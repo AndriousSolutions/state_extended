@@ -1,4 +1,8 @@
 
+## 0.3.0
+ July 11, 2022
+- Changed keyId to identifier in mixin StateListener
+
 ## 0.2.0
  July 10, 2022
 - Removed abstract class AppStatefulWidget

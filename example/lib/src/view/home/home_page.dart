@@ -8,8 +8,10 @@ import 'package:example/src/view.dart';
 
 /// The Home page
 class HomePage extends StatefulWidget {
+  /// With a constant constructor, instantiated once.
   const HomePage({Key? key, this.title = 'Flutter Demo'}) : super(key: key);
-  // Fields in a StatefulWidget should always be "final".
+
+  /// Fields in a StatefulWidget should always be "final".
   final String title;
 
   @override
@@ -40,7 +42,7 @@ class _HomePageState extends StateX<HomePage> {
 
     con = appState.controllerByType<AppController>();
 
-    con = appState.controllerById(con?.keyId);
+    con = appState.controllerById(con?.identifier);
   }
 
   late AppStateX appState;

@@ -45,7 +45,7 @@ Future<void> testsStateMVC(WidgetTester tester) async {
   appState.notifyClients();
 
   /// Every StateMVC and ControllerMVC has a unique String identifier.
-  final myAppStateId = appState.keyId;
+  final myAppStateId = appState.identifier;
 
   BuildContext context = appState.context;
 
@@ -56,7 +56,7 @@ Future<void> testsStateMVC(WidgetTester tester) async {
 
   expect(con, isA<AppController>(), reason: _location);
 
-  final String keyId = con.keyId;
+  final String keyId = con.identifier;
 
   con = appState.controllerById(keyId)!;
 
@@ -109,16 +109,16 @@ Future<void> testsStateMVC(WidgetTester tester) async {
 
   /// Test looking up State objects by id.
   /// The unique key identifier for this State object.
-  final String keyIdPage1 = state.keyId;
+  final String keyIdPage1 = state.identifier;
 
   /// Returns the StateMVC object using an unique String identifiers.
-  stateObj = appState.getState(keyIdPage1)!;
+  stateObj = appState.stateById(keyIdPage1)!;
 
   expect(stateObj.widget, isA<Page1>(), reason: _location);
 
   /// If you know their identifiers, you can retrieve a Map of StateMVC objects.
   final Map<String, StateX> map =
-      appState.getStates([myAppStateId, keyIdPage1]);
+      appState.statesById([myAppStateId, keyIdPage1]);
 
   /// Retrieve a State object by its unique identifier.
   StateX? state02 = map[myAppStateId];

@@ -1,64 +1,44 @@
-# mvc_pattern
-[![codecov](https://codecov.io/gh/AndriousSolutions/mvc_pattern/branch/master/graph/badge.svg)](https://codecov.io/gh/AndriousSolutions/mvc_pattern)
-[![CI](https://github.com/AndriousSolutions/mvc_pattern/actions/workflows/format_then_test.yml/badge.svg)](https://github.com/AndriousSolutions/mvc_pattern/actions/workflows/format_then_test.yml)
+# StateX
+[![codecov](https://codecov.io/gh/AndriousSolutions/state_extended/branch/master/graph/badge.svg)](https://codecov.io/gh/AndriousSolutions/state_extended)
+[![CI](https://github.com/AndriousSolutions/state_extended/actions/workflows/format_test_release.yml/badge.svg)](https://github.com/AndriousSolutions/state_extended/actions/workflows/format_then_test.yml)
 [![Medium](https://img.shields.io/badge/Medium-Read-green?logo=Medium)](https://andrious.medium.com/a-framework-for-flutter-3a4a358f5d26/)
-[![Pub.dev](https://img.shields.io/pub/v/mvc_pattern.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAeGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAEgAAAABAAAASAAAAAEAAqACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAAAQdIdCAAAACXBIWXMAAAsTAAALEwEAmpwYAAACZmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICAgICA8dGlmZjpSZXNvbHV0aW9uVW5pdD4yPC90aWZmOlJlc29sdXRpb25Vbml0PgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjE8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjY0PC9leGlmOlBpeGVsWERpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjY0PC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+Ck0aSxoAAAaTSURBVFgJrVdbbBRVGP7OzOzsbmsXChIIiEQFRaIRhEKi0VRDjI++LIoPeHkhgRgeBCUCYY3iHTWGVHnxFhNpy6MXkMtCfLAENAGEAMGEgEBSLu1u2+3u7Mw5fv/MbrsFeiOeZHfOnMv/f//3X84ZYLytrc0e2HImOx8n9/yFv/d4OHtg08B4JmMN9P+3jjEK2axTkadwav8mnNxbxpmswbFdGv92GJzObgvnDRTGCEKNCaBYvWxZEK49/tsiOFYL6pJNyPUABgHVWTAmQOMEByWvBXOaV0dACFopM5KOkamqWi3K29I2Tu/LUHkHHKcJ3XmfgsVWcYkoctCV8xF3V+HM/pZQaaR8RCOHnzTGolAdCjqxbzFV0OrEwshqWqvUYCyEiyp/2viYMslBf+l9zHnyLTJjc23EXu26Sv/WDFSVm+0xnM++AxcdSNoL0dfjI8adrmWHzxjxy3v4rPTjBNab46C3Crldk0Ll24/Iqlu2mxmoKv/p93th+ndicnwBevp8aKOHtfpm0T7q3ThKzutY2vxpOJ0ho5vFZUNj4kYA8h4FTfsfHWj0luCHXBETVZwuAMQhN+4Ipd/4x0V+WWHGFI3ZDx5m/zMsn9YarhIgmYprOTDUBZls5Nf1f25AsW4JZhU8pB0nXFVP1Q38yXPUH6M/xYztyRl4pSWoS+1A+7WvIgBULiAqbaCDNFMt85SPrYceQUxvRpF+LKkY7rEcPG0H6CUzwoDwI8/RfkJV2bNw/YqHvm4fbnIlWju/C/UKAxUQVQAK7WkRydhhjjsxCRpGLi3x2LuPIJYSRKHinjG5gfuUUsh3CasW8td8JOpXoPXqt3xH6AaCiACE1DM43j2yHrHkYygVmOOVNBNltwPCkCqbunt7FEpFA8t2kL9OEMmX0Hb1myoIa4D6LYcfgjIZ9Oc5R+WqYq2svF0QJIABaKGnW9gQSQ56CCKefJlMfB0NtJH6cE61wHbiCLyoyJgaALKyFgTFYm9go46jMh7ljawa2oQFlgzkCGDyVElBWR2BaJj8ClqvBVLtDLYcXodY4gmUmO/DVTgRXQtirDEhXu7ttVDs1wg9LmilWBGUCZ6z8F7HPI68jSIPFpkYzhrOhm28IMRoHTAYuymZ/ar8CAyRaftLWE4SRku9FvGjt/GACN1AFvJdikCkmtbKJwylpkHLwTZkgkirUGvX1/THA0Kyoa9gob/AbJDEG5RNBswGOK7o58xgiaxRNXx3PCCMjtwwcBZEBlvY1LQT5dJquHUcCS8QUUFiToYBOrz6aGYsIKo1IUc3+L7I5V5hwWJNlhK8cXEL8/U1xOuZ/UQqtxsBIxeSsbSxgBDqi/0WCr0EIG6ImoV2ue3w0rCxaRtBrEEipeAmJBsCh2FjjQ1CFEKjVUwxKNdFzYNHcgRlGX0fMrHoCxjvVWh9CiZm+cxcTfqkmMttdFQsIzFRdUO+m+dLKWJBrhgREZX/wbNazfz+0DPTm4qtlwMvdV7Tb4xf8Z2AkU2Ss4OxXNlffcgE4xr/ML2qFVPmwg3UOmeeRj3Pa2PODTpDFsgxyRtwhlRdWLFk9+zUxJ8fnzJdPZtIeU2xRDCVd8SAu3xaI7KElSog2T7QbsVEVJCAVKNGvM7Q3VyueELd2HgDPlH5+Ogvl7fGguDFCY6bmOi4ehYV5wNPX/E9nAs81RUFKdWp8GpYvSKEhtaC4Nlh79O2dowxd051UNcQnRGlQl6W3bKleZtt5232+QtH19jJ+OdeLs/0IGQeKFRgPB2YfFA2nQRzNiirfsma0DsRmKqLbC4OXCbU6WKA4422un9uJ3FnEehfWJT2DgtAUNEVVoa0L7947A3lxj4kiDCHBYhstPhPqwWM7vbL5nJQUmcCXxmjGS8V70rwMa0XpBps51L9B4dXLtiCE6pX5EsbEQAdrTK0LARx+eg6Zcc+8vI9JjpVo1wSAfIu6jRDo2h83UVWLgYeOnkIPWC5epqbtFNuonfy3WbuNvXopeascQ4cPABsbuYpNVojXxnqEBAvXDy+1orZH9eCqG6XsJTLgbAiQgPS4DPgXcsyTn297Xvl3a0z5z+bZs1pXzb4oTI0C6rSap90eYYkphmYO2Y8/InxvLVuwx3yKVYBz4corbxK3ZAsYbNilm0Fmk7iYaS1/6sMXplyYIjRowOQXQTRnk5rAfHjXfO3+p73pgpPNbkt8lOMOvmTj1SJPQnWMCEY81opyy73FQqOxm4R1XzwoMwNtP8ArtQKBPNf6YAAAAAASUVORK5CYII=)](https://pub.dev/packages/mvc_pattern)
-[![GitHub stars](https://img.shields.io/github/stars/AndriousSolutions/mvc_pattern.svg?style=social&amp;logo=github)](https://github.com/AndriousSolutions/mvc_pattern/stargazers)
-[![Last Commit](https://img.shields.io/github/last-commit/AndriousSolutions/mvc_pattern)](https://github.com/AndriousSolutions/mvc_pattern/commits/master)
-![flutter and mvc](https://user-images.githubusercontent.com/32497443/47087365-c9524f80-d1e9-11e8-85e5-6c8bbabb18cc.png)
-Note, the Framework package, [mvc_application](https://pub.dev/packages/mvc_application), uses mvc_pattern at its core.
-[![StateX](https://user-images.githubusercontent.com/32497443/104046248-658b1700-51a5-11eb-83b6-2b8be54ecc3a.jpg)](https://pub.dev/packages/mvc_application)
-The package, [mvc_application](https://pub.dev/packages/mvc_application), allows for easier and, dare I say, faster development and better maintainability. No 're-inventing of the wheel' with already built-in capabilities and features. Accommodating and Intergrated features:
-* Error Handling
-* System Preferences
-* Notifications
-* Date picker
-* App Color picker
-* Dialog Box
-* Customizable Bottom Bar
-* Loading Screen
-* Time Zones
-* Localization
+[![Pub.dev](https://img.shields.io/pub/v/state_extended.svg?logo=data:image/png;base64,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)](https://pub.dev/packages/state_extended)
+[![GitHub stars](https://img.shields.io/github/stars/AndriousSolutions/state_extended.svg?style=social&amp;logo=github)](https://github.com/AndriousSolutions/state_extended/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/AndriousSolutions/state_extended)](https://github.com/AndriousSolutions/state_extended/commits/master)
+![statex](https://user-images.githubusercontent.com/32497443/178376573-a39195e4-5712-45d9-8c93-af05bfe6add3.jpg)
+Note, the Framework package, [fluttery_framework](https://pub.dev/packages/fluttery_framework), uses state_extended at its core.
+[![MVC](https://user-images.githubusercontent.com/32497443/104046248-658b1700-51a5-11eb-83b6-2b8be54ecc3a.jpg)](https://pub.dev/packages/mvc_application)
+The package, [fluttery_framework](https://pub.dev/packages/fluttery_framework), allows for easier and, dare I say, faster development and better maintainability. No 're-inventing of the wheel' with already built-in capabilities and features. Accommodating and Intergrated features:
 
-The package, [mvc_web](https://pub.dev/packages/mvc_web), uses [mvc_application](https://pub.dev/packages/mvc_application), but for the Web.
-
-
-##### The "Kiss" of Flutter Frameworks
-
-In keeping with the ["KISS
-Principle"](https://en.wikipedia.org/wiki/KISS_principle), this is an attempt to
-offer the MVC design pattern to Flutter in an intrinsic fashion incorporating
-much of the Flutter framework itself. All in a standalone Flutter Package.
+##### A State extension
+This package is an attempt to expand the capabilities of the fundamental component of Flutter's State Management:
+ the State object
 
 In truth, this all came about only because I wanted a place to put my 'mutable' code (the business logic for the app)
-without the compiler complaining about it! Placing such code in a StatefulWidget or a StatelessWidget is discouraged of course--only immutable code should be in those objects.
+without the compiler complaining about it! Placing such code in a StatefulWidget or a StatelessWidget is discouraged (see below).
+Only immutable code should be in those objects.
 Sure, all that code could go into the State object. That's good since you want access to the State object anyway.
 After all, it's the main player when it comes to 'State Management' in Flutter. However, it makes for rather big and
 messy State objects!
+![immutable](https://user-images.githubusercontent.com/32497443/178375270-64ace2c7-923c-4899-9db5-5a09fc3c537a.png)
 
 Placing the code in separate Dart files would be the solution, but then there would have to be a means to access that
-ever-important State object. I wanted the separate Dart file or files that had all the functionality and capability
-of the State object. In other words, that separate Dart file would to have access to a State object!
+ever-important State object. I wanted these separate Dart files that had all the functionality and capability
+of the State object. That means a separate Dart file would to have access to a State object!
 
-Now, I had no interest in re-inventing the wheel. I wanted to keep it all Flutter, and so I stopped and looked at
-Flutter closely to see how to apply some already known design pattern onto it. That's when I saw the State
-object (its build() function specifically) as 'The View,' and the separate Dart file or files with access to that State
-object as 'The Controller.'
+Now, I had no interest in re-inventing the wheel. I wanted to 'keep it Flutter.'
+Flutter itself involves the concept of Controllers in some of its classes, here too Controllers are
+involved to contain the 'business logic' of an app and have access and subsequently the full capability
+of a State object.
 
-This package is essentially the result, and it involves just two 'new' classes: StateX and StateXController.
-A StateX object is a State object with an explicit life-cycle (Android developers will appreciate that),
-and a StateXController object can be that separate Dart file with access to the State object (StateX in this case).
-All done with Flutter objects and libraries---no re-inventing here. It looks and tastes like Flutter.
-
-Indeed, it just happens to be named after the 'granddaddy' of design patterns, MVC, but it's actually a bit more like the [PAC](https://medium.com/follow-flutter/flutter-mvc-at-last-275a0dc1e730#b671)
-design pattern. In truth, you could use any other architecture you like with it. By design, you can just use the classes,
-StateX, and StateXController. Heck! You could call objects that extend StateXController, BLoC's for all that matters!
-Again, all I wanted was some means to bond a State object to separate Dart files containing the 'guts' of the app.
-I think you'll find it useful.
+And so this package involves primarily two classes: StateX and StateXController.
+A StateX object is an extension of State object with hooks into a mobile app's life-cycle events (Android developers will recognize that).
+A StateXController object can have access to that StateX object.
+All done with Flutter objects and libraries---no re-inventing here. It looks and feels like Flutter.
 
 **Installing**
 
-I don't always like the version number suggested in the '[Installing](https://pub.dev/packages/mvc_pattern#-installing-tab-)' page.
+I don't always like the version number suggested in the '[Installing](https://pub.dev/packages/state_extended#-installing-tab-)' page.
 Instead, always go up to the '**major**' semantic version number when installing my library packages. This means always entering a version number trailing with two zero, '**.0.0**'. This allows you to take in any '**minor**' versions introducing new features as well as any '**patch**' versions that involves bugfixes. Semantic version numbers are always in this format: **major.minor.patch**.
 
 1. **patch** - I've made bugfixes
@@ -68,8 +48,9 @@ Instead, always go up to the '**major**' semantic version number when installing
 And so, in this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-  mvc_pattern:^8.9.0
+  state_extended:^1.0.0
 ```
+
 # Documentation
 
 Turn to this free Medium article for a full overview of the package plus examples:
@@ -77,105 +58,101 @@ Turn to this free Medium article for a full overview of the package plus example
 ](https://andrious.medium.com/3a4a358f5d26)
 
 ## Example Code
-Copy and paste the code below to get started. Examine the paths
-specified at the start of every code sequence to determine where
-these files are to be located.
 
 ```dart
-/// example/lib/main.dart
+//
+import 'package:state_extended/state_extended.dart';
 
-import 'package:example/src/view.dart';
+import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp(key: const Key('MyApp')));
-```
+void main() => runApp(const MyApp(key: Key('MyApp')));
 
-```dart
-/// example/src/app/view/my_app.dart
-
-import 'package:example/src/view.dart';
-
-import 'package:example/src/controller.dart';
-
-class MyApp extends AppStatefulWidgetMVC {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   /// This is the App's State object
   @override
-  AppStateMVC createState() => _MyAppState();
+  State createState() => _MyAppState();
 }
 
-class _MyAppState extends AppStateMVC<MyApp> {
+class _MyAppState extends AppStateX<MyApp> {
   factory _MyAppState() => _this ??= _MyAppState._();
   static _MyAppState? _this;
 
+  _MyAppState._()
+      : super(
+          controller: AppController(),
+          object: 'Hello',
+        );
+
+  /// Override this build function if you don't want to use the built-in FutureBuilder or InheritedWidget
   @override
-  Widget buildApp(BuildContext context) => MaterialApp(
-        home: FutureBuilder<bool>(
-            future: initAsync(),
-            builder: (context, snapshot) {
-              //
-              if (snapshot.hasData) {
-                //
-                if (snapshot.data!) {
-                  /// Key identifies the widget. New key? New widget!
-                  /// Demonstrates how to explicitly 're-create' a State object
-                  return MyHomePage(key: UniqueKey());
-                } else {
-                  //
-                  return const Text('Failed to startup');
-                }
-              } else if (snapshot.hasError) {
-                //
-                return Text('${snapshot.error}');
-              }
-              // By default, show a loading spinner.
-              return const Center(child: CircularProgressIndicator());
-            }),
+  Widget build(BuildContext context) => super.build(context);
+
+  /// This is the widget returned by the built-in FutureBuilder widget.
+  /// Override this build function if you don't want to use the built-in InheritedWidget
+  @override
+  Widget buildWidget(BuildContext context) => MaterialApp(
+        home: super.buildWidget(context),
       );
+
+  /// This returns the 'child' widget supplied to the InheritedWidget.
+  @override
+  Widget buildChild(BuildContext context) => MyHomePage(key: UniqueKey());
 }
-```
 
-```dart
-/// example/src/app/controller/app_controller.dart
-
-import 'package:example/src/view.dart';
-
-class AppController extends StateXController with AppControllerMVC {
-  factory AppController() => _this ??= AppController._();
-  AppController._();
-  static AppController? _this;
-
-  /// Initialize any 'time-consuming' operations at the beginning.
-  /// Initialize asynchronous items essential to the Mobile Applications.
-  /// Typically called within a FutureBuilder() widget.
+/// A Controller at the 'app level'
+class AppController extends StateXController {
+  /// Used for long asynchronous operations that need to be done
+  /// before the app can be fully available to the user.
+  /// e.g. Opening Databases, accessing Web servers, etc.
   @override
   Future<bool> initAsync() async {
-    // Simply wait for 10 seconds at startup.
-    /// In production, this is where databases are opened, logins attempted, etc.
-    return Future.delayed(const Duration(seconds: 10), () {
-      return true;
-    });
+    final init = super.initAsync();
+    return init;
   }
 
   /// Supply an 'error handler' routine if something goes wrong
-  /// in the corresponding initAsync() routine.
-  /// Returns true if the error was properly handled.
+  /// in initAsync() routine above.
   @override
-  bool onAsyncError(FlutterErrorDetails details) {
-    return false;
+  bool onAsyncError(FlutterErrorDetails details) => false;
+
+  /// Like the State object, the Flutter framework will call this method exactly once.
+  /// Only when the [StateX] object is first created.
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  /// The framework calls this method whenever it removes this [StateX] object
+  /// from the tree.
+  @override
+  void deactivate() {
+    super.deactivate();
+  }
+
+  /// Called when this object is reinserted into the tree after having been
+  /// removed via [deactivate].
+  @override
+  void activate() {
+    super.activate();
+  }
+
+  /// The framework calls this method when this [StateX] object will never
+  /// build again.
+  /// Note: THERE IS NO GUARANTEE THIS METHOD WILL RUN in the Framework.
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
-```
-```dart
-/// example/src/home/view/my_home_page.dart
-
-import 'package:example/src/view.dart';
-
-import 'package:example/src/controller.dart';
 
 /// The Home page
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, this.title = 'Flutter Demo'}) : super(key: key);
+  const MyHomePage({
+    Key? key,
+    this.title = 'Flutter Demo',
+  }) : super(key: key);
 
   // Fields in a StatefulWidget should always be "final".
   final String title;
@@ -208,10 +185,10 @@ class _MyHomePageState extends StateX<MyHomePage> {
 
     con = appState.controllerByType<AppController>();
 
-    con = appState.controllerById(con?.keyId);
+    con = appState.controllerById(con?.identifier);
   }
 
-  late AppStateMVC appState;
+  late AppStateX appState;
 
   /// This is 'the View'; the interface of the home page.
   @override
@@ -240,10 +217,8 @@ class _MyHomePageState extends StateX<MyHomePage> {
                 'You have pushed the button this many times:',
                 style: Theme.of(context).textTheme.bodyText2,
               ),
-              // Text(
-              //   '${con.count}',
-              //   style: Theme.of(context).textTheme.headline4,
-              // ),
+
+              /// Linked to the State object's built-in InheritedWidget.
               SetState(
                 builder: (context, dataObject) => Text(
                   '${con.count}',
@@ -256,15 +231,8 @@ class _MyHomePageState extends StateX<MyHomePage> {
         floatingActionButton: FloatingActionButton(
           key: const Key('+'),
 
-          /// Refresh only the Text widget containing the counter.
-          onPressed: () => con.incrementCounter(),
-
-          /// The traditional approach calling the State object's setState() function.
-          // onPressed: () {
-          //   setState(con.incrementCounter);
-          // },
-          /// You can have the Controller called the interface (the View).
-//          onPressed: con.onPressed,
+          /// rebuilds only the Text widget containing the counter.
+          onPressed: () => con.onPressed(),
           child: const Icon(Icons.add),
         ),
       );
@@ -276,15 +244,8 @@ class _MyHomePageState extends StateX<MyHomePage> {
     super.onError(details);
   }
 }
-```
 
-```dart
-/// example/src/home/controller/controller.dart
-
-import 'package:example/src/view.dart';
-
-import 'package:example/src/model.dart';
-
+/// Everything a State object can do, this Controller can do as well!
 class Controller extends StateXController {
   factory Controller([StateX? state]) => _this ??= Controller._(state);
   Controller._(StateX? state)
@@ -295,69 +256,286 @@ class Controller extends StateXController {
   final Model _model;
 
   /// Note, the count comes from a separate class, _Model.
-  int get count => _model.counter;
+  int get count => _model.integer;
 
   // The Controller knows how to 'talk to' the Model and to the View (interface).
-  void incrementCounter() {
+  void onPressed() {
     //
     _model.incrementCounter();
 
-    /// Only calls only 'SetState' widgets
-    /// or widgets that called the inheritWidget(context) function
-    inheritBuild();
+    /// Calls only 'SetState' widgets
+    /// or widgets that called the dependOnInheritedWidget(context) function
+    notifyClients();
 
     /// Retrieve a particular State object.
     final homeState = stateOf<MyHomePage>();
 
     /// If working with a particular State object and if divisible by 5
-    if (homeState != null && _model.counter % 5 == 0) {
+    if (homeState != null && _model.integer % 5 == 0) {
       //
       dataObject = _model.sayHello();
       setState(() {});
     }
   }
 
-  /// Call the State object's setState() function to reflect the change.
-  void onPressed() => setState(() => _model.incrementCounter());
+  /// Used for long asynchronous operations that need to be done
+  /// before the app can be fully available to the user.
+  /// e.g. Opening Databases, accessing Web servers, etc.
+  @override
+  Future<bool> initAsync() async {
+    final init = super.initAsync();
+    return init;
+  }
+
+  /// Supply an 'error handler' routine if something goes wrong
+  /// in initAsync() routine above.
+  @override
+  bool onAsyncError(FlutterErrorDetails details) => false;
+
+  /// Like the State object, the Flutter framework will call this method exactly once.
+  /// Only when the [StateX] object is first created.
+  @override
+  void initState() {
+    super.initState();
+
+    /// Access to it's corresponding State object
+    final statefulWidget = state?.widget;
+
+    assert(statefulWidget is MyHomePage,
+        'Of course the Controller has access to the StatefulWidget');
+
+    /// A State object can reference it's 'current' State object controller.
+    var thisController = state?.controller;
+
+    /// The same controller can be retrieved by type if you know the type
+    /// Note, it has to be a Controller explicitly added to the State object at some time.
+    thisController = state?.controllerByType<Controller>();
+
+    /// The same controller can be retrieved by its unique identifier if you know it.
+    /// You then don't have to know the type or the type is private with a leading underscore.
+    /// Note, it has to be a Controller explicitly added to the State object at some time.
+    thisController = state?.controllerById(thisController?.identifier);
+
+    assert(thisController == this,
+        'Just demonstrating the means to retrieve a Controller.');
+
+    /// You can retrieve a Controller's state object by its StatefulWidget
+    /// Good if the state class type is unknown or private with a leading underscore.
+    var stateObj = stateOf<MyHomePage>();
+
+    assert(stateObj == state, 'They should be the same State object.');
+
+    /// Retrieve the 'app level' State object
+    var appState = rootState;
+
+    assert(appState is _MyAppState,
+        "Every Controller has access to the 'first' State object.");
+
+    /// The 'app level' State object has *all* the Stat objects running in the App
+    /// at any one point of time.
+    stateObj = appState?.stateByType<_MyHomePageState>();
+
+    assert(stateObj == state, 'They should be the same State object.');
+
+    /// Retrieve the State object's controller.
+    var con = appState?.controller;
+
+    /// You're able to retrieve the Controller(s) from other State objects.
+    /// if you know their type
+    con = appState?.controllerByType<AppController>();
+
+    /// You're able to retrieve the Controller(s) from other State objects.
+    /// if you know their unique identifier.
+    con = appState?.controllerById(con?.identifier);
+
+    /// If you know the type, every State object can access any Controller
+    var appController = state?.controllerByType<AppController>();
+
+    assert(appController == con, 'They should be the same object.');
+
+    assert(dataObject == 'Hello', 'The data object passed to the App.');
+  }
+
+  /// The framework calls this method whenever it removes this [StateX] object
+  /// from the tree.
+  @override
+  void deactivate() {
+    super.deactivate();
+  }
+
+  /// Called when this object is reinserted into the tree after having been
+  /// removed via [deactivate].
+  @override
+  void activate() {
+    super.activate();
+  }
+
+  /// The framework calls this method when this [StateX] object will never
+  /// build again.
+  /// Note: THERE IS NO GUARANTEE THIS METHOD WILL RUN in the Framework.
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  /// Called when the corresponding [StatefulWidget] is recreated.
+  @override
+  void didUpdateWidget(StatefulWidget oldWidget) {
+    /// The framework always calls build() after calling [didUpdateWidget], which
+    /// means any calls to [setState] in [didUpdateWidget] are redundant.
+    super.didUpdateWidget(oldWidget);
+  }
+
+  /// Called when this [StateX] object is first created immediately after [initState].
+  /// Otherwise called only if this [State] object's Widget
+  /// is a dependency of [InheritedWidget].
+  @override
+  void didChangeDependencies() {
+    return super.didChangeDependencies();
+  }
+
+  /// Called whenever the application is reassembled during debugging, for
+  /// example during hot reload.
+  @override
+  void reassemble() {
+    return super.reassemble();
+  }
+
+  /// Called when the system tells the app to pop the current route.
+  /// For example, on Android, this is called when the user presses
+  /// the back button.
+  ///
+  /// Observers are notified in registration order until one returns
+  /// true. If none return true, the application quits.
+  /// This method exposes the `popRoute` notification from
+  // ignore: comment_references
+  /// [SystemChannels.navigation].
+  @override
+  Future<bool> didPopRoute() async {
+    return super.didPopRoute();
+  }
+
+  /// Called when the host tells the app to push a new route onto the
+  /// navigator.
+  /// This method exposes the `pushRoute` notification from
+  // ignore: comment_references
+  /// [SystemChannels.navigation].
+  @override
+  Future<bool> didPushRoute(String route) async {
+    return super.didPushRoute(route);
+  }
+
+  /// Called when the host tells the application to push a new
+  /// [RouteInformation] and a restoration state onto the router.
+  /// This method exposes the `popRoute` notification from
+  // ignore: comment_references
+  /// [SystemChannels.navigation].
+  ///
+  /// The default implementation is to call the [didPushRoute] directly with the
+  /// [RouteInformation.location].
+  @override
+  Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
+    return super.didPushRouteInformation(routeInformation);
+  }
+
+  /// Called when the application's dimensions change. For example,
+  /// when a phone is rotated.
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+  }
+
+  /// Called when the platform's text scale factor changes.
+  @override
+  void didChangeTextScaleFactor() {
+    super.didChangeTextScaleFactor();
+  }
+
+  /// Brightness changed.
+  @override
+  void didChangePlatformBrightness() {
+    super.didChangePlatformBrightness();
+  }
+
+  /// Called when the system tells the app that the user's locale has changed.
+  @override
+  void didChangeLocale(Locale locale) {
+    didChangeLocale(locale);
+  }
+
+  /// Called when the system puts the app in the background or returns the app to the foreground.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    /// Passing these possible values:
+    /// AppLifecycleState.inactive (may be paused at any time)
+    /// AppLifecycleState.paused (may enter the suspending state at any time)
+    /// AppLifecycleState.detach
+    /// AppLifecycleState.resumed
+    super.didChangeAppLifecycleState(state);
+  }
+
+  /// The application is in an inactive state and is not receiving user input.
+  ///
+  /// On iOS, this state corresponds to an app or the Flutter host view running
+  /// in the foreground inactive state. Apps transition to this state when in
+  /// a phone call, responding to a TouchID request, when entering the app
+  /// switcher or the control center, or when the UIViewController hosting the
+  /// Flutter app is transitioning.
+  ///
+  /// On Android, this corresponds to an app or the Flutter host view running
+  /// in the foreground inactive state.  Apps transition to this state when
+  /// another activity is focused, such as a split-screen app, a phone call,
+  /// a picture-in-picture app, a system dialog, or another window.
+  ///
+  /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
+  @override
+  void inactiveLifecycleState() {
+    super.inactiveLifecycleState();
+  }
+
+  /// The application is not currently visible to the user, not responding to
+  /// user input, and running in the background.
+  @override
+  void pausedLifecycleState() {
+    super.pausedLifecycleState();
+  }
+
+  /// Either be in the progress of attaching when the engine is first initializing
+  /// or after the view being destroyed due to a Navigator pop.
+  @override
+  void detachedLifecycleState() {
+    super.detachedLifecycleState();
+  }
+
+  /// The application is visible and responding to user input.
+  @override
+  void resumedLifecycleState() {
+    super.resumedLifecycleState();
+  }
+
+  /// Called when the system is running low on memory.
+  @override
+  void didHaveMemoryPressure() {
+    super.didHaveMemoryPressure();
+  }
+
+  /// Called when the system changes the set of active accessibility features.
+  @override
+  void didChangeAccessibilityFeatures() {
+    super.didChangeAccessibilityFeatures();
+  }
+}
+
+/// This example has a separate class that contains the data.
+class Model {
+  int get integer => _integer;
+  int _integer = 0;
+
+  int incrementCounter() => ++_integer;
+
+  String sayHello() => 'Hello There!';
 }
 ```
 
-```dart
-/// example/src/view.dart
-
-export 'package:flutter/material.dart' hide StateSetter;
-
-export 'package:mvc_pattern/mvc_pattern.dart';
-
-export 'package:example/src/app/view/my_app.dart';
-
-export 'package:example/src/home/view/my_home_page.dart';
-
-export 'package:example/src/home/view/page_01.dart';
-
-export 'package:example/src/home/view/page_02.dart';
-
-export 'package:example/src/home/view/page_03.dart';
-
-export 'package:example/src/home/view/common/build_page.dart';
-```
-
-```dart
-/// example/src/controller.dart
-
-export 'package:example/src/app/controller/app_controller.dart';
-
-export 'package:example/src/home/controller/controller.dart';
-
-export 'package:example/src/home/controller/another_controller.dart';
-
-export 'package:example/src/home/controller/yet_another_controller.dart';
-```
-```dart
-/// example/src/model.dart
-
-export 'package:example/src/home/model/data_source.dart';
-```
-
-Further information on the StateX package can be found in the article, [‘StateX in Flutter’](https://medium.com/follow-flutter/mvc-in-flutter-1d26b86328ea)
+Further information on the package can be found in the article, [‘MVC in Flutter’](https://medium.com/follow-flutter/mvc-in-flutter-1d26b86328ea)
 [![online article](https://user-images.githubusercontent.com/32497443/87216185-c626bd80-c302-11ea-9535-c5dac12ea106.png)](https://medium.com/follow-flutter/mvc-in-flutter-1d26b86328ea)

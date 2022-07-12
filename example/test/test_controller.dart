@@ -45,13 +45,13 @@ void testsController(WidgetTester tester) {
   /// This State object 'contains' this Controller.
   con = appState.controllerByType<Controller>()!;
 
-  String keyId = con.keyId;
+  String keyId = con.identifier;
 
   con = appState.controllerById(keyId) as Controller;
 
   expect(con, isA<Controller>(), reason: location);
 
-  List<String> keyIds = appState.addList([Controller()]);
+  final List<String> keyIds = appState.addList([Controller()]);
 
   expect(keyIds, isNotEmpty, reason: location);
 
@@ -65,7 +65,7 @@ void testsController(WidgetTester tester) {
   expect(appState.widget, isA<MyApp>(), reason: location);
 
   /// Returns the most recent BuildContext/Element created in the App
-  BuildContext context = con.lastContext!;
+  final BuildContext context = con.lastContext!;
 
   expect(context.widget, isA<Page1>(), reason: location);
 
@@ -81,7 +81,7 @@ void testsController(WidgetTester tester) {
   /// This State object 'contains' this Controller.
   AnotherController another = appState.controllerByType<AnotherController>()!;
 
-  keyId = another.keyId;
+  keyId = another.identifier;
 
   another = appState.controllerById(keyId) as AnotherController;
 
@@ -91,7 +91,7 @@ void testsController(WidgetTester tester) {
   YetAnotherController andAnother =
       appState.controllerByType<YetAnotherController>()!;
 
-  keyId = andAnother.keyId;
+  keyId = andAnother.identifier;
 
   andAnother = appState.controllerById(keyId) as YetAnotherController;
 
@@ -110,7 +110,7 @@ void testsController(WidgetTester tester) {
 
   expect(con, isA<Controller>());
 
-  conId = con.keyId;
+  conId = con.identifier;
 
   /// Another way to retrieve its Controller from a list of Controllers
   /// Retrieve it by its key id Note the casting.
@@ -163,14 +163,15 @@ void testsController(WidgetTester tester) {
   /// Allows you to call 'setState' from the 'current' the State object.
   con.setState(() {});
 
-  /// Allows you to call 'setState' from the 'current' the State object.
-  con.refresh();
-
-  /// Allows you to call 'setState' from the 'current' the State object.
-  con.rebuild();
-
-  /// Allows you to call 'setState' from the 'current' the State object.
-  con.notifyListeners();
+  //@Deprecated('Keep with Flutter syntax')
+  // /// Allows you to call 'setState' from the 'current' the State object.
+  // con.refresh();
+  //
+  // /// Allows you to call 'setState' from the 'current' the State object.
+  // con.rebuild();
+  //
+  // /// Allows you to call 'setState' from the 'current' the State object.
+  // con.notifyListeners();
 
   /// Return a 'copy' of the Set of State objects.
   final Set<StateX>? states = con.states;
@@ -179,12 +180,10 @@ void testsController(WidgetTester tester) {
 }
 
 bool _testAppController(WidgetTester tester) {
-  bool tested = false;
-
   /// Explicitly provide what's intentionally should be accessible
   /// but is made accessible for 'internal testing' of this framework.
   // Find its StatefulWidget first then the 'type' of State object.
-  StateX appState = tester.firstState<AppStateX>(find.byType(MyApp));
+  final StateX appState = tester.firstState<AppStateX>(find.byType(MyApp));
 
   /// The first Controller added to the App's first State object
   final controller = appState.rootCon;
@@ -202,7 +201,5 @@ bool _testAppController(WidgetTester tester) {
   expect(rootCon.onAsyncError(errorDetails), isA<bool>());
 
   // Take in any Exception so not to 'fail' the running test
-  tester.takeException();
-
-  return tested;
+  return tester.takeException() == null;
 }

@@ -32,15 +32,15 @@ Future<void> testsStateListener01(WidgetTester tester) async {
 
   /// Of course, you can retrieve the State object its currently colledted.
   /// In this case, there's only one, the one in con.state.
-  StateX state = con.stateOf<Page1>()!;
+  final StateX state = con.stateOf<Page1>()!;
 
   final listener = TesterStateListener();
 
-  final id = listener.keyId;
+  final id = listener.identifier;
 
   /// Testing the Adding of Listeners to a State object
 
-  var added = state.addBeforeListener(listener);
+  final added = state.addBeforeListener(listener);
 
   expect(added, isTrue, reason: _location);
 
@@ -96,7 +96,7 @@ Future<void> testsStateListener02(WidgetTester tester) async {
 
   /// Of course, you can retrieve the State object its currently collected.
   /// In this case, there's only one, the one in con.state.
-  StateX state = con.stateOf<Page1>()!;
+  final StateX state = con.stateOf<Page1>()!;
 
   /// The Test Listener
   final listener = TesterStateListener();
@@ -110,7 +110,7 @@ Future<void> testsStateListener02(WidgetTester tester) async {
 
   expect(add, isTrue, reason: _location);
 
-  var removed = state.removeListener(listener);
+  final removed = state.removeListener(listener);
 
   expect(removed, isTrue, reason: _location);
 

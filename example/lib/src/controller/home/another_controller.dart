@@ -4,6 +4,7 @@
 
 import 'package:example/src/view.dart';
 
+/// Multiple Controllers can be assigned to one State object.
 class AnotherController extends StateXController {
   /// It's a good practice to make Controllers using the Singleton pattern
   factory AnotherController() => _this ??= AnotherController._();
@@ -14,22 +15,22 @@ class AnotherController extends StateXController {
   @override
   void setState(VoidCallback fn) => super.setState(fn);
 
-  /// Allows external classes to 'refresh' or 'rebuild' the widget tree.
-  @override
-  void refresh() => super.refresh();
-
-  /// Allow for a more accurate description
-  @override
-  void rebuild() => super.rebuild();
-
-  /// For those accustom to the 'Provider' approach.
-  @override
-  void notifyListeners() => super.notifyListeners();
+  // /// Allows external classes to 'refresh' or 'rebuild' the widget tree.
+  // @override
+  // void refresh() => super.refresh();
+  //
+  // /// Allow for a more accurate description
+  // @override
+  // void rebuild() => super.rebuild();
+  //
+  // /// For those accustom to the 'Provider' approach.
+  // @override
+  // void notifyListeners() => super.notifyListeners();
 
   /// Retrieve the State object by type
   /// Returns null if not found
   @override
-  T? ofState<T extends State>() => super.ofState<T>();
+  T? ofState<T extends StateX>() => super.ofState<T>();
 
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.
