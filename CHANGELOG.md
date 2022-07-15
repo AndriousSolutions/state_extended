@@ -1,5 +1,5 @@
 
-## 0.4.0+01
+## 0.4.0+02
  July 15, 2022
 - Removed the refresh() function
 - Removed the class, StateXModel

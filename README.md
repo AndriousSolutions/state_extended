@@ -7,32 +7,15 @@
 [![Last Commit](https://img.shields.io/github/last-commit/AndriousSolutions/state_extended)](https://github.com/AndriousSolutions/state_extended/commits/master)
 ![statex](https://user-images.githubusercontent.com/32497443/178387749-1e28f27f-f64c-41df-b5c0-a7591f194e22.jpg)
 
-Note, the Framework package, [fluttery_framework](https://pub.dev/packages/fluttery_framework), uses state_extended at its core.
-It allows for easier and, dare I say, faster development and better maintainability. No 're-inventing of the wheel' with already built-in capabilities and features. Accommodating and Intergrated features:
-
 ## An Extension of the State class
-This package is an attempt to expand the capabilities of the fundamental component of Flutter's State Management:
- the State object
+This package expands the capabilities of Flutter's State class.
+This fundamental component of Flutter's state management had room for improvement.
 
-In truth, this all came about only because I wanted a place to put my 'mutable' code (the business logic for the app)
-without the compiler complaining about it! Placing such code in a StatefulWidget or a StatelessWidget is discouraged (see below).
-Only immutable code should be in those objects.
-All that code could go into the State object---it is the main player to the 'State Management' in Flutter.
-However, it makes for rather big and messy State objects!
-![immutable](https://user-images.githubusercontent.com/32497443/178385405-3063b529-7d04-4e49-ae31-05aa5cf53bcc.jpg)
+The capabilities of Flutter's State class now includes 'State Object Controllers' and the app's 'lifecycle events.'
 
-Placing the code in separate Dart files would be the solution, but then there would have to be a means to access that
-ever-important State object. I wanted these separate Dart files to have all the functionality and capability
-of the State object and even access to a State object!
-Now, I had no interest in re-inventing the wheel. I wanted to 'keep it Flutter.'
-Flutter itself involves the concept of Controllers in some of its classes, here too Controllers are
-involved to contain the 'business logic' of an app and have access and subsequently the full capability
-of a State object.
-
-And so this package involves primarily two classes: StateX and StateXController.
-A StateX object is an extension of State object with hooks into a mobile app's life-cycle events (Android developers will recognize that).
-A StateXController object can have access to that StateX object.
-All done with Flutter objects and libraries, it looks and feels like Flutter.
+StateX should not be confused with GetX, however, they do have their similarities.
+In particular, both involve 'controllers' that generally contain the 'business logic' involved in any given app.
+GetX has its GetxController class while StateX has its StateXController class.
 
 **Installing**
 
@@ -46,7 +29,7 @@ Instead, always go up to the '**major**' semantic version number when installing
 And so, in this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-  state_extended:^1.0.0
+  state_extended:^0.4.0
 ```
 
 ## Documentation
@@ -56,8 +39,7 @@ Turn to this free Medium article for a full overview of the package plus example
 
 ## Example Code
 Further examples can be found in its Github repository: 
-[example code/](https://pub.dev/packages/state_extended#example-code)
-[example app/](https://github.com/AndriousSolutions/state_extended/tree/master/example)
+[example app](https://github.com/AndriousSolutions/state_extended/tree/master/example)
 ```dart
 //
 import 'package:state_extended/state_extended.dart';
