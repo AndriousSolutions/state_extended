@@ -1,10 +1,11 @@
 
-## 0.4.0
+## 0.4.0+01
  July 15, 2022
 - Removed the refresh() function
 - Removed the class, StateXModel
 - call _states.clear() in AppStateX
 - Updated README.md
+- Updated test scripts
 
 ## 0.3.0
  July 11, 2022

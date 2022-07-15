@@ -8,7 +8,7 @@ import 'test_controller.dart';
 
 import 'test_listener.dart';
 
-import 'test_statec.dart';
+import 'test_statex.dart';
 
 Future<void> unitTesting(WidgetTester tester) async {
 //
@@ -16,7 +16,7 @@ Future<void> unitTesting(WidgetTester tester) async {
   await testsStateListener02(tester);
 
   /// Tests StateMVC class
-  await testsStateMVC(tester);
+  await testsStateX(tester);
 
   /// Tests ControllerMVC class
   testsController(tester);

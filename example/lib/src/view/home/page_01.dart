@@ -8,14 +8,16 @@ import 'package:example/src/controller.dart';
 
 /// The first page displayed in this app.
 class Page1 extends StatefulWidget {
-  Page1({Key? key})
-      : con = Controller(),
-        super(key: key);
+  /// Page 1
+  Page1({super.key}) : con = Controller();
+
+  /// The Controller used.
   final Controller con;
 
   @override
   State createState() => Page1State();
 
+  /// The event handler
   void onPressed() {
     //
     var state = con.ofState<Page1State>()!;
@@ -27,11 +29,12 @@ class Page1 extends StatefulWidget {
   }
 }
 
+///
 class Page1State extends StateX<Page1> {
   //
   @override
   void initState() {
-    /// Link with the StateMVC so con.setState(() {}) will work.
+    /// Link with the StateX so con.setState(() {}) will work.
     add(widget.con);
     con = controller as Controller;
 
@@ -39,15 +42,16 @@ class Page1State extends StateX<Page1> {
     super.initState();
   }
 
+  /// The Controller used
   late Controller con;
 
+  /// The counter
   int count = 0;
 
-  // Responsible for the incrementation
+  /// Responsible for the incrementation
   void onPressed() {
     count++;
     setState(() {});
-//          buildInherited();
   }
 
   @override
@@ -62,6 +66,7 @@ class Page1State extends StateX<Page1> {
     );
   }
 
+  /// Page 1
   Widget buildPage1({
     int count = 0,
     required void Function() counter,

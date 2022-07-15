@@ -9,9 +9,9 @@ import 'package:example/src/view.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
-const _location = '========================== test_statemvc.dart';
+const _location = '========================== test_statex.dart';
 
-Future<void> testsStateMVC(WidgetTester tester) async {
+Future<void> testsStateX(WidgetTester tester) async {
   //
 
   /// Explicitly provide what's intentionally should be accessible
