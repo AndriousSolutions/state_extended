@@ -187,7 +187,7 @@ Future<void> testPage2State(WidgetTester tester) async {
   /// In harmony with Flutter's own API
   (statePage2 as InheritedStateX).notifyClients();
 
-  statePage2.refresh();
+  statePage2.setState(() {});
 
   final child = statePage2.inheritedStatefulWidget;
 

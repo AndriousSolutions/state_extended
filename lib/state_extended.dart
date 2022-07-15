@@ -457,7 +457,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
   }
 
@@ -521,7 +521,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
     // Return false to pop out
     return handled;
@@ -563,7 +563,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
     return handled;
   }
@@ -609,7 +609,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
     return handled;
   }
@@ -647,7 +647,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
   }
 
@@ -684,7 +684,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
   }
 
@@ -709,7 +709,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
   }
 
@@ -739,7 +739,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
   }
 
@@ -768,7 +768,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
   }
 
@@ -796,7 +796,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
   }
 
@@ -833,7 +833,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
-      refresh();
+      setState(() {});
     }
 
     /// Not the first build now.
@@ -889,8 +889,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
   }
 
-  /// Allows the user to call setState() within the StateXController.
-  void refresh() => setState(() {});
+  // /// Allows the user to call setState() within the StateXController.
+  // void refresh() => setState(() {});
 
   /// Link a widget to the InheritedWidget
   bool dependOnInheritedWidget(BuildContext? context) {
@@ -1517,16 +1517,6 @@ mixin StateListener {
   }
 }
 
-/// This class is to be concerned with the data
-/// It is accessed by the StateXController but can call setState() as well.
-class StateXModel extends StateSetter with _RootStateMixin {
-  /// Optionally supply a State object to 'link' to this object.
-  /// Thus, assigned as 'current' StateX for this object
-  StateXModel([StateX? state]) : super() {
-    _pushState(state);
-  }
-}
-
 /// Supply a FutureBuilder to a State object.
 mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// Implement this function instead of the build() function
@@ -1666,6 +1656,7 @@ abstract class AppStateX<T extends StatefulWidget>
   @override
   void dispose() {
     _controllers.clear();
+    _states.clear();
     _clearRootStateX();
     super.dispose();
   }
@@ -1778,11 +1769,6 @@ class _AppInheritedWidget extends InheritedWidget {
 mixin _AppStates {
   /// All the State objects in this app.
   final Map<String, StateX> _states = {};
-
-  /// Clean up
-  void dispose() {
-    _states.clear();
-  }
 
   /// Retrieve the State object by type
   /// Returns null if not found

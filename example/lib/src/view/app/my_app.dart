@@ -14,15 +14,13 @@ class MyApp extends StatefulWidget {
 
   /// This is the App's State object
   @override
-  AppStateX createState() => _MyAppState();
+  State createState() => _MyAppState();
 }
 
 ///
 class _MyAppState extends AppStateX<MyApp> {
   //
-  factory _MyAppState() => _this ??= _MyAppState._();
-
-  _MyAppState._()
+  _MyAppState()
       : super(
           controller: AppController(),
           controllers: [
@@ -35,7 +33,6 @@ class _MyAppState extends AppStateX<MyApp> {
           /// in the Scoped Model
           object: 'Hello!',
         );
-  static _MyAppState? _this;
 
   /// Try these different 'build' functions and get access
   /// to a built-in FutureBuilder and or a 'app level' InheritedWidget.

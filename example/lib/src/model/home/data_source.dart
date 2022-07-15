@@ -5,16 +5,20 @@
 import 'package:example/src/view.dart';
 
 /// This separate class represents 'the Model' (the data) of the App.
-class Model extends StateXModel {
+class Model extends StateXController {
+  ///
   factory Model([StateX? state]) => _this ??= Model._(state);
-  Model._(StateX? state) : super(state);
+  Model._(super.state);
   static Model? _this;
 
+  ///
   int get counter => _counter;
   int _counter = 0;
 
+  ///
   int incrementCounter() => ++_counter;
 
+  ///
   final words = [
     'Hello There!',
     'How are you?',
@@ -24,6 +28,7 @@ class Model extends StateXModel {
   ];
   int _index = 0;
 
+  ///
   String sayHello() {
     String say;
     if (_index < words.length) {

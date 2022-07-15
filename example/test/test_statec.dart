@@ -38,8 +38,7 @@ Future<void> testsStateMVC(WidgetTester tester) async {
   /// Test its if statement.
   appState.catchError(null);
 
-  /// setState((){});
-  appState.refresh();
+  appState.setState(() {});
 
   /// Test 'refresh' alternative
   appState.notifyClients();
@@ -285,7 +284,7 @@ Future<void> testsStateMVC(WidgetTester tester) async {
   /// null testing
   stateObj.add(null);
 
-  stateObj.refresh();
+  stateObj.setState(() {});
 }
 
 /// Merely a 'tester' Controller used in the function above.
