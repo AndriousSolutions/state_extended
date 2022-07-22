@@ -1,4 +1,10 @@
 
+## 0.5.0
+ July 22, 2022
+- Renamed text from 'mvc_pattern.dart' to 'state_extended.dart'
+- Removed void refresh() => setState(() {});
+- Enhanced example apps with demonstration code.
+
 ## 0.4.0+02
  July 15, 2022
 - Removed the refresh() function

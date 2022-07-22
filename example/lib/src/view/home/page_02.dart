@@ -2,24 +2,46 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:example/src/view.dart';
-
 import 'package:example/src/controller.dart';
+
+import 'package:example/src/view.dart';
 
 /// The second page displayed in this app.
 class Page2 extends StatefulWidget {
+  ///
   Page2({Key? key, this.tripError})
       : con = Controller(),
         super(key: key);
+
+  ///
   final Controller con;
+
+  ///
   final bool? tripError;
 
   @override
   State createState() => _Page2State();
 
-  /// This will 'rebuild' the InheritedWidget defined below
-  /// and not call setState() function to instead initiate a rebuild.
-  void onPressed() => con.incrementCounter();
+  /// Public API for increment a 'Page 2' counter.
+  void onPressed() {
+    //
+    var state = con.state;
+
+    state = con.stateOf<Page2>();
+
+    state = con.ofState<_Page2State>();
+
+    con.onPressed();
+
+    /// Comment out this line and be surprised it still works!!
+    state?.setState(() {});
+
+    // by its StatefulWidget
+    var outsideState = con.stateOf<Page1>();
+
+    // by its type
+    outsideState = con.ofState<Page1State>();
+  }
 }
 
 /// This works with a separate 'data source'
@@ -36,6 +58,18 @@ class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
 
     con = controller as Controller;
 
+    /// Event the 'first' State object has a reference to itself
+    AppStateX? firstState = con.rootState;
+
+    /// The latest BuildContext in the app.
+    BuildContext? lastContext = con.lastContext;
+
+    /// The app's data object
+    Object? dataObject = con.dataObject;
+
+    /// Is the app is running in IDE or in production
+    bool debugging = con.inDebugger;
+
     /// Allow for con.initState() function to fire.
     super.initState();
   }
@@ -46,14 +80,15 @@ class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
   /// Define the 'child' Widget that will be passed to the InheritedWidget above.
   @override
   Widget buildChild(BuildContext context) {
+    //
     final tripError = widget.tripError ?? false;
 
     if (tripError) {
-      throw 'Pretend a error occurs here in this function.';
+      throw AssertionError('Pretend a error occurs here in this function.');
     }
 
-    /// Comment this command out and the counter will not work.
-    /// That's because this Widget is then no longer a dependency to the InheritedWidget above.
+    // /// Comment this command out and the counter will not work.
+    // /// That's because this Widget is then no longer a dependency to the InheritedWidget above.
     dependOnInheritedWidget(context);
 
     /// Ignore BuildPage(). It's used only to highlight the other features in this page
@@ -103,7 +138,8 @@ class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
           style: flatButtonStyle,
           onPressed: () {
             final state = con.ofState<Page1State>()!;
-            state.onPressed();
+            state.count++;
+            state.setState(() {});
           },
           child: const Text('Page 1 Counter'),
         ),

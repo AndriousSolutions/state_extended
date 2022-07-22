@@ -4,6 +4,7 @@
 
 import 'package:example/src/view.dart';
 
+/// Yet another Controller for demonstration purposes.
 class YetAnotherController extends StateXController {
   /// It's a good practice to make Controllers using the Singleton pattern
   factory YetAnotherController() => _this ??= YetAnotherController._();
@@ -13,8 +14,9 @@ class YetAnotherController extends StateXController {
   /// Used to complete asynchronous operations
   @override
   Future<bool> initAsync() async {
-    super.initAsync();
-    throw "An error in initializing the Controller's synchronous operations!";
+    await super.initAsync();
+    throw Exception(
+        "An error in initializing the Controller's synchronous operations!");
   }
 
   /// Supply an 'error handler' routine if something goes wrong

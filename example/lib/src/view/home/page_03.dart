@@ -11,9 +11,7 @@ import 'package:example/src/view.dart';
 /// The third page displayed in this app.
 class Page3 extends StatefulWidget {
   /// You can instantiate the State Controller in the StatefulWidget;
-  Page3({Key? key})
-      : con = Controller(),
-        super(key: key);
+  Page3({super.key}) : con = Controller();
 
   /// Note, it's good in a final variable.
   final Controller con;
@@ -23,20 +21,32 @@ class Page3 extends StatefulWidget {
 
   /// Note, there is more than one way below to access the State object.
   void onPressed() {
-    var state = con.state as _Page3State;
-    state = con.stateOf<Page3>() as _Page3State;
-    state.setState(() {});
-    state.count++;
+    // by its controller's 'current' state object
+    var state = con.state;
+    // by its StatefulWidget
+    state = con.stateOf<Page3>();
+    // by its type
+    state = con.ofState<_Page3State>();
+
+    state?.setState(() {
+      (state as _Page3State).count++;
+    });
   }
 }
 
 class _Page3State extends StateX<Page3> {
   @override
   void initState() {
-    // Register the controller with the StateMVC
+    // Register the controller with the StateX
     add(widget.con);
+
     // Allow for con.initState() to be called.
     super.initState();
+
+    // Retrieve a past controller.
+    final otherCon = controllerByType<YetAnotherController>();
+    final state = otherCon?.state;
+    assert(state is AppStateX, "Should be the 'root' state object.");
   }
 
   int count = 0;

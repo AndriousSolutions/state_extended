@@ -7,6 +7,7 @@ import 'package:example/src/view.dart';
 /// Standard Counter Screen
 ///
 class BuildPage extends StatelessWidget {
+  ///
   const BuildPage({
     Key? key,
     required this.label,
@@ -17,11 +18,22 @@ class BuildPage extends StatelessWidget {
     this.persistentFooterButtons,
   }) : super(key: key);
 
+  ///
   final String label;
+
+  ///
   final int count;
+
+  ///
   final void Function() counter;
+
+  ///
   final List<Widget> Function(BuildContext context)? column;
+
+  ///
   final List<Widget> Function(BuildContext context) row;
+
+  ///
   final List<Widget>? persistentFooterButtons;
 
   @override
@@ -81,6 +93,7 @@ class BuildPage extends StatelessWidget {
       );
 }
 
+///
 final ButtonStyle flatButtonStyle = TextButton.styleFrom(
   minimumSize: const Size(88, 36),
   padding: const EdgeInsets.symmetric(horizontal: 16),

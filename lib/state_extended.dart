@@ -156,7 +156,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         final details = FlutterErrorDetails(
           exception: e,
           stack: e is Error ? e.stackTrace : null,
-          library: 'mvc_pattern.dart',
+          library: 'state_extended.dart',
           context: ErrorDescription('${con.runtimeType}.initAsync'),
         );
         // To cleanup and recover resources.
@@ -1550,18 +1550,18 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
         errorDetails = FlutterErrorDetails(
           exception: exception,
           stack: exception is Error ? exception.stackTrace : null,
-          library: 'mvc_pattern.dart',
+          library: 'state_extended.dart',
           context: ErrorDescription('While getting ready in FutureBuilder'),
         );
 
-        // Possibly recover resources and close serivces before continuing to exit in error.
+        // Possibly recover resources and close services before continuing to exit in error.
         onAsyncError(errorDetails);
         //
       } else {
         //
         errorDetails = FlutterErrorDetails(
           exception: Exception('App failed to initialize'),
-          library: 'mvc_pattern.dart',
+          library: 'state_extended.dart',
           context: ErrorDescription('Please, notify Admin.'),
         );
       }
@@ -1606,8 +1606,8 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
 //   AppStateX createState();
 // }
 
-/// The StateX object at the 'app level.' Used to effect the whole app and
-/// is the State class for the StatefulWidget, AppStatefulWidgetMVC.
+/// The StateX object at the 'app level.' Used to effect the whole app by
+/// being the 'root' of first State object instantiated.
 abstract class AppStateX<T extends StatefulWidget>
     extends InheritedStateX<T, _AppInheritedWidget> with _AppStates {
   /// Optionally supply as many State Controllers as you like to work with this App.
@@ -1984,10 +1984,6 @@ abstract class InheritedStateX<T extends StatefulWidget,
   /// Rebuild the InheritedWidget and its dependencies.
   @override
   void notifyClients() => setState(() {});
-
-  // /// Inline with 'older' frameworks
-  // @override
-  // void refresh() => setState(() {});
 }
 
 ///
@@ -2103,9 +2099,6 @@ class InheritedStatefulWidget<U extends InheritedWidget>
 
   /// In harmony with Flutter's own API
   void notifyClients() => setState(() {});
-
-  /// Inline with 'older' frameworks
-  void refresh() => setState(() {});
 }
 
 class _InheritedState extends State<InheritedStatefulWidget> {
@@ -2148,7 +2141,7 @@ class _BuildBuilder extends StatelessWidget {
       final errorDetails = FlutterErrorDetails(
         exception: e,
         stack: e is Error ? e.stackTrace : null,
-        library: 'mvc_pattern.dart',
+        library: 'state_extended.dart',
         context:
             ErrorDescription("While building 'child' for InheritedWidget."),
       );

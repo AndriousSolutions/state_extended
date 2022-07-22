@@ -4,7 +4,7 @@
 
 import 'package:example/src/view.dart';
 
-/// The 'App Leve' Controller
+/// The 'App Level' Controller
 class AppController extends StateXController {
   /// Singleton design pattern is best for Controllers.
   factory AppController() => _this ??= AppController._();

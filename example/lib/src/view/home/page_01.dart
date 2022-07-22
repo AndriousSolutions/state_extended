@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:example/src/view.dart';
-
 import 'package:example/src/controller.dart';
+
+import 'package:example/src/view.dart';
 
 /// The first page displayed in this app.
 class Page1 extends StatefulWidget {
@@ -19,13 +19,26 @@ class Page1 extends StatefulWidget {
 
   /// The event handler
   void onPressed() {
-    //
-    var state = con.ofState<Page1State>()!;
-    state = con.state as Page1State;
+    // See the number of ways to retrieve a State object.
 
-    state.setState(() {
-      state.count++;
+    // its current state object
+    var state = con.state;
+
+    // by its StatefulWidget
+    state = con.stateOf<Page1>();
+
+    // by its type
+    state = con.ofState<Page1State>();
+
+    state?.setState(() {
+      (state as Page1State).count++;
     });
+
+    final mounted = state?.mounted;
+
+    final widget = state?.widget;
+
+    final context = state?.context;
   }
 }
 
@@ -38,6 +51,12 @@ class Page1State extends StateX<Page1> {
     add(widget.con);
     con = controller as Controller;
 
+    final mountedTest = mounted;
+
+    final widgetTest = widget;
+
+    final contextTest = context;
+
     /// Allow the con.initState() to be called.
     super.initState();
   }
@@ -48,33 +67,17 @@ class Page1State extends StateX<Page1> {
   /// The counter
   int count = 0;
 
-  /// Responsible for the incrementation
-  void onPressed() {
-    count++;
-    setState(() {});
-  }
-
+  /// BuildPage is just a 'generic' widget I made for each page to highlight
+  /// the parameters it taks in for demonstration purposes.
   @override
-  Widget build(context) {
-    // Takes this state object as a dependency to an InheritedWidget.
-    // Link this widget to the InheritedWidget
-    // Only useful if buildInherited() is used instead of setState().
-    dependOnInheritedWidget(context);
-    return buildPage1(
-      count: count,
-      counter: onPressed,
-    );
-  }
-
-  /// Page 1
-  Widget buildPage1({
-    int count = 0,
-    required void Function() counter,
-  }) =>
-      BuildPage(
+  Widget build(context) => BuildPage(
         label: '1',
         count: count,
-        counter: counter,
+        counter: () {
+          count++;
+          setState(() {});
+          //         setState(()=> count++);  // variation of the same thing.
+        },
         row: (BuildContext context) => [
           const SizedBox(),
           ElevatedButton(
