@@ -9,19 +9,19 @@ import 'package:example/src/controller.dart';
 
 import 'package:example/src/view.dart';
 
-///
-class ImageAPIStateMVC<T extends StatefulWidget> extends StateX<T>
+/// The State object allows for a web service to be called.
+class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
     implements ImageAPIState {
   ///
-  ImageAPIStateMVC({
+  ImageAPIStateX({
     required this.uri,
     this.message,
     StateXController? controller,
   }) : super(controller) {
     //
-    final keyId = add(ImageAPIController());
+    final id = add(ImageAPIController());
     // Retrieve the Controller by its unique id.
-    _con = controllerById(keyId) as ImageAPIController;
+    _con = controllerById(id) as ImageAPIController;
     // or Simply by its type.
     _con = controllerByType<ImageAPIController>()!;
   }
@@ -36,11 +36,7 @@ class ImageAPIStateMVC<T extends StatefulWidget> extends StateX<T>
 
   late ImageAPIController _con;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
+  /// Supply the widget to the FutureBuilder. Don't implement an InheritedWidget
   @override
   Widget buildWidget(context) {
     controller?.dependOnInheritedWidget(context);

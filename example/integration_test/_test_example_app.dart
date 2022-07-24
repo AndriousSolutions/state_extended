@@ -188,14 +188,6 @@ Future<void> testPage2State(WidgetTester tester) async {
   (statePage2 as InheritedStateX).notifyClients();
 
   statePage2.setState(() {});
-
-  final child = statePage2.inheritedStatefulWidget;
-
-  expect(child, isA<Widget>(), reason: _location);
-
-  final widget = child.inheritedChildWidget;
-
-  expect(widget, isA<Widget>(), reason: _location);
 }
 
 Future<void> resetPage1Count(WidgetTester tester) async {

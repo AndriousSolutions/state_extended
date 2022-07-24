@@ -16,7 +16,7 @@ class RandomCat extends StatefulWidget {
   State<StatefulWidget> createState() => _RandomCatState();
 }
 
-class _RandomCatState extends ImageAPIStateMVC<RandomCat> {
+class _RandomCatState extends ImageAPIStateX<RandomCat> {
   _RandomCatState()
       : super(
           controller: CatController(),

@@ -17,7 +17,7 @@ class RandomDog extends StatefulWidget {
   State<StatefulWidget> createState() => _RandomDogState();
 }
 
-class _RandomDogState extends ImageAPIStateMVC<RandomDog> {
+class _RandomDogState extends ImageAPIStateX<RandomDog> {
   _RandomDogState()
       : super(
           controller: DogController(),

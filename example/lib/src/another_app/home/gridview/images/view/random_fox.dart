@@ -17,7 +17,7 @@ class RandomFox extends StatefulWidget {
   State<StatefulWidget> createState() => _RandomFoxState();
 }
 
-class _RandomFoxState extends ImageAPIStateMVC<RandomFox> {
+class _RandomFoxState extends ImageAPIStateX<RandomFox> {
   _RandomFoxState()
       : super(
           controller: FoxController(),

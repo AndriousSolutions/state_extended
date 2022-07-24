@@ -1,4 +1,10 @@
 
+## 0.6.0
+ July 24, 2022
+- Removed getter inheritedStatefulWidget
+- Call initInheritedState() in buildWidget()
+- Merged mixin InheritedStateMixin with InheritedStateX
+
 ## 0.5.0
  July 22, 2022
 - Renamed text from 'mvc_pattern.dart' to 'state_extended.dart'
