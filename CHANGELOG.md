@@ -1,4 +1,9 @@
 
+## 0.7.0
+ August 16, 2022
+- New example app: counter_app.dart
+- New: class Swx extends StatefulWidget {
+
 ## 0.6.0
  July 24, 2022
 - Removed getter inheritedStatefulWidget
