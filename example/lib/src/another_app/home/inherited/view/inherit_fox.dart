@@ -21,6 +21,7 @@ class InheritFox extends StatefulWidget {
   State<StatefulWidget> createState() => _InheritFoxState();
 }
 
+/// Supply an InheritedWidget to a StateX object: InheritedStateX
 class _InheritFoxState extends InheritedStateX<InheritFox, _FoxInherited> {
   _InheritFoxState()
       : super(

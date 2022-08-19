@@ -1,4 +1,8 @@
 
+## 0.8.0
+ August 18, 2022
+- Removed inappropriate class Swx
+
 ## 0.7.0
  August 16, 2022
 - New example app: counter_app.dart

@@ -21,6 +21,7 @@ class InheritCat extends StatefulWidget {
   State<StatefulWidget> createState() => _InheritCatState();
 }
 
+/// Supply an InheritedWidget to a StateX object: InheritedStateX
 class _InheritCatState extends InheritedStateX<InheritCat, _CatInherited> {
   _InheritCatState()
       : super(

@@ -21,6 +21,7 @@ class InheritDog extends StatefulWidget {
   State<StatefulWidget> createState() => _InheritDogState();
 }
 
+/// Supply an InheritedWidget to a StateX object: InheritedStateX
 class _InheritDogState extends InheritedStateX<InheritDog, _DogInherited> {
   _InheritDogState()
       : super(
