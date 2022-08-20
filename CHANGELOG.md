@@ -1,7 +1,8 @@
 
-## 0.8.0
+## 0.8.0+01
  August 18, 2022
 - Removed inappropriate class Swx
+- StateSetter from class to mixin
 
 ## 0.7.0
  August 16, 2022

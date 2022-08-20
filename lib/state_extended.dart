@@ -26,9 +26,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         // ignore: prefer_mixin
         WidgetsBindingObserver,
         _ControllerListing,
-        _StateListeners,
-        _RootStateMixin,
-        _AsyncOperations,
+        StateListeners,
+        RootState,
+        AsyncOps,
         FutureBuilderStateMixin
     implements
         StateListener {
@@ -928,7 +928,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 }
 
 /// Add, List, and Remove Listeners.
-mixin _StateListeners {
+mixin StateListeners {
   List<StateListener> get _beforeList => _listenersBefore.toList();
 
   /// Returns a List of 'before' listeners by matching key identifiers.
@@ -1124,8 +1124,7 @@ mixin _ControllerListing {
 
 /// Your 'working' class most concerned with the app's functionality.
 /// Add it to a 'StateX' object to associate it with that State object.
-class StateXController extends StateSetter
-    with StateListener, _RootStateMixin, _AsyncOperations {
+class StateXController with StateSetter, StateListener, RootState, AsyncOps {
   /// Optionally supply a State object to 'link' to this object.
   /// Thus, assigned as 'current' StateX for this object
   StateXController([StateX? state]) {
@@ -1172,27 +1171,14 @@ class StateXController extends StateSetter
 }
 
 /// Allows you to call 'setState' from the 'current' the State object.
-class StateSetter with _StateSets {
+mixin StateSetter {
   /// Provide the setState() function to external actors
   void setState(VoidCallback fn) => _stateX?.setState(fn);
-
-  // /// Allows external classes to 'refresh' or 'rebuild' the widget tree.
-  // void refresh() => _stateX?.refresh();
-  //
-  // /// Allow for a more accurate description
-  // void rebuild() => refresh();
-  //
-  // /// For those accustom to the 'Provider' approach.
-  // void notifyListeners() => refresh();
 
   /// Retrieve the State object by its StatefulWidget. Returns null if not found.
   StateX? stateOf<T extends StatefulWidget>() =>
       _stateWidgetMap.isEmpty ? null : _stateWidgetMap[_type<T>()];
-}
 
-/// Record in a Set any previous State objects
-/// and the current State object being used.
-mixin _StateSets {
   StateX? _stateX;
   final Set<StateX> _stateXSet = {};
   final Map<Type, StateX> _stateWidgetMap = {};
@@ -1623,7 +1609,7 @@ abstract class AppStateX<T extends StatefulWidget>
           controller: controller,
         ) {
     //Record this as the 'root' State object.
-    _setRootStateX(this);
+    setRootStateX(this);
     _dataObj = object;
     addList(controllers?.toList());
   }
@@ -1740,7 +1726,7 @@ class _AppInheritedWidget extends InheritedWidget {
   _AppInheritedWidget({
     Key? key,
     required super.child,
-  })  : dataObject = _RootStateMixin._rootStateX?._dataObj,
+  })  : dataObject = RootState._rootStateX?._dataObj,
         super(key: key);
 
   final Object? dataObject;
@@ -1750,7 +1736,7 @@ class _AppInheritedWidget extends InheritedWidget {
     //
     bool notify = true;
 
-    final rootState = _RootStateMixin._rootStateX;
+    final rootState = RootState._rootStateX;
 
     if (rootState != null) {
       /// if StateSet objects were implemented and this wasn't called within one.
@@ -1856,7 +1842,7 @@ class SetState extends StatelessWidget {
     /// Go up the widget tree and link to the App's inherited widget.
     context.dependOnInheritedWidgetOfExactType<_AppInheritedWidget>();
 
-    final rootState = _RootStateMixin._rootStateX;
+    final rootState = RootState._rootStateX;
 
     if (rootState != null) {
       rootState._inSetStateBuilder = true;
@@ -1874,9 +1860,9 @@ class SetState extends StatelessWidget {
 }
 
 /// Supply access to the 'Root' State object.
-mixin _RootStateMixin {
+mixin RootState {
   ///Record the 'root' StateX object
-  void _setRootStateX(StateX state) {
+  void setRootStateX(StateX state) {
     // This can only be called once successfully. Subsequent calls are ignored.
     if (_rootStateX == null && state is AppStateX) {
       //
@@ -1934,7 +1920,8 @@ mixin _RootStateMixin {
   }
 }
 
-mixin _AsyncOperations {
+/// Supply the Async API
+mixin AsyncOps {
   /// Used to complete asynchronous operations
   Future<bool> initAsync() async => true;
 
