@@ -1,4 +1,8 @@
 
+## 1.0.0
+September 10, 2022
+- Production release
+
 ## 0.8.0+02
  August 18, 2022
 - Removed inappropriate class Swx
