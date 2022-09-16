@@ -21,6 +21,9 @@ class Controller extends StateXController {
   /// Note, the count comes from a separate class, _Model.
   int get count => _model.counter;
 
+  /// Increment and then call the State object's setState() function to reflect the change.
+  void onPressed() => incrementCounter();
+
   /// The Controller knows how to 'talk to' the Model and to the View (interface).
   void incrementCounter() {
     //
@@ -35,14 +38,9 @@ class Controller extends StateXController {
       dataObject = _model.sayHello();
     }
 
-    // /// Just rebuild an InheritedWidget's dependencies.
-    buildInherited();
-    // Same as the buildInherited() function.
-    notifyClients();
+    /// Call the State object's setState() function to reflect the change.
+    setState(() {});
   }
-
-  /// Call the State object's setState() function to reflect the change.
-  void onPressed() => incrementCounter();
 
   /// **************  Life cycle events ****************
 

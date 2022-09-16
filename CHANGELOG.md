@@ -1,7 +1,8 @@
 
-## 1.1.0
+## 1.1.0+01
 September 16, 2022
 - buildInherited() and refresh() are deprecated.
+- Corrected the widget_test.dart. notifyClients() to setState()
 
 ## 1.0.0
 September 10, 2022
