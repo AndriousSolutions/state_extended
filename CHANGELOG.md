@@ -1,4 +1,8 @@
 
+## 1.1.0
+September 16, 2022
+- buildInherited() and refresh() are deprecated.
+
 ## 1.0.0
 September 10, 2022
 - Production release

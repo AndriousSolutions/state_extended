@@ -911,14 +911,18 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
+  @Deprecated('Replaced by the recognized function, notifyClients')
   void buildInherited() {
     final state = context.findAncestorStateOfType<InheritedStateX>();
-    state?.buildInherited();
+    state?.setState(() {});
   }
 
   /// In harmony with Flutter's own API
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
-  void notifyClients() => buildInherited();
+  void notifyClients() {
+    final state = context.findAncestorStateOfType<InheritedStateX>();
+    state?.setState(() {});
+  }
 
   /// Supply an 'error handler' routine to fire when an error occurs.
   /// Allows the user to define their own with each StateX object.
@@ -1163,11 +1167,12 @@ class StateXController with StateSetter, StateListener, RootState, AsyncOps {
       _stateX?.dependOnInheritedWidget(context) ?? false;
 
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
-  void buildInherited() => _stateX?.buildInherited();
+  @Deprecated('Replaced by the recognized function, notifyClients')
+  void buildInherited() => _stateX?.notifyClients();
 
   /// In harmony with Flutter's own API
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
-  void notifyClients() => buildInherited();
+  void notifyClients() => _stateX?.notifyClients();
 }
 
 /// Allows you to call 'setState' from the 'current' the State object.
@@ -1652,20 +1657,17 @@ abstract class AppStateX<T extends StatefulWidget>
     if (object != null) {
       dataObject = object;
     }
-    buildInherited();
+    notifyClients();
   }
 
   /// Rebuild the InheritedWidget and its dependencies.
   @override
+  @Deprecated('Replaced by the recognized function, notifyClients')
   void buildInherited() => super.setState(() {});
 
   /// In harmony with Flutter's own API
   @override
   void notifyClients() => super.setState(() {});
-
-  // /// Inline with 'older' frameworks
-  // @override
-  // void refresh() => setState(() {});
 
   /// Calls the State object's setState() function if not
   ///  (see class SetState below).
@@ -1906,7 +1908,7 @@ mixin RootState {
     if (object != null) {
       _rootStateX?._dataObj = object;
       // Call inherited widget to 'rebuild' any dependencies
-      _rootStateX?.buildInherited();
+      _rootStateX?.notifyClients();
     }
   }
 
@@ -1999,6 +2001,7 @@ abstract class InheritedStateX<T extends StatefulWidget,
 
   /// Rebuild the InheritedWidget and its dependencies.
   @override
+  @Deprecated('Replaced by the recognized function, notifyClients')
   void buildInherited() => setState(() {});
 
   /// In harmony with Flutter's own API
@@ -2060,6 +2063,7 @@ class InheritedStatefulWidget<U extends InheritedWidget>
   void setState(VoidCallback fn) => state._setState(fn);
 
   /// Rebuild the InheritedWidget and its dependencies.
+  @Deprecated('Replaced by the recognized function, notifyClients')
   void buildInherited() => setState(() {});
 
   /// In harmony with Flutter's own API
