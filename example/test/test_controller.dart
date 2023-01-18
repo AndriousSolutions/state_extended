@@ -177,6 +177,25 @@ void testsController(WidgetTester tester) {
   final Set<StateX>? states = con.states;
 
   expect(states, isA<Set<StateX>>(), reason: location);
+
+  expect(states!.length == 2, isTrue, reason: location);
+
+  var state = states.first;
+
+  expect(state, isA<StateX>(), reason: location);
+
+  final id = state.remove(con);
+
+  // I've seen this is the same as the 'isTrue' version below.
+  expect(id, conId, reason: location);
+
+  expect(id == conId, isTrue, reason: location);
+
+  state = states.last;
+
+  final removed = state.removeByKey(id);
+
+  expect(removed, isTrue, reason: location);
 }
 
 bool _testAppController(WidgetTester tester) {

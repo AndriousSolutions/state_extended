@@ -51,6 +51,18 @@ class _Page3State extends StateX<Page3> {
 
   int count = 0;
 
+  /// Completely unnecessary because the Controller uses a
+  /// factory constructor, but if such a Controller had
+  /// separate instances you should add the new controller.
+  @override
+  void didUpdateWidget(Page3 oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Remove the Controller.
+    remove(oldWidget.con);
+    // Add the new Widget's controller
+    add(widget.con);
+  }
+
   @override
   Widget build(BuildContext context) => _buildPage3(
         count: count,

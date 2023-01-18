@@ -92,6 +92,20 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return super.add(controller);
   }
 
+  /// Remove a specific StateXController to this View.
+  /// Returns the StateXController's unique String identifier.
+  @override
+  String remove(StateXController? controller) {
+    if (controller != null) {
+      /// It may have been a listener. Can't be both.
+      removeListener(controller);
+
+      /// Collect all the Controllers to the 'root' State object;
+      rootState?._controllers.remove(controller);
+    }
+    return super.remove(controller);
+  }
+
   /// Add a list of 'Controllers' to be associated with this StatX object.
   @override
   List<String> addList(List<StateXController>? list) {
@@ -1034,7 +1048,7 @@ mixin _ControllerListing {
     if (keyId == null || keyId.isEmpty) {
       return null;
     }
-    return _map[keyId];
+    return _mapControllers[keyId];
   }
 
   /// Associate a list of 'Controllers' to this StateX object at one time.
@@ -1064,13 +1078,13 @@ mixin _ControllerListing {
     return controllers;
   }
 
-  final Map<String, StateXController> _map = {};
+  final Map<String, StateXController> _mapControllers = {};
 
   /// Returns a Map containing all the 'Controllers' associated with this
   /// StateX object each with their unique 'key' identifier.
-  Map<String, StateXController> get map => _map;
+  Map<String, StateXController> get map => _mapControllers;
 
-  List<StateXController> get _asList => _map.values.toList();
+  List<StateXController> get _asList => _mapControllers.values.toList();
 
   /// Add a 'StateXController' to then associate it to this
   /// particular StateX object. Returns the StateXController's
@@ -1094,14 +1108,30 @@ mixin _ControllerListing {
     return id;
   }
 
+  /// Remove a 'StateXController' to then associate it to this
+  /// particular StateX object. Returns the StateXController's
+  /// unique 'key' identifier.
+  String remove(StateXController? con) {
+    String id;
+
+    if (con == null) {
+      id = '';
+    } else {
+      id = con.identifier;
+      removeByKey(id);
+      _cons.remove(con);
+    }
+    return id;
+  }
+
   /// Remove a specific associated 'StateXController' from this StateX object
   /// by using its unique 'key' identifier.
-  bool remove(String keyId) {
-    final con = _map[keyId];
+  bool removeByKey(String keyId) {
+    final con = _mapControllers[keyId];
     final there = con != null;
     if (there) {
       con._popState(_stateX);
-      _map.remove(keyId);
+      _mapControllers.remove(keyId);
     }
     return there;
   }
@@ -1111,15 +1141,15 @@ mixin _ControllerListing {
   StateXController? get rootCon => _asList.isEmpty ? null : _asList.first;
 
   /// Returns true if the specified 'StateXController' is associated with this StateX object.
-  bool contains(StateXController con) => _map.containsValue(con);
+  bool contains(StateXController con) => _mapControllers.containsValue(con);
 
-  void _disposeControllerListing() => _map.clear();
+  void _disposeControllerListing() => _mapControllers.clear();
 
   /// Adds a 'StateXController' to be associated with this StateX object
   /// and returns StateXController's the unique 'key' identifier assigned to it.
   String addConId(StateXController con) {
     final keyId = con.identifier;
-    _map[keyId] = con;
+    _mapControllers[keyId] = con;
     return keyId;
   }
 

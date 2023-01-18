@@ -32,7 +32,7 @@ void testMyApp() {
   tearDownAll(() {});
 
   testWidgets(
-    'test mvc_pattern',
+    'test state_extended',
     (WidgetTester tester) async {
       // Tells the tester to build a UI based on the widget tree passed to it
       await tester.pumpWidget(app);

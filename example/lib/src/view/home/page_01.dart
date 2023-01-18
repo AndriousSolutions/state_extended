@@ -67,6 +67,19 @@ class Page1State extends StateX<Page1> {
   /// The counter
   int count = 0;
 
+  /// Completely unnecessary because the Controller uses a
+  /// factory constructor, but if such a Controller had
+  /// separate instances you should add the new controller.
+  @override
+  void didUpdateWidget(Page1 oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Remove the Controller.
+    remove(oldWidget.con);
+    // Add the new Widget's controller
+    add(widget.con);
+    con = controller as Controller;
+  }
+
   /// BuildPage is just a 'generic' widget I made for each page to highlight
   /// the parameters it taks in for demonstration purposes.
   @override

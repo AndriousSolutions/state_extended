@@ -182,7 +182,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(keyList, isEmpty, reason: _location);
 
-  final removed = stateObj.remove(id);
+  final removed = stateObj.removeByKey(id);
 
   expect(removed, isTrue, reason: _location);
 
@@ -202,7 +202,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   /// Usually you would call this function on a subclass of StateMVC
   /// We're testing the very class, StateMVC, itself and so the warning if fine:
   /// The member 'xxxxxxx' can only be used within instance members
-  /// of subclasses of 'package:mvc_pattern/mvc_pattern.dart'.
+  /// of subclasses of 'package:state_extended/state_extended.dart'.
   bool? boolean = await stateObj.didPopRoute();
 
   expect(boolean, isA<bool>(), reason: _location);

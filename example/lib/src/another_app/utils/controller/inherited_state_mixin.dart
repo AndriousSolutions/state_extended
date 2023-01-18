@@ -155,7 +155,7 @@ class _BuildBuilder extends StatelessWidget {
       final errorDetails = FlutterErrorDetails(
         exception: e,
         stack: e is Error ? e.stackTrace : null,
-        library: 'mvc_pattern.dart',
+        library: 'state_extended.dart',
         context:
             ErrorDescription("While building 'child' for InheritedWidget."),
       );

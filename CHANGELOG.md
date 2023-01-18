@@ -1,4 +1,10 @@
 
+## 2.0.0
+January 18, 2023
+- included void didUpdateWidget(Page1 oldWidget) { in example app
+- New function: String remove(StateXController? controller) {
+- **BREAKING CHANGE** Renamed remove() to bool removeByKey(String keyId) {
+
 ## 1.1.0+01
 September 16, 2022
 - buildInherited() and refresh() are deprecated.

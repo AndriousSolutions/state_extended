@@ -16,5 +16,5 @@ class InheritController extends StateXController {
       states.first.dependOnInheritedWidget(context);
 
   /// Rebuild the InheritedWidget to also rebuild its dependencies.
-  void newAnimals() => states.first.buildInherited();
+  void newAnimals() => states.first.notifyClients();
 }

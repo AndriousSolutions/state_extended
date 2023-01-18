@@ -74,6 +74,19 @@ class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
     super.initState();
   }
 
+  /// Completely unnecessary because the Controller uses a
+  /// factory constructor, but if such a Controller had
+  /// separate instances you should add the new controller.
+  @override
+  void didUpdateWidget(Page2 oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Remove the Controller.
+    remove(oldWidget.con);
+    // Add the new Widget's controller
+    add(widget.con);
+    con = controller as Controller;
+  }
+
   //
   late Controller con;
 

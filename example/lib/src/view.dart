@@ -4,11 +4,11 @@
 
 // Flutter's Material Interface package
 
-/// StateSetter is also defined in mvc_pattern.dart
 export 'package:example/src/view/app/my_app.dart';
 
 export 'package:example/src/view/home/_view.dart';
 
+/// StateSetter is also defined in state_extended.dart
 export 'package:flutter/material.dart' hide StateSetter;
 
 export 'package:state_extended/state_extended.dart';

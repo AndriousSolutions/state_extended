@@ -51,29 +51,27 @@ class _HomePageState extends StateX<HomePage> {
           ),
         ),
         persistentFooterButtons: [
-          Center(
-            child: OverflowBar(
-              spacing: 16,
-              overflowAlignment: OverflowBarAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () => con.newDogs(),
-                  child: const Text('New Dogs'),
-                ),
-                TextButton(
-                  onPressed: () => con.newCats(),
-                  child: const Text('New Cats'),
-                ),
-                TextButton(
-                  onPressed: () => con.newFoxes(),
-                  child: const Text('New Foxes'),
-                ),
-                TextButton(
-                  onPressed: () => con.newBirds(),
-                  child: const Text('New Birds'),
-                ),
-              ],
-            ),
+          OverflowBar(
+            spacing: 5,
+            overflowAlignment: OverflowBarAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () => con.newDogs(),
+                child: const Text('New Dogs'),
+              ),
+              TextButton(
+                onPressed: () => con.newCats(),
+                child: const Text('New Cats'),
+              ),
+              TextButton(
+                onPressed: () => con.newFoxes(),
+                child: const Text('New Foxes'),
+              ),
+              TextButton(
+                onPressed: () => con.newBirds(),
+                child: const Text('New Birds'),
+              ),
+            ],
           ),
         ],
       );
