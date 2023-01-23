@@ -1,9 +1,13 @@
 
+## 2.1.0
+January 23, 2023
+- class _AppInheritedElement allows for better debugging
+
 ## 2.0.0
 January 18, 2023
+- **BREAKING CHANGE** Renamed remove() to bool removeByKey(String keyId) {
 - included void didUpdateWidget(Page1 oldWidget) { in example app
 - New function: String remove(StateXController? controller) {
-- **BREAKING CHANGE** Renamed remove() to bool removeByKey(String keyId) {
 
 ## 1.1.0+01
 September 16, 2022

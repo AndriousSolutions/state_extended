@@ -1764,6 +1764,9 @@ class _AppInheritedWidget extends InheritedWidget {
   final Object? dataObject;
 
   @override
+  InheritedElement createElement() => _AppInheritedElement(this);
+
+  @override
   bool updateShouldNotify(_AppInheritedWidget oldWidget) {
     //
     bool notify = true;
@@ -1781,6 +1784,36 @@ class _AppInheritedWidget extends InheritedWidget {
     }
     return notify;
   }
+}
+
+/// The InheritedElement used by the App's InheritedWidget
+/// InheritedWidget's are used extensively in Flutter
+/// Supply a separate InheritedElement allows for quick debugging
+/// i.e Allow the developer to place breakpoints in this class
+class _AppInheritedElement extends InheritedElement {
+  _AppInheritedElement(super.widget);
+
+  @override
+  // ignore: unnecessary_overrides
+  Object? getDependencies(Element dependent) =>
+      super.getDependencies(dependent);
+
+  @override
+  // ignore: unnecessary_overrides
+  void setDependencies(Element dependent, Object? value) =>
+      super.setDependencies(dependent, value);
+
+  // Allow the developer to place breakpoints
+  @override
+  void notifyDependent(covariant InheritedWidget oldWidget, Element dependent) {
+    dependent.didChangeDependencies();
+  }
+
+  // Those dependencies will be 'marked' for rebuild
+  @override
+  // ignore: unnecessary_overrides
+  void notifyClients(InheritedWidget oldWidget) =>
+      super.notifyClients(oldWidget);
 }
 
 /// Works with the collection of State objects in the App.
