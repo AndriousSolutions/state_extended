@@ -9,14 +9,14 @@ import 'package:example/src/view.dart';
 class BuildPage extends StatelessWidget {
   ///
   const BuildPage({
-    Key? key,
+    super.key,
     required this.label,
     required this.count,
     required this.counter,
     this.column,
     required this.row,
     this.persistentFooterButtons,
-  }) : super(key: key);
+  });
 
   ///
   final String label;

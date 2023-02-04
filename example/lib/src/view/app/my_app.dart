@@ -10,7 +10,7 @@ import 'package:example/src/view.dart';
 /// This is the app's first StatefulWidget.
 class MyApp extends StatefulWidget {
   /// A constant constructor
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   /// This is the App's State object
   @override

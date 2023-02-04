@@ -93,18 +93,20 @@ class Page1State extends StateX<Page1> {
         },
         row: (BuildContext context) => [
           const SizedBox(),
-          ElevatedButton(
-            key: const Key('Page 2'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (BuildContext context) => Page2(),
-                ),
-              );
-            },
-            child: const Text(
-              'Page 2',
+          Flexible(
+            child: ElevatedButton(
+              key: const Key('Page 2'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => Page2(),
+                  ),
+                );
+              },
+              child: const Text(
+                'Page 2',
+              ),
             ),
           ),
         ],

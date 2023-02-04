@@ -1,4 +1,9 @@
 
+## 2.1.1
+February 04, 2023
+- Corrected getter rootState => RootState._rootStateX;
+- refreshLastState() function now in AppStateX
+
 ## 2.1.0
 January 23, 2023
 - class _AppInheritedElement allows for better debugging

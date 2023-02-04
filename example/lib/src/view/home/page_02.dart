@@ -9,9 +9,7 @@ import 'package:example/src/view.dart';
 /// The second page displayed in this app.
 class Page2 extends StatefulWidget {
   ///
-  Page2({Key? key, this.tripError})
-      : con = Controller(),
-        super(key: key);
+  Page2({super.key, this.tripError}) : con = Controller();
 
   ///
   final Controller con;

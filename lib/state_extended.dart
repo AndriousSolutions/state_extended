@@ -1725,7 +1725,10 @@ abstract class AppStateX<T extends StatefulWidget>
     }
   }
 
-  /// This is 'privatized' function returning the 'last' StateX and not for public access.
+  /// Return the latest StateX object currently being used if any.
+  void refreshLastState() => _lastStateX()?.setState(() {});
+
+  /// Returning the 'last' StateX.
   StateX? _lastStateX() {
     StateX? state;
     while (_states.isNotEmpty) {
@@ -1795,25 +1798,14 @@ class _AppInheritedElement extends InheritedElement {
 
   @override
   // ignore: unnecessary_overrides
-  Object? getDependencies(Element dependent) =>
-      super.getDependencies(dependent);
-
-  @override
-  // ignore: unnecessary_overrides
   void setDependencies(Element dependent, Object? value) =>
       super.setDependencies(dependent, value);
 
-  // Allow the developer to place breakpoints
-  @override
-  void notifyDependent(covariant InheritedWidget oldWidget, Element dependent) {
-    dependent.didChangeDependencies();
-  }
-
-  // Those dependencies will be 'marked' for rebuild
   @override
   // ignore: unnecessary_overrides
-  void notifyClients(InheritedWidget oldWidget) =>
-      super.notifyClients(oldWidget);
+  void notifyDependent(
+          covariant InheritedWidget oldWidget, Element dependent) =>
+      super.notifyDependent(oldWidget, dependent);
 }
 
 /// Works with the collection of State objects in the App.
@@ -1929,38 +1921,41 @@ mixin RootState {
   ///Record the 'root' StateX object
   void setRootStateX(StateX state) {
     // This can only be called once successfully. Subsequent calls are ignored.
-    if (_rootStateX == null && state is AppStateX) {
-      //
-      _rootStateX = state;
+    // Important to prefix with the class name to 'share' this as a mixin.
+    if (RootState._rootStateX == null && state is AppStateX) {
+      // Important to prefix with the class name to 'share' this as a mixin.
+      RootState._rootStateX = state;
 
       /// It must now add itself to the State objects list.
-      _rootStateX!._addStateX(state);
+      state._addStateX(state);
 
-      final controller = rootState?.controller;
+      final controller = state.controller;
 
       if (controller != null) {
         /// Collect all the Controllers to the 'root' State object;
-        _rootStateX?._controllers.add(controller);
+        state._controllers.add(controller);
       }
     }
   }
 
-  /// Clear the static reference.
-  void _clearRootStateX() => _rootStateX = null;
-
-  /// Retain the value across all instances of
+  /// To supply the static value across all instances of
   /// StateX objects, ControllerMVC objects and Model objects
+  /// reference it using the class prefix, RootState.
   static AppStateX? _rootStateX;
 
   /// Returns the 'first' StateX object in the App
-  AppStateX? get rootState => _rootStateX;
+  // Important to prefix with the class name to 'share' this as a mixin.
+  AppStateX? get rootState => RootState._rootStateX;
+
+  // /// Return the 'latest' state object
+  // StateX? get lastState => rootState?._lastStateX();
 
   /// Returns the 'latest' context in the App.
-  BuildContext? get lastContext => _rootStateX?._lastStateX()?.context;
+  BuildContext? get lastContext => rootState?._lastStateX()?.context;
 
   /// This is of type Object allowing you
   /// to propagate any class object you wish down the widget tree.
-  Object? get dataObject => _rootStateX?._dataObj;
+  Object? get dataObject => rootState?._dataObj;
 
   /// Assign an object to the property, dataObject.
   /// It will not assign null and if SetState objects are implemented,
@@ -1969,14 +1964,23 @@ mixin RootState {
   set dataObject(Object? object) {
     // Never explicitly set to null
     if (object != null) {
-      _rootStateX?._dataObj = object;
+      final state = rootState;
+      state?._dataObj = object;
       // Call inherited widget to 'rebuild' any dependencies
-      _rootStateX?.notifyClients();
+      state?.notifyClients();
     }
   }
 
+  /// Clear the static reference.
+  /// Important to prefix with the class name to 'share' this as a mixin.
+  void _clearRootStateX() => RootState._rootStateX = null;
+
   /// Determines if running in an IDE or in production.
   /// Returns true if the App is under in the Debugger and not production.
+  bool get inDebugMode => inDebugger;
+
+  ///
+  //@Deprecated('Use inDebugMode. Need not be in a debugger.');
   bool get inDebugger {
     var inDebugMode = false;
     // assert is removed in production.
