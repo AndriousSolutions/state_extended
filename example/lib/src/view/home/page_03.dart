@@ -11,34 +11,32 @@ import 'package:example/src/view.dart';
 /// The third page displayed in this app.
 class Page3 extends StatefulWidget {
   /// You can instantiate the State Controller in the StatefulWidget;
-  Page3({super.key}) : con = Controller();
+  Page3({super.key});
 
-  /// Note, it's good in a final variable.
-  final Controller con;
+  /// To the contain a reference to the State object.
+  final _stateList = <StateX>[];
 
   @override
   State createState() => _Page3State();
 
   /// Note, there is more than one way below to access the State object.
   void onPressed() {
-    // by its controller's 'current' state object
-    var state = con.state;
-    // by its StatefulWidget
-    state = con.stateOf<Page3>();
-    // by its type
-    state = con.ofState<_Page3State>();
+    // Retrieve the State Object
+    final state = _stateList.first;
 
-    state?.setState(() {
+    state.setState(() {
       (state as _Page3State).count++;
     });
   }
 }
 
 class _Page3State extends StateX<Page3> {
+  _Page3State() : super(Controller());
+  //
   @override
   void initState() {
     // Register the controller with the StateX
-    add(widget.con);
+    widget._stateList.add(this);
 
     // Allow for con.initState() to be called.
     super.initState();
@@ -57,10 +55,11 @@ class _Page3State extends StateX<Page3> {
   @override
   void didUpdateWidget(Page3 oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Remove the Controller.
-    remove(oldWidget.con);
-    // Add the new Widget's controller
-    add(widget.con);
+    // Remove this state object from the old Widget.
+    oldWidget._stateList.clear();
+
+    // Make this the 'current' State object for the Controller.
+    widget._stateList.add(this);
   }
 
   @override
@@ -74,7 +73,7 @@ class _Page3State extends StateX<Page3> {
           Page1().onPressed();
         },
         page2counter: () {
-          Page2().onPressed();
+          Controller().onPressed();
         },
       );
 

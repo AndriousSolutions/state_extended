@@ -1,4 +1,9 @@
 
+## 2.2.0
+February 15, 2023
+- Updated example app
+- Deprecated refreshLastState() for rebuildLastState()
+
 ## 2.1.1
 February 04, 2023
 - Corrected getter rootState => RootState._rootStateX;

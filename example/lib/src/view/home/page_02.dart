@@ -9,37 +9,13 @@ import 'package:example/src/view.dart';
 /// The second page displayed in this app.
 class Page2 extends StatefulWidget {
   ///
-  Page2({super.key, this.tripError}) : con = Controller();
-
-  ///
-  final Controller con;
+  const Page2({super.key, this.tripError});
 
   ///
   final bool? tripError;
 
   @override
   State createState() => _Page2State();
-
-  /// Public API for increment a 'Page 2' counter.
-  void onPressed() {
-    //
-    var state = con.state;
-
-    state = con.stateOf<Page2>();
-
-    state = con.ofState<_Page2State>();
-
-    con.onPressed();
-
-    /// Comment out this line and be surprised it still works!!
-    state?.setState(() {});
-
-    // by its StatefulWidget
-    var outsideState = con.stateOf<Page1>();
-
-    // by its type
-    outsideState = con.ofState<Page1State>();
-  }
 }
 
 /// This works with a separate 'data source'
@@ -47,46 +23,34 @@ class Page2 extends StatefulWidget {
 class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
   _Page2State()
-      : super(inheritedBuilder: (child) => _Page02Inherited(child: child));
-
-  @override
-  void initState() {
-    /// Make this the 'current' State object for the Controller.
-    add(widget.con);
-
-    con = controller as Controller;
-
-    /// Event the 'first' State object has a reference to itself
-    AppStateX? firstState = con.rootState;
-
-    /// The latest BuildContext in the app.
-    BuildContext? lastContext = con.lastContext;
-
-    /// The app's data object
-    Object? dataObject = con.dataObject;
-
-    /// Is the app is running in IDE or in production
-    bool debugging = con.inDebugger;
-
-    /// Allow for con.initState() function to fire.
-    super.initState();
-  }
-
-  /// Completely unnecessary because the Controller uses a
-  /// factory constructor, but if such a Controller had
-  /// separate instances you should add the new controller.
-  @override
-  void didUpdateWidget(Page2 oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Remove the Controller.
-    remove(oldWidget.con);
-    // Add the new Widget's controller
-    add(widget.con);
+      : super(
+          inheritedBuilder: (child) => _Page02Inherited(child: child),
+          controller: Controller(),
+        ) {
+    /// Cast to type Controller
     con = controller as Controller;
   }
 
   //
   late Controller con;
+
+  @override
+  void initState() {
+    /// Event the 'first' State object has a reference to itself
+    final AppStateX? firstState = controller?.rootState;
+
+    /// The latest BuildContext in the app.
+    final BuildContext? lastContext = controller?.lastContext;
+
+    /// The app's data object
+    final Object? dataObject = controller?.dataObject;
+
+    /// Is the app is running in IDE or in production
+    final bool? debugging = controller?.inDebugMode;
+
+    /// Allow for con.initState() function to fire.
+    super.initState();
+  }
 
   /// Define the 'child' Widget that will be passed to the InheritedWidget above.
   @override
@@ -106,7 +70,7 @@ class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
     return BuildPage(
       label: '2',
       count: con.count,
-      counter: widget.onPressed,
+      counter: con.onPressed,
       row: (context) => [
         Flexible(
           child: ElevatedButton(
@@ -125,6 +89,7 @@ class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
             key: const Key('Page 3'),
             style: flatButtonStyle,
             onPressed: () async {
+              //
               await Navigator.push(
                   context,
                   MaterialPageRoute<void>(
@@ -148,7 +113,11 @@ class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
           key: const Key('Page 1 Counter'),
           style: flatButtonStyle,
           onPressed: () {
-            final state = con.ofState<Page1State>()!;
+            final con = controller!;
+            // Retrieve specific State object (thus it can't be private)
+            Page1State state = con.ofState<Page1State>()!;
+            // Retrieve State object by its StatefulWidget (will have to cast)
+            state = con.stateOf<Page1>() as Page1State;
             state.count++;
             state.setState(() {});
           },

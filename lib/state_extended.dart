@@ -1726,7 +1726,11 @@ abstract class AppStateX<T extends StatefulWidget>
   }
 
   /// Return the latest StateX object currently being used if any.
-  void refreshLastState() => _lastStateX()?.setState(() {});
+  void rebuildLastState() => _lastStateX()?.setState(() {});
+
+  /// Replaced by a more accurate sounding function.
+  @Deprecated('Use rebuildLastState() instead')
+  void refreshLastState() => rebuildLastState();
 
   /// Returning the 'last' StateX.
   StateX? _lastStateX() {

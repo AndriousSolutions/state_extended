@@ -49,6 +49,10 @@ class Page1State extends StateX<Page1> {
   void initState() {
     /// Link with the StateX so con.setState(() {}) will work.
     add(widget.con);
+
+    /// Allow the con.initState() to be called.
+    super.initState();
+
     con = controller as Controller;
 
     final mountedTest = mounted;
@@ -56,9 +60,6 @@ class Page1State extends StateX<Page1> {
     final widgetTest = widget;
 
     final contextTest = context;
-
-    /// Allow the con.initState() to be called.
-    super.initState();
   }
 
   /// The Controller used
