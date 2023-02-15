@@ -9,58 +9,17 @@ import 'package:example/src/view.dart';
 /// The first page displayed in this app.
 class Page1 extends StatefulWidget {
   /// Page 1
-  Page1({super.key}) : con = Controller();
-
-  /// The Controller used.
-  final Controller con;
+  const Page1({super.key});
 
   @override
   State createState() => Page1State();
-
-  /// The event handler
-  void onPressed() {
-    // See the number of ways to retrieve a State object.
-
-    // its current state object
-    var state = con.state;
-
-    // by its StatefulWidget
-    state = con.stateOf<Page1>();
-
-    // by its type
-    state = con.ofState<Page1State>();
-
-    state?.setState(() {
-      (state as Page1State).count++;
-    });
-
-    final mounted = state?.mounted;
-
-    final widget = state?.widget;
-
-    final context = state?.context;
-  }
 }
 
 ///
 class Page1State extends StateX<Page1> {
-  //
-  @override
-  void initState() {
-    /// Link with the StateX so con.setState(() {}) will work.
-    add(widget.con);
-
-    /// Allow the con.initState() to be called.
-    super.initState();
-
-    con = controller as Controller;
-
-    final mountedTest = mounted;
-
-    final widgetTest = widget;
-
-    final contextTest = context;
-  }
+  /// Supply a controller to this State object
+  /// so to call its setState() function below.
+  Page1State() : super(Controller());
 
   /// The Controller used
   late Controller con;
@@ -68,29 +27,21 @@ class Page1State extends StateX<Page1> {
   /// The counter
   int count = 0;
 
-  /// Completely unnecessary because the Controller uses a
-  /// factory constructor, but if such a Controller had
-  /// separate instances you should add the new controller.
-  @override
-  void didUpdateWidget(Page1 oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Remove the Controller.
-    remove(oldWidget.con);
-    // Add the new Widget's controller
-    add(widget.con);
-    con = controller as Controller;
-  }
-
+  /// Ignore class, BuildPage
   /// BuildPage is just a 'generic' widget I made for each page to highlight
-  /// the parameters it taks in for demonstration purposes.
+  /// the parameters it takes in for demonstration purposes.
   @override
   Widget build(context) => BuildPage(
         label: '1',
         count: count,
         counter: () {
           count++;
-          setState(() {});
-          //         setState(()=> count++);  // variation of the same thing.
+          // Commented out since the controller has access to this State object.
+//          setState(() {});
+          // Look how this Controller has access to this State object!
+          // The incremented counter will not update otherwise! Powerful!
+          // Comment out and the counter will appear not to work.
+          controller?.setState(() {});
         },
         row: (BuildContext context) => [
           const SizedBox(),
@@ -101,7 +52,7 @@ class Page1State extends StateX<Page1> {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (BuildContext context) => Page2(),
+                    builder: (BuildContext context) => const Page2(),
                   ),
                 );
               },

@@ -11,56 +11,15 @@ import 'package:example/src/view.dart';
 /// The third page displayed in this app.
 class Page3 extends StatefulWidget {
   /// You can instantiate the State Controller in the StatefulWidget;
-  Page3({super.key});
-
-  /// To the contain a reference to the State object.
-  final _stateList = <StateX>[];
+  const Page3({super.key});
 
   @override
   State createState() => _Page3State();
-
-  /// Note, there is more than one way below to access the State object.
-  void onPressed() {
-    // Retrieve the State Object
-    final state = _stateList.first;
-
-    state.setState(() {
-      (state as _Page3State).count++;
-    });
-  }
 }
 
 class _Page3State extends StateX<Page3> {
-  _Page3State() : super(Controller());
   //
-  @override
-  void initState() {
-    // Register the controller with the StateX
-    widget._stateList.add(this);
-
-    // Allow for con.initState() to be called.
-    super.initState();
-
-    // Retrieve a past controller.
-    final otherCon = controllerByType<YetAnotherController>();
-    final state = otherCon?.state;
-    assert(state is AppStateX, "Should be the 'root' state object.");
-  }
-
   int count = 0;
-
-  /// Completely unnecessary because the Controller uses a
-  /// factory constructor, but if such a Controller had
-  /// separate instances you should add the new controller.
-  @override
-  void didUpdateWidget(Page3 oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Remove this state object from the old Widget.
-    oldWidget._stateList.clear();
-
-    // Make this the 'current' State object for the Controller.
-    widget._stateList.add(this);
-  }
 
   @override
   Widget build(BuildContext context) => _buildPage3(
@@ -68,9 +27,11 @@ class _Page3State extends StateX<Page3> {
         newKey: () {
           rootState?.setState(() {});
         },
-        counter: widget.onPressed,
+        counter: () => setState(() => count++),
         page1counter: () {
-          Page1().onPressed();
+          // Merely instantiating the StatefulWidget to call its function.
+          final state = Controller().ofState<Page2State>()!;
+          state.onPressed();
         },
         page2counter: () {
           Controller().onPressed();

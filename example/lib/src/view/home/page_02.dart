@@ -15,29 +15,34 @@ class Page2 extends StatefulWidget {
   final bool? tripError;
 
   @override
-  State createState() => _Page2State();
+  State createState() => Page2State();
 }
 
 /// This works with a separate 'data source'
 /// It doesn't no what data source, but being so, the count is never reset to zero.
-class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
+class Page2State extends InheritedStateX<Page2, _Page02Inherited> {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
-  _Page2State()
+  Page2State()
       : super(
           inheritedBuilder: (child) => _Page02Inherited(child: child),
           controller: Controller(),
         ) {
-    /// Cast to type Controller
+    /// Cast to type, Controller
     con = controller as Controller;
   }
 
-  //
+  /// The controller reference property
   late Controller con;
 
   @override
   void initState() {
-    /// Event the 'first' State object has a reference to itself
-    final AppStateX? firstState = controller?.rootState;
+    //
+    super.initState();
+
+    /// Even the app's 'first' State object has a reference to itself
+    final firstState = controller?.rootState;
+
+    assert(firstState is AppStateX, "Should be the 'root' state object.");
 
     /// The latest BuildContext in the app.
     final BuildContext? lastContext = controller?.lastContext;
@@ -46,10 +51,39 @@ class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
     final Object? dataObject = controller?.dataObject;
 
     /// Is the app is running in IDE or in production
-    final bool? debugging = controller?.inDebugMode;
+    final bool? debugMode = controller?.inDebugMode;
 
-    /// Allow for con.initState() function to fire.
-    super.initState();
+    // its current state object
+    var state = con.state;
+
+    // by its StatefulWidget
+    state = con.stateOf<Page1>();
+
+    // by its type
+    state = con.ofState<Page1State>();
+
+    // Look what you have access to 'outside' the build() function.
+    final mounted = state?.mounted;
+
+    final widget = state?.widget;
+
+    final context = state?.context;
+
+    // Retrieve past controllers.
+    final appCon = controllerByType<AppController>();
+
+    var rootState = appCon?.state;
+
+    final otherCon = controllerByType<AnotherController>();
+
+    rootState = otherCon!.state;
+
+    final yetOtherCon = controllerByType<YetAnotherController>();
+
+    rootState = yetOtherCon?.state;
+
+    // All three share the same State object.
+    assert(rootState is AppStateX, "Should be the 'root' state object.");
   }
 
   /// Define the 'child' Widget that will be passed to the InheritedWidget above.
@@ -112,19 +146,23 @@ class _Page2State extends InheritedStateX<Page2, _Page02Inherited> {
         ElevatedButton(
           key: const Key('Page 1 Counter'),
           style: flatButtonStyle,
-          onPressed: () {
-            final con = controller!;
-            // Retrieve specific State object (thus it can't be private)
-            Page1State state = con.ofState<Page1State>()!;
-            // Retrieve State object by its StatefulWidget (will have to cast)
-            state = con.stateOf<Page1>() as Page1State;
-            state.count++;
-            state.setState(() {});
-          },
+          onPressed: onPressed,
           child: const Text('Page 1 Counter'),
         ),
       ],
     );
+  }
+
+  /// Supply a public method to be accessed in Page 3.
+  /// Calling another State object's function for demonstration purposes
+  void onPressed() {
+    final con = controller!;
+    // Retrieve specific State object (thus it can't be private)
+    Page1State state = con.ofState<Page1State>()!;
+    // Retrieve State object by its StatefulWidget (will have to cast)
+    state = con.stateOf<Page1>() as Page1State;
+    state.count++;
+    state.setState(() {});
   }
 }
 

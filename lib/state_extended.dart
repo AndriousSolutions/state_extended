@@ -124,7 +124,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   final String _id = Uuid().generateV4();
 
-  /// Retrieve a StateXController in the  framework by type.
+  /// Retrieve a StateXController by type.
   U? controllerByType<U extends StateXController>() {
     // Look in this State objects list of Controllers.  Maybe not?
 

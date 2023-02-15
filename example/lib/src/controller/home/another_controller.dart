@@ -15,18 +15,6 @@ class AnotherController extends StateXController {
   @override
   void setState(VoidCallback fn) => super.setState(fn);
 
-  // /// Allows external classes to 'refresh' or 'rebuild' the widget tree.
-  // @override
-  // void refresh() => super.refresh();
-  //
-  // /// Allow for a more accurate description
-  // @override
-  // void rebuild() => super.rebuild();
-  //
-  // /// For those accustom to the 'Provider' approach.
-  // @override
-  // void notifyListeners() => super.notifyListeners();
-
   /// Retrieve the State object by type
   /// Returns null if not found
   @override

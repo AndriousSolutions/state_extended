@@ -1,5 +1,5 @@
 
-## 2.2.0
+## 2.2.0+01
 February 15, 2023
 - Updated example app
 - Deprecated refreshLastState() for rebuildLastState()
