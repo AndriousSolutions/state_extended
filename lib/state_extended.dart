@@ -10,8 +10,6 @@ import 'dart:math' show Random;
 
 import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
 
-import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_test/flutter_test.dart' show TestWidgetsFlutterBinding;
@@ -34,14 +32,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         StateListener {
   //
   /// With an optional StateXController parameter, this constructor imposes its own Error Handler.
-  StateX([this._controller]) : currentErrorFunc = FlutterError.onError {
-    /// If a tester is running. Don't switch out its error handler.
-    if (WidgetsBinding.instance is WidgetsFlutterBinding) {
-      /// This allows one to place a breakpoint at 'onError(details)' to determine error location.
-      FlutterError.onError = onError;
-    } else {
-      _inTester = WidgetsBinding.instance is TestWidgetsFlutterBinding;
-    }
+  StateX([this._controller]) {
+    /// If running in a test.
+    _inTester = WidgetsBinding.instance is TestWidgetsFlutterBinding;
 
     /// IMPORTANT! Assign itself to _stateX before adding any StateXController. -gp
     _stateX = this;
@@ -62,9 +55,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Implement the build() function.
   @override
   Widget build(BuildContext context);
-
-  /// Save the current Error Handler.
-  final FlutterExceptionHandler? currentErrorFunc;
 
   /// You need to be able access the widget.
   @override
@@ -186,6 +176,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     /// No 'setState()' functions are necessary
     _rebuildRequested = false;
+
     return init;
   }
 
@@ -356,9 +347,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Clear the list of Controllers.
     _cons.clear();
-
-    // Return the original error routine.
-    FlutterError.onError = currentErrorFunc;
 
     // Remove the State object from a collection.
     rootState?._removeStateX(this);
@@ -937,12 +925,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     final state = context.findAncestorStateOfType<InheritedStateX>();
     state?.setState(() {});
   }
-
-  /// Supply an 'error handler' routine to fire when an error occurs.
-  /// Allows the user to define their own with each StateX object.
-  // details.exception, details.stack
-  @protected
-  void onError(FlutterErrorDetails details) => currentErrorFunc!(details);
 }
 
 /// Add, List, and Remove Listeners.
@@ -1638,9 +1620,7 @@ abstract class AppStateX<T extends StatefulWidget>
     List<StateXController>? controllers,
     Object? object,
   }) : super(
-          inheritedBuilder: (child) => _AppInheritedWidget(
-            child: child,
-          ),
+          inheritedBuilder: (child) => _AppInheritedWidget(child: child),
           controller: controller,
         ) {
     //Record this as the 'root' State object.

@@ -21,9 +21,6 @@ class Page1State extends StateX<Page1> {
   /// so to call its setState() function below.
   Page1State() : super(Controller());
 
-  /// The Controller used
-  late Controller con;
-
   /// The counter
   int count = 0;
 
@@ -48,8 +45,8 @@ class Page1State extends StateX<Page1> {
           Flexible(
             child: ElevatedButton(
               key: const Key('Page 2'),
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute<void>(
                     builder: (BuildContext context) => const Page2(),

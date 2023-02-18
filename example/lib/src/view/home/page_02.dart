@@ -19,14 +19,10 @@ class Page2 extends StatefulWidget {
 }
 
 /// This works with a separate 'data source'
-/// It doesn't no what data source, but being so, the count is never reset to zero.
-class Page2State extends InheritedStateX<Page2, _Page02Inherited> {
+/// It a separate data source, and so the count is never reset to zero.
+class Page2State extends StateX<Page2> {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
-  Page2State()
-      : super(
-          inheritedBuilder: (child) => _Page02Inherited(child: child),
-          controller: Controller(),
-        ) {
+  Page2State() : super(Controller()) {
     /// Cast to type, Controller
     con = controller as Controller;
   }
@@ -88,17 +84,13 @@ class Page2State extends InheritedStateX<Page2, _Page02Inherited> {
 
   /// Define the 'child' Widget that will be passed to the InheritedWidget above.
   @override
-  Widget buildChild(BuildContext context) {
+  Widget build(BuildContext context) {
     //
     final tripError = widget.tripError ?? false;
 
     if (tripError) {
       throw AssertionError('Pretend a error occurs here in this function.');
     }
-
-    // /// Comment this command out and the counter will not work.
-    // /// That's because this Widget is then no longer a dependency to the InheritedWidget above.
-    dependOnInheritedWidget(context);
 
     /// Ignore BuildPage(). It's used only to highlight the other features in this page
     return BuildPage(
@@ -127,7 +119,7 @@ class Page2State extends InheritedStateX<Page2, _Page02Inherited> {
               await Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                      builder: (BuildContext context) => Page3()));
+                      builder: (BuildContext context) => const Page3()));
 
               /// A good habit to get into. Refresh the screen again.
               /// In this case, to show the count may have changed.
@@ -164,12 +156,4 @@ class Page2State extends InheritedStateX<Page2, _Page02Inherited> {
     state.count++;
     state.setState(() {});
   }
-}
-
-/// The inserted InheritedWidget that takes in the buildChild() Widget above.
-class _Page02Inherited extends InheritedWidget {
-  const _Page02Inherited({Key? key, required Widget child})
-      : super(key: key, child: child);
-  @override
-  bool updateShouldNotify(oldWidget) => true;
 }

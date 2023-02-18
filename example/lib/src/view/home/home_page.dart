@@ -59,62 +59,83 @@ class _HomePageState extends StateX<HomePage> {
 
   /// Build the 'child' Widget passed to the InheritedWidget.
   @override
-  Widget buildWidget(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Center(
-          /// SetState class is like a setState() function but called only when the App's InheritedWidget is rebuilt.
-          child: SetState(
-            builder: (context, dataObject) => Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                /// Display the App's data object if it has something to display
-                /// Note, the Stat Controllers has access to the same 'dataObject'
-                if (dataObject != null &&
-                    dataObject == con.dataObject &&
-                    con.dataObject is String)
-                  Padding(
-                    padding: const EdgeInsets.all(30),
-                    child: Text(
-                      dataObject as String,
-                      key: const Key('greetings'),
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize:
-                            Theme.of(context).textTheme.headline4!.fontSize,
-                      ),
-                    ),
+  Widget buildWidget(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        /// SetState class is like a setState() function but called
+        /// only when the App's InheritedWidget is rebuilt.
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            /// Display the App's data object if it has something to display
+            SetState(
+              builder: (context, dataObject) => Padding(
+                padding: const EdgeInsets.all(30),
+                child: Text(
+                  dataObject is! String ? '' : dataObject,
+                  key: const Key('greetings'),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize:
+                        Theme.of(context).textTheme.headlineMedium!.fontSize,
                   ),
-                Text(
-                  'You have pushed the button this many times:',
-                  style: Theme.of(context).textTheme.bodyText2,
                 ),
-                Text(
-                  '${con.count}',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-              ],
+              ),
             ),
-          ),
+            Text(
+              'You have pushed the button this many times:',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            // A Text widget to display the counter is in here.
+            CounterWidget(controller: con),
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          key: const Key('+'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        key: const Key('+'),
 
-          /// Refresh only the Text widget containing the counter.
-          onPressed: () => con.incrementCounter(),
+        /// Refresh only the Text widget containing the counter.
+        onPressed: con.incrementCounter,
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
 
-          /// You can have the Controller called the interface (the View).
-//          onPressed: con.onPressed,
+/// Demonstrating the InheritedWidget's ability to spontaneously rebuild
+/// its dependent widgets.
+class CounterWidget extends StatefulWidget {
+  /// Pass along the State Object Controller to make this widget
+  /// dependent on the App's InheritedWidget.
+  const CounterWidget({super.key, this.controller});
 
-          child: const Icon(Icons.add),
-        ),
-      );
+  /// Making this widget dependent will cause the build() function below
+  /// to run again if and when the App's InheritedWidget calls its notifyClients() funciton.
+  final Controller? controller;
 
-  /// Supply an error handler for Unit Testing.
   @override
-  void onError(FlutterErrorDetails details) {
-    /// Error is now handled.
-    super.onError(details);
+  State<StatefulWidget> createState() => _CounterState();
+}
+
+class _CounterState extends State<CounterWidget> {
+  @override
+  void initState() {
+    super.initState();
+    con = widget.controller;
+  }
+
+  Controller? con;
+
+  @override
+  Widget build(BuildContext context) {
+    // Set a dependency to this widget
+    con?.dependOnInheritedWidget(context);
+    return Text(
+      '${con?.count ?? 0}',
+      style: Theme.of(context).textTheme.headlineMedium,
+    );
   }
 }

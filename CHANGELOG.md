@@ -1,4 +1,10 @@
 
+## 2.3.0
+February 17, 2023
+- onError(FlutterErrorDetails details) removed from StateX
+  It was been proven ineffective.
+- Corrected the 'Hello!' Example App 
+
 ## 2.2.0+1
 February 15, 2023
 - Updated example app

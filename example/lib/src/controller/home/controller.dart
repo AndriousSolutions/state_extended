@@ -32,14 +32,22 @@ class Controller extends StateXController {
     /// Retrieve a particular State object. The rest is ignore if not at 'HomePage'
     final homeState = stateOf<HomePage>();
 
-    /// If working with a particular State object and if divisible by 5
-    if (homeState != null && _model.counter % 5 == 0) {
-      //
-      dataObject = _model.sayHello();
+    // If we're not currently working with this particular State object
+    if (homeState == null) {
+      // Update the interface with the latest change.
+      setState(() {});
+    } else {
+      /// If count is divisible by 5
+      if (_model.counter % 5 == 0) {
+        // Assigning a value will cause 'rootState?.notifyClients()'
+        // Update the interface with the latest change.
+        dataObject = _model.sayHello();
+      } else {
+        // Call those widget's 'dependent' on the App's InheritedWidget.
+        // Update the interface with the latest change.
+        rootState!.notifyClients();
+      }
     }
-
-    /// Call the State object's setState() function to reflect the change.
-    setState(() {});
   }
 
   /// **************  Life cycle events ****************
