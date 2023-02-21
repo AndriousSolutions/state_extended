@@ -48,9 +48,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   StateXController? _controller;
 
   /// Implement this function instead of the build() function
-  /// to utilize a built-in FutureBuilder Widget and InheritedWidget.
+  /// so to utilize a built-in FutureBuilder Widget and InheritedWidget.
   @override
-  Widget buildWidget(BuildContext context) => super.buildWidget(context);
+  Widget buildF(BuildContext context) => super.buildF(context);
 
   /// Implement the build() function.
   @override
@@ -1524,7 +1524,11 @@ mixin StateListener {
 mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// Implement this function instead of the build() function
   /// to utilize a built-in FutureBuilder Widget.
-  Widget buildWidget(BuildContext context) => const SizedBox();
+  Widget buildF(BuildContext context) => const SizedBox();
+
+  /// Deprecated soon
+  @Deprecated('Use buildF() function instead.')
+  Widget buildWidget(BuildContext context) => buildF(context);
 
   /// Run the CircularProgressIndicator() until asynchronous operations are
   /// completed before the app proceeds.
@@ -1931,9 +1935,6 @@ mixin RootState {
   // Important to prefix with the class name to 'share' this as a mixin.
   AppStateX? get rootState => RootState._rootStateX;
 
-  // /// Return the 'latest' state object
-  // StateX? get lastState => rootState?._lastStateX();
-
   /// Returns the 'latest' context in the App.
   BuildContext? get lastContext => rootState?._lastStateX()?.context;
 
@@ -1959,13 +1960,12 @@ mixin RootState {
   /// Important to prefix with the class name to 'share' this as a mixin.
   void _clearRootStateX() => RootState._rootStateX = null;
 
+  //@Deprecated('Use inDebugMode. Need not be in a debugger.');
+  bool get inDebugger => inDebugMode;
+
   /// Determines if running in an IDE or in production.
   /// Returns true if the App is under in the Debugger and not production.
-  bool get inDebugMode => inDebugger;
-
-  ///
-  //@Deprecated('Use inDebugMode. Need not be in a debugger.');
-  bool get inDebugger {
+  bool get inDebugMode {
     var inDebugMode = false;
     // assert is removed in production.
     assert(inDebugMode = true);

@@ -1,8 +1,12 @@
 
+## 2.4.0
+February 21, 2023
+- Replaced buildWidget() function with buildF() function
+
 ## 2.3.0
 February 17, 2023
-- onError(FlutterErrorDetails details) removed from StateX
-  It was been proven ineffective.
+- onError(FlutterErrorDetails details) removed from the StateX class
+  It was been proven ineffective and instead degraded performance.
 - Corrected the 'Hello!' Example App 
 
 ## 2.2.0+1
