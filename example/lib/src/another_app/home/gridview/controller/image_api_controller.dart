@@ -6,14 +6,13 @@
 ///
 
 import 'dart:async';
-
 import 'dart:convert' show json;
 
-import 'package:http/http.dart' as http;
+import 'package:example/src/another_app/home/gridview/view.dart';
 
 import 'package:example/src/view.dart';
 
-import 'package:example/src/another_app/home/gridview/view.dart';
+import 'package:http/http.dart' as http;
 
 /// This is the 'image API' State Object Controller.
 class ImageAPIController extends StateXController {

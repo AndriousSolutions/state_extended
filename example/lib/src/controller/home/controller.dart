@@ -57,7 +57,7 @@ class Controller extends StateXController {
   @override
   void initState() {
     super.initState();
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: initState');
     }
@@ -67,7 +67,7 @@ class Controller extends StateXController {
   /// from the tree.
   @override
   void deactivate() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: deactivate');
     }
@@ -77,7 +77,7 @@ class Controller extends StateXController {
   /// removed via [deactivate].
   @override
   void activate() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: activate');
     }
@@ -89,7 +89,7 @@ class Controller extends StateXController {
   @override
   void dispose() {
     super.dispose();
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: dispose');
     }
@@ -99,7 +99,7 @@ class Controller extends StateXController {
   /// user input, and running in the background.
   @override
   void pausedLifecycleState() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: pausedLifecycleState');
     }
@@ -108,7 +108,7 @@ class Controller extends StateXController {
   /// The application is visible and responding to user input.
   @override
   void resumedLifecycleState() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: resumedLifecycleState');
     }
@@ -117,7 +117,7 @@ class Controller extends StateXController {
   /// The application is in an inactive state and is not receiving user input.
   @override
   void inactiveLifecycleState() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: inactiveLifecycleState');
     }
@@ -127,7 +127,7 @@ class Controller extends StateXController {
   /// or after the view being destroyed due to a Navigator pop.
   @override
   void detachedLifecycleState() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: detachedLifecycleState');
     }
@@ -136,7 +136,7 @@ class Controller extends StateXController {
   /// Override this method to respond when the [StatefulWidget] is recreated.
   @override
   void didUpdateWidget(StatefulWidget oldWidget) {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didUpdateWidget');
     }
@@ -147,7 +147,7 @@ class Controller extends StateXController {
   /// is a dependency of [InheritedWidget].
   @override
   void didChangeDependencies() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didChangeDependencies');
     }
@@ -157,7 +157,7 @@ class Controller extends StateXController {
   /// example during hot reload.
   @override
   void reassemble() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: reassemble');
     }
@@ -168,7 +168,7 @@ class Controller extends StateXController {
   /// the back button.
   @override
   Future<bool> didPopRoute() async {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didPopRoute');
     }
@@ -179,7 +179,7 @@ class Controller extends StateXController {
   /// navigator.
   @override
   Future<bool> didPushRoute(String route) async {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didPushRoute');
     }
@@ -190,7 +190,7 @@ class Controller extends StateXController {
   /// [RouteInformation] and a restoration state onto the router.
   @override
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didPushRouteInformation');
     }
@@ -201,7 +201,7 @@ class Controller extends StateXController {
   /// when a phone is rotated.
   @override
   void didChangeMetrics() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didChangeMetrics');
     }
@@ -210,7 +210,7 @@ class Controller extends StateXController {
   /// Called when the platform's text scale factor changes.
   @override
   void didChangeTextScaleFactor() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didChangeTextScaleFactor');
     }
@@ -219,7 +219,7 @@ class Controller extends StateXController {
   /// Brightness changed.
   @override
   void didChangePlatformBrightness() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didChangePlatformBrightness');
     }
@@ -228,7 +228,7 @@ class Controller extends StateXController {
   /// Called when the system tells the app that the user's locale has changed.
   @override
   void didChangeLocale(Locale locale) {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didChangeLocale');
     }
@@ -251,7 +251,7 @@ class Controller extends StateXController {
   /// Called when the system is running low on memory.
   @override
   void didHaveMemoryPressure() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didHaveMemoryPressure');
     }
@@ -260,7 +260,7 @@ class Controller extends StateXController {
   /// Called when the system changes the set of active accessibility features.
   @override
   void didChangeAccessibilityFeatures() {
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didChangeAccessibilityFeatures');
     }

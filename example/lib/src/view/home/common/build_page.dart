@@ -61,16 +61,18 @@ class BuildPage extends StatelessWidget {
                 style: const TextStyle(fontSize: 48),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(top: 50),
-              child: Text(
-                'You have pushed the button this many times:',
+            const Flexible(
+              child: Padding(
+                padding: EdgeInsets.only(top: 50),
+                child: Text(
+                  'You have pushed the button this many times:',
+                ),
               ),
             ),
             Flexible(
               child: Text(
                 '$count',
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
             Padding(

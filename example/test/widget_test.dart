@@ -16,7 +16,7 @@ import '../integration_test/_test_example_app.dart'
 
 import '_unit_testing.dart' show unitTesting;
 
-import 'test_listener.dart' show testsStateListener01;
+import 'test_listener.dart' show testsStateListener;
 
 void main() => testMyApp();
 
@@ -43,8 +43,8 @@ void testMyApp() {
       /// pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle();
 
-      /// Tests Listener class
-      await testsStateListener01(tester);
+      /// Introduce State Listeners for the testing.
+      await testsStateListener(tester);
 
       /// Preform integration first to set up
       /// WidgetsBinding.instance is IntegrationTestWidgetsFlutterBinding

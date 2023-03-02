@@ -5,8 +5,8 @@
 /// Export libraries concerned with the Home Page's Interface
 ///
 
-export 'package:example/src/another_app/home/inherited/view.dart';
-
 export 'package:example/src/another_app/home/gridview/view.dart';
+
+export 'package:example/src/another_app/home/inherited/view.dart';
 
 export 'package:example/src/another_app/home/view/home_page.dart';

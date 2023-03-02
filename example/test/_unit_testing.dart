@@ -12,9 +12,6 @@ import 'test_statex.dart';
 
 Future<void> unitTesting(WidgetTester tester) async {
 //
-  /// Tests Listener class
-  await testsStateListener02(tester);
-
   /// Tests StateMVC class
   await testsStateX(tester);
 

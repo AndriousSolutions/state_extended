@@ -9,56 +9,48 @@ import 'package:example/src/view.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// A 'listener' for testing.
-class TesterStateListener with StateListener {
-  factory TesterStateListener() => _this ??= TesterStateListener._();
-  TesterStateListener._();
-  static TesterStateListener? _this;
-}
-
 //
 const _location = '========================== test_listener.dart';
 
-Future<void> testsStateListener01(WidgetTester tester) async {
+/// Introduce State Listeners for the testing.
+Future<void> testsStateListener(WidgetTester tester) async {
   //
-  /// Find its StatefulWidget first then the 'type' of State object.
+  // Find its StatefulWidget first then the 'type' of State object.
   final appState = tester.firstState<AppStateX>(find.byType(MyApp));
 
   expect(appState.widget, isA<MyApp>());
 
-  /// If the State object has 'added' it, you can retrieve one of its
-  /// Controllers by type.
-  final con = appState.controllerByType<Controller>()!;
+  final con = Controller();
 
-  /// Of course, you can retrieve the State object its currently colledted.
-  /// In this case, there's only one, the one in con.state.
+  // Of course, you can retrieve the State object its currently collected.
+  // In this case, there's only one, the one in con.state.
   final StateX state = con.stateOf<Page1>()!;
 
   final listener = TesterStateListener();
 
   final id = listener.identifier;
 
-  /// Testing the Adding of Listeners to a State object
-
+  // Testing the Adding of Listeners to a State object
   final added = state.addBeforeListener(listener);
 
   expect(added, isTrue, reason: _location);
 
-  /// Test for 'Before' Listener has been added.
+  // Test for 'Before' Listener has been added.
   var contains = state.beforeContains(listener);
 
   expect(contains, isTrue, reason: _location);
 
-  /// Add an 'after' Listener.
+  // Add an 'after' Listener.
   state.addAfterListener(listener);
 
-  /// Test for 'After' Listener has been added.
+  // Test for 'After' Listener has been added.
   contains = state.afterContains(listener);
 
   expect(contains, isTrue, reason: _location);
 
   final add = state.addListener(listener);
 
+  // Should be false as it's already an 'after listener.'
   expect(add, isFalse, reason: _location);
 
   var stateListener = state.beforeListener(id);
@@ -77,56 +69,29 @@ Future<void> testsStateListener01(WidgetTester tester) async {
 
   var list = state.beforeList([id]);
 
+  expect(list, isNotEmpty, reason: _location);
+
   list = state.afterList([id]);
 
   expect(list, isNotEmpty, reason: _location);
+
+  final remove = state.removeListener(listener);
+
+  expect(remove, isTrue, reason: _location);
+
+  list = state.beforeList([id]);
+
+  expect(list, isEmpty, reason: _location);
+
+  list = state.afterList([id]);
+
+  expect(list, isEmpty, reason: _location);
+
 }
 
-Future<void> testsStateListener02(WidgetTester tester) async {
-  //
-  /// Find the 'first State object' of the App.
-  /// Find its StatefulWidget first then the 'type' of State object.
-  final appState = tester.firstState<AppStateX>(find.byType(MyApp));
-
-  expect(appState.widget, isA<MyApp>());
-
-  /// If the State object has 'added' it, you can retrieve one of its
-  /// Controllers by type.
-  final con = appState.controllerByType<Controller>()!;
-
-  /// Of course, you can retrieve the State object its currently collected.
-  /// In this case, there's only one, the one in con.state.
-  final StateX state = con.stateOf<Page1>()!;
-
-  /// The Test Listener
-  final listener = TesterStateListener();
-
-  var add = state.addListener(listener);
-
-  expect(add, isTrue, reason: _location);
-
-  // Add the listener as a 'before' listener
-  add = state.addBeforeListener(listener);
-
-  expect(add, isTrue, reason: _location);
-
-  final removed = state.removeListener(listener);
-
-  expect(removed, isTrue, reason: _location);
-
-  // Add again for further testing that follows.
-  add = state.addListener(listener);
-
-  expect(add, isTrue, reason: _location);
-
-  // 'addListener' adds an 'after' listener
-  // Should return false as it's already added.
-  add = state.addAfterListener(listener);
-
-  expect(add, isFalse, reason: _location);
-
-  // Add again for further testing that follows.
-  add = state.addBeforeListener(listener);
-
-  expect(add, isTrue, reason: _location);
+/// A 'listener' for testing.
+class TesterStateListener with StateListener {
+  factory TesterStateListener() => _this ??= TesterStateListener._();
+  TesterStateListener._();
+  static TesterStateListener? _this;
 }

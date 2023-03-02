@@ -22,8 +22,6 @@ class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
     final id = add(ImageAPIController());
     // Retrieve the Controller by its unique id.
     _con = controllerById(id) as ImageAPIController;
-    // or Simply by its type.
-    _con = controllerByType<ImageAPIController>()!;
   }
 
   ///

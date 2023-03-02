@@ -41,7 +41,7 @@ class Page2State extends StateX<Page2> {
     assert(firstState is AppStateX, "Should be the 'root' state object.");
 
     /// The latest BuildContext in the app.
-    final BuildContext? lastContext = controller?.lastContext;
+    final BuildContext? lastContext = controller?.state?.endState?.context;
 
     /// The app's data object
     final Object? dataObject = controller?.dataObject;
@@ -65,18 +65,10 @@ class Page2State extends StateX<Page2> {
 
     final context = state?.context;
 
-    // Retrieve past controllers.
-    final appCon = controllerByType<AppController>();
+    // Retrieve the app's own controller.
+    final appCon = AppController();
 
-    var rootState = appCon?.state;
-
-    final otherCon = controllerByType<AnotherController>();
-
-    rootState = otherCon!.state;
-
-    final yetOtherCon = controllerByType<YetAnotherController>();
-
-    rootState = yetOtherCon?.state;
+    final rootState = appCon.state;
 
     // All three share the same State object.
     assert(rootState is AppStateX, "Should be the 'root' state object.");
@@ -132,7 +124,7 @@ class Page2State extends StateX<Page2> {
         ),
       ],
       column: (context) => [
-        const Text("Has a 'data source' to save the count"),
+        const Flexible(child: Text("Has a 'data source' to save the count")),
       ],
       persistentFooterButtons: <Widget>[
         ElevatedButton(

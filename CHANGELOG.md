@@ -1,4 +1,14 @@
 
+## 2.5.0
+February 27, 2023
+- RecordExceptionMixin stores the last error
+- onAsyncError() no longer returns boolean
+- Removed getter, Map<String, StateXController> get map
+- bool forEach(void Function(StateXController con) func, {bool? reversed}) {
+- bool forEachState(void Function(StateX state) func, {bool? reversed}) {
+- startState and endState introduced to the StateX class
+- WidgetsBinding.instance in activate() & deactivate()
+
 ## 2.4.0
 February 21, 2023
 - Replaced buildWidget() function with buildF() function

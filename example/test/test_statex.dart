@@ -80,7 +80,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(widget, isA<MyApp>(), reason: _location);
 
   /// Returns the most recent BuildContext/Element created in the App
-  context = appState.lastContext!;
+  context = appState.endState!.context;
 
   if (context.widget is Page1) {
     /// Page 1 is currently being displayed.
@@ -98,9 +98,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   /// This is confirmed by testing for its StatefulWidget
   expect(stateObj.widget, isA<MyApp>(), reason: _location);
 
-  /// If the State object has 'added' it, you can retrieve one of its
-  /// Controllers by type.
-  con = appState.controllerByType<Controller>()!;
+  con = Controller();
 
   /// Of course, you can retrieve the State object its collected.
   /// In this case, there's only one, the one in con.state.
@@ -158,7 +156,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   /// Determines if running in an IDE or in production.
   /// Returns true if the App is under in the Debugger and not production.
-  final debugging = appState.inDebugger && con.inDebugger;
+  final debugging = appState.inDebugMode && con.inDebugMode;
 
   expect(debugging, isA<bool>(), reason: _location);
 
@@ -166,12 +164,6 @@ Future<void> testsStateX(WidgetTester tester) async {
   final _state = con.state!;
 
   expect(_state, isA<State>(), reason: _location);
-
-  /// The appState object 'contains' this particular State Controller object.
-  final noCon = appState.controllerByType<TestingController>();
-
-  /// appState object 'does not contain' this particular State Controller object.
-  expect(noCon, isNull, reason: _location);
 
   /// Test for the unique identifier assigned to every Controller.
   final id = stateObj.add(TestingController());
@@ -196,8 +188,6 @@ Future<void> testsStateX(WidgetTester tester) async {
     context: ErrorDescription('Created merely for testing purposes.'),
     library: 'widget_test',
   );
-
-  expect(appState.onAsyncError(errorDetails), isA<bool>());
 
   /// Usually you would call this function on a subclass of StateMVC
   /// We're testing the very class, StateMVC, itself and so the warning if fine:
@@ -251,7 +241,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(controller, isA<Controller>(), reason: _location);
 
-  final debug = stateObj.inDebugger;
+  final debug = stateObj.inDebugMode;
 
   expect(debug, isA<bool>(), reason: _location);
 

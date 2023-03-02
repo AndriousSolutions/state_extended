@@ -35,6 +35,8 @@ void testsController(WidgetTester tester) {
   /// Do the reverse, test 'adding' a State object to a Controller.
   conId = con.addState(appState);
 
+  expect(conId, equals(appState.identifier), reason: location);
+
   /// null testing
   conId = appState.add(null);
 
@@ -42,8 +44,9 @@ void testsController(WidgetTester tester) {
 
   appState = con.rootState!;
 
-  /// This State object 'contains' this Controller.
-  con = appState.controllerByType<Controller>()!;
+  expect(appState, isA<AppStateX>(), reason: location);
+
+  con = Controller();
 
   String keyId = con.identifier;
 
@@ -59,13 +62,13 @@ void testsController(WidgetTester tester) {
 
   expect(con, isA<Controller>(), reason: location);
 
-  /// Event the 'first' State object has a reference to itself
+  /// Even the 'first' State object has a reference to itself
   appState = appState.rootState!;
 
   expect(appState.widget, isA<MyApp>(), reason: location);
 
   /// Returns the most recent BuildContext/Element created in the App
-  final BuildContext context = con.lastContext!;
+  final BuildContext context = con.state!.endState!.context;
 
   expect(context.widget, isA<Page1>(), reason: location);
 
@@ -79,7 +82,7 @@ void testsController(WidgetTester tester) {
   _testAppController(tester);
 
   /// This State object 'contains' this Controller.
-  AnotherController another = appState.controllerByType<AnotherController>()!;
+  var another = AnotherController();
 
   keyId = another.identifier;
 
@@ -88,8 +91,7 @@ void testsController(WidgetTester tester) {
   expect(another, isA<AnotherController>(), reason: location);
 
   /// This State object 'contains' this Controller.
-  YetAnotherController andAnother =
-      appState.controllerByType<YetAnotherController>()!;
+  var andAnother = YetAnotherController();
 
   keyId = andAnother.identifier;
 
@@ -97,18 +99,7 @@ void testsController(WidgetTester tester) {
 
   expect(andAnother, isA<YetAnotherController>(), reason: location);
 
-  /// Another way to retrieve its Controller from a list of Controllers
-  /// Retrieve it by 'type'
-  /// This controller exists but not with this State object
-  /// but with the AppMVC (the App's State object)
-  another = appState.controllerByType<AnotherController>()!;
-
-  expect(another, isA<AnotherController>(), reason: location);
-
-  /// This Controller will be found in this State object's listing.
-  con = appState.controllerByType<Controller>()!;
-
-  expect(con, isA<Controller>());
+  con = Controller();
 
   conId = con.identifier;
 
@@ -163,30 +154,20 @@ void testsController(WidgetTester tester) {
   /// Allows you to call 'setState' from the 'current' the State object.
   con.setState(() {});
 
-  //@Deprecated('Keep with Flutter syntax')
-  // /// Allows you to call 'setState' from the 'current' the State object.
-  // con.refresh();
-  //
-  // /// Allows you to call 'setState' from the 'current' the State object.
-  // con.rebuild();
-  //
-  // /// Allows you to call 'setState' from the 'current' the State object.
-  // con.notifyListeners();
-
   /// Return a 'copy' of the Set of State objects.
   final Set<StateX>? states = con.states;
 
   expect(states, isA<Set<StateX>>(), reason: location);
 
-  expect(states!.length == 2, isTrue, reason: location);
+  expect(states!.isNotEmpty, isTrue, reason: location);
 
   var state = states.first;
 
-  expect(state, isA<StateX>(), reason: location);
+  expect(state, isA<AppStateX>(), reason: location);
 
   final id = state.remove(con);
 
-  // I've seen this is the same as the 'isTrue' version below.
+  // I see this is the same as the 'isTrue' version below.
   expect(id, conId, reason: location);
 
   expect(id == conId, isTrue, reason: location);
@@ -217,8 +198,6 @@ bool _testAppController(WidgetTester tester) {
     library: 'widget_test',
   );
 
-  expect(rootCon.onAsyncError(errorDetails), isA<bool>());
-
-  // Take in any Exception so not to 'fail' the running test
+   // Take in any Exception so not to 'fail' the running test
   return tester.takeException() == null;
 }

@@ -35,8 +35,6 @@ class _HomePageState extends StateX<HomePage> {
 
     var con = controller;
 
-    con = controllerByType<Controller>();
-
     con = controllerById(con?.identifier);
 
     /// Retrieve the 'app level' State object
@@ -45,21 +43,14 @@ class _HomePageState extends StateX<HomePage> {
     /// You're able to retrieve the Controller(s) from other State objects.
     con = appState.controller;
 
-    con = appState.controllerByType<Controller>();
-
     con = appState.controllerById(con?.identifier);
-
-    /// You're able to retrieve the 'past' Controller(s)
-    con = controllerByType<AppController>();
-
-    con = appState.controllerByType<AppController>();
   }
 
   late AppStateX appState;
 
   /// Build the 'child' Widget passed to the InheritedWidget.
   @override
-  Widget buildWidget(BuildContext context) {
+  Widget buildF(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
