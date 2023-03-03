@@ -198,6 +198,6 @@ bool _testAppController(WidgetTester tester) {
     library: 'widget_test',
   );
 
-   // Take in any Exception so not to 'fail' the running test
+  // Take in any Exception so not to 'fail' the running test
   return tester.takeException() == null;
 }

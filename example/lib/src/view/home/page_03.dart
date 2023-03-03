@@ -19,20 +19,6 @@ class Page3 extends StatefulWidget {
 }
 
 class _Page3State extends StateX<Page3> {
-  @override
-  void initState() {
-    super.initState();
-    // Demonstrates the ability to process all the StateX objects
-    // currently available in the app.
-    forEachState((state) {
-      if (kDebugMode) {
-        print(state.hasError);
-        print(state.errorMsg);
-        print(state.stackTrace?.toString() ?? '');
-      }
-    });
-  }
-
   //
   int count = 0;
 
@@ -42,7 +28,12 @@ class _Page3State extends StateX<Page3> {
         newKey: () {
           startState?.setState(() {});
         },
-        counter: () => setState(() => count++),
+        counter: () {
+          setState(() => count++);
+          // Deprecated, but still needs to be tested.
+          rootState?.rebuildLastState();
+          rootState?.refreshLastState();
+        },
         page1counter: () {
           // Merely instantiating the StatefulWidget to call its function.
           final state = Controller().ofState<Page2State>()!;
@@ -80,7 +71,7 @@ class _Page3State extends StateX<Page3> {
                 key: const Key('Hello! example'),
                 onPressed: () {
                   Navigator.push(
-                      endState!.context,
+                      lastContext!,
                       MaterialPageRoute<void>(
                           builder: (BuildContext context) => const HomePage()));
                 },
@@ -93,7 +84,7 @@ class _Page3State extends StateX<Page3> {
                 key: const Key('InheritedWidget example'),
                 onPressed: () {
                   Navigator.push(
-                      lastContext!,
+                      endState!.context,
                       MaterialPageRoute<void>(
                           builder: (BuildContext context) =>
                               const i.HomePage()));

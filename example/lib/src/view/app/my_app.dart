@@ -35,16 +35,6 @@ class _MyAppState extends AppStateX<MyApp> {
           object: 'Hello!',
         );
 
-  @override
-  void initState() {
-    super.initState();
-    forEach((con) {
-      if (kDebugMode) {
-        print(con.runtimeType.toString());
-      }
-    });
-  }
-
   /// Try these different 'build' functions and get access
   /// to a built-in FutureBuilder and or a 'app level' InheritedWidget.
 

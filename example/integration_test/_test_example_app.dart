@@ -233,7 +233,7 @@ Future<void> resetPage1Count(WidgetTester tester) async {
   // Is there a button labeled, Page 1.
   final page1Finder = find.byKey(const Key('Page 1'));
 
-  if(page1Finder.evaluate().toList(growable: false).isNotEmpty) {
+  if (page1Finder.evaluate().toList(growable: false).isNotEmpty) {
     // Explicitly go to Page 1 if necessary.
     await tester.tap(page1Finder);
     await tester.pumpAndSettle();

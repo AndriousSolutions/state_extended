@@ -86,7 +86,6 @@ Future<void> testsStateListener(WidgetTester tester) async {
   list = state.afterList([id]);
 
   expect(list, isEmpty, reason: _location);
-
 }
 
 /// A 'listener' for testing.

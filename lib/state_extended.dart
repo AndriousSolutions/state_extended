@@ -35,9 +35,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   //
   /// With an optional StateXController parameter, this constructor imposes its own Error Handler.
   StateX([this._controller]) {
-    /// If running in a test.
-    _inTester = WidgetsBinding.instance is TestWidgetsFlutterBinding;
-
     /// IMPORTANT! Assign itself to _stateX before adding any StateXController. -gp
     _stateX = this;
 
@@ -152,7 +149,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   bool _rebuildRequested = false;
 
   /// Running in a tester instead of production.
-  bool _inTester = false;
+  static bool get inTester => _inTester;
+  static final _inTester = WidgetsBinding.instance is TestWidgetsFlutterBinding;
 
   /// Asynchronous operations must complete successfully.
   @override
@@ -259,7 +257,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final con in _controllerList) {
       // Don't call its deactivate if it's in other State objects.
 //      if (con._stateXSet.isEmpty) {
-        con.deactivate();
+      con.deactivate();
 //      }
       // Pop the State object from the controller
       con._popState(this);
@@ -320,7 +318,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
       // Don't call its activate if it's in other State objects.
 //      if (con._stateXSet.isEmpty) {
-        con.activate();
+      con.activate();
 //      }
     }
 
@@ -493,7 +491,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       }
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -557,7 +555,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       await listener.didPopRoute();
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -599,7 +597,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       await listener.didPushRoute(route);
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -645,7 +643,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       await listener.didPushRouteInformation(routeInformation);
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -683,7 +681,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.didChangeMetrics();
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -720,7 +718,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.didChangeTextScaleFactor();
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -745,7 +743,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.didChangePlatformBrightness();
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -775,7 +773,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.didChangeLocale(locale);
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -804,7 +802,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.didHaveMemoryPressure();
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -832,7 +830,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.didChangeAccessibilityFeatures();
     }
     _rebuildAllowed = true;
-    if (_rebuildRequested || _inTester) {
+    if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
       /// Perform a 'rebuild' if requested.
@@ -1356,7 +1354,8 @@ mixin StateSetter {
     if (state == _stateX) {
       //
       _statePushed = false;
-/// Now this is called in deactivate, this shouldn't be necessary.
+
+      /// Now this is called in deactivate, this shouldn't be necessary.
       // // Remove all State objects that have been disposed of.
       // _stateXSet.retainWhere((item) => item.mounted);
       // _stateWidgetMap.removeWhere((key, value) => !value.mounted);
@@ -2152,7 +2151,7 @@ mixin RecordExceptionMixin {
   /// Simply display the exception.
   String get errorMsg => _recException == null
       ? ''
-      : _recException.toString().replaceFirst('Exception:', '');
+      : _recException.toString().replaceFirst('Exception: ', '');
 
   /// Indicate if an exception had occurred.
   bool get hasError => _recException != null;

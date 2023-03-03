@@ -18,6 +18,8 @@ import '_unit_testing.dart' show unitTesting;
 
 import 'test_listener.dart' show testsStateListener;
 
+import 'test_error_handling.dart';
+
 void main() => testMyApp();
 
 /// Also called in package's own testing file, test/widget_test.dart
@@ -55,6 +57,8 @@ void testMyApp() {
 
       /// Testing the StateMVC, ControllerMVC, and ListenerMVC
       await unitTesting(tester);
+
+      await errorHandling(tester);
     },
   );
 }

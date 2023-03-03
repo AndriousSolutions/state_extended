@@ -1,5 +1,5 @@
 
-## 2.5.0+1
+## 2.5.0+2
 February 27, 2023
 - RecordExceptionMixin stores the last error
 - onAsyncError() no longer returns boolean

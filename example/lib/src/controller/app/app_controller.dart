@@ -27,7 +27,5 @@ class AppController extends StateXController {
   /// in the corresponding initAsync() routine.
   /// Returns true if the error was properly handled.
   @override
-  void onAsyncError(FlutterErrorDetails details) {
-
-  }
+  void onAsyncError(FlutterErrorDetails details) {}
 }

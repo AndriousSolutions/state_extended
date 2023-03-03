@@ -21,36 +21,61 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(stateObj, isA<AppStateX>(), reason: _location);
 
+  var conCount = 0;
+
+  stateObj.forEach((con) {
+    conCount++;
+  });
+
+  expect(conCount > 1, isTrue, reason: _location);
+
+  stateObj.forEach(reversed: true, (con) {
+    conCount--;
+  });
+
+  expect(conCount == 0, isTrue, reason: _location);
+
   StateXController con = stateObj.controller!;
 
   expect(con, isA<AppController>());
 
-  /// This Controller's current State object is _MyAppState as AppStateMVC
+  // This Controller's current State object is _MyAppState as AppStateMVC
   stateObj = con.state!;
 
   expect(stateObj, isA<AppStateX>(), reason: _location);
 
-  /// The first State object is itself --- _MyAppState
+  // The first State object is itself --- _MyAppState
   AppStateX appState = stateObj.rootState!;
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
-  /// Test its if statement.
-  appState.catchError(null);
+  final exception = Exception('Testing');
+
+  // Test its if statement.
+  appState.catchError(exception);
+
+  appState.recordException(exception);
+
+  expect(appState.hasError, isTrue, reason: _location);
+
+  expect(appState.errorMsg == 'Testing', isTrue, reason: _location);
+
+  expect(appState.stackTrace, isNull, reason: _location);
 
   appState.setState(() {});
 
-  /// Test 'refresh' alternative
+  // Test 'refresh' alternative
   appState.notifyClients();
+  appState.buildInherited();
 
-  /// Every StateMVC and ControllerMVC has a unique String identifier.
+  // Every StateMVC and ControllerMVC has a unique String identifier.
   final myAppStateId = appState.identifier;
 
   BuildContext context = appState.context;
 
   expect(context, isA<BuildContext>(), reason: _location);
 
-  /// A Controller for the 'app level' to influence the whole app.
+  // A Controller for the 'app level' to influence the whole app.
   con = appState.controller!;
 
   expect(con, isA<AppController>(), reason: _location);
@@ -61,111 +86,129 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(con, isA<AppController>(), reason: _location);
 
-  /// As well as the base class, ControllerMVC
+  // Deprecated by must still be tested.
+  con = appState.controllerByType<AppController>()!;
+
+  expect(con, isA<AppController>(), reason: _location);
+
+  // As well as the base class, ControllerMVC
   expect(con, isA<StateXController>(), reason: _location);
 
-  /// You can retrieve a State object by the 'type' of its StatefulWidget
+  // You can retrieve a State object by the 'type' of its StatefulWidget
   appState = con.stateOf<MyApp>() as AppStateX;
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
-  /// The 'state' property is the Controller's current State object
-  /// it is working with.
+  // The 'state' property is the Controller's current State object
+  // it is working with.
   stateObj = con.state!;
 
-  /// Of course, Flutter provides a reference to the StatefulWidget
-  /// thought the State object.
+  // Of course, Flutter provides a reference to the StatefulWidget
+  // thought the State object.
   StatefulWidget widget = stateObj.widget;
 
   expect(widget, isA<MyApp>(), reason: _location);
 
-  /// Returns the most recent BuildContext/Element created in the App
+  // Returns the most recent BuildContext/Element created in the App
   context = appState.endState!.context;
 
   if (context.widget is Page1) {
-    /// Page 1 is currently being displayed.
+    // Page 1 is currently being displayed.
     expect(context.widget, isA<Page1>(), reason: _location);
   }
 
   if (context.widget is HomePage) {
-    /// MyHomePage is currently being displayed.
+    // MyHomePage is currently being displayed.
     expect(context.widget, isA<HomePage>(), reason: _location);
   }
 
-  /// We know Controller's current State object is _MyHomePageState
+  // Deprecated but must still be tested.
+  stateObj = appState.lastState! as StateX;
+
+  expect(stateObj, isA<Page1State>(), reason: _location);
+
+  stateObj = appState.lastStateX!;
+
+  expect(stateObj, isA<Page1State>(), reason: _location);
+
+  // We know Controller's current State object is _MyHomePageState
   stateObj = con.state!;
 
-  /// This is confirmed by testing for its StatefulWidget
+  // This is confirmed by testing for its StatefulWidget
   expect(stateObj.widget, isA<MyApp>(), reason: _location);
 
   con = Controller();
 
-  /// Of course, you can retrieve the State object its collected.
-  /// In this case, there's only one, the one in con.state.
+  // Of course, you can retrieve the State object its collected.
+  // In this case, there's only one, the one in con.state.
   final StateX state = con.stateOf<Page1>()!;
 
-  /// Test looking up State objects by id.
-  /// The unique key identifier for this State object.
+  // Test looking up State objects by id.
+  // The unique key identifier for this State object.
   final String keyIdPage1 = state.identifier;
 
-  /// Returns the StateMVC object using an unique String identifiers.
+  // Returns the StateMVC object using an unique String identifiers.
   stateObj = appState.stateById(keyIdPage1)!;
 
   expect(stateObj.widget, isA<Page1>(), reason: _location);
 
-  /// If you know their identifiers, you can retrieve a Map of StateMVC objects.
+  stateObj = appState.stateByType<Page1State>()!;
+
+  expect(stateObj.widget, isA<Page1>(), reason: _location);
+
+  // If you know their identifiers, you can retrieve a Map of StateMVC objects.
   final Map<String, StateX> map =
       appState.statesById([myAppStateId, keyIdPage1]);
 
-  /// Retrieve a State object by its unique identifier.
+  // Retrieve a State object by its unique identifier.
   StateX? state02 = map[myAppStateId];
 
-  /// It should be a specific type of State object.
+  // It should be a specific type of State object.
   expect(state02, isA<AppStateX>(), reason: _location);
 
-  /// It should be from a specific StatefulWidget
+  // It should be from a specific StatefulWidget
   expect(state02!.widget, isA<MyApp>(), reason: _location);
 
-  /// It should be a specific type of State object.
+  // It should be a specific type of State object.
   state02 = map[keyIdPage1];
 
-  /// It should be a specific type of State object.
+  // It should be a specific type of State object.
   expect(state02, isA<StateX>(), reason: _location);
 
-  /// It should be from a specific StatefulWidget
+  // It should be from a specific StatefulWidget
   expect(state02!.widget, isA<Page1>(), reason: _location);
 
-  /// Returns a List of StateView objects using unique String identifiers.
+  // Returns a List of StateView objects using unique String identifiers.
   final list = appState.listStates([myAppStateId, keyIdPage1]);
 
   state02 = list[0];
 
-  /// It should be a specific type of State object.
+  // It should be a specific type of State object.
   expect(state02, isA<AppStateX>(), reason: _location);
 
-  /// It should be from a specific StatefulWidget
+  // It should be from a specific StatefulWidget
   expect(state02.widget, isA<MyApp>(), reason: _location);
 
   state02 = list[1];
 
-  /// It should be a specific type of State object.
+  // It should be a specific type of State object.
   expect(state02, isA<StateX>(), reason: _location);
 
-  /// It should be from a specific StatefulWidget
+  // It should be from a specific StatefulWidget
   expect(state02.widget, isA<Page1>(), reason: _location);
 
-  /// Determines if running in an IDE or in production.
-  /// Returns true if the App is under in the Debugger and not production.
+  // Determines if running in an IDE or in production.
+  // Returns true if the App is under in the Debugger and not production.
   final debugging = appState.inDebugMode && con.inDebugMode;
 
   expect(debugging, isA<bool>(), reason: _location);
 
-  /// The State object. (con.state as StateMVC will work!)
+  // The State object. (con.state as StateMVC will work!)
   final _state = con.state!;
 
   expect(_state, isA<State>(), reason: _location);
 
-  /// Test for the unique identifier assigned to every Controller.
+  // Test for the unique identifier assigned to every Controller.
   final id = stateObj.add(TestingController());
 
   expect(id, isNotEmpty, reason: _location);
@@ -178,7 +221,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(removed, isTrue, reason: _location);
 
-  /// Is the widget mounted?
+  // Is the widget mounted?
   final mounted = stateObj.mounted;
 
   expect(mounted, isTrue, reason: _location);
