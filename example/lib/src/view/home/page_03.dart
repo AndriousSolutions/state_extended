@@ -7,6 +7,7 @@ import 'package:example/src/another_app/view.dart' as i;
 import 'package:example/src/controller.dart';
 
 import 'package:example/src/view.dart';
+import 'package:flutter/foundation.dart';
 
 /// The third page displayed in this app.
 class Page3 extends StatefulWidget {
@@ -18,6 +19,20 @@ class Page3 extends StatefulWidget {
 }
 
 class _Page3State extends StateX<Page3> {
+  @override
+  void initState() {
+    super.initState();
+    // Demonstrates the ability to process all the StateX objects
+    // currently available in the app.
+    forEachState((state) {
+      if (kDebugMode) {
+        print(state.hasError);
+        print(state.errorMsg);
+        print(state.stackTrace?.toString() ?? '');
+      }
+    });
+  }
+
   //
   int count = 0;
 
@@ -78,7 +93,7 @@ class _Page3State extends StateX<Page3> {
                 key: const Key('InheritedWidget example'),
                 onPressed: () {
                   Navigator.push(
-                      endState!.context,
+                      lastContext!,
                       MaterialPageRoute<void>(
                           builder: (BuildContext context) =>
                               const i.HomePage()));

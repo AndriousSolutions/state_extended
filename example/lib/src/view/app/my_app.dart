@@ -5,6 +5,7 @@
 import 'package:example/src/controller.dart';
 
 import 'package:example/src/view.dart';
+import 'package:flutter/foundation.dart';
 
 /// To be passed to the runApp() function.
 /// This is the app's first StatefulWidget.
@@ -33,6 +34,16 @@ class _MyAppState extends AppStateX<MyApp> {
           /// in the Scoped Model
           object: 'Hello!',
         );
+
+  @override
+  void initState() {
+    super.initState();
+    forEach((con) {
+      if (kDebugMode) {
+        print(con.runtimeType.toString());
+      }
+    });
+  }
 
   /// Try these different 'build' functions and get access
   /// to a built-in FutureBuilder and or a 'app level' InheritedWidget.

@@ -25,6 +25,10 @@ class Page2State extends StateX<Page2> {
   Page2State() : super(Controller()) {
     /// Cast to type, Controller
     con = controller as Controller;
+
+    /// Add listeners for Codecov in the widget_test
+    addBeforeListener(PageStateListener());
+    addListener(PageStateListener());
   }
 
   /// The controller reference property

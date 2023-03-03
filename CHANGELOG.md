@@ -1,5 +1,5 @@
 
-## 2.5.0
+## 2.5.0+1
 February 27, 2023
 - RecordExceptionMixin stores the last error
 - onAsyncError() no longer returns boolean
@@ -8,6 +8,7 @@ February 27, 2023
 - bool forEachState(void Function(StateX state) func, {bool? reversed}) {
 - startState and endState introduced to the StateX class
 - WidgetsBinding.instance in activate() & deactivate()
+- Added a State Listener and more tests for the forEach() & forEachState()
 
 ## 2.4.0
 February 21, 2023

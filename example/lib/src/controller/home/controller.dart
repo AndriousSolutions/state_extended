@@ -260,7 +260,7 @@ class Controller extends StateXController {
   /// Called when the system changes the set of active accessibility features.
   @override
   void didChangeAccessibilityFeatures() {
-    if (inDebugMode) {
+    if (inDebugger) {
       //ignore: avoid_print
       print('############ Event: didChangeAccessibilityFeatures');
     }
