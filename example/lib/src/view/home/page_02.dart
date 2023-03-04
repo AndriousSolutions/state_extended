@@ -9,10 +9,7 @@ import 'package:example/src/view.dart';
 /// The second page displayed in this app.
 class Page2 extends StatefulWidget {
   ///
-  const Page2({super.key, this.tripError});
-
-  ///
-  final bool? tripError;
+  const Page2({super.key});
 
   @override
   State createState() => Page2State();
@@ -35,6 +32,16 @@ class Page2State extends StateX<Page2> {
   late Controller con;
 
   @override
+  Future<bool> initAsync() async {
+    final init = await super.initAsync();
+    //
+    if (AppController().tripError) {
+      throw AssertionError('error thrown in Page2State.initAsync()');
+    }
+    return init;
+  }
+
+  @override
   void initState() {
     //
     super.initState();
@@ -45,12 +52,15 @@ class Page2State extends StateX<Page2> {
     assert(firstState is AppStateX, "Should be the 'root' state object.");
 
     /// The latest BuildContext in the app.
+    // ignore: unused_local_variable
     final BuildContext? lastContext = controller?.state?.endState?.context;
 
     /// The app's data object
+    // ignore: unused_local_variable
     final Object? dataObject = controller?.dataObject;
 
     /// Is the app is running in IDE or in production
+    // ignore: unused_local_variable
     final bool? debugMode = controller?.inDebugMode;
 
     // its current state object
@@ -63,10 +73,13 @@ class Page2State extends StateX<Page2> {
     state = con.ofState<Page1State>();
 
     // Look what you have access to 'outside' the build() function.
+    // ignore: unused_local_variable
     final mounted = state?.mounted;
 
+    // ignore: unused_local_variable
     final widget = state?.widget;
 
+    // ignore: unused_local_variable
     final context = state?.context;
 
     // Retrieve the app's own controller.
@@ -80,14 +93,7 @@ class Page2State extends StateX<Page2> {
 
   /// Define the 'child' Widget that will be passed to the InheritedWidget above.
   @override
-  Widget build(BuildContext context) {
-    //
-    final tripError = widget.tripError ?? false;
-
-    if (tripError) {
-      throw AssertionError('Pretend a error occurs here in this function.');
-    }
-
+  Widget buildF(BuildContext context) {
     /// Ignore BuildPage(). It's used only to highlight the other features in this page
     return BuildPage(
       label: '2',

@@ -148,14 +148,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// May be set true to request a 'rebuild.'
   bool _rebuildRequested = false;
 
-  /// Running in a tester instead of production.
-  static bool get inTester => _inTester;
+  /// Running in a tester instead of in production.
+  bool get inFlutterTester => StateX._inTester;
   static final _inTester = WidgetsBinding.instance is TestWidgetsFlutterBinding;
 
   /// Asynchronous operations must complete successfully.
   @override
   @mustCallSuper
   Future<bool> initAsync() async {
+    //
     bool init = true;
     // No 'setState()' functions are allowed to fully function at this point.
     _rebuildAllowed = false;
@@ -959,7 +960,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   void notifyClients() {
     final state = context.findAncestorStateOfType<InheritedStateX>();
-    state?.setState(() {});
+    state?.notifyClients();
   }
 }
 
@@ -1856,7 +1857,7 @@ abstract class AppStateX<T extends StatefulWidget>
   /// Implement this function to compose the App's View.
   /// Return the 'child' Widget is then passed to an InheritedWidget
   @override
-  Widget buildChild(BuildContext context);
+  Widget buildIn(BuildContext context);
 
   /// Use this build instead if you don't want to use the built-in InheritedWidget
   @override
@@ -1903,7 +1904,7 @@ abstract class AppStateX<T extends StatefulWidget>
     if (!_inSetStateBuilder) {
       // If not called by the buildInherited() function
       if (mounted && !_buildInherited) {
-        _inheritedStatefulWidget?.inheritedChildWidget = buildChild(context);
+        _inheritedStatefulWidget?.inheritedChildWidget = buildIn(context);
         super.setState(() {});
       }
     }
@@ -2149,9 +2150,19 @@ mixin RecordExceptionMixin {
   Exception? _recException;
 
   /// Simply display the exception.
-  String get errorMsg => _recException == null
-      ? ''
-      : _recException.toString().replaceFirst('Exception: ', '');
+  String get errorMsg {
+    String message;
+    if (_recException == null) {
+      message = '';
+    } else {
+      message = _recException.toString();
+      final colon = message.lastIndexOf(': ');
+      if (colon > -1 && colon + 2 <= message.length) {
+        message = message.substring(colon + 2);
+      }
+    }
+    return message;
+  }
 
   /// Indicate if an exception had occurred.
   bool get hasError => _recException != null;
@@ -2186,8 +2197,12 @@ abstract class InheritedStateX<T extends StatefulWidget,
   /// Supply a child Widget to the returning InheritedWidget's child parameter.
   final U Function(Widget child) inheritedBuilder;
 
+  ///
+//  @Deprecated('Replaced by buildIn() function.')
+//  Widget buildChild(BuildContext context);
+
   /// Build the 'child' Widget passed to the InheritedWidget.
-  Widget buildChild(BuildContext context);
+  Widget buildIn(BuildContext context);
 
   /// Run the CircularProgressIndicator() until asynchronous operations are
   /// completed before the app proceeds.
@@ -2212,7 +2227,7 @@ abstract class InheritedStateX<T extends StatefulWidget,
       InheritedStatefulWidget<V>(
           key: GlobalKey(),
           inheritedWidgetBuilder: inheritedWidgetBuilder,
-          child: _BuildBuilder(key: GlobalKey(), builder: buildChild));
+          child: _BuildBuilder(key: GlobalKey(), builder: buildIn));
 
   /// Link a widget to a InheritedWidget of type U
   @override

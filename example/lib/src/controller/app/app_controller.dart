@@ -28,4 +28,27 @@ class AppController extends StateXController {
   /// Returns true if the error was properly handled.
   @override
   void onAsyncError(FlutterErrorDetails details) {}
+
+  /// Return true when the App is passed true to throw errors.
+  bool get tripError {
+    if (_tripError == null) {
+      final appWidget = state?.rootState?.widget;
+      var trip = appWidget != null && appWidget is MyApp;
+      if (trip) {
+        trip = appWidget.throwErrors ?? false;
+      }
+      _tripError = trip;
+    }
+    return _tripError!;
+  }
+
+  /// Set whether to allow for errors.
+  set tripError(bool? trip) {
+    if (trip != null) {
+      _tripError = trip;
+    }
+  }
+
+  // Store the boolean allowing for errors or not.
+  bool? _tripError;
 }

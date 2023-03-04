@@ -29,7 +29,7 @@ class _InheritCatState extends InheritedStateX<InheritCat, _CatInherited> {
           inheritedBuilder: (child) => _CatInherited(child: child),
         );
   @override
-  Widget buildChild(context) => widget.child!;
+  Widget buildIn(context) => widget.child!;
 }
 
 /// The InheritedWidget assigned 'dependent' child widgets.

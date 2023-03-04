@@ -1,7 +1,7 @@
 # StateX
 [![codecov](https://codecov.io/gh/AndriousSolutions/state_extended/branch/master/graph/badge.svg)](https://codecov.io/gh/AndriousSolutions/state_extended)
 [![CI](https://github.com/AndriousSolutions/state_extended/actions/workflows/format_test_release.yml/badge.svg)](https://github.com/AndriousSolutions/state_extended/actions/workflows/format_then_test.yml)
-[![Medium](https://img.shields.io/badge/Medium-Read-green?logo=Medium)](https://medium.com/p/60bc9957bf20)
+[![Medium](https://img.shields.io/badge/Medium-Read-green?logo=Medium)](https://medium.com/@andrious/statex-b8f57015188f)
 [![Pub.dev](https://img.shields.io/pub/v/state_extended.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAeGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAEgAAAABAAAASAAAAAEAAqACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAAAQdIdCAAAACXBIWXMAAAsTAAALEwEAmpwYAAACZmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICAgICA8dGlmZjpSZXNvbHV0aW9uVW5pdD4yPC90aWZmOlJlc29sdXRpb25Vbml0PgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjE8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjY0PC9leGlmOlBpeGVsWERpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjY0PC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+Ck0aSxoAAAaTSURBVFgJrVdbbBRVGP7OzOzsbmsXChIIiEQFRaIRhEKi0VRDjI++LIoPeHkhgRgeBCUCYY3iHTWGVHnxFhNpy6MXkMtCfLAENAGEAMGEgEBSLu1u2+3u7Mw5fv/MbrsFeiOeZHfOnMv/f//3X84ZYLytrc0e2HImOx8n9/yFv/d4OHtg08B4JmMN9P+3jjEK2axTkadwav8mnNxbxpmswbFdGv92GJzObgvnDRTGCEKNCaBYvWxZEK49/tsiOFYL6pJNyPUABgHVWTAmQOMEByWvBXOaV0dACFopM5KOkamqWi3K29I2Tu/LUHkHHKcJ3XmfgsVWcYkoctCV8xF3V+HM/pZQaaR8RCOHnzTGolAdCjqxbzFV0OrEwshqWqvUYCyEiyp/2viYMslBf+l9zHnyLTJjc23EXu26Sv/WDFSVm+0xnM++AxcdSNoL0dfjI8adrmWHzxjxy3v4rPTjBNab46C3Crldk0Ll24/Iqlu2mxmoKv/p93th+ndicnwBevp8aKOHtfpm0T7q3ThKzutY2vxpOJ0ho5vFZUNj4kYA8h4FTfsfHWj0luCHXBETVZwuAMQhN+4Ipd/4x0V+WWHGFI3ZDx5m/zMsn9YarhIgmYprOTDUBZls5Nf1f25AsW4JZhU8pB0nXFVP1Q38yXPUH6M/xYztyRl4pSWoS+1A+7WvIgBULiAqbaCDNFMt85SPrYceQUxvRpF+LKkY7rEcPG0H6CUzwoDwI8/RfkJV2bNw/YqHvm4fbnIlWju/C/UKAxUQVQAK7WkRydhhjjsxCRpGLi3x2LuPIJYSRKHinjG5gfuUUsh3CasW8td8JOpXoPXqt3xH6AaCiACE1DM43j2yHrHkYygVmOOVNBNltwPCkCqbunt7FEpFA8t2kL9OEMmX0Hb1myoIa4D6LYcfgjIZ9Oc5R+WqYq2svF0QJIABaKGnW9gQSQ56CCKefJlMfB0NtJH6cE61wHbiCLyoyJgaALKyFgTFYm9go46jMh7ljawa2oQFlgzkCGDyVElBWR2BaJj8ClqvBVLtDLYcXodY4gmUmO/DVTgRXQtirDEhXu7ttVDs1wg9LmilWBGUCZ6z8F7HPI68jSIPFpkYzhrOhm28IMRoHTAYuymZ/ar8CAyRaftLWE4SRku9FvGjt/GACN1AFvJdikCkmtbKJwylpkHLwTZkgkirUGvX1/THA0Kyoa9gob/AbJDEG5RNBswGOK7o58xgiaxRNXx3PCCMjtwwcBZEBlvY1LQT5dJquHUcCS8QUUFiToYBOrz6aGYsIKo1IUc3+L7I5V5hwWJNlhK8cXEL8/U1xOuZ/UQqtxsBIxeSsbSxgBDqi/0WCr0EIG6ImoV2ue3w0rCxaRtBrEEipeAmJBsCh2FjjQ1CFEKjVUwxKNdFzYNHcgRlGX0fMrHoCxjvVWh9CiZm+cxcTfqkmMttdFQsIzFRdUO+m+dLKWJBrhgREZX/wbNazfz+0DPTm4qtlwMvdV7Tb4xf8Z2AkU2Ss4OxXNlffcgE4xr/ML2qFVPmwg3UOmeeRj3Pa2PODTpDFsgxyRtwhlRdWLFk9+zUxJ8fnzJdPZtIeU2xRDCVd8SAu3xaI7KElSog2T7QbsVEVJCAVKNGvM7Q3VyueELd2HgDPlH5+Ogvl7fGguDFCY6bmOi4ehYV5wNPX/E9nAs81RUFKdWp8GpYvSKEhtaC4Nlh79O2dowxd051UNcQnRGlQl6W3bKleZtt5232+QtH19jJ+OdeLs/0IGQeKFRgPB2YfFA2nQRzNiirfsma0DsRmKqLbC4OXCbU6WKA4422un9uJ3FnEehfWJT2DgtAUNEVVoa0L7947A3lxj4kiDCHBYhstPhPqwWM7vbL5nJQUmcCXxmjGS8V70rwMa0XpBps51L9B4dXLtiCE6pX5EsbEQAdrTK0LARx+eg6Zcc+8vI9JjpVo1wSAfIu6jRDo2h83UVWLgYeOnkIPWC5epqbtFNuonfy3WbuNvXopeascQ4cPABsbuYpNVojXxnqEBAvXDy+1orZH9eCqG6XsJTLgbAiQgPS4DPgXcsyTn297Xvl3a0z5z+bZs1pXzb4oTI0C6rSap90eYYkphmYO2Y8/InxvLVuwx3yKVYBz4corbxK3ZAsYbNilm0Fmk7iYaS1/6sMXplyYIjRowOQXQTRnk5rAfHjXfO3+p73pgpPNbkt8lOMOvmTj1SJPQnWMCEY81opyy73FQqOxm4R1XzwoMwNtP8ArtQKBPNf6YAAAAAASUVORK5CYII=)](https://pub.dev/packages/state_extended)
 [![GitHub stars](https://img.shields.io/github/stars/AndriousSolutions/state_extended.svg?style=social&amp;logo=github)](https://github.com/AndriousSolutions/state_extended/stargazers)
 [![Last Commit](https://img.shields.io/github/last-commit/AndriousSolutions/state_extended)](https://github.com/AndriousSolutions/state_extended/commits/master)
@@ -29,26 +29,28 @@ Instead, always go up to the '**major**' semantic version number when installing
 And so, in this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-  state_extended:^1.0.0
+  state_extended:^2.0.0
 ```
 
 ## Documentation
 
 Turn to this free Medium article for a full overview of the package plus examples:
-[![StateX](https://user-images.githubusercontent.com/32497443/179269220-80efea47-b852-47c0-a073-b22f502dc437.jpg)](https://medium.com/p/60bc9957bf20)
+[![StateX](https://user-images.githubusercontent.com/32497443/179269220-80efea47-b852-47c0-a073-b22f502dc437.jpg)](https://medium.com/@andrious/statex-b8f57015188f)
 
 ## Example Code
 Further examples can be found in its Github repository: 
 [example app](https://github.com/AndriousSolutions/state_extended/tree/master/example)
 ```dart
 //
-import 'package:state_extended/state_extended.dart';
-
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp(key: Key('MyApp')));
+import 'package:state_extended/state_extended.dart';
 
+void main() => runApp(const MaterialApp(home: MyApp(key: Key('MyApp'))));
+
+/// README.md example app
 class MyApp extends StatefulWidget {
+  ///
   const MyApp({Key? key}) : super(key: key);
 
   /// This is the App's State object
@@ -58,83 +60,23 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends AppStateX<MyApp> {
   factory _MyAppState() => _this ??= _MyAppState._();
+  _MyAppState._() : super(controller: Controller());
   static _MyAppState? _this;
 
-  _MyAppState._()
-      : super(
-          controller: AppController(),
-          object: 'Hello',
-        );
-
-  /// Override this build function if you don't want to use the built-in FutureBuilder or InheritedWidget
+  /// Supplies a widget to AppStateX's InheritedWidget.
   @override
-  Widget build(BuildContext context) => super.build(context);
-
-  /// This is the widget returned by the built-in FutureBuilder widget.
-  /// Override this build function if you don't want to use the built-in InheritedWidget
-  @override
-  Widget buildWidget(BuildContext context) => MaterialApp(
-        home: super.buildWidget(context),
-      );
-
-  /// This returns the 'child' widget supplied to the InheritedWidget.
-  @override
-  Widget buildChild(BuildContext context) => MyHomePage(key: UniqueKey());
-}
-
-/// A Controller at the 'app level'
-class AppController extends StateXController {
-  /// Used for long asynchronous operations that need to be done
-  /// before the app can be fully available to the user.
-  /// e.g. Opening Databases, accessing Web servers, etc.
-  @override
-  Future<bool> initAsync() async {
-    final init = super.initAsync();
-    return init;
-  }
-
-  /// Supply an 'error handler' routine if something goes wrong
-  /// in initAsync() routine above.
-  @override
-  bool onAsyncError(FlutterErrorDetails details) => false;
-
-  /// Like the State object, the Flutter framework will call this method exactly once.
-  /// Only when the [StateX] object is first created.
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  /// The framework calls this method whenever it removes this [StateX] object
-  /// from the tree.
-  @override
-  void deactivate() {
-    super.deactivate();
-  }
-
-  /// Called when this object is reinserted into the tree after having been
-  /// removed via [deactivate].
-  @override
-  void activate() {
-    super.activate();
-  }
-
-  /// The framework calls this method when this [StateX] object will never
-  /// build again.
-  /// Note: THERE IS NO GUARANTEE THIS METHOD WILL RUN in the Framework.
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  Widget buildIn(BuildContext context) => const MyHomePage();
 }
 
 /// The Home page
 class MyHomePage extends StatefulWidget {
+  ///
   const MyHomePage({
     Key? key,
-    this.title = 'Flutter Demo',
+    this.title = 'Flutter InheritedWidget Demo',
   }) : super(key: key);
 
+  /// Title of the screen
   // Fields in a StatefulWidget should always be "final".
   final String title;
 
@@ -142,14 +84,15 @@ class MyHomePage extends StatefulWidget {
   State createState() => _MyHomePageState();
 }
 
-/// This 'MVC version' is a subclass of the State class.
-/// This version is linked to the App's lifecycle using [WidgetsBindingObserver]
+/// This is a subclass of the State class.
+/// This subclass is linked to the App's lifecycle using [WidgetsBindingObserver]
 class _MyHomePageState extends StateX<MyHomePage> {
   /// Let the 'business logic' run in a Controller
   _MyHomePageState() : super(Controller()) {
     /// Acquire a reference to the passed Controller.
     con = controller as Controller;
   }
+
   late Controller con;
 
   @override
@@ -162,72 +105,74 @@ class _MyHomePageState extends StateX<MyHomePage> {
     appState = rootState!;
 
     /// You're able to retrieve the Controller(s) from other State objects.
-    var con = appState.controller;
+    final con = appState.controller;
 
-    con = appState.controllerByType<AppController>();
+    /// Another way to retrieve the 'app level' State object
+    appState = con?.state!.startState as AppStateX;
 
-    con = appState.controllerById(con?.identifier);
+    /// You can retrieve by type as well
+    appState = stateByType<AppStateX>()!;
   }
 
   late AppStateX appState;
 
-  /// This is 'the View'; the interface of the home page.
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              /// Display the App's data object if it has something to display
-              if (con.dataObject != null && con.dataObject is String)
-                Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: Text(
-                    con.dataObject as String,
-                    key: const Key('greetings'),
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: Theme.of(context).textTheme.headline4!.fontSize,
-                    ),
-                  ),
-                ),
-              Text(
-                'You have pushed the button this many times:',
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-
-              /// Linked to the State object's built-in InheritedWidget.
-              SetState(
-                builder: (context, dataObject) => Text(
-                  '${con.count}',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-              ),
-            ],
+    appBar: AppBar(title: Text(widget.title)),
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'You have pushed the button this many times:',
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          key: const Key('+'),
 
-          /// rebuilds only the Text widget containing the counter.
-          onPressed: () => con.onPressed(),
-          child: const Icon(Icons.add),
-        ),
-      );
+          /// Linked to the built-in InheritedWidget.
+          /// A Text widget to display the counter is in here.
+          /// ONLY IS WIDGET is updated with every press of the button.
+          const CounterWidget(),
+        ],
+      ),
+    ),
+    floatingActionButton: FloatingActionButton(
+      key: const Key('+'),
 
-  /// Supply an error handler for Unit Testing.
+      /// rebuilds only the Text widget containing the counter.
+      onPressed: () => con.onPressed(),
+      child: const Icon(Icons.add),
+    ),
+  );
+}
+
+/// Demonstrating the InheritedWidget's ability to spontaneously rebuild
+/// its dependent widgets.
+class CounterWidget extends StatefulWidget {
+  /// Pass along the State Object Controller to make this widget
+  /// dependent on the App's InheritedWidget.
+  const CounterWidget({super.key});
+
   @override
-  void onError(FlutterErrorDetails details) {
-    /// Error is now handled.
-    super.onError(details);
+  State<StatefulWidget> createState() => _CounterState();
+}
+
+class _CounterState extends StateX<CounterWidget> {
+  @override
+  Widget buildF(BuildContext context) {
+    /// Making this widget dependent will cause the build() function below
+    /// to run again if and when the App's InheritedWidget calls its notifyClients() function.
+    final con = Controller();
+    con.dependOnInheritedWidget(context);
+    return Text(
+      '${con.count}',
+      style: Theme.of(context).textTheme.headlineMedium,
+    );
   }
 }
 
 /// Everything a State object can do, this Controller can do as well!
 class Controller extends StateXController {
+  /// Utilizing the Singleton pattern is a good programming practice
   factory Controller([StateX? state]) => _this ??= Controller._(state);
   Controller._(StateX? state)
       : _model = Model(),
@@ -239,24 +184,12 @@ class Controller extends StateXController {
   /// Note, the count comes from a separate class, _Model.
   int get count => _model.integer;
 
-  // The Controller knows how to 'talk to' the Model and to the View (interface).
+  /// The Controller deals with the event handling and business logic.
   void onPressed() {
     //
     _model.incrementCounter();
-
-    /// Calls only 'SetState' widgets
-    /// or widgets that called the dependOnInheritedWidget(context) function
+    // Call the InheritedWidget in AppStateX to rebuild its dependents.
     notifyClients();
-
-    /// Retrieve a particular State object.
-    final homeState = stateOf<MyHomePage>();
-
-    /// If working with a particular State object and if divisible by 5
-    if (homeState != null && _model.integer % 5 == 0) {
-      //
-      dataObject = _model.sayHello();
-      setState(() {});
-    }
   }
 
   /// Used for long asynchronous operations that need to be done
@@ -264,8 +197,11 @@ class Controller extends StateXController {
   /// e.g. Opening Databases, accessing Web servers, etc.
   @override
   Future<bool> initAsync() async {
-    final init = super.initAsync();
-    return init;
+    // Simply wait for 10 seconds at startup.
+    /// In production, this is where databases are opened, logins attempted, etc.
+    return Future.delayed(const Duration(seconds: 10), () {
+      return true;
+    });
   }
 
   /// Supply an 'error handler' routine if something goes wrong
@@ -279,18 +215,8 @@ class Controller extends StateXController {
   void initState() {
     super.initState();
 
-    /// Access to it's corresponding State object
-    final statefulWidget = state?.widget;
-
-    assert(statefulWidget is MyHomePage,
-        'Of course the Controller has access to the StatefulWidget');
-
     /// A State object can reference it's 'current' State object controller.
     var thisController = state?.controller;
-
-    /// The same controller can be retrieved by type if you know the type
-    /// Note, it has to be a Controller explicitly added to the State object at some time.
-    thisController = state?.controllerByType<Controller>();
 
     /// The same controller can be retrieved by its unique identifier if you know it.
     /// You then don't have to know the type or the type is private with a leading underscore.
@@ -298,43 +224,30 @@ class Controller extends StateXController {
     thisController = state?.controllerById(thisController?.identifier);
 
     assert(thisController == this,
-        'Just demonstrating the means to retrieve a Controller.');
+    'Just demonstrating the means to retrieve a Controller.');
 
     /// You can retrieve a Controller's state object by its StatefulWidget
     /// Good if the state class type is unknown or private with a leading underscore.
     var stateObj = stateOf<MyHomePage>();
 
-    assert(stateObj == state, 'They should be the same State object.');
-
     /// Retrieve the 'app level' State object
-    var appState = rootState;
+    final appState = rootState;
 
     assert(appState is _MyAppState,
-        "Every Controller has access to the 'first' State object.");
+    "Every Controller has access to the 'first' State object.");
 
     /// The 'app level' State object has *all* the Stat objects running in the App
     /// at any one point of time.
     stateObj = appState?.stateByType<_MyHomePageState>();
 
-    assert(stateObj == state, 'They should be the same State object.');
-
     /// Retrieve the State object's controller.
-    var con = appState?.controller;
-
-    /// You're able to retrieve the Controller(s) from other State objects.
-    /// if you know their type
-    con = appState?.controllerByType<AppController>();
+    final appController = appState?.controller;
 
     /// You're able to retrieve the Controller(s) from other State objects.
     /// if you know their unique identifier.
-    con = appState?.controllerById(con?.identifier);
-
-    /// If you know the type, every State object can access any Controller
-    var appController = state?.controllerByType<AppController>();
+    final con = appState?.controllerById(appController?.identifier);
 
     assert(appController == con, 'They should be the same object.');
-
-    assert(dataObject == 'Hello', 'The data object passed to the App.');
   }
 
   /// The framework calls this method whenever it removes this [StateX] object
@@ -509,11 +422,11 @@ class Controller extends StateXController {
 
 /// This example has a separate class that contains the data.
 class Model {
+  /// the public API for this class. Describes you're dealing with an integer.
   int get integer => _integer;
   int _integer = 0;
 
+  /// The business logic involves incrementing an integer.
   int incrementCounter() => ++_integer;
-
-  String sayHello() => 'Hello There!';
 }
 ```

@@ -35,7 +35,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(conCount == 0, isTrue, reason: _location);
 
-  StateXController con = stateObj.controller!;
+  StateXController? con = stateObj.controller!;
 
   expect(con, isA<AppController>());
 
@@ -87,7 +87,11 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(con, isA<AppController>(), reason: _location);
 
   // Deprecated by must still be tested.
-  con = appState.controllerByType<AppController>()!;
+  con = appState.controllerByType<TestingController>();
+
+  expect(con, isNull, reason: _location);
+
+  con = appState.controllerByType<AppController>();
 
   expect(con, isA<AppController>(), reason: _location);
 
@@ -95,7 +99,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(con, isA<StateXController>(), reason: _location);
 
   // You can retrieve a State object by the 'type' of its StatefulWidget
-  appState = con.stateOf<MyApp>() as AppStateX;
+  appState = con!.stateOf<MyApp>() as AppStateX;
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
@@ -226,11 +230,24 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(mounted, isTrue, reason: _location);
 
-  final errorDetails = FlutterErrorDetails(
-    exception: Exception('Pretend Error'),
-    context: ErrorDescription('Created merely for testing purposes.'),
-    library: 'widget_test',
-  );
+  await gotoPage3(tester);
+
+  // The previous State object is now unmounted.
+  stateObj = con.stateOf<Page1>()!;
+
+  var count = 0;
+
+  stateObj.forEachState((state) {
+    count++;
+  });
+
+  expect(count > 2, isTrue, reason: _location);
+
+  stateObj.forEachState(reversed: true, (state) {
+    count--;
+  });
+
+  expect(count == 0, isTrue, reason: _location);
 
   /// Usually you would call this function on a subclass of StateMVC
   /// We're testing the very class, StateMVC, itself and so the warning if fine:
@@ -325,4 +342,19 @@ class TestingController extends StateXController {
   factory TestingController() => _this ??= TestingController._();
   TestingController._();
   static TestingController? _this;
+}
+
+/// Go to Page 3
+Future<void> gotoPage3(WidgetTester tester) async {
+  final page2Button = find.byKey(const Key('Page 2'));
+
+  if (page2Button.evaluate().isNotEmpty) {
+    // Go to Page 2
+    await tester.tap(page2Button);
+    await tester.pumpAndSettle();
+
+    // Go to Page 3
+    await tester.tap(find.byKey(const Key('Page 3')));
+    await tester.pumpAndSettle();
+  }
 }

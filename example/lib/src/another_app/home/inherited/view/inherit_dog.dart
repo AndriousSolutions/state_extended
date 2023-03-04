@@ -29,7 +29,7 @@ class _InheritDogState extends InheritedStateX<InheritDog, _DogInherited> {
           inheritedBuilder: (child) => _DogInherited(child: child),
         );
   @override
-  Widget buildChild(context) => widget.child!;
+  Widget buildIn(context) => widget.child!;
 }
 
 /// The InheritedWidget assigned 'dependent' child widgets.

@@ -9,7 +9,8 @@ import 'package:example/src/view.dart';
 /// The Home page
 class HomePage extends StatefulWidget {
   /// With a constant constructor, instantiated once.
-  const HomePage({Key? key, this.title = 'Flutter Demo'}) : super(key: key);
+  const HomePage({Key? key, this.title = 'Flutter InheritedWidget Demo'})
+      : super(key: key);
 
   /// Fields in a StatefulWidget should always be "final".
   final String title;
@@ -48,9 +49,10 @@ class _HomePageState extends StateX<HomePage> {
 
   late AppStateX appState;
 
-  /// Build the 'child' Widget passed to the InheritedWidget.
+  /// Build the widget passed to the built-in FutureBuilder.
   @override
   Widget buildF(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.headlineMedium;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -70,15 +72,14 @@ class _HomePageState extends StateX<HomePage> {
                   key: const Key('greetings'),
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize:
-                        Theme.of(context).textTheme.headlineMedium!.fontSize,
+                    fontSize: textStyle?.fontSize,
                   ),
                 ),
               ),
             ),
             Text(
               'You have pushed the button this many times:',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             // A Text widget to display the counter is in here.
             CounterWidget(controller: con),
@@ -104,14 +105,14 @@ class CounterWidget extends StatefulWidget {
   const CounterWidget({super.key, this.controller});
 
   /// Making this widget dependent will cause the build() function below
-  /// to run again if and when the App's InheritedWidget calls its notifyClients() funciton.
+  /// to run again if and when the App's InheritedWidget calls its notifyClients() function.
   final Controller? controller;
 
   @override
   State<StatefulWidget> createState() => _CounterState();
 }
 
-class _CounterState extends State<CounterWidget> {
+class _CounterState extends StateX<CounterWidget> {
   @override
   void initState() {
     super.initState();

@@ -2,7 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:example/src/controller.dart'
+    show AppController, StateXController;
+
 import 'package:example/src/view.dart';
+import 'package:flutter/foundation.dart';
 
 /// Multiple Controllers can be assigned to one State object.
 class AnotherController extends StateXController {
@@ -10,6 +14,24 @@ class AnotherController extends StateXController {
   factory AnotherController() => _this ??= AnotherController._();
   AnotherController._() : super();
   static AnotherController? _this;
+
+  /// Explicitly cause an error
+  bool tripError = false;
+
+  @override
+  Future<bool> initAsync() async {
+    if (tripError && AppController().tripError) {
+      throw AssertionError('Error in AnotherController.initAsync()!');
+    }
+    return true;
+  }
+
+  @override
+  void onAsyncError(FlutterErrorDetails details) {
+    if (kDebugMode) {
+      print('Called when there is an error.');
+    }
+  }
 
   /// Provide the setState() function to external actors
   @override

@@ -5,13 +5,15 @@
 import 'package:example/src/controller.dart';
 
 import 'package:example/src/view.dart';
-import 'package:flutter/foundation.dart';
 
 /// To be passed to the runApp() function.
 /// This is the app's first StatefulWidget.
 class MyApp extends StatefulWidget {
   /// A constant constructor
-  const MyApp({super.key});
+  const MyApp({super.key, this.throwErrors});
+
+  /// Purposely throws errors as the app runs.
+  final bool? throwErrors;
 
   /// This is the App's State object
   @override
@@ -54,7 +56,11 @@ class _MyAppState extends AppStateX<MyApp> {
   /// Override buildChild() to use the FutureBuilder again but also
   /// the built-in InheritedWidget.
   @override
-  Widget buildChild(BuildContext context) => MaterialApp(
+  Widget buildIn(BuildContext context) => MaterialApp(
         home: Page1(key: UniqueKey()),
       );
+
+  ///
+  @override
+  bool get inFlutterTester => super.inFlutterTester;
 }

@@ -32,7 +32,7 @@ class _InheritBirdState extends InheritedStateX<InheritBird, _BirdInherited> {
           inheritedBuilder: (child) => _BirdInherited(child: child),
         );
   @override
-  Widget buildChild(context) => widget.child!;
+  Widget buildIn(context) => widget.child!;
 }
 
 /// The InheritedWidget assigned 'dependent' child widgets.

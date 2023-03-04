@@ -190,24 +190,27 @@ Future<void> testInheritedWidgetApp(WidgetTester tester) async {
 }
 
 Future<void> testPage2State(WidgetTester tester) async {
-  /// Go to Page 2
+  // Go to Page 2
   await tester.tap(find.byKey(const Key('Page 2')));
   await tester.pumpAndSettle();
 
-  /// Go to Page 3
+  // Go to Page 3
   await tester.tap(find.byKey(const Key('Page 3')));
   await tester.pumpAndSettle();
 
-  /// Start with the first State object.
+  // Start with the first State object.
   // Find its StatefulWidget first then the 'type' of State object.
   final appState = tester.firstState<AppStateX>(find.byType(MyApp));
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
-  /// You can retrieve one of the controllers State objects.
+  // You can retrieve one of the controllers State objects.
   final StateX statePage2 = Controller().stateOf<Page2>()!;
 
   statePage2.notifyClients();
+
+  // Deprecated yet must be tested anyway.
+  statePage2.buildInherited();
 
   statePage2.setState(() {});
 }

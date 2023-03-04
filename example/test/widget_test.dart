@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// Show clause is used for you to appreciate what is used in the testing.
-import 'package:example/src/view.dart' show MyApp, UniqueKey;
+import 'package:example/src/controller.dart';
 
-import 'package:flutter_test/flutter_test.dart'
-    show WidgetTester, tearDownAll, testWidgets;
+import 'package:example/src/view.dart';
+
+import 'package:flutter_test/flutter_test.dart';
 
 import 'package:integration_test/integration_test.dart'
     show IntegrationTestWidgetsFlutterBinding;
@@ -18,24 +18,20 @@ import '_unit_testing.dart' show unitTesting;
 
 import 'test_listener.dart' show testsStateListener;
 
-import 'test_error_handling.dart';
-
 void main() => testMyApp();
 
 /// Also called in package's own testing file, test/widget_test.dart
 void testMyApp() {
-  //
-  final app = MyApp(key: UniqueKey());
-
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  /// Registers a function to be run once after all tests.
-  /// Be sure the close the app after all the testing.
-  tearDownAll(() {});
+  // Call this function instead of using the 'default' TestWidgetsFlutterBinding
+  final integrationTest =
+      IntegrationTestsBinder(); //   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets(
     'test state_extended',
     (WidgetTester tester) async {
+      //
+      final app = MyApp(key: UniqueKey());
+
       // Tells the tester to build a UI based on the widget tree passed to it
       await tester.pumpWidget(app);
 
@@ -58,7 +54,42 @@ void testMyApp() {
       /// Testing the StateMVC, ControllerMVC, and ListenerMVC
       await unitTesting(tester);
 
-      await errorHandling(tester);
+      // Find its StatefulWidget first then the 'type' of State object.
+      final appState = tester.firstState<AppStateX>(find.byType(MyApp));
+
+      final appCon = appState.controller;
+
+      if (appCon != null && appCon is AppController) {
+        // Allow for errors to be thrown.
+        appCon.tripError = true;
+      }
+
+      // hot reload
+      await integrationTest.reassembleApplication();
+
+      // pumpAndSettle() waits for all animations to complete.
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Go to Page 2
+      await tester.tap(find.byKey(const Key('Page 2')));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      AnotherController().tripError = true;
+
+      // hot reload
+      await integrationTest.reassembleApplication();
+
+      // // pumpAndSettle() waits for all animations to complete.
+      // await tester.pumpAndSettle(const Duration(seconds: 5));
     },
   );
+}
+
+class IntegrationTestsBinder extends IntegrationTestWidgetsFlutterBinding {
+  IntegrationTestsBinder() : super();
+
+  @override
+  void reportExceptionNoticed(FlutterErrorDetails exception) {
+    Future.delayed(const Duration(milliseconds: 5), takeException);
+  }
 }

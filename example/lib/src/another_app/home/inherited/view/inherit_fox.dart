@@ -29,7 +29,7 @@ class _InheritFoxState extends InheritedStateX<InheritFox, _FoxInherited> {
           inheritedBuilder: (child) => _FoxInherited(child: child),
         );
   @override
-  Widget buildChild(context) => widget.child!;
+  Widget buildIn(context) => widget.child!;
 }
 
 /// The InheritedWidget assigned 'dependent' child widgets.

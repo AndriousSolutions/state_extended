@@ -179,7 +179,7 @@ void testsController(WidgetTester tester) {
   expect(removed, isTrue, reason: location);
 }
 
-bool _testAppController(WidgetTester tester) {
+void _testAppController(WidgetTester tester) {
   /// Explicitly provide what's intentionally should be accessible
   /// but is made accessible for 'internal testing' of this framework.
   // Find its StatefulWidget first then the 'type' of State object.
@@ -191,13 +191,4 @@ bool _testAppController(WidgetTester tester) {
   expect(controller, isA<AppController>());
 
   final rootCon = controller as AppController;
-
-  final errorDetails = FlutterErrorDetails(
-    exception: Exception('Pretend Error'),
-    context: ErrorDescription('Created merely for testing purposes.'),
-    library: 'widget_test',
-  );
-
-  // Take in any Exception so not to 'fail' the running test
-  return tester.takeException() == null;
 }
