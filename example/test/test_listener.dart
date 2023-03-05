@@ -93,4 +93,44 @@ class TesterStateListener with StateListener {
   factory TesterStateListener() => _this ??= TesterStateListener._();
   TesterStateListener._();
   static TesterStateListener? _this;
+
+  /// The application is not currently visible to the user, not responding to
+  /// user input, and running in the background.
+  @override
+  void pausedLifecycleState() {
+    //ignore: avoid_print
+    print('############ Event: pausedLifecycleState in TesterStateListener');
+  }
+
+  /// The application is visible and responding to user input.
+  @override
+  void resumedLifecycleState() {
+    //ignore: avoid_print
+    print('############ Event: resumedLifecycleState in TesterStateListener');
+  }
+
+  /// The application is in an inactive state and is not receiving user input.
+  @override
+  void inactiveLifecycleState() {
+    //ignore: avoid_print
+    print('############ Event: inactiveLifecycleState in TesterStateListener');
+  }
+
+  /// Either be in the progress of attaching when the engine is first initializing
+  /// or after the view being destroyed due to a Navigator pop.
+  @override
+  void detachedLifecycleState() {
+    //ignore: avoid_print
+    print('############ Event: detachedLifecycleState in TesterStateListener');
+  }
+
+  /// Called when the system puts the app in the background or returns the app to the foreground.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    /// Passing these possible values:
+    /// AppLifecycleState.inactive (may be paused at any time)
+    /// AppLifecycleState.paused (may enter the suspending state at any time)
+    /// AppLifecycleState.detach
+    /// AppLifecycleState.resumed
+  }
 }

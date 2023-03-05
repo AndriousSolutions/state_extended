@@ -1,5 +1,11 @@
 
-## 2.5.0+3
+## 2.5.1+1
+March 04, 2023
+- StateX.notifyClients() was corrected.
+- Updated example app in README.md
+- testEventHandling(tester); in testing
+
+## 2.5.0+2
 February 27, 2023
 - RecordExceptionMixin stores the last error
 - onAsyncError() no longer returns boolean
@@ -9,8 +15,6 @@ February 27, 2023
 - startState and endState introduced to the StateX class
 - WidgetsBinding.instance in activate() & deactivate()
 - Incrementally adding tests for a higher percentage in Codecov
-- Updated example app in README.md
-- StateX.notifyClients() was corrected.
 
 ## 2.4.0
 February 21, 2023

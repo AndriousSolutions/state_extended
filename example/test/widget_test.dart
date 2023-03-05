@@ -41,15 +41,15 @@ void testMyApp() {
       /// pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle();
 
-      /// Introduce State Listeners for the testing.
-      await testsStateListener(tester);
-
       /// Preform integration first to set up
       /// WidgetsBinding.instance is IntegrationTestWidgetsFlutterBinding
       await integrationTesting(tester);
 
       /// Reset the counter to zero on Page 1
       await resetPage1Count(tester);
+
+      /// Introduce State Listeners for the testing.
+      await testsStateListener(tester);
 
       /// Testing the StateMVC, ControllerMVC, and ListenerMVC
       await unitTesting(tester);
@@ -65,7 +65,7 @@ void testMyApp() {
       }
 
       // hot reload
-      await integrationTest.reassembleApplication();
+      await tester.binding.reassembleApplication();
 
       // pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle(const Duration(seconds: 5));
@@ -77,7 +77,7 @@ void testMyApp() {
       AnotherController().tripError = true;
 
       // hot reload
-      await integrationTest.reassembleApplication();
+      await tester.binding.reassembleApplication();
 
       // // pumpAndSettle() waits for all animations to complete.
       // await tester.pumpAndSettle(const Duration(seconds: 5));

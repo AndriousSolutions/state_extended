@@ -75,9 +75,6 @@ void testsController(WidgetTester tester) {
   /// Call for testing coverage
   con.dependOnInheritedWidget(context);
 
-  /// Rebuild InheritedWidget
-  appState.inheritedNeedsBuild('Test');
-
   /// Test AppController class
   _testAppController(tester);
 

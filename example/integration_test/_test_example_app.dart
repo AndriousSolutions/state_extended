@@ -47,16 +47,6 @@ Future<void> integrationTesting(WidgetTester tester) async {
   // You can retrieve a State object the Controller has collected so far.
   StateX state = con.stateOf<Page2>()!;
 
-  final listener = TesterStateListener();
-
-  // Testing the activate and deactivate of this State object.
-  final added = state.addBeforeListener(listener);
-
-  expect(added, isTrue, reason: _location);
-
-  // Add an 'after' Listener.
-  state.addListener(listener);
-
   /// Increment the counter
   for (int cnt = 0; cnt <= count - 1; cnt++) {
     // Tap the '+' icon and trigger a frame.
@@ -70,9 +60,24 @@ Future<void> integrationTesting(WidgetTester tester) async {
 
   expect(find.text((count * 2).toString()), findsOneWidget, reason: _location);
 
+  final listener = TesterStateListener();
+
+  // Testing the activate and deactivate of this State object.
+  var added = state.addBeforeListener(listener);
+
+  expect(added, isTrue, reason: _location);
+
+  // Add an 'after' Listener.
+  added = state.addListener(listener);
+
+  expect(added, isTrue, reason: _location);
+
+  /// Simulate some events (eg. paused and resumed the app)
+  await testEventHandling(tester);
+
   /// Go to Page 2
   await tester.tap(find.byKey(const Key('Page 2')));
-  await tester.pumpAndSettle();
+  await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
   // Test the controllers move across different State objects.
   state = con.state!.startState as StateX;
@@ -117,6 +122,18 @@ Future<void> integrationTesting(WidgetTester tester) async {
   /// Return to Page 1
   await tester.tap(find.byKey(const Key('Page 1')));
   await tester.pumpAndSettle();
+}
+
+/// Simulate some App 'life cycle' events.
+Future<void> testEventHandling(WidgetTester tester) async {
+  //
+  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.detached);
+  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+
+  /// Give the app time to recover and indeed resume testing.
+  await tester.pumpAndSettle(const Duration(seconds: 1));
 }
 
 Future<void> testHomePageApp(WidgetTester tester) async {

@@ -49,6 +49,9 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
+  /// Rebuild InheritedWidget
+  appState.inheritedNeedsBuild('Test');
+
   final exception = Exception('Testing');
 
   // Test its if statement.
@@ -103,6 +106,14 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
+  if (appState.inheritedType is InheritedWidget) {
+    // Return the type of 'Inherited Widget' used.
+    expect(appState.inheritedType, isA<InheritedWidget>(), reason: _location);
+  }
+
+  // Testing for Test Coverage. It's the true setState() function for appState
+  appState.setSuperState(() {});
+
   // The 'state' property is the Controller's current State object
   // it is working with.
   stateObj = con.state!;
@@ -140,6 +151,9 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   // This is confirmed by testing for its StatefulWidget
   expect(stateObj.widget, isA<MyApp>(), reason: _location);
+
+  /// Call for testing coverage
+  appState.dependOnInheritedWidget(context);
 
   con = Controller();
 
@@ -200,6 +214,9 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   // It should be from a specific StatefulWidget
   expect(state02.widget, isA<Page1>(), reason: _location);
+
+  // Determine if app is running in a tester
+  expect(state02.inFlutterTester, isTrue, reason: _location);
 
   // Determines if running in an IDE or in production.
   // Returns true if the App is under in the Debugger and not production.
