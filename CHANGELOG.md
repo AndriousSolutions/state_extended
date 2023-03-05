@@ -1,9 +1,10 @@
 
-## 2.5.1+1
+## 2.5.1+2
 March 04, 2023
 - StateX.notifyClients() was corrected.
 - Updated example app in README.md
 - testEventHandling(tester); in testing
+- Continue to adding testing
 
 ## 2.5.0+2
 February 27, 2023

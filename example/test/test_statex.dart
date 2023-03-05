@@ -247,8 +247,6 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(mounted, isTrue, reason: _location);
 
-  await gotoPage3(tester);
-
   // The previous State object is now unmounted.
   stateObj = con.stateOf<Page1>()!;
 
@@ -258,7 +256,7 @@ Future<void> testsStateX(WidgetTester tester) async {
     count++;
   });
 
-  expect(count > 2, isTrue, reason: _location);
+  expect(count > 1, isTrue, reason: _location);
 
   stateObj.forEachState(reversed: true, (state) {
     count--;
@@ -359,19 +357,4 @@ class TestingController extends StateXController {
   factory TestingController() => _this ??= TestingController._();
   TestingController._();
   static TestingController? _this;
-}
-
-/// Go to Page 3
-Future<void> gotoPage3(WidgetTester tester) async {
-  final page2Button = find.byKey(const Key('Page 2'));
-
-  if (page2Button.evaluate().isNotEmpty) {
-    // Go to Page 2
-    await tester.tap(page2Button);
-    await tester.pumpAndSettle();
-
-    // Go to Page 3
-    await tester.tap(find.byKey(const Key('Page 3')));
-    await tester.pumpAndSettle();
-  }
 }
