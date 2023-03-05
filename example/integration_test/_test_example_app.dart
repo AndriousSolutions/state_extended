@@ -8,7 +8,7 @@ import 'package:example/src/view.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import '../test/_test_imports.dart' show TesterStateListener;
+import '../test/_test_imports.dart';
 
 const _location = '========================== test_example_app.dart';
 
@@ -75,6 +75,9 @@ Future<void> integrationTesting(WidgetTester tester) async {
   added = state.addListener(listener);
 
   expect(added, isTrue, reason: _location);
+
+  /// Simulate some events (eg. paused and resumed the app)
+  await testEventHandling(tester);
 
   /// Go to Page 2
   await tester.tap(find.byKey(const Key('Page 2')));

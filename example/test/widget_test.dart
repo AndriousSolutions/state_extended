@@ -38,8 +38,7 @@ void testMyApp() {
       /// pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle();
 
-      /// Preform integration first to set up
-      /// WidgetsBinding.instance is IntegrationTestWidgetsFlutterBinding
+      /// Preform integration tests
       await integrationTesting(tester);
 
       /// Reset the counter to zero on Page 1
@@ -80,7 +79,7 @@ void testMyApp() {
       await tester.pumpAndSettle(const Duration(seconds: 5));
 
       /// Simulate some events (eg. paused and resumed the app)
-      await testEventHandling(tester);
+      await testWidgetsBindingObserver(tester);
     },
   );
 }
