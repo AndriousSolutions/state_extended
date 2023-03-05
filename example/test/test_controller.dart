@@ -151,6 +151,10 @@ void testsController(WidgetTester tester) {
   /// Allows you to call 'setState' from the 'current' the State object.
   con.setState(() {});
 
+  // Continuing the testing coverage
+  con.notifyClients();
+  con.buildInherited();
+
   /// Return a 'copy' of the Set of State objects.
   final Set<StateX>? states = con.states;
 

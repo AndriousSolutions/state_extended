@@ -1,5 +1,5 @@
 
-## 2.5.1+2
+## 2.5.1+3
 March 04, 2023
 - StateX.notifyClients() was corrected.
 - Updated example app in README.md

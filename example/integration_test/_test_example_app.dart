@@ -60,6 +60,10 @@ Future<void> integrationTesting(WidgetTester tester) async {
 
   expect(find.text((count * 2).toString()), findsOneWidget, reason: _location);
 
+  state = con.state!;
+
+  expect(state, isA<Page1State>(), reason: _location);
+
   final listener = TesterStateListener();
 
   // Testing the activate and deactivate of this State object.

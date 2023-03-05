@@ -132,5 +132,7 @@ class TesterStateListener with StateListener {
     /// AppLifecycleState.paused (may enter the suspending state at any time)
     /// AppLifecycleState.detach
     /// AppLifecycleState.resumed
+    //ignore: avoid_print
+    print('############ Event: detachedLifecycleState in TesterStateListener');
   }
 }

@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:example/src/controller.dart';
+
 import 'package:example/src/model.dart';
 
 import 'package:example/src/view.dart';
@@ -51,6 +53,17 @@ class Controller extends StateXController {
   }
 
   /// **************  Life cycle events ****************
+
+  /// Called to complete any asynchronous operations.
+  @override
+  Future<bool> initAsync() async {
+    final init = await super.initAsync();
+    //
+    if (AppController().tripError) {
+      throw AssertionError('error thrown in Page1State.initAsync()');
+    }
+    return init;
+  }
 
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.

@@ -1897,14 +1897,14 @@ abstract class AppStateX<T extends StatefulWidget>
   void notifyClients() => super.setState(() {});
 
   /// Calls the State object's setState() function if not
-  ///  (see class SetState below).
+  ///  (see class SetState).
   @override
   void setState(VoidCallback fn) {
     // Don't if already in the SetState.builder() function
     if (!_inSetStateBuilder) {
       // If not called by the buildInherited() function
       if (mounted && !_buildInherited) {
-        _inheritedStatefulWidget?.inheritedChildWidget = buildIn(context);
+        _inheritedStatefulWidget?.state.child = buildIn(context);
         super.setState(() {});
       }
     }
@@ -2308,10 +2308,10 @@ class InheritedStatefulWidget<U extends InheritedWidget>
   }
 
   /// The 'child' widget passed to the InheritedWidget
-  Widget get inheritedChildWidget => state.child!;
+//  Widget get inheritedChildWidget => state.child!;
 
   /// set the child widget.
-  set inheritedChildWidget(Widget? child) => state.child = child;
+//  set inheritedChildWidget(Widget? child) => state.child = child;
 
   /// Call its State object's setState() function
   void setState(VoidCallback fn) => state._setState(fn);
