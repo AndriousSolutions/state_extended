@@ -29,11 +29,21 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(conCount > 1, isTrue, reason: _location);
 
-  stateObj.forEach(reversed: true, (con) {
+  var each = stateObj.forEach(reversed: true, (con) {
     conCount--;
   });
 
+  expect(each, isTrue, reason: _location);
+
   expect(conCount == 0, isTrue, reason: _location);
+
+  each = stateObj.forEach((con) {
+    if (con is YetAnotherController) {
+      throw AssertionError('Error in forEach()!');
+    }
+  });
+
+  expect(each, isFalse, reason: _location);
 
   StateXController? con = stateObj.controller!;
 
@@ -260,17 +270,27 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   var count = 0;
 
-  stateObj.forEachState((state) {
+  each = stateObj.forEachState((state) {
     count++;
   });
 
   expect(count > 1, isTrue, reason: _location);
 
-  stateObj.forEachState(reversed: true, (state) {
+  each = stateObj.forEachState(reversed: true, (state) {
     count--;
   });
 
+  expect(each, isTrue, reason: _location);
+
   expect(count == 0, isTrue, reason: _location);
+
+  each = stateObj.forEachState((state) {
+    if (state is Page1State) {
+      throw AssertionError('Error in forEachState()!');
+    }
+  });
+
+  expect(each, isFalse, reason: _location);
 
   /// Usually you would call this function on a subclass of StateMVC
   /// We're testing the very class, StateMVC, itself and so the warning if fine:
