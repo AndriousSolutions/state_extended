@@ -11,19 +11,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart'
     show IntegrationTestWidgetsFlutterBinding;
 
-import '../integration_test/_test_example_app.dart'
-    show integrationTesting, resetPage1Count;
-
-import '_unit_testing.dart' show unitTesting;
-
-import 'test_listener.dart' show testsStateListener;
+import '../test/_test_imports.dart';
 
 void main() => testMyApp();
+
+IntegrationTestWidgetsFlutterBinding? _integrationTest;
 
 /// Also called in package's own testing file, test/widget_test.dart
 void testMyApp() {
   // Call this function instead of using the 'default' TestWidgetsFlutterBinding
-  final integrationTest =
+  _integrationTest =
       IntegrationTestsBinder(); //   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets(
@@ -80,7 +77,10 @@ void testMyApp() {
       await tester.binding.reassembleApplication();
 
       // // pumpAndSettle() waits for all animations to complete.
-      // await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      /// Simulate some events (eg. paused and resumed the app)
+      await testEventHandling(tester);
     },
   );
 }
@@ -90,6 +90,11 @@ class IntegrationTestsBinder extends IntegrationTestWidgetsFlutterBinding {
 
   @override
   void reportExceptionNoticed(FlutterErrorDetails exception) {
-    Future.delayed(const Duration(milliseconds: 5), takeException);
+    Future.delayed(const Duration(milliseconds: 5), () {
+      // Possibly the testing is over in 5 milliseconds.
+      if (_integrationTest!.inTest) {
+        takeException();
+      }
+    });
   }
 }

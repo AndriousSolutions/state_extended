@@ -65,6 +65,14 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(appState.stackTrace, isNull, reason: _location);
 
+  var ex = appState.recordException();
+
+  expect(ex, isA<Exception>(), reason: _location);
+
+  ex = appState.recordException(FlutterError('Test Error'));
+
+  expect(ex, isA<Exception>(), reason: _location);
+
   appState.setState(() {});
 
   // Test 'refresh' alternative

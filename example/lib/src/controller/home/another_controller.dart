@@ -118,5 +118,6 @@ class AnotherController extends StateXController {
 
   /// Called when the system changes the set of active accessibility features.
   @override
-  void didChangeAccessibilityFeatures() => didChangeAccessibilityFeatures();
+  void didChangeAccessibilityFeatures() =>
+      super.didChangeAccessibilityFeatures();
 }

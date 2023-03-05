@@ -8,7 +8,7 @@ import 'package:example/src/view.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import '../test/test_listener.dart' show TesterStateListener;
+import '../test/_test_imports.dart' show TesterStateListener;
 
 const _location = '========================== test_example_app.dart';
 
@@ -76,9 +76,6 @@ Future<void> integrationTesting(WidgetTester tester) async {
 
   expect(added, isTrue, reason: _location);
 
-  /// Simulate some events (eg. paused and resumed the app)
-  await testEventHandling(tester);
-
   /// Go to Page 2
   await tester.tap(find.byKey(const Key('Page 2')));
   await tester.pumpAndSettle(const Duration(milliseconds: 200));
@@ -126,18 +123,6 @@ Future<void> integrationTesting(WidgetTester tester) async {
   /// Return to Page 1
   await tester.tap(find.byKey(const Key('Page 1')));
   await tester.pumpAndSettle();
-}
-
-/// Simulate some App 'life cycle' events.
-Future<void> testEventHandling(WidgetTester tester) async {
-  //
-  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
-  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
-  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.detached);
-  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-
-  /// Give the app time to recover and indeed resume testing.
-  await tester.pumpAndSettle(const Duration(seconds: 1));
 }
 
 Future<void> testHomePageApp(WidgetTester tester) async {

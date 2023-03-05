@@ -2139,8 +2139,8 @@ mixin RecordExceptionMixin {
       } else {
         _recException = error;
       }
-      // Return the currently recorded exception
-      ex ??= _recException;
+      // Return the current exception
+      ex = _recException;
       _stackTrace = stack;
     }
     return ex;
