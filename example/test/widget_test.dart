@@ -64,7 +64,7 @@ void testMyApp() {
       await tester.binding.reassembleApplication();
 
       // pumpAndSettle() waits for all animations to complete.
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
 
       // Go to Page 2
       await tester.tap(find.byKey(const Key('Page 2')));
@@ -76,7 +76,7 @@ void testMyApp() {
       await tester.binding.reassembleApplication();
 
       // // pumpAndSettle() waits for all animations to complete.
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
 
       /// Simulate some events (eg. paused and resumed the app)
       await testWidgetsBindingObserver(tester);
