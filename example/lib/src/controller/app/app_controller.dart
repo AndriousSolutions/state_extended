@@ -51,4 +51,67 @@ class AppController extends StateXController {
 
   // Store the boolean allowing for errors or not.
   bool? _tripError;
+
+  /// The framework will call this method exactly once.
+  /// Only when the [StateX] object is first created.
+  @override
+  void initState() {
+    super.initState();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: initState in Controller');
+    }
+  }
+
+  /// The framework calls this method whenever this [StateX] object is closed.
+  @override
+  void deactivate() {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: deactivate in AppController');
+    }
+  }
+
+  /// Called when this object was [deactivate].
+  /// Rarely actually called but good to have since was deactivated.
+  /// You may have to undo what was done in [deactivate].
+  /// It was removed from the widget tree for some reason but re-inserted again.
+  @override
+  void activate() {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: activate in AppController');
+    }
+  }
+
+  /// The framework calls this method when this [StateX] object will be garbage collected
+  /// Note: YOU HAVE NO IDEA WHEN THIS WILL RUN in the Framework.
+  /// USE [deactivate] for time critical operations.[dispose] for light cleanup.
+  @override
+  void dispose() {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: dispose in AppController');
+    }
+    super.dispose();
+  }
+
+  /// The application is not currently visible to the user, not responding to
+  /// user input, and running in the background.
+  @override
+  void pausedLifecycleState() {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: pausedLifecycleState in AppController');
+    }
+  }
+
+  /// The application is visible and responding to user input.
+  @override
+  void resumedLifecycleState() {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: resumedLifecycleState in AppController');
+    }
+  }
 }

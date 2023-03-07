@@ -94,6 +94,31 @@ class TesterStateListener with StateListener {
   TesterStateListener._();
   static TesterStateListener? _this;
 
+  /// Called when this object is reinserted into the tree after having been
+  /// removed via [deactivate].
+  @override
+  void activate() {
+    //ignore: avoid_print
+    print('############ Event: activate in TesterStateListener');
+  }
+
+  /// The framework calls this method whenever it removes this [State] object
+  /// from the tree.
+  @override
+  void deactivate() {
+    //ignore: avoid_print
+    print('############ Event: deactivate in TesterStateListener');
+  }
+
+  /// The framework calls this method when this [StateX] object will never
+  /// build again.
+  @override
+  void dispose() {
+    //ignore: avoid_print
+    print('############ Event: pausedLifecycleState in TesterStateListener');
+    super.dispose();
+  }
+
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
   @override

@@ -1,7 +1,15 @@
 
+## 2.5.2
+March 06, 2023
+- System events from WidgetsBinding.instance.addObserver(this); destroys current State object!
+- Introduced updateNewStateX() to compensate for destroyed current State object.
+- Corrected FutureBuilderStateMixin with _initAsync()
+- i.e. Run the StateX object's initAsync() until it returns true
+
 ## 2.5.1+7
 March 04, 2023
 - StateX.notifyClients() was corrected.
+- Replace buildChild() function with buildIn() function
 - Updated example app in README.md
 - testEventHandling(tester); in testing
 - Continue to adding testing

@@ -37,8 +37,8 @@ class _MyAppState extends AppStateX<MyApp> {
           object: 'Hello!',
         );
 
-  /// Try these different 'build' functions and get access
-  /// to a built-in FutureBuilder and or a 'app level' InheritedWidget.
+  /// Try these different 'build' functions so to get access
+  /// to a built-in FutureBuilder and or an InheritedWidget.
 
   /// Override build() and stay with the traditional Flutter approach.
   // @override
@@ -46,19 +46,18 @@ class _MyAppState extends AppStateX<MyApp> {
   //   home: Page1(key: UniqueKey()),
   // );
 
-  /// Override buildWidget() and implement initAsync() and use a FutureBuilder
+  /// Override buildF() and implement initAsync() and use a FutureBuilder
   /// to perform asynchronous operations while the app starts up.
   // @override
-  // Widget buildWidget(BuildContext context) => MaterialApp(
+  // Widget buildF(BuildContext context) => MaterialApp(
   //       home: Page1(key: UniqueKey()),
   //     );
 
-  /// Override buildChild() to use the FutureBuilder again but also
+  /// Override buildIn() to use the FutureBuilder again but also
   /// the built-in InheritedWidget.
   @override
-  Widget buildIn(BuildContext context) => MaterialApp(
-        home: Page1(key: UniqueKey()),
-      );
+  Widget buildIn(BuildContext context) =>
+      MaterialApp(home: Page1(key: GlobalKey()));
 
   ///
   @override

@@ -113,43 +113,43 @@ void testsController(WidgetTester tester) {
 
   expect(listCons[0], isA<Controller>(), reason: location);
 
-  /// Only when the [StateMVC] object is first created.
-  con.initState();
-
-  /// The framework calls this method when removed from the widget tree.
-  /// Called when there's a hot reload.
-  con.deactivate();
-
-  /// The framework calls this method the State object is terminated.
-  con.dispose();
-
-  /// Called if the State object was a dependency to an InheritedWidget
-  /// and that InheritedWidget has been rebuilt. Hence this is rebuilt.
-  con.didChangeDependencies();
-
-  /// Called during development whenever there's a hot reload.
-  con.reassemble();
-
-  /// When the framework tells the app to pop the current route.
-  con.didPopRoute();
-
-  /// When the application's dimensions change.
-  con.didChangeMetrics();
-
-  /// Called when the platform's text scale factor changes.
-  con.didChangeTextScaleFactor();
-
-  /// Brightness changed.
-  con.didChangePlatformBrightness();
-
-  /// Called when the system is running low on memory.
-  con.didHaveMemoryPressure();
-
-  /// Called when the system changes the set of active accessibility features.
-  con.didChangeAccessibilityFeatures();
-
-  /// Allows you to call 'setState' from the 'current' the State object.
-  con.setState(() {});
+  // /// Only when the [StateMVC] object is first created.
+  // con.initState();
+  //
+  // /// The framework calls this method when removed from the widget tree.
+  // /// Called when there's a hot reload.
+  // con.deactivate();
+  //
+  // /// The framework calls this method the State object is terminated.
+  // con.dispose();
+  //
+  // /// Called if the State object was a dependency to an InheritedWidget
+  // /// and that InheritedWidget has been rebuilt. Hence this is rebuilt.
+  // con.didChangeDependencies();
+  //
+  // /// Called during development whenever there's a hot reload.
+  // con.reassemble();
+  //
+  // /// When the framework tells the app to pop the current route.
+  // con.didPopRoute();
+  //
+  // /// When the application's dimensions change.
+  // con.didChangeMetrics();
+  //
+  // /// Called when the platform's text scale factor changes.
+  // con.didChangeTextScaleFactor();
+  //
+  // /// Brightness changed.
+  // con.didChangePlatformBrightness();
+  //
+  // /// Called when the system is running low on memory.
+  // con.didHaveMemoryPressure();
+  //
+  // /// Called when the system changes the set of active accessibility features.
+  // con.didChangeAccessibilityFeatures();
+  //
+  // /// Allows you to call 'setState' from the 'current' the State object.
+  // con.setState(() {});
 
   // Continuing the testing coverage
   con.notifyClients();

@@ -9,6 +9,7 @@ import 'dart:async' show Future;
 import 'dart:math' show Random;
 
 import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 
@@ -38,10 +39,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// IMPORTANT! Assign itself to _stateX before adding any StateXController. -gp
     _stateX = this;
 
-//    /// Collect all the StateX objects to the 'root' State object;
-//    rootState?._addStateX(this);
     /// Add to the list of StateX objects present in the app!
-    _addStateX(this);
+    _addToMapOfStates(this);
 
     /// Any subsequent calls to add() will be assigned to stateX.
     add(_controller);
@@ -143,7 +142,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   /// May be set false to prevent unnecessary 'rebuilds'.
-  static bool _rebuildAllowed = true;
+  static bool _setStateAllowed = true;
 
   /// May be set true to request a 'rebuild.'
   bool _rebuildRequested = false;
@@ -159,7 +158,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     //
     bool init = true;
     // No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
 
     for (final con in _controllerList) {
       //
@@ -183,7 +182,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         rethrow;
       }
     }
-    _rebuildAllowed = true;
+    _setStateAllowed = true;
 
     /// No 'setState()' functions are necessary
     _rebuildRequested = false;
@@ -214,7 +213,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     WidgetsBinding.instance.addObserver(this);
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
     for (final listener in _beforeList) {
       listener.initState();
     }
@@ -225,61 +224,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     while (cnt < list) {
       con = _controllerList[cnt];
       // Add this to the _StateSets Map
-      con._addState(this);
+      con._addStateToSetter(this);
       con.initState();
       cnt++;
     }
     for (final listener in _afterList) {
       listener.initState();
     }
-    _rebuildAllowed = true;
-  }
-
-  /// The framework calls this method whenever it removes this [State] object
-  /// from the tree.
-  @protected
-  @override
-  @mustCallSuper
-  void deactivate() {
-    /// The framework calls this method whenever it removes this [State] object
-    /// from the tree. Subclasses should override this method to clean up any links between
-    /// this object and other elements in the tree.
-
-    // Unregisters the given observer.
-    WidgetsBinding.instance.removeObserver(this);
-
-    // No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
-
-    for (final listener in _beforeList) {
-      listener.deactivate();
-    }
-
-    for (final con in _controllerList) {
-      // Don't call its deactivate if it's in other State objects.
-//      if (con._stateXSet.isEmpty) {
-      con.deactivate();
-//      }
-      // Pop the State object from the controller
-      con._popState(this);
-    }
-
-    for (final listener in _afterList) {
-      listener.deactivate();
-    }
-
-    super.deactivate();
-
-    // Remove from the list of StateX objects present in the app!
-    _removeStateX(this);
-
-    _rebuildAllowed = true;
-
-    // In some cases, if then reinserted back in another part of the tree
-    // the build is called, and so setState() is not necessary.
-    _rebuildRequested = false;
-
-    _deactivated = true;
+    _setStateAllowed = true;
   }
 
   /// Readily determine if the State object is possibly to be disposed of.
@@ -301,13 +253,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// subtree containing this [State] object is grafted from one location in
     /// the tree to another due to the use of a [GlobalKey]).
 
-    // Add to the list of StateX objects present in the app!
-    _addStateX(this);
-
+    // Likely was deactivated.
     _deactivated = false;
 
+    // Add to the list of StateX objects present in the app!
+    _addToMapOfStates(this);
+
     // No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
 
     for (final listener in _beforeList) {
       listener.activate();
@@ -315,12 +268,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     for (final con in _controllerList) {
       // Supply the State object first
-      con._pushState(this);
+      con._pushStateToSetter(this);
 
-      // Don't call its activate if it's in other State objects.
-//      if (con._stateXSet.isEmpty) {
       con.activate();
-//      }
     }
 
     for (final listener in _afterList) {
@@ -333,51 +283,99 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Registers the given object as a binding observer.
     WidgetsBinding.instance.addObserver(this);
 
-    _rebuildAllowed = true;
+    _setStateAllowed = true;
 
     // In some cases, if then reinserted back in another part of the tree
     // the build is called, and so setState() is not necessary.
     _rebuildRequested = false;
   }
 
+  /// The framework calls this method whenever it removes this [State] object
+  /// from the tree.
+  @protected
+  @override
+  @mustCallSuper
+  void deactivate() {
+    /// The framework calls this method whenever it removes this [State] object
+    /// from the tree. Subclasses should override this method to clean up any links between
+    /// this object and other elements in the tree.
+
+    // Indicate this State object is deactivated.
+    _deactivated = true;
+
+    // Unregisters the given observer.
+    WidgetsBinding.instance.removeObserver(this);
+
+    // No 'setState()' functions are allowed to fully function at this point.
+    _setStateAllowed = false;
+
+    for (final listener in _beforeList) {
+      listener.deactivate();
+    }
+
+    for (final con in _controllerList) {
+      //
+      con.deactivate();
+      // Pop the State object from the controller
+      con._popStateFromSetter(this);
+    }
+
+    for (final listener in _afterList) {
+      listener.deactivate();
+    }
+
+    super.deactivate();
+
+    // Remove from the list of StateX objects present in the app!
+    _removeFromMapOfStates(this);
+
+    _setStateAllowed = true;
+
+    // In some cases, if then reinserted back in another part of the tree
+    // the build is called, and so setState() is not necessary.
+    _rebuildRequested = false;
+  }
+
+  /// Flag indicating this State object is disposed.
+  /// Will be garbage collected.
+  /// property, mounted, is then set to false.
+  bool get disposed => _disposed;
+  bool _disposed = false;
+
   /// The framework calls this method when this [StateX] object will never
-  /// build again and will be disposed of.
+  /// build again and will be disposed of with garbage collection.
   @protected
   @override
   @mustCallSuper
   void dispose() {
     /// The State object's lifecycle is terminated.
-    /// Subclasses should override this method to release any resources retained
-    /// by this object (e.g., stop any active animations).
+    /// **IMPORTANT** You will not know when this will run
+    /// It's to the Flutter engines discretion. deactivate() is more reliable.
+    /// Subclasses should override deactivate() method instead
+    /// to release any resources  (e.g., stop any active animations).
+
+    /// Indicate this State object is terminated.
+    _disposed = true;
 
     // No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
 
     for (final listener in _beforeList) {
       listener.dispose();
     }
     for (final con in _controllerList) {
-      // // This state's association is severed.
-      // con._popState(this);
-
-      // Don't call its dispose if it's in other State objects.
-      // *IMPORTANT* Best to use deactivate() instead.
-      // dispose() is sometimes not called right away due to memory constraints.
-      if (con._stateXSet.isEmpty) {
-        con.dispose();
-      }
+      con.dispose();
     }
+
+    // Clear the its list of Controllers
     _disposeControllerListing();
+
     for (final listener in _afterList) {
       listener.dispose();
     }
+
+    // Clear the 'listeners'
     _disposeStateEventList();
-
-    // *In some cases, the setState() will be called again! gp
-    _rebuildAllowed = true;
-
-    // // Unregisters the given observer.
-    // WidgetsBinding.instance.removeObserver(this);
 
     // Remove any 'StateXController' reference
     _controller = null;
@@ -385,10 +383,28 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Clear the list of Controllers.
     _cons.clear();
 
-    // Remove the State object from a collection.
-//    rootState?._removeStateX(this);
+    // // *In some cases, the setState() will be called again! gp
+    _setStateAllowed = true;
 
     super.dispose();
+  }
+
+  /// Update the 'new' StateX object from the 'old' StateX object.
+  /// Returning to this app from another app will re-create the State object
+  /// You 'update' the current State object using this function.
+  @override
+  @mustCallSuper
+  @protected
+  void updateNewStateX(covariant StateX oldState) {
+    /// No 'setState()' functions are allowed
+    _setStateAllowed = false;
+
+    for (final con in _controllerList) {
+      con.updateNewStateX(oldState);
+    }
+
+    /// Re-enable setState() function
+    _setStateAllowed = true;
   }
 
   /// Override this method to respond when its [StatefulWidget] is re-created.
@@ -399,7 +415,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @mustCallSuper
   void didUpdateWidget(StatefulWidget oldWidget) {
     /// No 'setState()' functions are allowed
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
     for (final listener in _beforeList) {
       listener.didUpdateWidget(oldWidget);
     }
@@ -410,11 +426,29 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.didUpdateWidget(oldWidget);
     }
     super.didUpdateWidget(oldWidget);
-    _rebuildAllowed = true;
+
+    /// Re-enable setState() function
+    _setStateAllowed = true;
 
     /// No 'setState()' functions are necessary
     _rebuildRequested = false;
   }
+
+  /// State object was in 'inactive' state
+  bool get inactive => _inactive;
+  bool _inactive = false;
+
+  /// State object was in 'paused' state
+  bool get paused => _paused;
+  bool _paused = false;
+
+  /// State object was in 'paused' state
+  bool get detached => _detached;
+  bool _detached = false;
+
+  /// State object was in 'resumed' state
+  bool get resumed => _resumed;
+  bool _resumed = false;
 
   /// Called when the system puts the app in the background or returns the app to the foreground.
   @protected
@@ -422,20 +456,24 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @mustCallSuper
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
 
     /// First, process the State object's own event functions.
     switch (state) {
       case AppLifecycleState.inactive:
+        _inactive = true;
         inactiveLifecycleState();
         break;
       case AppLifecycleState.paused:
+        _paused = true;
         pausedLifecycleState();
         break;
       case AppLifecycleState.detached:
+        _detached = true;
         detachedLifecycleState();
         break;
       case AppLifecycleState.resumed:
+        _resumed = true; // The StateX object now resumed will be re-created.
         resumedLifecycleState();
         break;
     }
@@ -491,7 +529,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
           break;
       }
     }
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -538,7 +578,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// [SystemChannels.navigation].
     ///
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
 
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
@@ -555,7 +595,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final listener in _afterList) {
       await listener.didPopRoute();
     }
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -580,7 +622,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// This method exposes the `pushRoute` notification from
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
 
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
@@ -597,7 +639,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final listener in _afterList) {
       await listener.didPushRoute(route);
     }
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -626,7 +670,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   Future<bool> didPushRouteInformation(
       RouteInformation routeInformation) async {
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
 
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
@@ -643,7 +687,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final listener in _afterList) {
       await listener.didPushRouteInformation(routeInformation);
     }
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -653,6 +699,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return handled;
   }
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   @protected
@@ -671,7 +721,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     ///   }
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
+
     for (final listener in _beforeList) {
       listener.didChangeMetrics();
     }
@@ -681,7 +732,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final listener in _afterList) {
       listener.didChangeMetrics();
     }
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -690,6 +743,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
   }
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the platform's text scale factor changes.
   @protected
   @override
@@ -708,7 +765,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     ///   }
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
+
     for (final listener in _beforeList) {
       listener.didChangeTextScaleFactor();
     }
@@ -718,7 +776,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final listener in _afterList) {
       listener.didChangeTextScaleFactor();
     }
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -727,13 +787,18 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
   }
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the platform brightness changes.
   @protected
   @override
   @mustCallSuper
   void didChangePlatformBrightness() {
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
+
     for (final listener in _beforeList) {
       listener.didChangePlatformBrightness();
     }
@@ -743,7 +808,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final listener in _afterList) {
       listener.didChangePlatformBrightness();
     }
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -763,7 +830,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// This method exposes notifications from [Window.onLocaleChanged].
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
+
     for (final listener in _beforeList) {
       listener.didChangeLocale(locale);
     }
@@ -773,7 +841,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final listener in _afterList) {
       listener.didChangeLocale(locale);
     }
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -792,7 +862,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// [SystemChannels.system].
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
+
     for (final listener in _beforeList) {
       listener.didHaveMemoryPressure();
     }
@@ -802,7 +873,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final listener in _afterList) {
       listener.didHaveMemoryPressure();
     }
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -811,8 +884,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
   }
 
-  /// Called when the system changes the set of currently active accessibility
-  /// features.
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
+  /// Called when the system changes the set of currently active accessibility features.
   @protected
   @override
   @mustCallSuper
@@ -830,7 +906,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final listener in _afterList) {
       listener.didChangeAccessibilityFeatures();
     }
-    _rebuildAllowed = true;
+    _setStateAllowed = true;
     if (_rebuildRequested || StateX._inTester) {
       _rebuildRequested = false;
 
@@ -856,7 +932,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     super.didChangeDependencies();
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
+
     for (final listener in _beforeList) {
       listener.didChangeDependencies();
     }
@@ -867,7 +944,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.didChangeDependencies();
     }
     super.didChangeDependencies();
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
+
     if (_rebuildRequested && !_firstBuild) {
       _rebuildRequested = false;
 
@@ -887,7 +966,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @mustCallSuper
   void reassemble() {
     /// No 'setState()' functions are allowed to fully function at this point.
-    _rebuildAllowed = false;
+    _setStateAllowed = false;
+
     for (final listener in _beforeList) {
       listener.reassemble();
     }
@@ -901,7 +981,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.reassemble();
     }
     super.reassemble();
-    _rebuildAllowed = true;
+
+    _setStateAllowed = true;
 
     /// No 'setState()' function is necessary
     /// The framework always calls build with a hot reload.
@@ -912,8 +993,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   // Note not 'protected' and so can be called by 'anyone.' -gp
   @override
   void setState(VoidCallback fn) {
-    if (_rebuildAllowed) {
-      _rebuildAllowed = false;
+    if (_setStateAllowed) {
+      _setStateAllowed = false;
 
       // Don't bother if the State object is disposed of.
       if (mounted) {
@@ -921,15 +1002,12 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         /// Call the State object's setState() function.
         super.setState(fn);
       }
-      _rebuildAllowed = true;
+      _setStateAllowed = true;
     } else {
       /// Can't rebuild at this moment but at least make the request.
       _rebuildRequested = true;
     }
   }
-
-  // /// Allows the user to call setState() within the StateXController.
-  // void refresh() => setState(() {});
 
   /// Link a widget to the InheritedWidget
   bool dependOnInheritedWidget(BuildContext? context) {
@@ -962,6 +1040,22 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     final state = context.findAncestorStateOfType<InheritedStateX>();
     state?.notifyClients();
   }
+
+  /// Copy particular properties from another StateX
+  @mustCallSuper
+  void copy([StateX? state]) {
+    //
+    if (state == null) {
+      return;
+    }
+    // Copy over certain properties
+    _recException = state._recException;
+    _ranFuture = state._ranFuture;
+    _listenersBefore.addAll(state._listenersBefore);
+    _listenersAfter.addAll(state._listenersAfter);
+    // Important!? Other controllers may have been added!
+    _mapControllers.addAll(state._mapControllers);
+  }
 }
 
 /// Manages the number of 'Controllers' associated with this
@@ -991,9 +1085,6 @@ mixin _ControllerListing on State {
   List<StateXController?> listControllers(List<String> keys) =>
       _controllersMap(keys).values.toList();
 
-  /// Never supply a public list of Controllers. User must know the key identifier(s).
-  List<StateXController> get _controllerList => _asList; //_controllers.asList;
-
   /// Returns a specific 'StateXController' by looking up its unique 'key' identifier.
   Map<String, StateXController?> _controllersMap(List<String> keys) {
     final Map<String, StateXController?> controllers = {};
@@ -1006,13 +1097,10 @@ mixin _ControllerListing on State {
 
   final Map<String, StateXController> _mapControllers = {};
 
-// Can't allow external access to a StateX object's Controllers.
-// There's a forEach() function below to externally 'process' through the controllers.
-  // /// Returns a Map containing all the 'Controllers' associated with this
-  // /// StateX object each with their unique 'key' identifier.
-  // Map<String, StateXController> get map => _mapControllers;
-
-  List<StateXController> get _asList =>
+  /// Never supply a public list of Controllers.
+  /// Supplied only for internal use.
+  /// User must know the key identifier(s). to access it publicly.
+  List<StateXController> get _controllerList =>
       _mapControllers.values.toList(growable: false);
 
   /// Add a 'StateXController' to then associate it to this
@@ -1025,10 +1113,15 @@ mixin _ControllerListing on State {
       id = '';
     } else {
       /// This connects the StateXController to this State object!
-      con._pushState(_stateX);
+      con._pushStateToSetter(_stateX);
 
-      /// It's already there?! Return its key.
-      id = (contains(con)) ? con._id : addConId(con);
+      // /// It's already there?! Return its key.
+      // id = (contains(con)) ? con._id : _addConId(con);
+      if (!contains(con)) {
+        _mapControllers[con._id] = con;
+      }
+
+      id = con._id;
 
       if (!_cons.containsValue(con)) {
         _cons.addAll({con.runtimeType: con});
@@ -1059,7 +1152,7 @@ mixin _ControllerListing on State {
     final con = _mapControllers[keyId];
     final there = con != null;
     if (there) {
-      con._popState(_stateX);
+      con._popStateFromSetter(_stateX);
       _mapControllers.remove(keyId);
     }
     return there;
@@ -1067,20 +1160,15 @@ mixin _ControllerListing on State {
 
   /// Returns 'the first' StateXController associated with this StateX object.
   /// Returns null if empty.
-  StateXController? get rootCon => _asList.isEmpty ? null : _asList.first;
+  StateXController? get rootCon {
+    final list = _controllerList;
+    return list.isEmpty ? null : list.first;
+  }
 
   /// Returns true if the specified 'StateXController' is associated with this StateX object.
   bool contains(StateXController con) => _mapControllers.containsValue(con);
 
   void _disposeControllerListing() => _mapControllers.clear();
-
-  /// Adds a 'StateXController' to be associated with this StateX object
-  /// and returns StateXController's the unique 'key' identifier assigned to it.
-  String addConId(StateXController con) {
-    final keyId = con.identifier;
-    _mapControllers[keyId] = con;
-    return keyId;
-  }
 
   final Map<Type, StateXController> _cons = {};
 
@@ -1092,9 +1180,9 @@ mixin _ControllerListing on State {
     Iterable<StateXController> list;
     // In reversed chronological order
     if (reversed != null && reversed) {
-      list = _asList.reversed;
+      list = _controllerList.reversed;
     } else {
-      list = _asList;
+      list = _controllerList;
     }
     for (final StateXController con in list) {
       try {
@@ -1225,7 +1313,7 @@ mixin _MapOfStates on State {
 
   /// This is 'privatized' function as it is an critical method and not for public access.
   /// This contains the 'main list' of StateX objects present in the app!
-  bool _addStateX(StateX? state) {
+  bool _addToMapOfStates(StateX? state) {
 //    bool add = state != null;
     final add = state != null;
     // if (add) {
@@ -1238,7 +1326,7 @@ mixin _MapOfStates on State {
   }
 
   /// Remove the specified State object from static Set object.
-  bool _removeStateX(StateX? state) {
+  bool _removeFromMapOfStates(StateX? state) {
     var removed = state != null;
     if (removed) {
       final int length = _MapOfStates._states.length;
@@ -1309,13 +1397,14 @@ mixin StateSetter {
       _stateWidgetMap.isEmpty ? null : _stateWidgetMap[_type<T>()];
 
   StateX? _stateX;
+  StateX? _oldStateX;
   final Set<StateX> _stateXSet = {};
   final Map<Type, StateX> _stateWidgetMap = {};
   bool _statePushed = false;
 
   /// Add the provided State object to the Map object if
   /// it's the 'current' StateX object in _stateX.
-  void _addState(StateX state) {
+  void _addStateToSetter(StateX state) {
     if (_statePushed && _stateX != null && _stateX == state) {
       _stateWidgetMap.addAll({state.widget.runtimeType: state});
     }
@@ -1324,11 +1413,31 @@ mixin StateSetter {
   /// Add to a Set object and assigned to as the 'current' StateX
   /// However, if was already previously added, it's not added
   /// again to a Set object and certainly not set the 'current' StateX.
-  bool _pushState(StateX? state) {
+  bool _pushStateToSetter(StateX? state) {
     //
     if (state == null) {
       return false;
     }
+
+    // If this is likely a 'resumed' State it's to be re-created.
+    if (_oldStateX != null) {
+      // Testing Flutter lifecycle operation
+      if (_oldStateX!._resumed || _oldStateX!._deactivated) {
+        if (kDebugMode) {
+          print('StateX(): Re-created because returning from another app!');
+        }
+      }
+
+      // Ensure it's the same type...it's being recreated.
+      if (state.runtimeType == _oldStateX.runtimeType) {
+        // Copy over certain properties
+        state.copy(_oldStateX);
+        state.updateNewStateX(_oldStateX!);
+      }
+      // cleanup
+      _oldStateX = null;
+    }
+
     _statePushed = _stateXSet.add(state);
     // If added, assign as the 'current' state object.
     if (_statePushed) {
@@ -1340,7 +1449,7 @@ mixin StateSetter {
   /// This removes the most recent StateX object added
   /// to the Set of StateX state objects.
   /// Primarily internal use only: This disconnects the StateXController from that StateX object.
-  bool _popState([StateX? state]) {
+  bool _popStateFromSetter([StateX? state]) {
     // Return false if null
     if (state == null) {
       return false;
@@ -1356,10 +1465,11 @@ mixin StateSetter {
       //
       _statePushed = false;
 
-      /// Now this is called in deactivate, this shouldn't be necessary.
-      // // Remove all State objects that have been disposed of.
-      // _stateXSet.retainWhere((item) => item.mounted);
-      // _stateWidgetMap.removeWhere((key, value) => !value.mounted);
+      // **IMPORTANT** if 'resumed' it'll soon be destroyed and another created
+      // Retain a copy to update the new StateX object!
+      if (_stateX!._resumed) {
+        _oldStateX = _stateX;
+      }
 
       if (_stateXSet.isEmpty) {
         _stateX = null;
@@ -1456,6 +1566,16 @@ mixin StateListener {
     /// by this object (e.g., stop any active animations).
   }
 
+  /// **IMPORTANT**
+  /// A number of system events will destroy the current State object
+  /// e.g. Returning the app to the foreground
+  /// You have to 'update' the properties of the new StateX object using the
+  /// old StateX object because it's going to be disposed of.
+  void updateNewStateX(covariant StateX oldState) {
+    /// When a State object is destroyed and a new one is re-created!
+    /// Use the old one to update properties in the new StateX object.
+  }
+
   /// Override this method to respond when the [StatefulWidget] is recreated.
   void didUpdateWidget(StatefulWidget oldWidget) {
     /// The framework always calls build() after calling [didUpdateWidget], which
@@ -1532,6 +1652,10 @@ mixin StateListener {
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) =>
       didPushRoute(routeInformation.location!);
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   void didChangeMetrics() {
@@ -1566,7 +1690,10 @@ mixin StateListener {
     ///   }
   }
 
-  /// {@macro on_platform_brightness_change}
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   void didChangePlatformBrightness() {
     /// Brightness changed.
   }
@@ -1580,6 +1707,10 @@ mixin StateListener {
     /// This method exposes notifications from [Window.onLocaleChanged].
   }
 
+  /// **IMPORTANT**
+  /// After 'resumed' the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the system puts the app in the background or returns the app to the foreground.
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// Passing these possible values:
@@ -1624,12 +1755,14 @@ mixin StateListener {
     /// [SystemChannels.system].
   }
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the system changes the set of active accessibility features.
   void didChangeAccessibilityFeatures() {
     /// Called when the system changes the set of currently active accessibility
     /// features.
-    ///
-    /// This method exposes notifications from [Window.onAccessibilityFeaturesChanged].
   }
 }
 
@@ -1740,7 +1873,19 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// completed before the app proceeds.
   @override
   Widget build(BuildContext context) => FutureBuilder<bool>(
-      future: initAsync(), initialData: false, builder: _futureBuilder);
+      future: _initAsync(), initialData: false, builder: _futureBuilder);
+
+  /// Run the StateX object's initAsync() until it returns true
+  Future<bool> _initAsync() async {
+    if (!_ranFuture) {
+      // Don't run StateX object's initAsync() if it's already returned true.
+      _ranFuture = await initAsync();
+    }
+    return _ranFuture;
+  }
+
+  /// Don't call initAsync() ever again once it has returned true.
+  bool _ranFuture = false;
 
   /// Used to complete asynchronous operations
   Future<bool> initAsync() async => true;
@@ -1868,7 +2013,7 @@ abstract class AppStateX<T extends StatefulWidget>
   Widget build(BuildContext context) => super.build(context);
 
   /// Clean up memory
-  /// Unlike dispose, this function is likely to always fire.
+  /// Called when garbage collecting
   @protected
   @mustCallSuper
   @override
@@ -2039,13 +2184,13 @@ class SetState extends StatelessWidget {
 
     if (rootState != null) {
       rootState._inSetStateBuilder = true;
-      StateX._rebuildAllowed = false;
+      StateX._setStateAllowed = false;
     }
 
     final Widget widget = builder(context, rootState?._dataObj);
 
     if (rootState != null) {
-      StateX._rebuildAllowed = true;
+      StateX._setStateAllowed = true;
       rootState._inSetStateBuilder = false;
     }
     return widget;
@@ -2208,7 +2353,7 @@ abstract class InheritedStateX<T extends StatefulWidget,
   /// completed before the app proceeds.
   @override
   Widget build(BuildContext context) => FutureBuilder<bool>(
-      future: initAsync(), initialData: false, builder: _futureBuilder);
+      future: _initAsync(), initialData: false, builder: _futureBuilder);
 
   /// Implement this function instead of the build() function
   /// to utilize a built-in FutureBuilder.

@@ -76,8 +76,8 @@ class Controller extends StateXController {
     }
   }
 
-  /// The framework calls this method whenever it removes this [StateX] object
-  /// from the tree.
+  /// The framework calls this method when the [StateX] object removed from widget tree.
+  /// i.e. The screen is closed.
   @override
   void deactivate() {
     if (inDebugMode) {
@@ -86,8 +86,8 @@ class Controller extends StateXController {
     }
   }
 
-  /// Called when this object is reinserted into the tree after having been
-  /// removed via [deactivate].
+  /// Called when this State object was removed from widget tree for some reason
+  /// Undo what was done when [deactivate] was called.
   @override
   void activate() {
     if (inDebugMode) {
@@ -98,14 +98,15 @@ class Controller extends StateXController {
 
   /// The framework calls this method when this [StateX] object will never
   /// build again.
-  /// Note: THERE IS NO GUARANTEE THIS METHOD WILL RUN in the Framework.
+  /// Note: YOU DON'T KNOW WHEN THIS WILL RUN in the Framework.
+  /// PERFORM ANY TIME-CRITICAL OPERATION IN deactivate() INSTEAD!
   @override
   void dispose() {
-    super.dispose();
     if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: dispose in Controller');
     }
+    super.dispose();
   }
 
   /// The application is not currently visible to the user, not responding to
@@ -118,13 +119,26 @@ class Controller extends StateXController {
     }
   }
 
-  /// The application is visible and responding to user input.
+  /// **IMPORTANT**
+  /// After this event the current State is to be destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   @override
   void resumedLifecycleState() {
     if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: resumedLifecycleState in Controller');
     }
+  }
+
+  /// **IMPORTANT** A number of system events will destroy the current State object
+  /// e.g. Returning the app to the foreground
+  /// You have to 'update' the properties of the new StateX object using the
+  /// old StateX object because it's going to be disposed of.
+  @override
+  void updateNewStateX(oldState) {
+    /// When a State object destroyed and a new one is re-created!
+    /// This new StateX object may need to be updated with the old State object
   }
 
   /// The application is in an inactive state and is not receiving user input.
@@ -210,6 +224,10 @@ class Controller extends StateXController {
     return super.didPushRouteInformation(routeInformation);
   }
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   @override
@@ -220,6 +238,10 @@ class Controller extends StateXController {
     }
   }
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the platform's text scale factor changes.
   @override
   void didChangeTextScaleFactor() {
@@ -229,6 +251,10 @@ class Controller extends StateXController {
     }
   }
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Brightness changed.
   @override
   void didChangePlatformBrightness() {
@@ -247,13 +273,21 @@ class Controller extends StateXController {
     }
   }
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// Passing these possible values:
     /// AppLifecycleState.inactive (may be paused at any time)
     /// AppLifecycleState.paused (may enter the suspending state at any time)
     /// AppLifecycleState.detach
-    /// AppLifecycleState.resumed
+    /// AppLifecycleState.resume
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didHaveMemoryPressure in Controller');
+    }
   }
 
   /// Called when the system is running low on memory.
@@ -265,9 +299,14 @@ class Controller extends StateXController {
     }
   }
 
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the system changes the set of active accessibility features.
   @override
   void didChangeAccessibilityFeatures() {
+    // inDebugger is deprecated but still tested here. Use inDebugMode instead.
     if (inDebugger) {
       //ignore: avoid_print
       print('############ Event: didChangeAccessibilityFeatures in Controller');

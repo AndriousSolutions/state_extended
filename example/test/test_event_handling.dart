@@ -5,10 +5,17 @@ import 'package:flutter_test/flutter_test.dart';
 /// Simulate some App 'life cycle' events.
 Future<void> testEventHandling(WidgetTester tester) async {
   //
+
+  /// IMPORTANT  All these operations destroy the current State object!
+  ///                      It is re-created after this!
+
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.detached);
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+
+  // Give the app time to recover and indeed resume testing.
+  await tester.pumpAndSettle(const Duration(seconds: 10));
 
   // didChangePlatformBrightness
   tester.binding.platformDispatcher.platformBrightnessTestValue =
