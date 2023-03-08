@@ -119,10 +119,7 @@ class Controller extends StateXController {
     }
   }
 
-  /// **IMPORTANT**
-  /// After this event the current State is to be destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
+  /// Called when app returns from the background
   @override
   void resumedLifecycleState() {
     if (inDebugMode) {
@@ -131,8 +128,7 @@ class Controller extends StateXController {
     }
   }
 
-  /// **IMPORTANT** A number of system events will destroy the current State object
-  /// e.g. Returning the app to the foreground
+  /// If a State object is unexpectedly re-created
   /// You have to 'update' the properties of the new StateX object using the
   /// old StateX object because it's going to be disposed of.
   @override
@@ -228,10 +224,6 @@ class Controller extends StateXController {
     return super.didPushRouteInformation(routeInformation);
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   @override
@@ -242,10 +234,6 @@ class Controller extends StateXController {
     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the platform's text scale factor changes.
   @override
   void didChangeTextScaleFactor() {
@@ -255,10 +243,6 @@ class Controller extends StateXController {
     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Brightness changed.
   @override
   void didChangePlatformBrightness() {
@@ -277,10 +261,6 @@ class Controller extends StateXController {
     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// Passing these possible values:
@@ -303,10 +283,6 @@ class Controller extends StateXController {
     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the system changes the set of active accessibility features.
   @override
   void didChangeAccessibilityFeatures() {
