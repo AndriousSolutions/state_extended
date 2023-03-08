@@ -10,10 +10,7 @@ import 'package:example/src/view.dart';
 /// This is the app's first StatefulWidget.
 class MyApp extends StatefulWidget {
   /// A constant constructor
-  const MyApp({super.key, this.throwErrors});
-
-  /// Purposely throws errors as the app runs.
-  final bool? throwErrors;
+  const MyApp({super.key});
 
   /// This is the App's State object
   @override
@@ -27,7 +24,7 @@ class _MyAppState extends AppStateX<MyApp> {
       : super(
           controller: AppController(),
           controllers: [
-            Controller(),
+//            Controller(),
             AnotherController(),
             YetAnotherController(),
           ],
@@ -46,18 +43,29 @@ class _MyAppState extends AppStateX<MyApp> {
   //   home: Page1(key: UniqueKey()),
   // );
 
-  /// Override buildF() and implement initAsync() and use a FutureBuilder
-  /// to perform asynchronous operations while the app starts up.
+  /// Override buildF() and implement initAsync() to use a FutureBuilder
+  /// to perform asynchronous operations while the State object starts up.
   // @override
   // Widget buildF(BuildContext context) => MaterialApp(
   //       home: Page1(key: UniqueKey()),
   //     );
 
-  /// Override buildIn() to use the FutureBuilder again but also
-  /// the built-in InheritedWidget.
+  /// Override buildIn() to use the built-in FutureBuilder and InheritedWidget.
   @override
-  Widget buildIn(BuildContext context) =>
-      MaterialApp(home: Page1(key: GlobalKey()));
+  Widget buildIn(BuildContext context) {
+    // Throw an error right here at the beginning to test recovery code.
+    var throwError = controller is AppController;
+    if (throwError) {
+      final appCon = controller as AppController;
+      throwError = appCon.errorAtStartup;
+      // It'll trip again instantly and so don't trip it again.
+      appCon.errorAtStartup = false;
+    }
+    if (throwError) {
+      throw AssertionError('Error in buildIn!');
+    }
+    return MaterialApp(home: Page1(key: UniqueKey()));
+  }
 
   ///
   @override

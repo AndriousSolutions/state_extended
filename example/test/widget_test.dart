@@ -15,7 +15,7 @@ import '../test/_test_imports.dart';
 
 void main() => testMyApp();
 
-IntegrationTestWidgetsFlutterBinding? _integrationTest;
+late IntegrationTestsBinder _integrationTest;
 
 /// Also called in package's own testing file, test/widget_test.dart
 void testMyApp() {
@@ -50,6 +50,9 @@ void testMyApp() {
       /// Testing the StateMVC, ControllerMVC, and ListenerMVC
       await unitTesting(tester);
 
+      /// Now allow for errors to occur even during the testing
+      _integrationTest.allowErrors = true;
+
       // Find its StatefulWidget first then the 'type' of State object.
       final appState = tester.firstState<AppStateX>(find.byType(MyApp));
 
@@ -57,18 +60,18 @@ void testMyApp() {
 
       if (appCon != null && appCon is AppController) {
         // Allow for errors to be thrown.
-        appCon.tripError = true;
+        appCon.allowErrors = true;
       }
 
       // hot reload
       await tester.binding.reassembleApplication();
 
       // pumpAndSettle() waits for all animations to complete.
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
 
       // Go to Page 2
       await tester.tap(find.byKey(const Key('Page 2')));
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
 
       AnotherController().tripError = true;
 
@@ -78,22 +81,38 @@ void testMyApp() {
       // // pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
-      /// Simulate some events (eg. paused and resumed the app)
-      await testWidgetsBindingObserver(tester);
+      /// Simulate Changing the text size.
+      /// Done near the end of testing as it's a very disruptive test
+      await testScaleFactor(tester);
+
+      // Now trip an error right at start up.
+      (appCon as AppController).errorAtStartup = true;
+
+      // hot reload
+      await tester.binding.reassembleApplication();
+
+      // pumpAndSettle() waits for all animations to complete.
+      await tester.pumpAndSettle(const Duration(seconds: 1));
     },
   );
 }
 
 class IntegrationTestsBinder extends IntegrationTestWidgetsFlutterBinding {
-  IntegrationTestsBinder() : super();
+  /// Set so to 'take Exceptions' and continue errors to occur during testing.
+  bool allowErrors = false;
 
   @override
   void reportExceptionNoticed(FlutterErrorDetails exception) {
-    Future.delayed(const Duration(milliseconds: 5), () {
-      // Possibly the testing is over in 5 milliseconds.
-      if (_integrationTest!.inTest) {
-        takeException();
-      }
-    });
+    //
+    if (allowErrors) {
+      // 'Remove' the error shortly after it occurs to allow for possibly anothers.
+      Future.delayed(const Duration(milliseconds: 3), () {
+        // Only attempt the delay while still 'testing' or testing will fail.
+        if (inTest) {
+          // Take in the exception so to allow for further exceptions
+          takeException();
+        }
+      });
+    }
   }
 }

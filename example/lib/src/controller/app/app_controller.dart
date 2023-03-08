@@ -29,28 +29,11 @@ class AppController extends StateXController {
   @override
   void onAsyncError(FlutterErrorDetails details) {}
 
-  /// Return true when the App is passed true to throw errors.
-  bool get tripError {
-    if (_tripError == null) {
-      final appWidget = state?.rootState?.widget;
-      var trip = appWidget != null && appWidget is MyApp;
-      if (trip) {
-        trip = appWidget.throwErrors ?? false;
-      }
-      _tripError = trip;
-    }
-    return _tripError!;
-  }
+  /// Store the boolean allowing for errors or not.
+  bool allowErrors = false;
 
-  /// Set whether to allow for errors.
-  set tripError(bool? trip) {
-    if (trip != null) {
-      _tripError = trip;
-    }
-  }
-
-  // Store the boolean allowing for errors or not.
-  bool? _tripError;
+  /// Error right at the start
+  bool errorAtStartup = false;
 
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.
@@ -59,7 +42,7 @@ class AppController extends StateXController {
     super.initState();
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: initState in Controller');
+      print('############ Event: initState in $state');
     }
   }
 
@@ -68,7 +51,7 @@ class AppController extends StateXController {
   void deactivate() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: deactivate in AppController');
+      print('############ Event: deactivate in $state');
     }
   }
 
@@ -80,7 +63,7 @@ class AppController extends StateXController {
   void activate() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: activate in AppController');
+      print('############ Event: activate in $state');
     }
   }
 
@@ -91,7 +74,7 @@ class AppController extends StateXController {
   void dispose() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: dispose in AppController');
+      print('############ Event: dispose in $state');
     }
     super.dispose();
   }
@@ -102,7 +85,7 @@ class AppController extends StateXController {
   void pausedLifecycleState() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: pausedLifecycleState in AppController');
+      print('############ Event: pausedLifecycleState in $state');
     }
   }
 
@@ -111,7 +94,7 @@ class AppController extends StateXController {
   void resumedLifecycleState() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: resumedLifecycleState in AppController');
+      print('############ Event: resumedLifecycleState in $state');
     }
   }
 }

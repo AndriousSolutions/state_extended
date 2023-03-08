@@ -22,7 +22,7 @@ Future<void> errorHandling(
 
   if (appCon != null && appCon is AppController) {
     // Allow for errors to be thrown.
-    appCon.tripError = true;
+    appCon.allowErrors = true;
   }
 
   final con = AnotherController();

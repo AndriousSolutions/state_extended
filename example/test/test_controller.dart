@@ -164,7 +164,7 @@ void testsController(WidgetTester tester) {
 
   var state = states.first;
 
-  expect(state, isA<AppStateX>(), reason: location);
+  expect(state, isA<Page1State>(), reason: location);
 
   final id = state.remove(con);
 

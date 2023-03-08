@@ -20,7 +20,7 @@ class AnotherController extends StateXController {
 
   @override
   Future<bool> initAsync() async {
-    if (tripError && AppController().tripError) {
+    if (tripError && AppController().allowErrors) {
       throw AssertionError('Error in AnotherController.initAsync()!');
     }
     return true;

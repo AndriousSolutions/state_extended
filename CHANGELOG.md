@@ -1,4 +1,10 @@
 
+## 2.5.3
+March 08, 2023
+- Bugfix. setState() no longer called in System events. 
+- Kept updateNewStateX() as it may be useful in special circumstances.
+- Added further testing
+
 ## 2.5.2
 March 06, 2023
 - System events from WidgetsBinding.instance.addObserver(this); destroys current State object!
@@ -12,7 +18,7 @@ March 04, 2023
 - Replace buildChild() function with buildIn() function
 - Updated example app in README.md
 - testEventHandling(tester); in testing
-- Continue to adding testing
+- Added further testing
 
 ## 2.5.0+2
 February 27, 2023

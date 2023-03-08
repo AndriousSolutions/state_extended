@@ -6,6 +6,7 @@
 import 'package:example/src/controller.dart';
 
 import 'package:example/src/view.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -159,5 +160,115 @@ class TesterStateListener with StateListener {
     /// AppLifecycleState.resumed
     //ignore: avoid_print
     print('############ Event: detachedLifecycleState in TesterStateListener');
+  }
+
+  /// Called when the system tells the app to pop the current route.
+  /// For example, on Android, this is called when the user presses
+  /// the back button.
+  @override
+  Future<bool> didPopRoute() async {
+    if (kDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didPopRoute in TesterStateListener');
+    }
+    return super.didPopRoute();
+  }
+
+  /// Called when the host tells the app to push a new route onto the
+  /// navigator.
+  @override
+  Future<bool> didPushRoute(String route) async {
+    if (kDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didPushRoute in TesterStateListener');
+    }
+    return super.didPushRoute(route);
+  }
+
+  /// Called when the host tells the application to push a new
+  /// [RouteInformation] and a restoration state onto the router.
+  @override
+  Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
+    if (kDebugMode) {
+      //ignore: avoid_print
+      print(
+          '############ Event: didPushRouteInformation in TesterStateListener');
+    }
+    return super.didPushRouteInformation(routeInformation);
+  }
+
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
+  /// Called when the application's dimensions change. For example,
+  /// when a phone is rotated.
+  @override
+  void didChangeMetrics() {
+    if (kDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didChangeMetrics in TesterStateListener');
+    }
+  }
+
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
+  /// Called when the platform's text scale factor changes.
+  @override
+  void didChangeTextScaleFactor() {
+    if (kDebugMode) {
+      //ignore: avoid_print
+      print(
+          '############ Event: didChangeTextScaleFactor in TesterStateListener');
+    }
+  }
+
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
+  /// Brightness changed.
+  @override
+  void didChangePlatformBrightness() {
+    if (kDebugMode) {
+      //ignore: avoid_print
+      print(
+          '############ Event: didChangePlatformBrightness in TesterStateListener');
+    }
+  }
+
+  /// Called when the system tells the app that the user's locale has changed.
+  @override
+  void didChangeLocale(Locale locale) {
+    if (kDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didChangeLocale in TesterStateListener');
+    }
+  }
+
+  /// Called when the system is running low on memory.
+  @override
+  void didHaveMemoryPressure() {
+    if (kDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didHaveMemoryPressure in TesterStateListener');
+    }
+  }
+
+  /// **IMPORTANT**
+  /// After this change the current State is destroyed.
+  /// It is unmounted and new State object is created!
+  /// Implement updateNewStateX() to update the new State object of its specific properties.
+  /// Called when the system changes the set of active accessibility features.
+  @override
+  void didChangeAccessibilityFeatures() {
+    // inDebugger is deprecated but still tested here. Use inDebugMode instead.
+    if (kDebugMode) {
+      //ignore: avoid_print
+      print(
+          '############ Event: didChangeAccessibilityFeatures in TesterStateListener');
+    }
   }
 }

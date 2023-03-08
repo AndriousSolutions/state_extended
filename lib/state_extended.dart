@@ -532,12 +532,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
   }
 
   /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
@@ -598,12 +599,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
     // Return false to pop out
     return handled;
   }
@@ -642,12 +644,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
     return handled;
   }
 
@@ -690,12 +693,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
     return handled;
   }
 
@@ -735,12 +739,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
   }
 
   /// **IMPORTANT**
@@ -779,12 +784,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
   }
 
   /// **IMPORTANT**
@@ -811,12 +817,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
   }
 
   /// Called when the system tells the app that the user's locale has
@@ -844,12 +851,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
   }
 
   /// Called when the system is running low on memory.
@@ -876,12 +884,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
   }
 
   /// **IMPORTANT**
@@ -907,12 +916,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.didChangeAccessibilityFeatures();
     }
     _setStateAllowed = true;
-    if (_rebuildRequested || StateX._inTester) {
-      _rebuildRequested = false;
 
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
+// //    if (_rebuildRequested || StateX._inTester) {
+//     if (_rebuildRequested) {
+//       _rebuildRequested = false;
+//
+//       /// Perform a 'rebuild' if requested.
+//       setState(() {});
+//     }
   }
 
   /// A flag indicating this is the very first build.
@@ -1031,7 +1042,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @Deprecated('Replaced by the recognized function, notifyClients')
   void buildInherited() {
     final state = context.findAncestorStateOfType<InheritedStateX>();
-    state?.setState(() {});
+    state?.notifyClients();
   }
 
   /// In harmony with Flutter's own API
@@ -1419,21 +1430,36 @@ mixin StateSetter {
       return false;
     }
 
-    // If this is likely a 'resumed' State it's to be re-created.
+    // It's been opened before
     if (_oldStateX != null) {
-      // Testing Flutter lifecycle operation
-      if (_oldStateX!._resumed || _oldStateX!._deactivated) {
-        if (kDebugMode) {
-          print('StateX(): Re-created because returning from another app!');
+      // If the previous State was 'resumed'. May want to recover further??
+      if (_oldStateX!._resumed) {
+        // If it's the same type. (Thought because it was being recreated, but not the case. gp)
+        if (state.runtimeType == _oldStateX.runtimeType) {
+          // Copy over certain properties
+          state.copy(_oldStateX);
+          state.updateNewStateX(_oldStateX!);
+          assert(() {
+            if (kDebugMode) {
+              //ignore: avoid_print
+              print(
+                  '############ _pushStateToSetter(): $state copied $_oldStateX');
+            }
+            return true;
+          }());
         }
       }
+      // Testing Flutter lifecycle operation
+      assert(() {
+        if (_oldStateX!._resumed || _oldStateX!._deactivated) {
+          if (kDebugMode) {
+            print(
+                '############ _pushStateToSetter(): resumed: ${_oldStateX!._resumed} deactivated: ${_oldStateX!._deactivated}');
+          }
+        }
+        return true;
+      }());
 
-      // Ensure it's the same type...it's being recreated.
-      if (state.runtimeType == _oldStateX.runtimeType) {
-        // Copy over certain properties
-        state.copy(_oldStateX);
-        state.updateNewStateX(_oldStateX!);
-      }
       // cleanup
       _oldStateX = null;
     }
@@ -1465,11 +1491,9 @@ mixin StateSetter {
       //
       _statePushed = false;
 
-      // **IMPORTANT** if 'resumed' it'll soon be destroyed and another created
+      // **IMPORTANT** In certain instances it's destroyed and another created
       // Retain a copy to update the new StateX object!
-      if (_stateX!._resumed) {
-        _oldStateX = _stateX;
-      }
+      _oldStateX = _stateX;
 
       if (_stateXSet.isEmpty) {
         _stateX = null;
@@ -1557,7 +1581,7 @@ mixin StateListener {
 
   /// The framework calls this method when this [StateX] object will never
   /// build again.
-  /// Note: THERE IS NO GUARANTEE THIS METHOD WILL RUN in the Framework.
+  /// Note: YOU WILL HAVE NO IDEA WHEN THIS WILL RUN in the Framework.
   @mustCallSuper
   void dispose() {
     /// The framework calls this method when this [StateX] object will never
@@ -1959,17 +1983,6 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   void onAsyncError(FlutterErrorDetails details) {}
 }
 
-// /// Main or first class to pass to the 'main.dart' file's runApp() function.
-// abstract class AppStatefulWidget extends StatefulWidget {
-//   /// Its sole purpose is to create the 'App State object', AppStateMVC.
-//   const AppStatefulWidget({super.key});
-//
-//   /// You create the App's State object.
-//   /// Return a type AppStateMVC that extends State<AppStatefulWidgetMVC>
-//   @override
-//   AppStateX createState();
-// }
-
 /// The StateX object at the 'app level.' Used to effect the whole app by
 /// being the 'root' of first State object instantiated.
 abstract class AppStateX<T extends StatefulWidget>
@@ -2075,32 +2088,6 @@ abstract class AppStateX<T extends StatefulWidget>
   /// Replaced by a more accurate sounding function.
   @Deprecated('Use rebuildLastState() instead')
   void refreshLastState() => rebuildLastState();
-
-  // /// Returning the 'last' StateX.
-  // StateX? lastStateX() {
-  //   StateX? state;
-  //   while (_states.isNotEmpty) {
-  //     try {
-  //       state = _states.values.last;
-  //       // The state object is 'on the way out!'
-  //       if (!state.mounted || state.deactivated) {
-  //         // Remove state
-  //         state = null;
-  //         _states.remove(_states.keys.last);
-  //         continue;
-  //       }
-  //       break;
-  //     } catch (ex) {
-  //       // Just get out and see if state is null.
-  //       break;
-  //     }
-  //   }
-  //   // Don't supply this State object if it's deactivated.
-  //   if (state == null && mounted && !deactivated) {
-  //     state = this;
-  //   }
-  //   return state;
-  // }
 }
 
 /// A InheritedWidget internally used by the 'App State' object
@@ -2327,7 +2314,7 @@ mixin AsyncOps {
   void onAsyncError(FlutterErrorDetails details) {}
 }
 
-/// A StateX object but inserts a InheritedWidget into the Widget tree.
+/// A StateX object that inserts a InheritedWidget into the Widget tree.
 abstract class InheritedStateX<T extends StatefulWidget,
     U extends InheritedWidget> extends StateX<T> {
   ///
@@ -2461,12 +2448,12 @@ class InheritedStatefulWidget<U extends InheritedWidget>
   /// Call its State object's setState() function
   void setState(VoidCallback fn) => state._setState(fn);
 
-  /// Rebuild the InheritedWidget and its dependencies.
-  @Deprecated('Replaced by the recognized function, notifyClients')
-  void buildInherited() => setState(() {});
-
-  /// In harmony with Flutter's own API
-  void notifyClients() => setState(() {});
+  // /// Rebuild the InheritedWidget and its dependencies.
+  // @Deprecated('Replaced by the recognized function, notifyClients')
+  // void buildInherited() => setState(() {});
+  //
+  // /// In harmony with Flutter's own API
+  // void notifyClients() => setState(() {});
 }
 
 class _InheritedState extends State<InheritedStatefulWidget> {
@@ -2511,7 +2498,7 @@ class _BuildBuilder extends StatelessWidget {
         stack: e is Error ? e.stackTrace : null,
         library: 'state_extended.dart',
         context:
-            ErrorDescription("While building 'child' for InheritedWidget."),
+            ErrorDescription("while building 'child' for InheritedStateX."),
       );
 
       FlutterError.reportError(errorDetails);

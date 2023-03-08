@@ -83,8 +83,6 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(ex, isA<Exception>(), reason: _location);
 
-  appState.setState(() {});
-
   // Test 'refresh' alternative
   appState.notifyClients();
   appState.buildInherited();

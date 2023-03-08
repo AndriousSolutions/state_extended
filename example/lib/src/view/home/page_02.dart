@@ -35,7 +35,7 @@ class Page2State extends StateX<Page2> {
   Future<bool> initAsync() async {
     final init = await super.initAsync();
     //
-    if (AppController().tripError) {
+    if (AppController().allowErrors) {
       throw AssertionError('error thrown in Page2State.initAsync()');
     }
     return init;

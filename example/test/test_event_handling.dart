@@ -5,17 +5,16 @@ import 'package:flutter_test/flutter_test.dart';
 /// Simulate some App 'life cycle' events.
 Future<void> testEventHandling(WidgetTester tester) async {
   //
-
-  /// IMPORTANT  All these operations destroy the current State object!
-  ///                      It is re-created after this!
-
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.detached);
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
   // Give the app time to recover and indeed resume testing.
-  await tester.pumpAndSettle(const Duration(seconds: 10));
+  await tester.pumpAndSettle(const Duration(seconds: 5));
+
+  // locale
+  await tester.binding.setLocale('zh', 'zh_CN');
 
   // didChangePlatformBrightness
   tester.binding.platformDispatcher.platformBrightnessTestValue =
@@ -39,16 +38,12 @@ Future<void> testEventHandling(WidgetTester tester) async {
 
   await tester.pump();
 
-  /// Give the app time to recover and indeed resume testing.
+  // Give the app time to recover and indeed resume testing.
   await tester.pumpAndSettle(const Duration(seconds: 1));
 }
 
-/// Simulate some App 'life cycle' events.
-Future<void> testWidgetsBindingObserver(WidgetTester tester) async {
-  // locale
-  await tester.binding.setLocale('zh', 'zh_CN');
-
-  // didChangeTextScaleFactor
+Future<void> testScaleFactor(WidgetTester tester) async {
+// didChangeTextScaleFactor
   tester.binding.platformDispatcher.textScaleFactorTestValue = 4;
   addTearDown(tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
 
