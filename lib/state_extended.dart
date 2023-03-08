@@ -703,10 +703,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return handled;
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   @protected
@@ -748,10 +744,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 //     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the platform's text scale factor changes.
   @protected
   @override
@@ -793,10 +785,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 //     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the platform brightness changes.
   @protected
   @override
@@ -893,10 +881,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 //     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the system changes the set of currently active accessibility features.
   @protected
   @override
@@ -1590,9 +1574,7 @@ mixin StateListener {
     /// by this object (e.g., stop any active animations).
   }
 
-  /// **IMPORTANT**
-  /// A number of system events will destroy the current State object
-  /// e.g. Returning the app to the foreground
+  /// A State object may be unexpectedly re-created by a UniqueKey() in a parent for example.
   /// You have to 'update' the properties of the new StateX object using the
   /// old StateX object because it's going to be disposed of.
   void updateNewStateX(covariant StateX oldState) {
@@ -1676,10 +1658,6 @@ mixin StateListener {
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) =>
       didPushRoute(routeInformation.location!);
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   void didChangeMetrics() {
@@ -1714,10 +1692,6 @@ mixin StateListener {
     ///   }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   void didChangePlatformBrightness() {
     /// Brightness changed.
   }
@@ -1731,10 +1705,6 @@ mixin StateListener {
     /// This method exposes notifications from [Window.onLocaleChanged].
   }
 
-  /// **IMPORTANT**
-  /// After 'resumed' the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the system puts the app in the background or returns the app to the foreground.
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// Passing these possible values:
@@ -1779,10 +1749,6 @@ mixin StateListener {
     /// [SystemChannels.system].
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the system changes the set of active accessibility features.
   void didChangeAccessibilityFeatures() {
     /// Called when the system changes the set of currently active accessibility

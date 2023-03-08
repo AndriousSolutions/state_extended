@@ -1,5 +1,5 @@
 
-## 2.5.3+1
+## 2.5.3+2
 March 08, 2023
 - Bugfix. setState() no longer called in System events. 
 - Kept updateNewStateX() as it may be useful in special circumstances.

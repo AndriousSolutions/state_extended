@@ -6,6 +6,7 @@
 import 'package:example/src/controller.dart';
 
 import 'package:example/src/view.dart';
+
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_test/flutter_test.dart';
