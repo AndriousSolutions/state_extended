@@ -110,6 +110,11 @@ Future<void> integrationTesting(WidgetTester tester) async {
     expect(state.mounted, isFalse, reason: _location);
   }
 
+  state = con.stateOf<Page1>()!;
+
+  /// Explicitly test this System event
+  (state as Page1State).didHaveMemoryPressure();
+
   /// A new State object has been introduced!
   /// **NO** StateX was using StateX._inTester for some reason?!
   state = con.state!;

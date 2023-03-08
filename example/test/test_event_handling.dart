@@ -1,3 +1,5 @@
+import 'package:example/src/controller.dart';
+
 import 'package:example/src/view.dart';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -46,13 +48,18 @@ Future<void> testEventHandling(WidgetTester tester) async {
 
 Future<void> testScaleFactor(WidgetTester tester) async {
   //
-  // Find its StatefulWidget first then the 'type' of State object.
-  final appState = tester.firstState<AppStateX>(find.byType(MyApp));
+  // A Singleton pattern allows for unit testing.
+  final con = Controller();
+
+  // You can retrieve a State object the Controller has collected so far.
+  final state = con.stateOf<Page1>()!;
 
   final listener = TesterStateListener();
 
   // Testing Listeners during the event
-  appState.addListener(listener);
+  state.addBeforeListener(listener);
+
+  state.addListener(listener);
 
 // didChangeTextScaleFactor
   tester.binding.platformDispatcher.textScaleFactorTestValue = 4;
@@ -62,5 +69,5 @@ Future<void> testScaleFactor(WidgetTester tester) async {
   await tester.pumpAndSettle(const Duration(seconds: 1));
 
   // Testing Listeners during the event
-  appState.removeListener(listener);
+  state.removeListener(listener);
 }
