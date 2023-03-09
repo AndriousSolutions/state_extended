@@ -79,6 +79,10 @@ Future<void> integrationTesting(WidgetTester tester) async {
   /// Simulate some events (eg. paused and resumed the app)
   await testEventHandling(tester);
 
+  if (state.paused) {
+    /// The app has been paused
+    expect(state.paused, isTrue, reason: _location);
+  }
   if (state.deactivated) {
     /// Test that a state object as been replaced!
     expect(state.deactivated, isTrue, reason: _location);
@@ -89,6 +93,10 @@ Future<void> integrationTesting(WidgetTester tester) async {
   if (state.detached) {
     expect(state.detached, isTrue, reason: _location);
   }
+  if (state.resumed) {
+    expect(state.resumed, isTrue, reason: _location);
+  }
+
   // Even the listener will be gone if the State is now disposed.
   final contains = state.afterContains(listener);
 
