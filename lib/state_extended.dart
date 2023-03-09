@@ -144,8 +144,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// May be set false to prevent unnecessary 'rebuilds'.
   static bool _setStateAllowed = true;
 
-  /// May be set true to request a 'rebuild.'
-  bool _rebuildRequested = false;
+  // /// May be set true to request a 'rebuild.'
+  // bool _rebuildRequested = false;
 
   /// Running in a tester instead of in production.
   bool get inFlutterTester => StateX._inTester;
@@ -184,8 +184,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
     _setStateAllowed = true;
 
-    /// No 'setState()' functions are necessary
-    _rebuildRequested = false;
+    // /// No 'setState()' functions are necessary
+    // _rebuildRequested = false;
 
     return init;
   }
@@ -320,9 +320,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    // In some cases, if then reinserted back in another part of the tree
-    // the build is called, and so setState() is not necessary.
-    _rebuildRequested = false;
+    // // In some cases, if then reinserted back in another part of the tree
+    // // the build is called, and so setState() is not necessary.
+    // _rebuildRequested = false;
   }
 
   /// The framework calls this method whenever it removes this [State] object
@@ -366,9 +366,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    // In some cases, if then reinserted back in another part of the tree
-    // the build is called, and so setState() is not necessary.
-    _rebuildRequested = false;
+    // // In some cases, if then reinserted back in another part of the tree
+    // // the build is called, and so setState() is not necessary.
+    // _rebuildRequested = false;
   }
 
   /// Readily determine if the State object is possibly to be disposed of.
@@ -470,8 +470,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Re-enable setState() function
     _setStateAllowed = true;
 
-    /// No 'setState()' functions are necessary
-    _rebuildRequested = false;
+    // /// No 'setState()' functions are necessary
+    // _rebuildRequested = false;
   }
 
   /// Called when the system puts the app in the background or returns the app to the foreground.
@@ -1001,9 +1001,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    /// No 'setState()' function is necessary
-    /// The framework always calls build with a hot reload.
-    _rebuildRequested = false;
+    // /// No 'setState()' function is necessary
+    // /// The framework always calls build with a hot reload.
+    // _rebuildRequested = false;
   }
 
   /// Allows 'external' routines can call this function.
@@ -1021,9 +1021,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         super.setState(fn);
       }
       _setStateAllowed = true;
-    } else {
-      /// Can't rebuild at this moment but at least make the request.
-      _rebuildRequested = true;
+      // } else {
+      //   /// Can't rebuild at this moment but at least make the request.
+      //   _rebuildRequested = true;
+      // }
     }
   }
 

@@ -1,8 +1,9 @@
 
-## 2.5.4
+## 2.5.4+1
 March 09, 2023
 - didChangeLocale(Locale? locales) to didChangeLocales(List<Locale>? locales)
 - Introduced system event indicator: bool get hadSystemEvent
+- _rebuildRequested removed
 - Adjusting further testing
 
 ## 2.5.3+4
