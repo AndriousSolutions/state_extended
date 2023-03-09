@@ -234,10 +234,45 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateAllowed = true;
   }
 
-  /// Readily determine if the State object is possibly to be disposed of.
-  bool get deactivated => _deactivated;
-  // State object's deactivated() was called.
-  bool _deactivated = false;
+  /// This method is also called immediately after [initState].
+  /// Otherwise called only if this [State] object's Widget
+  /// is a dependency of [InheritedWidget].
+  /// When a InheritedWidget's build() function is called
+  /// it's dependencies' build() function are also called but not before
+  /// their didChangeDependencies() function. Subclasses rarely use this method.
+  @protected
+  @override
+  @mustCallSuper
+  void didChangeDependencies() {
+    // Important to 'markNeedsBuild()' first
+    super.didChangeDependencies();
+
+    /// No 'setState()' functions are allowed to fully function at this point.
+    _setStateAllowed = false;
+
+    for (final listener in _beforeList) {
+      listener.didChangeDependencies();
+    }
+    for (final con in _controllerList) {
+      con.didChangeDependencies();
+    }
+    for (final listener in _afterList) {
+      listener.didChangeDependencies();
+    }
+    super.didChangeDependencies();
+
+    _setStateAllowed = true;
+
+    // if (_rebuildRequested && !_firstBuild) {
+    //   _rebuildRequested = false;
+    //
+    //   /// Perform a 'rebuild' if requested.
+    //   setState(() {});
+    // }
+
+    // /// Not the first build now.
+    // _firstBuild = false;
+  }
 
   /// Called when this object is reinserted into the tree after having been
   /// removed via [deactivate].
@@ -336,11 +371,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _rebuildRequested = false;
   }
 
-  /// Flag indicating this State object is disposed.
-  /// Will be garbage collected.
-  /// property, mounted, is then set to false.
-  bool get disposed => _disposed;
-  bool _disposed = false;
+  /// Readily determine if the State object is possibly to be disposed of.
+  bool get deactivated => _deactivated;
+  // State object's deactivated() was called.
+  bool _deactivated = false;
 
   /// The framework calls this method when this [StateX] object will never
   /// build again and will be disposed of with garbage collection.
@@ -389,6 +423,12 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     super.dispose();
   }
 
+  /// Flag indicating this State object is disposed.
+  /// Will be garbage collected.
+  /// property, mounted, is then set to false.
+  bool get disposed => _disposed;
+  bool _disposed = false;
+
   /// Update the 'new' StateX object from the 'old' StateX object.
   /// Returning to this app from another app will re-create the State object
   /// You 'update' the current State object using this function.
@@ -433,22 +473,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are necessary
     _rebuildRequested = false;
   }
-
-  /// State object was in 'inactive' state
-  bool get inactive => _inactive;
-  bool _inactive = false;
-
-  /// State object was in 'paused' state
-  bool get paused => _paused;
-  bool _paused = false;
-
-  /// State object was in 'paused' state
-  bool get detached => _detached;
-  bool _detached = false;
-
-  /// State object was in 'resumed' state
-  bool get resumed => _resumed;
-  bool _resumed = false;
 
   /// Called when the system puts the app in the background or returns the app to the foreground.
   @protected
@@ -545,19 +569,35 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   void inactiveLifecycleState() {}
 
+  /// State object was in 'inactive' state
+  bool get inactive => _inactive;
+  bool _inactive = false;
+
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
   @override
   void pausedLifecycleState() {}
+
+  /// State object was in 'paused' state
+  bool get paused => _paused;
+  bool _paused = false;
 
   /// Either be in the progress of attaching when the  engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
   @override
   void detachedLifecycleState() {}
 
+  /// State object was in 'paused' state
+  bool get detached => _detached;
+  bool _detached = false;
+
   /// The application is visible and responding to user input.
   @override
   void resumedLifecycleState() {}
+
+  /// State object was in 'resumed' state
+  bool get resumed => _resumed;
+  bool _resumed = false;
 
   /// Called when the system tells the app to pop the current route.
   /// For example, on Android, this is called when the user presses
@@ -703,6 +743,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return handled;
   }
 
+  /// State object experienced a system event
+  bool get hadSystemEvent => _hadSystemEvent;
+  bool _hadSystemEvent = false;
+
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   @protected
@@ -719,6 +763,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     ///   void didChangeMetrics() {
     ///     setState(() { _lastSize = ui.window.physicalSize; });
     ///   }
+
+    // A triggered system event
+    _hadSystemEvent = true;
 
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
@@ -761,6 +808,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     ///     setState(() { _lastTextScaleFactor = ui.window.textScaleFactor; });
     ///   }
 
+    // A triggered system event
+    _hadSystemEvent = true;
+
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
@@ -790,6 +840,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangePlatformBrightness() {
+    // A triggered system event
+    _hadSystemEvent = true;
+
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
@@ -820,7 +873,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @protected
   @mustCallSuper
   @override
-  void didChangeLocale(Locale locale) {
+  void didChangeLocales(List<Locale>? locales) {
+    // A triggered system event
+    _hadSystemEvent = true;
+
     ///
     /// This method exposes notifications from [Window.onLocaleChanged].
 
@@ -828,13 +884,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateAllowed = false;
 
     for (final listener in _beforeList) {
-      listener.didChangeLocale(locale);
+      listener.didChangeLocales(locales);
     }
     for (final con in _controllerList) {
-      con.didChangeLocale(locale);
+      con.didChangeLocales(locales);
     }
     for (final listener in _afterList) {
-      listener.didChangeLocale(locale);
+      listener.didChangeLocales(locales);
     }
 
     _setStateAllowed = true;
@@ -853,6 +909,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didHaveMemoryPressure() {
+    // A triggered system event
+    _hadSystemEvent = true;
+
     ///
     /// This method exposes the `memoryPressure` notification from
     /// [SystemChannels.system].
@@ -886,6 +945,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangeAccessibilityFeatures() {
+    // A triggered system event
+    _hadSystemEvent = true;
+
     ///
     /// This method exposes notifications from [Window.onAccessibilityFeaturesChanged].
 
@@ -910,48 +972,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 //     }
   }
 
-  /// A flag indicating this is the very first build.
-  bool _firstBuild = true;
-
-  /// This method is also called immediately after [initState].
-  /// Otherwise called only if this [State] object's Widget
-  /// is a dependency of [InheritedWidget].
-  /// When a InheritedWidget's build() function is called
-  /// it's dependencies' build() function are also called but not before
-  /// their didChangeDependencies() function. Subclasses rarely use this method.
-  @protected
-  @override
-  @mustCallSuper
-  void didChangeDependencies() {
-    // Important to 'markNeedsBuild()' first
-    super.didChangeDependencies();
-
-    /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
-
-    for (final listener in _beforeList) {
-      listener.didChangeDependencies();
-    }
-    for (final con in _controllerList) {
-      con.didChangeDependencies();
-    }
-    for (final listener in _afterList) {
-      listener.didChangeDependencies();
-    }
-    super.didChangeDependencies();
-
-    _setStateAllowed = true;
-
-    if (_rebuildRequested && !_firstBuild) {
-      _rebuildRequested = false;
-
-      /// Perform a 'rebuild' if requested.
-      setState(() {});
-    }
-
-    /// Not the first build now.
-    _firstBuild = false;
-  }
+  // /// A flag indicating this is the very first build.
+  // bool _firstBuild = true;
 
   /// During development, if a hot reload occurs, the reassemble method is called.
   /// This provides an opportunity to reinitialize any data that was prepared
@@ -988,6 +1010,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   // Note not 'protected' and so can be called by 'anyone.' -gp
   @override
   void setState(VoidCallback fn) {
+    //
     if (_setStateAllowed) {
       _setStateAllowed = false;
 
@@ -1417,9 +1440,12 @@ mixin StateSetter {
     // It's been opened before
     if (_oldStateX != null) {
       // If the previous State was 'resumed'. May want to recover further??
-      if (_oldStateX!._resumed) {
-        // If it's the same type. (Thought because it was being recreated, but not the case. gp)
-        if (state.runtimeType == _oldStateX.runtimeType) {
+      if (_oldStateX!._hadSystemEvent) {
+        // Reset so not to cause any future side-affects.
+        _oldStateX!._hadSystemEvent = false;
+        // If a different object and the same type. (Thought because it was being recreated, but not the case. gp)
+        if (state != _oldStateX &&
+            state.runtimeType == _oldStateX.runtimeType) {
           // Copy over certain properties
           state.copy(_oldStateX);
           state.updateNewStateX(_oldStateX!);
@@ -1431,18 +1457,19 @@ mixin StateSetter {
             }
             return true;
           }());
+
+          // Testing Flutter lifecycle operation
+          assert(() {
+            if (_oldStateX!._resumed || _oldStateX!._deactivated) {
+              if (kDebugMode) {
+                print(
+                    '############ _pushStateToSetter(): resumed: ${_oldStateX!._resumed} deactivated: ${_oldStateX!._deactivated}');
+              }
+            }
+            return true;
+          }());
         }
       }
-      // Testing Flutter lifecycle operation
-      assert(() {
-        if (_oldStateX!._resumed || _oldStateX!._deactivated) {
-          if (kDebugMode) {
-            print(
-                '############ _pushStateToSetter(): resumed: ${_oldStateX!._resumed} deactivated: ${_oldStateX!._deactivated}');
-          }
-        }
-        return true;
-      }());
 
       // cleanup
       _oldStateX = null;
@@ -1696,7 +1723,7 @@ mixin StateListener {
   void didChangePlatformBrightness() {}
 
   /// Called when the system tells the app that the user's locale has changed.
-  void didChangeLocale(Locale locale) {
+  void didChangeLocales(List<Locale>? locales) {
     /// Called when the system tells the app that the user's locale has
     /// changed. For example, if the user changes the system language
     /// settings.

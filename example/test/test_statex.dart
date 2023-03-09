@@ -9,6 +9,8 @@ import 'package:example/src/view.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import '../test/_test_imports.dart';
+
 const _location = '========================== test_statex.dart';
 
 Future<void> testsStateX(WidgetTester tester) async {
@@ -158,6 +160,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(stateObj, isA<Page1State>(), reason: _location);
 
+  // Deprecated and replaced by appState.endState. Must be tested.
   stateObj = appState.lastStateX!;
 
   expect(stateObj, isA<Page1State>(), reason: _location);
@@ -290,6 +293,13 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(each, isFalse, reason: _location);
 
+  final listener = TesterStateListener();
+
+  // Testing Listeners for the events below.
+  state.addBeforeListener(listener);
+
+  state.addAfterListener(listener);
+
   /// Usually you would call this function on a subclass of StateMVC
   /// We're testing the very class, StateMVC, itself and so the warning if fine:
   /// The member 'xxxxxxx' can only be used within instance members
@@ -318,24 +328,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   final locale = Localizations.localeOf(context);
 
   /// Called when the app's Locale changes
-  stateObj.didChangeLocale(locale);
-
-  // /// Called when the returning from another app.
-  // stateObj.didChangeAppLifecycleState(AppLifecycleState.resumed);
-  //
-  // stateObj.reassemble();
-  //
-  // stateObj.deactivate();
-  //
-  // stateObj.didChangeMetrics();
-  //
-  // stateObj.didChangeTextScaleFactor();
-  //
-  // stateObj.didChangePlatformBrightness();
-  //
-  // stateObj.didHaveMemoryPressure();
-  //
-  // stateObj.didChangeAccessibilityFeatures();
+  stateObj.didChangeLocales([locale]);
 
   /// Testing the Life-cycle Event Handling
   final controller = stateObj.rootCon;

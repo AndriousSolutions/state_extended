@@ -1,4 +1,10 @@
 
+## 2.5.4
+March 09, 2023
+- didChangeLocale(Locale? locales) to didChangeLocales(List<Locale>? locales)
+- Introduced system event indicator: bool get hadSystemEvent
+- Adjusting further testing
+
 ## 2.5.3+4
 March 08, 2023
 - Bugfix. setState() no longer called in System events. 
