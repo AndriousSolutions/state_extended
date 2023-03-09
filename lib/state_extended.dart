@@ -1692,9 +1692,8 @@ mixin StateListener {
     ///   }
   }
 
-  void didChangePlatformBrightness() {
-    /// Brightness changed.
-  }
+  /// Brightness changed.
+  void didChangePlatformBrightness() {}
 
   /// Called when the system tells the app that the user's locale has changed.
   void didChangeLocale(Locale locale) {
