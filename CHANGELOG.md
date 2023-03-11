@@ -1,4 +1,9 @@
 
+## 2.6.0
+March 11, 2023
+- bool get isEndState now used to determine if the 'latest' State object.
+- Only the 'latest' State object is rebuilt with setState() after a system event.
+
 ## 2.5.4+1
 March 09, 2023
 - didChangeLocale(Locale? locales) to didChangeLocales(List<Locale>? locales)

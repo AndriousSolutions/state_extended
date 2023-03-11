@@ -79,22 +79,36 @@ Future<void> integrationTesting(WidgetTester tester) async {
   /// Simulate some events (eg. paused and resumed the app)
   await testEventHandling(tester);
 
-  if (state.paused) {
+  var event = state.paused;
+
+  if (event) {
     /// The app has been paused
-    expect(state.paused, isTrue, reason: _location);
+    expect(event, isTrue, reason: _location);
   }
-  if (state.deactivated) {
+
+  event = state.deactivated;
+
+  if (event) {
     /// Test that a state object as been replaced!
-    expect(state.deactivated, isTrue, reason: _location);
+    expect(event, isTrue, reason: _location);
   }
-  if (state.inactive) {
-    expect(state.inactive, isTrue, reason: _location);
+
+  event = state.inactive;
+
+  if (event) {
+    expect(event, isTrue, reason: _location);
   }
-  if (state.detached) {
-    expect(state.detached, isTrue, reason: _location);
+
+  event = state.detached;
+
+  if (event) {
+    expect(event, isTrue, reason: _location);
   }
-  if (state.resumed) {
-    expect(state.resumed, isTrue, reason: _location);
+
+  event = state.resumed;
+
+  if (event) {
+    expect(event, isTrue, reason: _location);
   }
 
   // Even the listener will be gone if the State is now disposed.
@@ -110,9 +124,12 @@ Future<void> integrationTesting(WidgetTester tester) async {
   // The system will dispose of the State at its own discretion
   // You'll have no idea if and when that is.
 
-  if (state.disposed) {
-    expect(state.disposed, isTrue, reason: _location);
+  event = state.disposed;
+
+  if (event) {
+    expect(event, isTrue, reason: _location);
   }
+
   if (!state.mounted) {
     // Should not happen, but don't trip it here regardless! gp
     expect(state.mounted, isFalse, reason: _location);

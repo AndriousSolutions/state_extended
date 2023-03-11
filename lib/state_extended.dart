@@ -144,12 +144,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// May be set false to prevent unnecessary 'rebuilds'.
   static bool _setStateAllowed = true;
 
-  // /// May be set true to request a 'rebuild.'
-  // bool _rebuildRequested = false;
+  /// May be set true to request a 'rebuild.'
+  bool _setStateRequested = false;
 
   /// Running in a tester instead of in production.
   bool get inFlutterTester => StateX._inTester;
   static final _inTester = WidgetsBinding.instance is TestWidgetsFlutterBinding;
+
+  /// This is the 'latest' State being viewed by the App.
+  bool get isEndState => this == endState;
 
   /// Asynchronous operations must complete successfully.
   @override
@@ -184,8 +187,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
     _setStateAllowed = true;
 
-    // /// No 'setState()' functions are necessary
-    // _rebuildRequested = false;
+    /// No 'setState()' functions are necessary
+    _setStateRequested = false;
 
     return init;
   }
@@ -232,13 +235,16 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.initState();
     }
     _setStateAllowed = true;
+
+    /// No 'setState()' functions are necessary
+    _setStateRequested = false;
   }
 
   /// This method is also called immediately after [initState].
   /// Otherwise called only if this [State] object's Widget
   /// is a dependency of [InheritedWidget].
   /// When a InheritedWidget's build() function is called
-  /// it's dependencies' build() function are also called but not before
+  /// the dependent widget's build() function is also called but not before
   /// their didChangeDependencies() function. Subclasses rarely use this method.
   @protected
   @override
@@ -263,15 +269,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    // if (_rebuildRequested && !_firstBuild) {
-    //   _rebuildRequested = false;
-    //
-    //   /// Perform a 'rebuild' if requested.
-    //   setState(() {});
-    // }
-
-    // /// Not the first build now.
-    // _firstBuild = false;
+    // The InheritedWidget will dictate if widgets are rebuilt.
+    _setStateRequested = false;
   }
 
   /// Called when this object is reinserted into the tree after having been
@@ -289,7 +288,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// the tree to another due to the use of a [GlobalKey]).
 
     // Likely was deactivated.
-    _deactivated = false;
+    deactivated = false;
 
     // Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
@@ -320,9 +319,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    // // In some cases, if then reinserted back in another part of the tree
-    // // the build is called, and so setState() is not necessary.
-    // _rebuildRequested = false;
+    // In some cases, if then reinserted back in another part of the tree
+    // the build is called, and so setState() is not necessary.
+    _setStateRequested = false;
   }
 
   /// The framework calls this method whenever it removes this [State] object
@@ -336,7 +335,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// this object and other elements in the tree.
 
     // Indicate this State object is deactivated.
-    _deactivated = true;
+    deactivated = true;
 
     // Unregisters the given observer.
     WidgetsBinding.instance.removeObserver(this);
@@ -366,15 +365,21 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    // // In some cases, if then reinserted back in another part of the tree
-    // // the build is called, and so setState() is not necessary.
-    // _rebuildRequested = false;
+    // In some cases, if then reinserted back in another part of the tree
+    // the build is called, and so setState() is not necessary.
+    _setStateRequested = false;
   }
 
-  /// Readily determine if the State object is possibly to be disposed of.
-  bool get deactivated => _deactivated;
-  // State object's deactivated() was called.
-  bool _deactivated = false;
+  // /// Readily determine if the State object is possibly to be disposed of.
+  // bool get deactivated {
+  //   final deactivated = _deactivated;
+  //   // Reset once read.
+  //   _deactivated = false;
+  //   return deactivated;
+  // }
+
+  /// State object's deactivated() was called.
+  bool deactivated = false;
 
   /// The framework calls this method when this [StateX] object will never
   /// build again and will be disposed of with garbage collection.
@@ -389,7 +394,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// to release any resources  (e.g., stop any active animations).
 
     /// Indicate this State object is terminated.
-    _disposed = true;
+    disposed = true;
 
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
@@ -420,14 +425,27 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // // *In some cases, the setState() will be called again! gp
     _setStateAllowed = true;
 
+    // In some cases, if then reinserted back in another part of the tree
+    // the build is called, and so setState() is not necessary.
+    _setStateRequested = false;
+
     super.dispose();
   }
+
+  // /// Flag indicating this State object is disposed.
+  // /// Will be garbage collected.
+  // /// property, mounted, is then set to false.
+  // bool get disposed {
+  //   final disposed = _disposed;
+  //   // Reset once read.
+  //   _disposed = false;
+  //   return disposed;
+  // }
 
   /// Flag indicating this State object is disposed.
   /// Will be garbage collected.
   /// property, mounted, is then set to false.
-  bool get disposed => _disposed;
-  bool _disposed = false;
+  bool disposed = false;
 
   /// Update the 'new' StateX object from the 'old' StateX object.
   /// Returning to this app from another app will re-create the State object
@@ -470,8 +488,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Re-enable setState() function
     _setStateAllowed = true;
 
-    // /// No 'setState()' functions are necessary
-    // _rebuildRequested = false;
+    /// No 'setState()' functions are necessary
+    _setStateRequested = false;
   }
 
   /// Called when the system puts the app in the background or returns the app to the foreground.
@@ -485,19 +503,19 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// First, process the State object's own event functions.
     switch (state) {
       case AppLifecycleState.inactive:
-        _inactive = true;
+        inactive = true;
         inactiveLifecycleState();
         break;
       case AppLifecycleState.paused:
-        _paused = true;
+        paused = true;
         pausedLifecycleState();
         break;
       case AppLifecycleState.detached:
-        _detached = true;
+        detached = true;
         detachedLifecycleState();
         break;
       case AppLifecycleState.resumed:
-        _resumed = true; // The StateX object now resumed will be re-created.
+        resumed = true; // The StateX object now resumed will be re-created.
         resumedLifecycleState();
         break;
     }
@@ -556,48 +574,77 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
   }
 
   /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
   @override
   void inactiveLifecycleState() {}
 
+  // /// State object was in 'inactive' state
+  // bool get inactive {
+  //   final inactive = _inactive;
+  //   // Reset once read.
+  //   _inactive = false;
+  //   return inactive;
+  // }
+
   /// State object was in 'inactive' state
-  bool get inactive => _inactive;
-  bool _inactive = false;
+  bool inactive = false;
 
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
   @override
   void pausedLifecycleState() {}
 
+  // /// State object was in 'paused' state
+  // bool get paused {
+  //   final paused = _paused;
+  //   // Reset once read.
+  //   _paused = false;
+  //   return paused;
+  // }
+
   /// State object was in 'paused' state
-  bool get paused => _paused;
-  bool _paused = false;
+  bool paused = false;
 
   /// Either be in the progress of attaching when the  engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
   @override
   void detachedLifecycleState() {}
 
+  // /// State object was in 'paused' state
+  // bool get detached {
+  //   final detached = _detached;
+  //   // Reset once read.
+  //   _detached = false;
+  //   return detached;
+  // }
+
   /// State object was in 'paused' state
-  bool get detached => _detached;
-  bool _detached = false;
+  bool detached = false;
 
   /// The application is visible and responding to user input.
   @override
   void resumedLifecycleState() {}
 
+  // /// State object was in 'resumed' state
+  // bool get resumed {
+  //   final resumed = _resumed;
+  //   // Reset once read.
+  //   _resumed = false;
+  //   return resumed;
+  // }
+
   /// State object was in 'resumed' state
-  bool get resumed => _resumed;
-  bool _resumed = false;
+  bool resumed = false;
 
   /// Called when the system tells the app to pop the current route.
   /// For example, on Android, this is called when the user presses
@@ -639,13 +686,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+
     // Return false to pop out
     return handled;
   }
@@ -684,13 +733,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+
     return handled;
   }
 
@@ -733,18 +784,21 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+
     return handled;
   }
 
   /// State object experienced a system event
   bool get hadSystemEvent => _hadSystemEvent;
+  // Reset in _pushStateToSetter()
   bool _hadSystemEvent = false;
 
   /// Called when the application's dimensions change. For example,
@@ -782,13 +836,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
   }
 
   /// Called when the platform's text scale factor changes.
@@ -826,13 +881,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
   }
 
   /// Called when the platform brightness changes.
@@ -858,13 +914,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
   }
 
   /// Called when the system tells the app that the user's locale has
@@ -895,13 +952,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
   }
 
   /// Called when the system is running low on memory.
@@ -931,13 +989,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
   }
 
   /// Called when the system changes the set of currently active accessibility features.
@@ -963,17 +1022,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
     _setStateAllowed = true;
 
-// //    if (_rebuildRequested || StateX._inTester) {
-//     if (_rebuildRequested) {
-//       _rebuildRequested = false;
-//
-//       /// Perform a 'rebuild' if requested.
-//       setState(() {});
-//     }
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
   }
-
-  // /// A flag indicating this is the very first build.
-  // bool _firstBuild = true;
 
   /// During development, if a hot reload occurs, the reassemble method is called.
   /// This provides an opportunity to reinitialize any data that was prepared
@@ -989,9 +1046,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       listener.reassemble();
     }
     for (final con in _controllerList) {
-      // This state's association is severed.
-//      con._popState(this);
-
+      //
       con.reassemble();
     }
     for (final listener in _afterList) {
@@ -1001,9 +1056,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     _setStateAllowed = true;
 
-    // /// No 'setState()' function is necessary
-    // /// The framework always calls build with a hot reload.
-    // _rebuildRequested = false;
+    /// No 'setState()' function is necessary
+    /// The framework always calls build with a hot reload.
+    _setStateRequested = false;
   }
 
   /// Allows 'external' routines can call this function.
@@ -1021,10 +1076,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         super.setState(fn);
       }
       _setStateAllowed = true;
-      // } else {
-      //   /// Can't rebuild at this moment but at least make the request.
-      //   _rebuildRequested = true;
-      // }
+    } else {
+      /// Can't rebuild at this moment but at least make the request.
+      _setStateRequested = true;
     }
   }
 
@@ -1442,7 +1496,7 @@ mixin StateSetter {
     if (_oldStateX != null) {
       // If the previous State was 'resumed'. May want to recover further??
       if (_oldStateX!._hadSystemEvent) {
-        // Reset so not to cause any future side-affects.
+        // Reset so not to cause any side-affects.
         _oldStateX!._hadSystemEvent = false;
         // If a different object and the same type. (Thought because it was being recreated, but not the case. gp)
         if (state != _oldStateX &&
@@ -1461,10 +1515,10 @@ mixin StateSetter {
 
           // Testing Flutter lifecycle operation
           assert(() {
-            if (_oldStateX!._resumed || _oldStateX!._deactivated) {
+            if (_oldStateX!.resumed || _oldStateX!.deactivated) {
               if (kDebugMode) {
                 print(
-                    '############ _pushStateToSetter(): resumed: ${_oldStateX!._resumed} deactivated: ${_oldStateX!._deactivated}');
+                    '############ _pushStateToSetter(): resumed: ${_oldStateX!.resumed} deactivated: ${_oldStateX!.deactivated}');
               }
             }
             return true;
