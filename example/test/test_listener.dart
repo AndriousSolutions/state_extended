@@ -160,7 +160,7 @@ class TesterStateListener with StateListener {
     /// AppLifecycleState.detach
     /// AppLifecycleState.resumed
     //ignore: avoid_print
-    print('############ Event: detachedLifecycleState in TesterStateListener');
+    print('############ Event: $state in TesterStateListener');
   }
 
   /// Called when the system tells the app to pop the current route.
@@ -242,7 +242,7 @@ class TesterStateListener with StateListener {
 
   /// Called when the system tells the app that the user's locale has changed.
   @override
-  void didChangeLocale(Locale locale) {
+  void didChangeLocales(List<Locale>? locales) {
     if (kDebugMode) {
       //ignore: avoid_print
       print('############ Event: didChangeLocale in TesterStateListener');

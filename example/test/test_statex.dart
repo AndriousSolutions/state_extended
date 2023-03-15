@@ -351,22 +351,6 @@ Future<void> testsStateX(WidgetTester tester) async {
   /// Rarely called in real life, but must if deactivate() was called
   stateObj.activate();
 
-  // /// Called when the app is inactive.
-  // stateObj.didChangeAppLifecycleState(AppLifecycleState.inactive);
-  //
-  // /// The application is not currently visible to the user, not responding to
-  // /// user input, and running in the background.
-  // stateObj.didChangeAppLifecycleState(AppLifecycleState.paused);
-  //
-  // /// Either be in the progress of attaching when the engine is first initializing
-  // /// or after the view being destroyed due to a Navigator pop.
-  // stateObj.didChangeAppLifecycleState(AppLifecycleState.detached);
-  //
-  // /// Called when the returning from another app.
-  // stateObj.didChangeAppLifecycleState(AppLifecycleState.resumed);
-  //
-  // stateObj.didChangeDependencies();
-
   /// null testing
   stateObj.add(null);
 

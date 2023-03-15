@@ -35,9 +35,6 @@ class AppController extends StateXController {
   /// Error right at the start
   bool errorAtStartup = false;
 
-  /// For the testing. Unexpectedly re-creates its child State object.
-  bool _setState = true;
-
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.
   @override
@@ -98,12 +95,6 @@ class AppController extends StateXController {
     if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: resumedLifecycleState in $state');
-    }
-
-    /// Cause a State object to be re-created because UniqueKey() is used out there.
-    if (_setState) {
-      _setState = false; // Don't have it happen again.
-      setState(() {});
     }
   }
 }

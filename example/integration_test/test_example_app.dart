@@ -86,13 +86,6 @@ Future<void> integrationTesting(WidgetTester tester) async {
     expect(event, isTrue, reason: _location);
   }
 
-  event = state.deactivated;
-
-  if (event) {
-    /// Test that a state object as been replaced!
-    expect(event, isTrue, reason: _location);
-  }
-
   event = state.inactive;
 
   if (event) {
@@ -121,9 +114,16 @@ Future<void> integrationTesting(WidgetTester tester) async {
     expect(contains, isFalse, reason: _location);
   }
 
+  // Possibly the State object is now unmounted and deactivated in some tests.
+  event = state.deactivated;
+
+  if (event) {
+    /// Test that a state object as been replaced!
+    expect(event, isTrue, reason: _location);
+  }
+
   // The system will dispose of the State at its own discretion
   // You'll have no idea if and when that is.
-
   event = state.disposed;
 
   if (event) {
