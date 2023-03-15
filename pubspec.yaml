@@ -12,8 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   # Used in state_extended.dart import 'package:flutter_test/flutter_test.dart' show TestWidgetsFlutterBinding;
-  flutter_test:
-    sdk: flutter
+#  flutter_test:
+#    sdk: flutter
 
   # https://pub.dev/packages/universal_platform
   universal_platform: ^1.0.0
@@ -22,9 +22,9 @@ dev_dependencies:
   # Used during Continuous Integration
   integration_test:
     sdk: flutter
-  #  # Needed here as well for testing
-  #  flutter_test:
-  #    sdk: flutter
+  # Needed here as well for testing
+  flutter_test:
+    sdk: flutter
 
   # Supply the example app for testing.
   example:

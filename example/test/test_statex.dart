@@ -234,8 +234,9 @@ Future<void> testsStateX(WidgetTester tester) async {
   // It should be from a specific StatefulWidget
   expect(state02.widget, isA<Page1>(), reason: _location);
 
-  // Determine if app is running in a tester
-  expect(state02.inFlutterTester, isTrue, reason: _location);
+// Unable to determine and be Web compatible.
+//  // Determine if app is running in a tester
+//  expect(state02.inFlutterTester, isTrue, reason: _location);
 
   // Determines if running in an IDE or in production.
   // Returns true if the App is under in the Debugger and not production.

@@ -9,14 +9,16 @@ import 'dart:async' show Future;
 import 'dart:math' show Random;
 
 import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
+
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_test/flutter_test.dart' show TestWidgetsFlutterBinding;
+//import 'package:flutter_test/flutter_test.dart' show TestWidgetsFlutterBinding;
 
 /// Replace 'dart:io' for Web applications
-import 'package:universal_platform/universal_platform.dart';
+import 'package:universal_platform/universal_platform.dart'
+    show UniversalPlatform;
 
 /// The extension of the State class.
 /// Uses the mixins: WidgetsBindingObserver, _ControllerList, _StateListeners
@@ -147,9 +149,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// May be set true to request a 'rebuild.'
   bool _setStateRequested = false;
 
-  /// Running in a tester instead of in production.
-  bool get inFlutterTester => StateX._inTester;
-  static final _inTester = WidgetsBinding.instance is TestWidgetsFlutterBinding;
+//   /// Running in a tester instead of in production.
+//   bool get inFlutterTester => StateX._inTester;
+// //  static final _inTester = WidgetsBinding.instance is TestWidgetsFlutterBinding;
 
   /// This is the 'latest' State being viewed by the App.
   bool get isEndState => this == endState;
@@ -1670,9 +1672,8 @@ mixin StateListener {
     /// means any calls to [setState] in [didUpdateWidget] are redundant.
   }
 
-  /// Called when this [StateX] object is first created immediately after [initState].
-  /// Otherwise called only if this [State] object's Widget
-  /// is a dependency of [InheritedWidget].
+  /// Called when immediately after [initState].
+  /// Otherwise called only if a dependency of an [InheritedWidget].
   void didChangeDependencies() {
     ///
     /// if a State object's [build] references an [InheritedWidget] with

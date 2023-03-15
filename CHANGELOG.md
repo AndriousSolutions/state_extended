@@ -1,4 +1,8 @@
 
+## 2.7.0
+March 15, 2023
+- Removed bool get inFlutterTester so to be Web compatible
+
 ## 2.6.0
 March 11, 2023
 - bool get isEndState now used to determine if the 'latest' State object.

@@ -67,7 +67,7 @@ class _MyAppState extends AppStateX<MyApp> {
     return MaterialApp(home: Page1(key: UniqueKey()));
   }
 
-  ///
-  @override
-  bool get inFlutterTester => super.inFlutterTester;
+  // ///
+  // @override
+  // bool get inFlutterTester => super.inFlutterTester;
 }
