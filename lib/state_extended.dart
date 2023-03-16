@@ -1013,6 +1013,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// This method exposes notifications from [Window.onAccessibilityFeaturesChanged].
 
     /// No 'setState()' functions are allowed to fully function at this point.
+    _setStateAllowed = false;
+
+    /// No 'setState()' functions are allowed to fully function at this point.
     for (final listener in _beforeList) {
       listener.didChangeAccessibilityFeatures();
     }

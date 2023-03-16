@@ -1,4 +1,9 @@
 
+## 2.7.1
+March 15, 2023
+- didChangeAccessibilityFeatures corrected to include _setStateAllowed
+- Add further testing of the source code
+
 ## 2.7.0+3
 March 15, 2023
 - Removed bool get inFlutterTester so to be Web compatible

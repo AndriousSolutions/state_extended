@@ -122,15 +122,6 @@ Future<void> integrationTesting(WidgetTester tester) async {
     expect(event, isTrue, reason: _location);
   }
 
-  // Even the listener will be gone if the State is now disposed.
-  final contains = state.afterContains(listener);
-
-  // Test only to all for breakpoints.
-  if (!contains) {
-    // This should not run?! Has it lost its Listeners again?
-    expect(contains, isFalse, reason: _location);
-  }
-
   // Possibly the State object is now unmounted and deactivated in some tests.
   event = state.deactivated;
 
@@ -152,6 +143,9 @@ Future<void> integrationTesting(WidgetTester tester) async {
     expect(state.mounted, isFalse, reason: _location);
   }
 
+  /// Explicitly test this System event
+  (state as Page1State).didHaveMemoryPressure();
+
   // Remove the indicated controller
   event = state.removeByKey(id);
 
@@ -159,10 +153,16 @@ Future<void> integrationTesting(WidgetTester tester) async {
     expect(event, isTrue, reason: _location);
   }
 
-  state = con.stateOf<Page1>()!;
+  // Even the listener will be gone if the State is now disposed.
+  final contains = state.afterContains(listener);
 
-  /// Explicitly test this System event
-  (state as Page1State).didHaveMemoryPressure();
+  // Test only to all for breakpoints.
+  if (!contains) {
+    // This should not run?! Has it lost its Listeners again?
+    expect(contains, isFalse, reason: _location);
+  }
+
+  state = con.stateOf<Page1>()!;
 
   /// A new State object has been introduced!
   /// **NO** StateX was using StateX._inTester for some reason?!

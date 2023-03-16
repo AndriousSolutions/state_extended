@@ -45,7 +45,7 @@ Future<void> testEventHandling(WidgetTester tester) async {
   await tester.pump();
 
   // Give the app time to recover and indeed resume testing.
-  await tester.pumpAndSettle(const Duration(seconds: 1));
+  await tester.pumpAndSettle(const Duration(seconds: 5));
 }
 
 Future<void> testScaleFactor(WidgetTester tester) async {
