@@ -6,6 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../test/_test_imports.dart';
 
+const _location = '========================== test_event_handling.dart';
+
 /// Simulate some App 'life cycle' events.
 Future<void> testEventHandling(WidgetTester tester) async {
   //
@@ -54,6 +56,12 @@ Future<void> testScaleFactor(WidgetTester tester) async {
   // You can retrieve a State object the Controller has collected so far.
   final state = con.stateOf<Page1>()!;
 
+  final testController = TestStateController();
+
+  final id = state.add(testController);
+
+  expect(id, isNotEmpty, reason: _location);
+
   final listener = TesterStateListener();
 
   // Testing Listeners during the event
@@ -67,6 +75,9 @@ Future<void> testScaleFactor(WidgetTester tester) async {
 
   /// Give the app time to recover and indeed resume testing.
   await tester.pumpAndSettle(const Duration(seconds: 1));
+
+  // Remove the indicated controller
+  expect(state.removeByKey(id), isTrue, reason: _location);
 
   // Testing Listeners during the event
   state.removeListener(listener);

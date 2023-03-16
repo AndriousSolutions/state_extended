@@ -193,6 +193,9 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(stateObj.widget, isA<Page1>(), reason: _location);
 
+  // Test this particular method
+  stateObj.updateNewStateX(stateObj);
+
   // If you know their identifiers, you can retrieve a Map of StateMVC objects.
   final Map<String, StateX> map =
       appState.statesById([myAppStateId, keyIdPage1]);
@@ -250,7 +253,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(_state, isA<State>(), reason: _location);
 
   // Test for the unique identifier assigned to every Controller.
-  final id = stateObj.add(TestingController());
+  var id = stateObj.add(TestingController());
 
   expect(id, isNotEmpty, reason: _location);
 
@@ -301,10 +304,12 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   state.addAfterListener(listener);
 
-  /// Usually you would call this function on a subclass of StateMVC
-  /// We're testing the very class, StateMVC, itself and so the warning if fine:
-  /// The member 'xxxxxxx' can only be used within instance members
-  /// of subclasses of 'package:state_extended/state_extended.dart'.
+  final testController = TestStateController();
+
+  id = state.add(testController);
+
+  expect(id, isNotEmpty, reason: _location);
+
   bool? boolean = await stateObj.didPopRoute();
 
   expect(boolean, isA<bool>(), reason: _location);
@@ -319,6 +324,9 @@ Future<void> testsStateX(WidgetTester tester) async {
   boolean = await stateObj.didPushRoute('/');
 
   expect(boolean, isA<bool>(), reason: _location);
+
+  // Remove the indicated controller
+  expect(state.removeByKey(id), isTrue, reason: _location);
 
   widget = stateObj.widget;
 

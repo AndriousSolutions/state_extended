@@ -1,5 +1,5 @@
 
-## 2.7.0+2
+## 2.7.0+3
 March 15, 2023
 - Removed bool get inFlutterTester so to be Web compatible
 - Introduce void didChangeLocales(List<Locale>? locales) {
