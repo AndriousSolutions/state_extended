@@ -54,6 +54,9 @@ Future<void> integrationTesting(WidgetTester tester) async {
     await tester.pumpAndSettle();
   }
 
+  /// This should be the 'latest' State object running in the App
+  expect(state.isEndState, isTrue, reason: _location);
+
   /// Go to Page 1
   await tester.tap(find.byKey(const Key('Page 1')));
   await tester.pumpAndSettle();
@@ -63,6 +66,14 @@ Future<void> integrationTesting(WidgetTester tester) async {
   state = con.state!;
 
   expect(state, isA<Page1State>(), reason: _location);
+
+  final testController = TestStateController();
+
+  // Testing the 'setState()' function called during System events.
+  // Testing the activate and deactivate of this State object.
+  final id = state.add(testController);
+
+  expect(id, isNotEmpty, reason: _location);
 
   final listener = TesterStateListener();
 
@@ -79,7 +90,14 @@ Future<void> integrationTesting(WidgetTester tester) async {
   /// Simulate some events (eg. paused and resumed the app)
   await testEventHandling(tester);
 
-  var event = state.paused;
+  var event = state.hadSystemEvent;
+
+  if (event) {
+    /// The app has had some System events occurring.
+    expect(event, isTrue, reason: _location);
+  }
+
+  event = state.paused;
 
   if (event) {
     /// The app has been paused
@@ -110,7 +128,6 @@ Future<void> integrationTesting(WidgetTester tester) async {
   // Test only to all for breakpoints.
   if (!contains) {
     // This should not run?! Has it lost its Listeners again?
-    // Let it run, but don't trip error. //todo Must investigate this again!?
     expect(contains, isFalse, reason: _location);
   }
 
@@ -133,6 +150,13 @@ Future<void> integrationTesting(WidgetTester tester) async {
   if (!state.mounted) {
     // Should not happen, but don't trip it here regardless! gp
     expect(state.mounted, isFalse, reason: _location);
+  }
+
+  // Remove the indicated controller
+  event = state.removeByKey(id);
+
+  if (event) {
+    expect(event, isTrue, reason: _location);
   }
 
   state = con.stateOf<Page1>()!;
@@ -322,5 +346,79 @@ Future<void> resetPage1Count(WidgetTester tester) async {
     await tester.pumpAndSettle();
 
     expect(find.text('0'), findsOneWidget, reason: _location);
+  }
+}
+
+class TestStateController extends StateXController {
+  factory TestStateController() => _this ??= TestStateController._();
+  TestStateController._();
+  static TestStateController? _this;
+
+  /// The application is visible and responding to user input.
+  @override
+  void resumedLifecycleState() {
+    setState(() {});
+  }
+
+  /// Called when the system tells the app to pop the current route.
+  /// For example, on Android, this is called when the user presses
+  /// the back button.
+  @override
+  Future<bool> didPopRoute() async {
+    setState(() {});
+    return super.didPopRoute();
+  }
+
+  /// Called when the host tells the app to push a new route onto the
+  /// navigator.
+  @override
+  Future<bool> didPushRoute(String route) async {
+    setState(() {});
+    return super.didPushRoute(route);
+  }
+
+  /// Called when the host tells the application to push a new
+  /// [RouteInformation] and a restoration state onto the router.
+  @override
+  Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
+    setState(() {});
+    return super.didPushRouteInformation(routeInformation);
+  }
+
+  /// Called when the application's dimensions change. For example,
+  /// when a phone is rotated.
+  @override
+  void didChangeMetrics() {
+    setState(() {});
+  }
+
+  /// Called when the platform's text scale factor changes.
+  @override
+  void didChangeTextScaleFactor() {
+    setState(() {});
+  }
+
+  /// Brightness changed.
+  @override
+  void didChangePlatformBrightness() {
+    setState(() {});
+  }
+
+  /// Called when the system tells the app that the user's locale has changed.
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    setState(() {});
+  }
+
+  /// Called when the system is running low on memory.
+  @override
+  void didHaveMemoryPressure() {
+    setState(() {});
+  }
+
+  /// Called when the system changes the set of active accessibility features.
+  @override
+  void didChangeAccessibilityFeatures() {
+    setState(() {});
   }
 }

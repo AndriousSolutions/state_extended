@@ -198,10 +198,6 @@ class TesterStateListener with StateListener {
     return super.didPushRouteInformation(routeInformation);
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   @override
@@ -212,10 +208,6 @@ class TesterStateListener with StateListener {
     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the platform's text scale factor changes.
   @override
   void didChangeTextScaleFactor() {
@@ -226,10 +218,6 @@ class TesterStateListener with StateListener {
     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Brightness changed.
   @override
   void didChangePlatformBrightness() {
@@ -258,10 +246,6 @@ class TesterStateListener with StateListener {
     }
   }
 
-  /// **IMPORTANT**
-  /// After this change the current State is destroyed.
-  /// It is unmounted and new State object is created!
-  /// Implement updateNewStateX() to update the new State object of its specific properties.
   /// Called when the system changes the set of active accessibility features.
   @override
   void didChangeAccessibilityFeatures() {
