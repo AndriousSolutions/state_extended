@@ -798,6 +798,126 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return handled;
   }
 
+  /// The top route has been popped off, and this route shows up.
+  @override
+  @protected
+  @mustCallSuper
+  void didPopNext() {
+    // No 'setState()' functions are allowed
+    _setStateAllowed = false;
+
+    for (final listener in _beforeList) {
+      listener.didPopNext();
+    }
+    for (final con in _controllerList) {
+      con.didPopNext();
+    }
+    for (final listener in _afterList) {
+      listener.didPopNext();
+    }
+
+    _setStateAllowed = true;
+
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        // Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+  }
+
+  /// Called when this route has been pushed.
+  @override
+  @protected
+  @mustCallSuper
+  void didPush() {
+    // No 'setState()' functions are allowed
+    _setStateAllowed = false;
+
+    for (final listener in _beforeList) {
+      listener.didPush();
+    }
+    for (final con in _controllerList) {
+      con.didPush();
+    }
+    for (final listener in _afterList) {
+      listener.didPush();
+    }
+
+    _setStateAllowed = true;
+
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        // Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+  }
+
+  /// Called when this route has been popped off.
+  @override
+  @protected
+  @mustCallSuper
+  void didPop() {
+    // No 'setState()' functions are allowed
+    _setStateAllowed = false;
+
+    for (final listener in _beforeList) {
+      listener.didPop();
+    }
+    for (final con in _controllerList) {
+      con.didPop();
+    }
+    for (final listener in _afterList) {
+      listener.didPop();
+    }
+
+    _setStateAllowed = true;
+
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        // Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+  }
+
+  /// New route has been pushed, and this route is no longer visible.
+  @override
+  @protected
+  @mustCallSuper
+  void didPushNext() {
+    // No 'setState()' functions are allowed
+    _setStateAllowed = false;
+
+    for (final listener in _beforeList) {
+      listener.didPushNext();
+    }
+    for (final con in _controllerList) {
+      con.didPushNext();
+    }
+    for (final listener in _afterList) {
+      listener.didPushNext();
+    }
+
+    _setStateAllowed = true;
+
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        // Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+  }
+
   /// State object experienced a system event
   bool get hadSystemEvent => _hadSystemEvent;
   // Reset in _pushStateToSetter()
@@ -1606,7 +1726,7 @@ mixin StateSetter {
 Type _type<U>() => U;
 
 /// Responsible for the event handling in all the Controllers, Listeners and Views.
-mixin StateListener {
+mixin StateListener implements RouteAware {
   /// A unique key is assigned to all State Controllers, State objects,
   /// and listeners. Used in large projects to separate objects into teams.
   String get identifier => _id;
@@ -1743,6 +1863,22 @@ mixin StateListener {
   /// [RouteInformation.location].
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) =>
       didPushRoute(routeInformation.location!);
+
+  /// The top route has been popped off, and this route shows up.
+  @override
+  void didPopNext() {}
+
+  /// Called when this route has been pushed.
+  @override
+  void didPush() {}
+
+  /// Called when this route has been popped off.
+  @override
+  void didPop() {}
+
+  /// New route has been pushed, and this route is no longer visible.
+  @override
+  void didPushNext() {}
 
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.

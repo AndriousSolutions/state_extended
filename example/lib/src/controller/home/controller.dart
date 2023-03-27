@@ -254,7 +254,7 @@ class Controller extends StateXController {
 
   /// Called when the system tells the app that the user's locale has changed.
   @override
-  void didChangeLocale(Locale locale) {
+  void didChangeLocales(List<Locale>? locales) {
     if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didChangeLocale in $state');

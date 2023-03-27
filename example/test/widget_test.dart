@@ -20,9 +20,11 @@ late IntegrationTestsBinder _integrationTest;
 /// Also called in package's own testing file, test/widget_test.dart
 void testMyApp() {
   // Call this function instead of using the 'default' TestWidgetsFlutterBinding
+  // Allows one or two errors to be ignored. The error handling is also tested.
   _integrationTest =
       IntegrationTestsBinder(); //   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  // testWidgets calls TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets(
     'test state_extended',
     (WidgetTester tester) async {

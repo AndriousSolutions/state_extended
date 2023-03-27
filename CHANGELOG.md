@@ -1,4 +1,9 @@
 
+## 2.8.0
+March 26, 2023
+- mixin StateListener implements RouteAware
+- void didChangeLocales(List<Locale>? locales)
+
 ## 2.7.1
 March 15, 2023
 - didChangeAccessibilityFeatures corrected to include _setStateAllowed
