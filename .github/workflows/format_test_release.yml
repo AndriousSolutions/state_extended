@@ -56,7 +56,7 @@ jobs:
 
       # Get current datetime in ISO format
       - id: date
-        run: echo "::set-output name=date::$(date -u +'%Y-%m-%d')"
+        run: echo "RELEASE_DATE=$(date -u +'%Y-%m-%d')" >> $GITHUB_OUTPUT
         
       # Create a Release
       - uses: softprops/action-gh-release@v1
@@ -64,8 +64,8 @@ jobs:
           # This token is provided by Actions, you do not need to create your own token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.date.outputs.date }}v${{ github.run_number }}
-          name: ${{ steps.date.outputs.date }}v${{ github.run_number }}
+          tag_name: ${{ steps.date.outputs.RELEASE_DATE }}build${{ github.run_number }}
+          name: ${{ steps.date.outputs.RELEASE_DATE }}build${{ github.run_number }}
           body: |
                See CHANGELOG.md
           draft: false
