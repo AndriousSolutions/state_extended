@@ -1,8 +1,9 @@
 
-## 2.8.0
+## 2.8.0+1
 March 26, 2023
 - mixin StateListener implements RouteAware
 - void didChangeLocales(List<Locale>? locales)
+- Include tests for the class RouteAware
 
 ## 2.7.1
 March 15, 2023

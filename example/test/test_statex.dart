@@ -178,13 +178,13 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   // Of course, you can retrieve the State object its collected.
   // In this case, there's only one, the one in con.state.
-  final StateX state = con.stateOf<Page1>()!;
+  final StateX state01 = con.stateOf<Page1>()!;
 
   // Test looking up State objects by id.
   // The unique key identifier for this State object.
-  final String keyIdPage1 = state.identifier;
+  final String keyIdPage1 = state01.identifier;
 
-  // Returns the StateMVC object using an unique String identifiers.
+  // Returns the StateX object using an unique String identifiers.
   stateObj = appState.stateById(keyIdPage1)!;
 
   expect(stateObj.widget, isA<Page1>(), reason: _location);
@@ -300,13 +300,13 @@ Future<void> testsStateX(WidgetTester tester) async {
   final listener = TesterStateListener();
 
   // Testing Listeners for the events below.
-  state.addBeforeListener(listener);
+  state01.addBeforeListener(listener);
 
-  state.addAfterListener(listener);
+  state01.addAfterListener(listener);
 
   final testController = TestStateController();
 
-  id = state.add(testController);
+  id = state01.add(testController);
 
   expect(id, isNotEmpty, reason: _location);
 
@@ -314,19 +314,25 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(boolean, isA<bool>(), reason: _location);
 
-  final String path = WidgetsBinding.instance.window.defaultRouteName;
-
-  boolean =
-      await stateObj.didPushRouteInformation(RouteInformation(location: path));
-
-  expect(boolean, isA<bool>(), reason: _location);
-
   boolean = await stateObj.didPushRoute('/');
 
   expect(boolean, isA<bool>(), reason: _location);
 
+  boolean = await stateObj.didPushRouteInformation(RouteInformation(
+      location: WidgetsBinding.instance.window.defaultRouteName));
+
+  expect(boolean, isFalse, reason: _location);
+
+  stateObj.didPopNext();
+
+  stateObj.didPush();
+
+  stateObj.didPop();
+
+  stateObj.didPushNext();
+
   // Remove the indicated controller
-  expect(state.removeByKey(id), isTrue, reason: _location);
+  expect(state01.removeByKey(id), isTrue, reason: _location);
 
   widget = stateObj.widget;
 
@@ -347,11 +353,6 @@ Future<void> testsStateX(WidgetTester tester) async {
   final debug = stateObj.inDebugMode;
 
   expect(debug, isA<bool>(), reason: _location);
-
-  boolean = await stateObj.didPushRouteInformation(RouteInformation(
-      location: WidgetsBinding.instance.window.defaultRouteName));
-
-  expect(boolean, isFalse, reason: _location);
 
   stateObj.didUpdateWidget(widget);
 
