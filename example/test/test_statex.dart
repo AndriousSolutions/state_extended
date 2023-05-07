@@ -280,13 +280,6 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(each, isFalse, reason: _location);
 
-  final listener = TesterStateListener();
-
-  // Testing Listeners for the events below.
-  state01.addBeforeListener(listener);
-
-  state01.addAfterListener(listener);
-
   final testController = TestStateController();
 
   id = state01.add(testController);

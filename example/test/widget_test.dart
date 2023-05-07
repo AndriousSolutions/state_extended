@@ -46,9 +46,6 @@ void testMyApp() {
       /// Reset the counter to zero on Page 1
       await resetPage1Count(tester);
 
-      /// Introduce State Listeners for the testing.
-      await testsStateListener(tester);
-
       /// Testing the StateMVC, ControllerMVC, and ListenerMVC
       await unitTesting(tester);
 

@@ -89,18 +89,6 @@ Future<void> integrationTesting(WidgetTester tester) async {
 
   expect(id, isNotEmpty, reason: _location);
 
-  final listener = TesterStateListener();
-
-  // Testing the activate and deactivate of this State object.
-  var added = state.addBeforeListener(listener);
-
-  expect(added, isTrue, reason: _location);
-
-  // Add an 'after' Listener.
-  added = state.addListener(listener);
-
-  expect(added, isTrue, reason: _location);
-
   /// Simulate some events (eg. paused and resumed the app)
   await testEventHandling(tester);
 
@@ -165,15 +153,6 @@ Future<void> integrationTesting(WidgetTester tester) async {
 
   if (event) {
     expect(event, isTrue, reason: _location);
-  }
-
-  // Even the listener will be gone if the State is now disposed.
-  final contains = state.afterContains(listener);
-
-  // Test only to all for breakpoints.
-  if (!contains) {
-    // This should not run?! Has it lost its Listeners again?
-    expect(contains, isFalse, reason: _location);
   }
 
   state = con.stateOf<Page1>()!;

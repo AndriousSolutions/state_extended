@@ -1,4 +1,7 @@
 
+## 3.2.0
+- Removed the StateListeners mixin 
+
 ## 3.1.0
 - Introduced runAsync() in FutureBuilderStateMixin to allow initAsync() to run repeatedly.
 

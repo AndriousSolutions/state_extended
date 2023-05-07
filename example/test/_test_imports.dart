@@ -10,8 +10,6 @@ export '../test/test_error_handling.dart';
 
 export '../test/test_event_handling.dart';
 
-export '../test/test_listener.dart';
-
 export '../test/test_statex.dart';
 
 export '../test/unit_testing.dart';

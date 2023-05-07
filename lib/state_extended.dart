@@ -21,13 +21,11 @@ import 'package:universal_platform/universal_platform.dart'
     show UniversalPlatform;
 
 /// The extension of the State class.
-/// Uses the mixins: WidgetsBindingObserver, _ControllerList, _StateListeners
 abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         // ignore: prefer_mixin
         WidgetsBindingObserver,
         _ControllersByType,
-        StateListeners,
         RootState,
         AsyncOps,
         FutureBuilderStateMixin,
@@ -97,9 +95,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
           return true;
         }());
       } else {
-        /// It may have been a listener. Can't be both.
-        removeListener(controller);
-
         /// This connects the StateXController to this State object!
         controller._pushStateToSetter(this);
       }
@@ -110,13 +105,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Remove a specific StateXController to this View.
   /// Returns the StateXController's unique String identifier.
   @override
-  bool remove(StateXController? controller) {
-    if (controller != null) {
-      /// It may have been a listener. Can't be both.
-      removeListener(controller);
-    }
-    return super.remove(controller); // mixin _ControllersByType
-  }
+  bool remove(StateXController? controller) =>
+      super.remove(controller); // mixin _ControllersByType
 
   /// Add a list of 'Controllers' to be associated with this StatX object.
   @override
@@ -226,13 +216,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
-    for (final listener in _beforeList) {
-      listener.initState();
-    }
+
     int cnt = 0;
     StateXController con;
+
     // While loop so additional controllers can be added in a previous initState()
     final list = _controllerList.length;
+
     while (cnt < list) {
       con = _controllerList[cnt];
       // Add this to the _StateSets Map
@@ -240,9 +230,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       con.initState();
       cnt++;
     }
-    for (final listener in _afterList) {
-      listener.initState();
-    }
+
     _setStateAllowed = true;
 
     /// No 'setState()' functions are necessary
@@ -265,16 +253,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didChangeDependencies();
-    }
     for (final con in _controllerList) {
       con.didChangeDependencies();
     }
-    for (final listener in _afterList) {
-      listener.didChangeDependencies();
-    }
-    super.didChangeDependencies();
 
     _setStateAllowed = true;
 
@@ -305,19 +286,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.activate();
-    }
-
     for (final con in _controllerList) {
       // Supply the State object first
       con._pushStateToSetter(this);
 
       con.activate();
-    }
-
-    for (final listener in _afterList) {
-      listener.activate();
     }
 
     // Must call the 'super' routine as well.
@@ -352,19 +325,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.deactivate();
-    }
-
     for (final con in _controllerList) {
       //
       con.deactivate();
       // Pop the State object from the controller
       con._popStateFromSetter(this);
-    }
-
-    for (final listener in _afterList) {
-      listener.deactivate();
     }
 
     super.deactivate();
@@ -400,19 +365,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.dispose();
-    }
     for (final con in _controllerList) {
       con.dispose();
     }
-
-    for (final listener in _afterList) {
-      listener.dispose();
-    }
-
-    // Clear the 'listeners'
-    _disposeStateEventList();
 
     // Remove any 'StateXController' reference
     _controller = null;
@@ -462,15 +417,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   void didUpdateWidget(StatefulWidget oldWidget) {
     /// No 'setState()' functions are allowed
     _setStateAllowed = false;
-    for (final listener in _beforeList) {
-      listener.didUpdateWidget(oldWidget);
-    }
+
     for (final con in _controllerList) {
       con.didUpdateWidget(oldWidget);
     }
-    for (final listener in _afterList) {
-      listener.didUpdateWidget(oldWidget);
-    }
+
     super.didUpdateWidget(oldWidget);
 
     /// Re-enable setState() function
@@ -508,23 +459,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         break;
     }
 
-    for (final listener in _beforeList) {
-      listener.didChangeAppLifecycleState(state);
-      switch (state) {
-        case AppLifecycleState.inactive:
-          listener.inactiveLifecycleState();
-          break;
-        case AppLifecycleState.paused:
-          listener.pausedLifecycleState();
-          break;
-        case AppLifecycleState.detached:
-          listener.detachedLifecycleState();
-          break;
-        case AppLifecycleState.resumed:
-          listener.resumedLifecycleState();
-          break;
-      }
-    }
     for (final con in _controllerList) {
       con.didChangeAppLifecycleState(state);
       switch (state) {
@@ -539,23 +473,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
           break;
         case AppLifecycleState.resumed:
           con.resumedLifecycleState();
-          break;
-      }
-    }
-    for (final listener in _afterList) {
-      listener.didChangeAppLifecycleState(state);
-      switch (state) {
-        case AppLifecycleState.inactive:
-          listener.inactiveLifecycleState();
-          break;
-        case AppLifecycleState.paused:
-          listener.pausedLifecycleState();
-          break;
-        case AppLifecycleState.detached:
-          listener.detachedLifecycleState();
-          break;
-        case AppLifecycleState.resumed:
-          listener.resumedLifecycleState();
           break;
       }
     }
@@ -627,17 +544,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
 
-    for (final listener in _beforeList) {
-      await listener.didPopRoute();
-    }
     for (final con in _controllerList) {
       final didPop = await con.didPopRoute();
       if (didPop) {
         handled = true;
       }
-    }
-    for (final listener in _afterList) {
-      await listener.didPopRoute();
     }
 
     _setStateAllowed = true;
@@ -674,17 +585,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
 
-    for (final listener in _beforeList) {
-      await listener.didPushRoute(route);
-    }
     for (final con in _controllerList) {
       final didPush = await con.didPushRoute(route);
       if (didPush) {
         handled = true;
       }
-    }
-    for (final listener in _afterList) {
-      await listener.didPushRoute(route);
     }
 
     _setStateAllowed = true;
@@ -725,17 +630,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
 
-    for (final listener in _beforeList) {
-      await listener.didPushRouteInformation(routeInformation);
-    }
     for (final con in _controllerList) {
       final didPush = await con.didPushRouteInformation(routeInformation);
       if (didPush) {
         handled = true;
       }
-    }
-    for (final listener in _afterList) {
-      await listener.didPushRouteInformation(routeInformation);
     }
 
     _setStateAllowed = true;
@@ -760,14 +659,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didPopNext();
-    }
     for (final con in _controllerList) {
       con.didPopNext();
-    }
-    for (final listener in _afterList) {
-      listener.didPopNext();
     }
 
     _setStateAllowed = true;
@@ -790,14 +683,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didPush();
-    }
     for (final con in _controllerList) {
       con.didPush();
-    }
-    for (final listener in _afterList) {
-      listener.didPush();
     }
 
     _setStateAllowed = true;
@@ -820,14 +707,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didPop();
-    }
     for (final con in _controllerList) {
       con.didPop();
-    }
-    for (final listener in _afterList) {
-      listener.didPop();
     }
 
     _setStateAllowed = true;
@@ -850,14 +731,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didPushNext();
-    }
     for (final con in _controllerList) {
       con.didPushNext();
-    }
-    for (final listener in _afterList) {
-      listener.didPushNext();
     }
 
     _setStateAllowed = true;
@@ -900,14 +775,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didChangeMetrics();
-    }
     for (final con in _controllerList) {
       con.didChangeMetrics();
-    }
-    for (final listener in _afterList) {
-      listener.didChangeMetrics();
     }
 
     _setStateAllowed = true;
@@ -945,14 +814,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didChangeTextScaleFactor();
-    }
     for (final con in _controllerList) {
       con.didChangeTextScaleFactor();
-    }
-    for (final listener in _afterList) {
-      listener.didChangeTextScaleFactor();
     }
 
     _setStateAllowed = true;
@@ -978,14 +841,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didChangePlatformBrightness();
-    }
     for (final con in _controllerList) {
       con.didChangePlatformBrightness();
-    }
-    for (final listener in _afterList) {
-      listener.didChangePlatformBrightness();
     }
 
     _setStateAllowed = true;
@@ -1016,14 +873,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didChangeLocales(locales);
-    }
     for (final con in _controllerList) {
       con.didChangeLocales(locales);
-    }
-    for (final listener in _afterList) {
-      listener.didChangeLocales(locales);
     }
 
     _setStateAllowed = true;
@@ -1053,14 +904,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.didHaveMemoryPressure();
-    }
     for (final con in _controllerList) {
       con.didHaveMemoryPressure();
-    }
-    for (final listener in _afterList) {
-      listener.didHaveMemoryPressure();
     }
 
     _setStateAllowed = true;
@@ -1089,16 +934,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    /// No 'setState()' functions are allowed to fully function at this point.
-    for (final listener in _beforeList) {
-      listener.didChangeAccessibilityFeatures();
-    }
     for (final con in _controllerList) {
       con.didChangeAccessibilityFeatures();
     }
-    for (final listener in _afterList) {
-      listener.didChangeAccessibilityFeatures();
-    }
+
     _setStateAllowed = true;
 
     if (_setStateRequested) {
@@ -1121,16 +960,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final listener in _beforeList) {
-      listener.reassemble();
-    }
     for (final con in _controllerList) {
       //
       con.reassemble();
     }
-    for (final listener in _afterList) {
-      listener.reassemble();
-    }
+
     super.reassemble();
 
     _setStateAllowed = true;
@@ -1196,8 +1030,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Copy over certain properties
     _recException = state._recException;
     _ranAsync = state._ranAsync;
-    _listenersBefore.addAll(state._listenersBefore);
-    _listenersAfter.addAll(state._listenersAfter);
   }
 }
 
@@ -1487,12 +1319,6 @@ class StateXController with StateSetter, StateListener, RootState, AsyncOps {
   /// The current StateX object.
   StateX? get state => _stateX;
 
-  /// Retrieve the 'before' listener by its unique key.
-  StateListener? beforeListener(String key) => _stateX?.beforeListener(key);
-
-  /// Retrieve the 'after' listener by its unique key.
-  StateListener? afterListener(String key) => _stateX?.afterListener(key);
-
   /// Link a widget to a InheritedWidget
   bool dependOnInheritedWidget(BuildContext? context) =>
       _stateX?.dependOnInheritedWidget(context) ?? false;
@@ -1645,10 +1471,10 @@ mixin StateSetter {
 /// Used to explicitly return the 'type' indicated.
 Type _type<U>() => U;
 
-/// Responsible for the event handling in all the Controllers, Listeners and Views.
+/// Responsible for the event handling in all the Controllers and Views.
 mixin StateListener implements RouteAware {
-  /// A unique key is assigned to all State Controllers, State objects,
-  /// and listeners. Used in large projects to separate objects into teams.
+  /// A unique key is assigned to all State Controllers, State objects
+  /// Used in large projects to separate objects into teams.
   String get identifier => _id;
   final String _id = Uuid().generateV4();
 
@@ -1894,99 +1720,6 @@ mixin StateListener implements RouteAware {
   void didChangeAccessibilityFeatures() {
     /// Called when the system changes the set of currently active accessibility
     /// features.
-  }
-}
-
-/// Add, List, and Remove Listeners.
-mixin StateListeners {
-  List<StateListener> get _beforeList => _listenersBefore.toList();
-
-  /// Returns a List of 'before' listeners by matching key identifiers.
-  List<StateListener> beforeList(List<String> keys) {
-    return _getList(keys, _listenersBefore);
-  }
-
-  final Set<StateListener> _listenersBefore = {};
-
-  List<StateListener> get _afterList => _listenersAfter.toList();
-
-  /// Returns the list of 'after' listeners by matching key identifiers.
-  List<StateListener> afterList(List<String> keys) {
-    return _getList(keys, _listenersAfter);
-  }
-
-  List<StateListener> _getList(List<String>? keys, Set<StateListener> set) {
-    final List<StateListener> list = [];
-    if (keys == null || keys.isEmpty) {
-      return list;
-    }
-    for (final listener in set) {
-      for (final key in keys) {
-        if (listener._id == key) {
-          list.add(listener);
-          keys.remove(key);
-          break;
-        }
-      }
-    }
-    return list;
-  }
-
-  final Set<StateListener> _listenersAfter = {};
-
-  /// Add a listener fired 'before' the main controller runs.
-  bool addBeforeListener(StateListener listener) =>
-      _listenersBefore.add(listener);
-
-  /// Add a listener fired 'after' the main controller runs.
-  bool addAfterListener(StateListener listener) =>
-      _listenersAfter.add(listener);
-
-  /// Add a listener fired 'after' the main controller runs.
-  bool addListener(StateListener listener) => addAfterListener(listener);
-
-  /// Removes the specified listener.
-  bool removeListener(StateListener listener) {
-    bool removed = _listenersBefore.remove(listener);
-    if (_listenersAfter.remove(listener)) {
-      removed = true;
-    }
-    return removed;
-  }
-
-  /// Returns true of the listener specified is already added.
-  bool beforeContains(StateListener listener) =>
-      _listenersBefore.contains(listener);
-
-  /// Returns true of the listener specified is already added.
-  bool afterContains(StateListener listener) =>
-      _listenersAfter.contains(listener);
-
-  /// Returns the specified 'before' listener.
-  StateListener? beforeListener(String key) =>
-      _getStateEvents(key, _listenersBefore);
-
-  /// Returns the specified 'after' listener.
-  StateListener? afterListener(String key) =>
-      _getStateEvents(key, _listenersAfter);
-
-  StateListener? _getStateEvents(String? key, Set<StateListener> set) {
-    StateListener? se;
-    if (key == null || key.isEmpty) {
-      return se;
-    }
-    for (final listener in set) {
-      if (listener._id == key) {
-        se = listener;
-        break;
-      }
-    }
-    return se;
-  }
-
-  void _disposeStateEventList() {
-    _listenersBefore.clear();
-    _listenersAfter.clear();
   }
 }
 

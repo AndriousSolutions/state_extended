@@ -62,13 +62,6 @@ Future<void> testScaleFactor(WidgetTester tester) async {
 
   expect(id, isNotEmpty, reason: _location);
 
-  final listener = TesterStateListener();
-
-  // Testing Listeners during the event
-  state.addBeforeListener(listener);
-
-  state.addListener(listener);
-
 // didChangeTextScaleFactor
   tester.binding.platformDispatcher.textScaleFactorTestValue = 4;
   addTearDown(tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
@@ -78,7 +71,4 @@ Future<void> testScaleFactor(WidgetTester tester) async {
 
   // Remove the indicated controller
   expect(state.removeByKey(id), isTrue, reason: _location);
-
-  // Testing Listeners during the event
-  state.removeListener(listener);
 }
