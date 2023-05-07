@@ -1,5 +1,5 @@
 
-## 3.2.0
+## 3.2.0+1
 - Removed the StateListeners mixin 
 
 ## 3.1.0
