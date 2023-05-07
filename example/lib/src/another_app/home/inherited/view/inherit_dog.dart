@@ -28,6 +28,7 @@ class _InheritDogState extends InheritedStateX<InheritDog, _DogInherited> {
           controller: DogController(),
           inheritedBuilder: (child) => _DogInherited(child: child),
         );
+
   @override
   Widget buildIn(context) => widget.child!;
 }

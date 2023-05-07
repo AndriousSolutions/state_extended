@@ -20,10 +20,15 @@ class _RandomCatState extends ImageAPIStateX<RandomCat> {
   _RandomCatState()
       : super(
           controller: CatController(),
+          // uri: Uri(
+          //   scheme: 'https',
+          //   host: 'aws.random.cat',
+          //   path: 'meow',
+          // ),
           uri: Uri(
             scheme: 'https',
-            host: 'aws.random.cat',
-            path: 'meow',
+            host: 'shibe.online',
+            path: 'api/cats',
           ),
           message: 'file',
         );

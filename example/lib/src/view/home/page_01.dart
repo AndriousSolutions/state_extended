@@ -24,6 +24,54 @@ class Page1State extends StateX<Page1> {
   /// The counter
   int count = 0;
 
+  /// This function is not really necessary for th app to work
+  /// Merely demonstrating the package's many capabilities to you.
+  @override
+  void initState() {
+    //
+    super.initState();
+
+    // Just used to emphasize null can to returned if the controller is not found.
+    StateXController? nullableController;
+
+    /// Each StateX object references its current controller by this property.
+    nullableController = controller;
+
+    /// Each controller is assigned a unique identifier.
+    // identifier is a 35-alphanumeric character string
+    var id = nullableController?.identifier;
+
+    /// You're able to retrieve a controller by its identifier.
+    // Note, returns null if not found or id == null or empty
+    nullableController = controllerById(id);
+
+    /// You're able to retrieve a controller by its Type.
+    // Note, returns null if not found.
+    nullableController = controllerByType<Controller>();
+
+    /// You're able to retrieve a controller by its Type.
+    // Note, returns null if not found.
+    var anotherController = controllerByType<AnotherController>();
+
+    /// Each controller is assigned a unique identifier.
+    // identifier is a 35-alphanumeric character string
+    id = anotherController?.identifier;
+
+    /// You're able to retrieve a controller by its identifier.
+    // Note, returns null if not found or id == null or empty
+    nullableController = controllerById(id);
+
+    // No need to test 'nullableController is AnotherController'
+    // Searching by identifier ensures its of that Type.
+    if (nullableController != null) {
+      anotherController = nullableController as AnotherController;
+    }
+
+    // Since, I'm confident such a controller will be retrieved
+    // I can shortened the process like this.
+    anotherController = controllerById(id) as AnotherController;
+  }
+
   /// Ignore class, BuildPage
   /// BuildPage is just a 'generic' widget I made for each page to highlight
   /// the parameters it takes in for demonstration purposes.

@@ -1,6 +1,6 @@
 library state_extended;
 
-// Copyright 2022 Andrious Solutions Ltd. All rights reserved.
+// Copyright 2023 Andrious Solutions Ltd. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -26,7 +26,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         // ignore: prefer_mixin
         WidgetsBindingObserver,
-        _ControllerListing,
+        _ControllersByType,
         StateListeners,
         RootState,
         AsyncOps,
@@ -38,15 +38,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   //
   /// With an optional StateXController parameter, this constructor imposes its own Error Handler.
   StateX([this._controller]) {
-    /// IMPORTANT! Assign itself to _stateX before adding any StateXController. -gp
-    _stateX = this;
-
     /// Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
 
     /// Any subsequent calls to add() will be assigned to stateX.
     add(_controller);
   }
+
   StateXController? _controller;
 
   /// Implement this function instead of the build() function
@@ -56,8 +54,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   Widget buildF(BuildContext context) => super.buildF(context);
 
   /// Implement the build() function if you wish
-  /// Note, it's already implemented in mixin FutureBuilderStateMixin
-  /// Simply explicitly implemented here to indicate the override.
+  /// Implemented in mixin FutureBuilderStateMixin
+  /// Explicitly implemented here to highlight the override.
   @override
   Widget build(BuildContext context) => super.build(context);
 
@@ -70,37 +68,54 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// If _controller == null, get the 'first assigned' controller if any.
   StateXController? get controller => _controller ??= rootCon;
 
-  /// Retrieve a StateXController by its a unique String identifier.
-  StateXController? controllerById(String? keyId) => super._con(keyId);
-
   /// Add a specific StateXController to this View.
   /// Returns the StateXController's unique String identifier.
   @override
   String add(StateXController? controller) {
-    if (controller != null) {
-      /// It may have been a listener. Can't be both.
-      removeListener(controller);
+    String id;
+    if (controller == null) {
+      id = '';
+    } else {
+      id = super.add(controller); // mixin _ControllersByType
+      // Something is not right with that controller.
+      if (id.isEmpty) {
+        assert(() {
+          final type = controller.runtimeType;
+          if (_mapControllerByType.containsKey(type)) {
+            final con = _mapControllerByType[type];
+            if (con != null) {
+              assert(
+                controller.identifier == con.identifier,
+                'Multiple instances of the same Controller class, $type, is not allowed in a StateX class. '
+                'They are allowed in the AppStateX class but not in the StateX class. '
+                'Either extend the Controller class, $type, or add to AppStateX. '
+                "To then retrieve from the 'rootState', use its 'identifier' property. "
+                'Controller classes with factory constructors are encouraged instead.',
+              );
+            }
+          }
+          return true;
+        }());
+      } else {
+        /// It may have been a listener. Can't be both.
+        removeListener(controller);
 
-      // todo: Delete this along with _controllers. Proven hazardous.
-      /// Collect all the Controllers to the 'root' State object;
-      rootState?._controllers.add(controller);
+        /// This connects the StateXController to this State object!
+        controller._pushStateToSetter(this);
+      }
     }
-    return super.add(controller);
+    return id;
   }
 
-  // todo: Delete this function along with _controllers. Proven hazardous.
   /// Remove a specific StateXController to this View.
   /// Returns the StateXController's unique String identifier.
   @override
-  String remove(StateXController? controller) {
+  bool remove(StateXController? controller) {
     if (controller != null) {
       /// It may have been a listener. Can't be both.
       removeListener(controller);
-
-      /// Collect all the Controllers to the 'root' State object;
-      rootState?._controllers.remove(controller);
     }
-    return super.remove(controller);
+    return super.remove(controller); // mixin _ControllersByType
   }
 
   /// Add a list of 'Controllers' to be associated with this StatX object.
@@ -121,26 +136,22 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   final String _id = Uuid().generateV4();
 
-  // todo: Delete this function along with _controllers. Proven hazardous.
   /// Retrieve a StateXController by type.
-  @Deprecated('Proven to cause memory leaks.')
+  @override
   U? controllerByType<U extends StateXController>() {
-    // Look in this State objects list of Controllers.  Maybe not?
+    // Look in this State object's list of Controllers.
+    U? con = super.controllerByType<U>();
 
-    U? con = _cons[_type<U>()] as U?;
+    // Check the 'App State' by type  if not yet found
+    return con ??= rootState?.controllerByType<U>();
+  }
 
-    if (con == null) {
-      final controllers = rootState?._controllers.toList();
-      if (controllers != null) {
-        for (final cont in controllers) {
-          if (cont.runtimeType == _type<U>()) {
-            con = cont as U?;
-            break;
-          }
-        }
-      }
-    }
-    return con;
+  /// Retrieve a StateXController by its a unique String identifier.
+  @override
+  StateXController? controllerById(String? id) {
+    // It's by id, look in the root state first
+    StateXController? con = rootState?.controllerById(id);
+    return con ??= super.controllerById(id);
   }
 
   /// May be set false to prevent unnecessary 'rebuilds'.
@@ -148,10 +159,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// May be set true to request a 'rebuild.'
   bool _setStateRequested = false;
-
-//   /// Running in a tester instead of in production.
-//   bool get inFlutterTester => StateX._inTester;
-// //  static final _inTester = WidgetsBinding.instance is TestWidgetsFlutterBinding;
 
   /// This is the 'latest' State being viewed by the App.
   bool get isEndState => this == endState;
@@ -372,14 +379,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateRequested = false;
   }
 
-  // /// Readily determine if the State object is possibly to be disposed of.
-  // bool get deactivated {
-  //   final deactivated = _deactivated;
-  //   // Reset once read.
-  //   _deactivated = false;
-  //   return deactivated;
-  // }
-
   /// State object's deactivated() was called.
   bool deactivated = false;
 
@@ -408,9 +407,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       con.dispose();
     }
 
-    // Clear the its list of Controllers
-    _disposeControllerListing();
-
     for (final listener in _afterList) {
       listener.dispose();
     }
@@ -422,9 +418,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _controller = null;
 
     // Clear the list of Controllers.
-    _cons.clear();
+    _mapControllerByType.clear();
 
-    // // *In some cases, the setState() will be called again! gp
+    // // In some cases, the setState() will be called again! gp
     _setStateAllowed = true;
 
     // In some cases, if then reinserted back in another part of the tree
@@ -433,16 +429,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     super.dispose();
   }
-
-  // /// Flag indicating this State object is disposed.
-  // /// Will be garbage collected.
-  // /// property, mounted, is then set to false.
-  // bool get disposed {
-  //   final disposed = _disposed;
-  //   // Reset once read.
-  //   _disposed = false;
-  //   return disposed;
-  // }
 
   /// Flag indicating this State object is disposed.
   /// Will be garbage collected.
@@ -590,14 +576,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   void inactiveLifecycleState() {}
 
-  // /// State object was in 'inactive' state
-  // bool get inactive {
-  //   final inactive = _inactive;
-  //   // Reset once read.
-  //   _inactive = false;
-  //   return inactive;
-  // }
-
   /// State object was in 'inactive' state
   bool inactive = false;
 
@@ -605,14 +583,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// user input, and running in the background.
   @override
   void pausedLifecycleState() {}
-
-  // /// State object was in 'paused' state
-  // bool get paused {
-  //   final paused = _paused;
-  //   // Reset once read.
-  //   _paused = false;
-  //   return paused;
-  // }
 
   /// State object was in 'paused' state
   bool paused = false;
@@ -622,28 +592,12 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   void detachedLifecycleState() {}
 
-  // /// State object was in 'paused' state
-  // bool get detached {
-  //   final detached = _detached;
-  //   // Reset once read.
-  //   _detached = false;
-  //   return detached;
-  // }
-
   /// State object was in 'paused' state
   bool detached = false;
 
   /// The application is visible and responding to user input.
   @override
   void resumedLifecycleState() {}
-
-  // /// State object was in 'resumed' state
-  // bool get resumed {
-  //   final resumed = _resumed;
-  //   // Reset once read.
-  //   _resumed = false;
-  //   return resumed;
-  // }
 
   /// State object was in 'resumed' state
   bool resumed = false;
@@ -1225,13 +1179,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return inherit;
   }
 
-  /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
-  @Deprecated('Replaced by the recognized function, notifyClients')
-  void buildInherited() {
-    final state = context.findAncestorStateOfType<InheritedStateX>();
-    state?.notifyClients();
-  }
-
   /// In harmony with Flutter's own API
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   void notifyClients() {
@@ -1248,112 +1195,110 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
     // Copy over certain properties
     _recException = state._recException;
-    _ranFuture = state._ranFuture;
+    _ranAsync = state._ranAsync;
     _listenersBefore.addAll(state._listenersBefore);
     _listenersAfter.addAll(state._listenersAfter);
-    // Important!? Other controllers may have been added!
-    _mapControllers.addAll(state._mapControllers);
   }
 }
 
-/// Manages the number of 'Controllers' associated with this
-/// StateX object at any one time during the App's lifecycle.
-mixin _ControllerListing on State {
-  StateX? _stateX;
+/// Collects Controllers of various types.
+/// A State object, by definition, then can't have multiple instances of the same type.
+mixin _ControllersByType on State {
+  /// A collection of Controllers identified by type.
+  /// <type, controller>
+  final Map<Type, StateXController> _mapControllerByType = {};
 
-  // Keep it private to allow subclasses to use 'con.'
-  StateXController? _con(String? keyId) {
-    if (keyId == null || keyId.isEmpty) {
-      return null;
-    }
-    return _mapControllers[keyId];
-  }
+  /// Returns true if found.
+  bool contains(StateXController con) =>
+      _mapControllerByType.containsValue(con);
 
-  /// Associate a list of 'Controllers' to this StateX object at one time.
+  /// List the controllers.
+  List<StateXController> get _controllerList =>
+      _mapControllerByType.values.toList(growable: false);
+
+  /// Add a list of 'Controllers'.
   List<String> addList(List<StateXController> list) {
-    //list.forEach(add);
     final List<String> keyIds = [];
     for (final con in list) {
-      keyIds.add(add(con));
+      if (!_mapControllerByType.containsKey(con.runtimeType)) {
+        keyIds.add(add(con));
+      }
     }
     return keyIds;
   }
 
-  /// Returns the list of 'Controllers' associated with this StateX object.
-  List<StateXController?> listControllers(List<String> keys) =>
-      _controllersMap(keys).values.toList();
-
-  /// Returns a specific 'StateXController' by looking up its unique 'key' identifier.
-  Map<String, StateXController?> _controllersMap(List<String> keys) {
-    final Map<String, StateXController?> controllers = {};
-
-    for (final key in keys) {
-      controllers[key] = _mapControllers[key];
-    }
-    return controllers;
-  }
-
-  final Map<String, StateXController> _mapControllers = {};
-
-  /// Never supply a public list of Controllers.
-  /// Supplied only for internal use.
-  /// User must know the key identifier(s). to access it publicly.
-  List<StateXController> get _controllerList =>
-      _mapControllers.values.toList(growable: false);
-
-  /// Add a 'StateXController' to then associate it to this
-  /// particular StateX object. Returns the StateXController's
-  /// unique 'key' identifier.
+  /// Add a 'StateXController'
+  /// Returns the StateXController's unique identifier.
   String add(StateXController? con) {
     String id;
-
-    if (con == null) {
-      id = '';
-    } else {
-      /// This connects the StateXController to this State object!
-      con._pushStateToSetter(_stateX);
-
-      // /// It's already there?! Return its key.
-      // id = (contains(con)) ? con._id : _addConId(con);
-      if (!contains(con)) {
-        _mapControllers[con._id] = con;
-      }
-
-      id = con._id;
-
-      if (!_cons.containsValue(con)) {
-        _cons.addAll({con.runtimeType: con});
-      }
-    }
-    return id;
-  }
-
-  /// Remove a 'StateXController' to then associate it to this
-  /// particular StateX object. Returns the StateXController's
-  /// unique 'key' identifier.
-  String remove(StateXController? con) {
-    String id;
-
     if (con == null) {
       id = '';
     } else {
       id = con.identifier;
-      removeByKey(id);
-      _cons.remove(con);
+      final type = con.runtimeType;
+      if (!_mapControllerByType.containsKey(type)) {
+        _mapControllerByType.addAll({type: con});
+      }
     }
     return id;
   }
 
-  /// Remove a specific associated 'StateXController' from this StateX object
-  /// by using its unique 'key' identifier.
-  bool removeByKey(String keyId) {
-    final con = _mapControllers[keyId];
-    final there = con != null;
-    if (there) {
-      con._popStateFromSetter(_stateX);
-      _mapControllers.remove(keyId);
+  /// Remove a 'StateXController'
+  bool remove(StateXController? con) {
+    bool removed = con != null;
+    if (removed) {
+      removed = _mapControllerByType.remove(con.runtimeType) != null;
     }
-    return there;
+    return removed;
+  }
+
+  /// Remove a specific 'StateXController' by its unique 'key' identifier.
+  bool removeByKey(String? id) {
+    bool removed = id != null;
+    if (removed) {
+      final con = controllerById(id);
+      removed = con != null;
+      if (removed) {
+        removed = remove(con);
+      }
+    }
+    return removed;
+  }
+
+  /// Retrieve a StateXController by type.
+  U? controllerByType<U extends StateXController>() =>
+      _mapControllerByType[_type<U>()] as U?;
+
+  /// Retrieve a controller by it's unique identifier.
+  StateXController? controllerById(String? id) {
+    StateXController? con;
+    if (id != null && id.isNotEmpty) {
+      for (final controller in _controllerList) {
+        if (controller.identifier == id) {
+          con = controller;
+          break;
+        }
+      }
+    }
+    return con;
+  }
+
+  /// Returns the list of 'Controllers' but you must know their keys.
+  List<StateXController?> listControllers(List<String?>? ids) {
+    final List<StateXController?> controllers = [];
+    if (ids != null) {
+      for (final id in ids) {
+        if (id != null && id.isNotEmpty) {
+          for (final controller in _controllerList) {
+            if (controller.identifier == id) {
+              controllers.add(controller);
+              break;
+            }
+          }
+        }
+      }
+    }
+    return controllers;
   }
 
   /// Returns 'the first' StateXController associated with this StateX object.
@@ -1362,13 +1307,6 @@ mixin _ControllerListing on State {
     final list = _controllerList;
     return list.isEmpty ? null : list.first;
   }
-
-  /// Returns true if the specified 'StateXController' is associated with this StateX object.
-  bool contains(StateXController con) => _mapControllers.containsValue(con);
-
-  void _disposeControllerListing() => _mapControllers.clear();
-
-  final Map<Type, StateXController> _cons = {};
 
   /// To externally 'process' through the controllers.
   /// Invokes [func] on each StateXController possessed by this StateX object.
@@ -1393,6 +1331,13 @@ mixin _ControllerListing on State {
       }
     }
     return each;
+  }
+
+  @override
+  void dispose() {
+    // Clear the its list of Controllers
+    _mapControllerByType.clear();
+    super.dispose();
   }
 }
 
@@ -1442,21 +1387,9 @@ mixin _MapOfStates on State {
   // Bit of overkill, but some programmers don't appreciate Polymorphism.
   State? get startState => _nextStateX(); //startStateX;
 
-  // /// Returning the 'latest' StateX  object.
-  // StateX? get startStateX => _nextStateX();
-
   /// Return the 'latest' State object
   // Bit of overkill, but some programmers don't appreciate Polymorphism.
   State? get endState => _nextStateX(reversed: true); //endStateX;
-  // Bit of overkill, but some programmers don't appreciate Polymorphism.
-  @Deprecated('Will be replaced by endState soon.')
-  State? get lastState => endState;
-
-  // /// Returning the 'latest' StateX  object.
-  // StateX? get endStateX => _nextStateX(reversed: true);
-  //
-  @Deprecated('Will be replaced by endState soon.')
-  StateX? get lastStateX => _nextStateX(reversed: true);
 
   /// Loop through the list and return the next available State object
   StateX? _nextStateX({bool? reversed}) {
@@ -1490,10 +1423,6 @@ mixin _MapOfStates on State {
       list = _MapOfStates._states.values.toList(growable: false);
     }
     for (final StateX state in list) {
-      // // Prevent a possible infinite loop
-      // if(state is AppStateX){
-      //   continue;
-      // }
       try {
         if (state.mounted && !state.deactivated) {
           func(state);
@@ -1512,10 +1441,7 @@ mixin _MapOfStates on State {
   /// This is 'privatized' function as it is an critical method and not for public access.
   /// This contains the 'main list' of StateX objects present in the app!
   bool _addToMapOfStates(StateX? state) {
-//    bool add = state != null;
     final add = state != null;
-    // if (add) {
-    //   add = !_states.containsKey(state._id);
     if (add) {
       _MapOfStates._states[state._id] = state;
     }
@@ -1561,10 +1487,6 @@ class StateXController with StateSetter, StateListener, RootState, AsyncOps {
   /// The current StateX object.
   StateX? get state => _stateX;
 
-  /// Return a List of Controllers specified by key id.
-  List<StateXController?> listControllers(List<String> keys) =>
-      _stateX!.listControllers(keys);
-
   /// Retrieve the 'before' listener by its unique key.
   StateListener? beforeListener(String key) => _stateX?.beforeListener(key);
 
@@ -1574,10 +1496,6 @@ class StateXController with StateSetter, StateListener, RootState, AsyncOps {
   /// Link a widget to a InheritedWidget
   bool dependOnInheritedWidget(BuildContext? context) =>
       _stateX?.dependOnInheritedWidget(context) ?? false;
-
-  /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
-  @Deprecated('Replaced by the recognized function, notifyClients')
-  void buildInherited() => _stateX?.notifyClients();
 
   /// In harmony with Flutter's own API
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
@@ -1710,7 +1628,6 @@ mixin StateSetter {
             break;
           }
         }
-//        state = stateList.firstWhere((item) => item is T);
       } catch (_) {
         state = null;
       }
@@ -1718,8 +1635,11 @@ mixin StateSetter {
     return state == null ? null : state as T;
   }
 
-  /// Return a 'copy' of the Set of State objects.
-  Set<StateX> get states => Set.from(_stateXSet.whereType<StateX>());
+  // /// Return a 'copy' of the Set of State objects.
+  // Set<StateX> get states => Set.from(_stateXSet.whereType<StateX>());
+
+  /// The Set of State objects.
+  Set<StateX> get states => _stateXSet;
 }
 
 /// Used to explicitly return the 'type' indicated.
@@ -2076,40 +1996,36 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// to utilize a built-in FutureBuilder Widget.
   Widget buildF(BuildContext context) => const SizedBox();
 
-  /// Deprecated soon
-  @Deprecated('Use buildF() function instead.')
-  Widget buildWidget(BuildContext context) => buildF(context);
-
   /// Run the CircularProgressIndicator() until asynchronous operations are
   /// completed before the app proceeds.
   @override
   Widget build(BuildContext context) => FutureBuilder<bool>(
-      future: _initAsync(), initialData: false, builder: _futureBuilder);
+      future: runAsync(), initialData: false, builder: _futureBuilder);
 
   /// Run the StateX object's initAsync() until it returns true
-  Future<bool> _initAsync() async {
-    if (!_ranFuture) {
-      // Don't run StateX object's initAsync() if it's already returned true.
-      _ranFuture = await initAsync();
+  Future<bool> runAsync() async {
+    // Don't run StateX object's initAsync() if it's already returned true.
+    if (!_ranAsync) {
+      _ranAsync = await initAsync();
     }
-    return _ranFuture;
+    return _ranAsync;
   }
 
-  /// Don't call initAsync() ever again once it has returned true.
-  bool _ranFuture = false;
+  /// Don't call initAsync() ever again once it's true.
+  bool _ranAsync = false;
 
-  /// Used to complete asynchronous operations
+  /// Initialize any asynchronous operations
   Future<bool> initAsync() async => true;
 
+  /// Returns the appropriate widget when the Future is completed.
   Widget _futureBuilder(BuildContext context, AsyncSnapshot<bool> snapshot) {
     //
     Widget? widget;
     FlutterErrorDetails? errorDetails;
 
     if (snapshot.hasData && snapshot.data!) {
-      // Must use buildWidget for now only until removed.
-      // ignore: deprecated_member_use_from_same_package
-      widget = buildWidget(this.context);
+      //
+      widget = buildF(this.context);
       //
     } else if (snapshot.connectionState == ConnectionState.done) {
       //
@@ -2166,14 +2082,14 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Supply an 'error handler' routine if something goes wrong
-  /// in the corresponding initAsync() routine.
+  /// in the corresponding runAsync() routine.
   void onAsyncError(FlutterErrorDetails details) {}
 }
 
 /// The StateX object at the 'app level.' Used to effect the whole app by
 /// being the 'root' of first State object instantiated.
 abstract class AppStateX<T extends StatefulWidget>
-    extends InheritedStateX<T, _AppInheritedWidget> {
+    extends InheritedStateX<T, _AppInheritedWidget> with _ControllersById {
   /// Optionally supply as many State Controllers as you like to work with this App.
   /// Optionally supply a 'data object' to to be accessible to the App's InheritedWidget.
   AppStateX({
@@ -2190,10 +2106,7 @@ abstract class AppStateX<T extends StatefulWidget>
     addList(controllers?.toList());
   }
 
-  // todo: Delete this. Unmanageable and will cause memory leaks.
-  /// All the State Controllers in this app.
-  final Set<StateXController> _controllers = {};
-
+  /// In the SetState class?
   bool _inSetStateBuilder = false;
 
   /// The 'data object' available to the framework.
@@ -2218,7 +2131,6 @@ abstract class AppStateX<T extends StatefulWidget>
   @mustCallSuper
   @override
   void dispose() {
-    _controllers.clear();
     _MapOfStates._states.clear();
     _clearRootStateX();
     super.dispose();
@@ -2231,11 +2143,6 @@ abstract class AppStateX<T extends StatefulWidget>
     }
     notifyClients();
   }
-
-  /// Rebuild the InheritedWidget and its dependencies.
-  @override
-  @Deprecated('Replaced by the recognized function, notifyClients')
-  void buildInherited() => super.setState(() {});
 
   /// In harmony with Flutter's own API
   @override
@@ -2266,15 +2173,167 @@ abstract class AppStateX<T extends StatefulWidget>
       FlutterError.onError!(FlutterErrorDetails(exception: ex));
     }
   }
+}
 
-  // todo: Consider removing this function. It's not needed?!
-  /// Return the latest StateX object currently being used if any.
-  @Deprecated('Instead use, endState?.setState((){});')
-  void rebuildLastState() => endState?.setState(() {});
+/// Manages the 'Controllers' associated with this
+/// StateX object at any one time by their unique identifier.
+mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
+  /// Stores the Controller by its Id
+  ///  <id, controller>
+  final Map<String, StateXController> _mapControllerById = {};
 
-  /// Replaced by a more accurate sounding function.
-  @Deprecated('Use rebuildLastState() instead')
-  void refreshLastState() => rebuildLastState();
+  /// List the runtimeType of the stored controllers.
+  ///  <id, type>
+  final Map<String, Type> _mapControllerTypes = {};
+
+  /// Never supply a public list of all the Controllers.
+  /// User must know the key identifier(s) to access it publicly.
+  @override
+  List<StateXController> get _controllerList =>
+      _mapControllerById.values.toList(growable: false);
+
+  /// Collect a 'StateXController'
+  /// Returns the StateXController's unique identifier.
+  @override
+  String add(StateXController? con) {
+    String id;
+    if (con == null) {
+      id = '';
+    } else {
+      id = con.identifier;
+      if (!containsId(id)) {
+        _mapControllerById[id] = con;
+        // Will need to retrieve controller by type at times.
+        _mapControllerTypes[id] = con.runtimeType;
+
+        /// This connects the StateXController to this State object!
+        con._pushStateToSetter(this);
+      }
+    }
+    return id;
+  }
+
+  /// Collect a list of 'Controllers'.
+  @override
+  List<String> addList(List<StateXController>? list) {
+    //list.forEach(add);
+    final List<String> keyIds = [];
+    if (list != null) {
+      for (final con in list) {
+        keyIds.add(add(con));
+      }
+    }
+    return keyIds;
+  }
+
+  /// Remove a 'StateXController'
+  /// Returns boolean if successful.
+  @override
+  bool remove(StateXController? con) => removeByKey(con!.identifier);
+
+  /// Remove a specific 'StateXController' by its unique 'key' identifier.
+  @override
+  bool removeByKey(String? id) {
+    bool remove = id != null;
+    if (remove) {
+      remove = _mapControllerById.containsKey(id);
+      if (remove) {
+        _mapControllerById.remove(id);
+        _mapControllerTypes.remove(id);
+      }
+    }
+    return remove;
+  }
+
+  /// Retrieve a StateXController by type.
+  @override
+  U? controllerByType<U extends StateXController>() {
+    U? controller;
+
+    // Take a copy of the types
+    final temp = Map.of(_mapControllerTypes);
+
+    // and remove all not of the specified type
+    temp.removeWhere((key, value) => value != U);
+
+    // There can only be one instance of a particular type returned.
+    if (temp.length == 1) {
+      controller = _mapControllerById[temp.keys.first] as U?;
+    }
+    return controller;
+  }
+
+  // Retrieve a controller by it's unique identifier.
+  @override
+  StateXController? controllerById(String? id) {
+    if (id == null || id.isEmpty) {
+      return null;
+    }
+    return _mapControllerById[id];
+  }
+
+  /// Returns the list of 'Controllers' but you must know their keys.
+  @override
+  List<StateXController?> listControllers(List<String?>? keys) =>
+      _controllersById(keys).values.toList();
+
+  /// Returns a list of controllers by their unique identifiers.
+  Map<String, StateXController?> _controllersById(List<String?>? ids) {
+    final Map<String, StateXController?> controllers = {};
+    if (ids != null) {
+      for (final id in ids) {
+        if (id != null && id.isNotEmpty) {
+          if (_mapControllerById.containsKey(id)) {
+            controllers[id] = _mapControllerById[id];
+          }
+        }
+      }
+    }
+    return controllers;
+  }
+
+  /// Returns 'the first' StateXController associated with this StateX object.
+  /// Returns null if empty.
+  @override
+  StateXController? get rootCon {
+    final list = _controllerList;
+    return list.isEmpty ? null : list.first;
+  }
+
+  /// Returns true if the specified 'StateXController' is associated with this StateX object.
+  bool containsId(String? id) => _mapControllerById.containsKey(id);
+
+  /// To externally 'process' through the controllers.
+  /// Invokes [func] on each StateXController possessed by this StateX object.
+  /// With an option to process in reversed chronological order
+  @override
+  bool forEach(void Function(StateXController con) func, {bool? reversed}) {
+    bool each = true;
+    Iterable<StateXController> list;
+    // In reversed chronological order
+    if (reversed != null && reversed) {
+      list = _controllerList.reversed;
+    } else {
+      list = _controllerList;
+    }
+    for (final StateXController con in list) {
+      try {
+        func(con);
+      } catch (e, stack) {
+        each = false;
+        recordException(e, stack);
+      }
+    }
+    return each;
+  }
+
+  @override
+  void dispose() {
+    // Clear the its list of Controllers
+    _mapControllerById.clear();
+    _mapControllerTypes.clear();
+    super.dispose();
+  }
 }
 
 /// A InheritedWidget internally used by the 'App State' object
@@ -2299,13 +2358,9 @@ class _AppInheritedWidget extends InheritedWidget {
     final rootState = RootState._rootStateX;
 
     if (rootState != null) {
-      /// if StateSet objects were implemented and this wasn't called within one.
+      /// if StateSet objects were implemented
+      /// and this wasn't called within one.
       notify = !rootState._inSetStateBuilder;
-
-      if (!notify) {
-        /// if the 'object' value has changed.
-        notify = dataObject != oldWidget.dataObject;
-      }
     }
     return notify;
   }
@@ -2380,17 +2435,6 @@ mixin RootState {
     if (RootState._rootStateX == null && state is AppStateX) {
       // Important to prefix with the class name to 'share' this as a mixin.
       RootState._rootStateX = state;
-
-      // /// It must now add itself to the State objects list.
-      // state._addStateX(state);
-
-      // todo: Delete this along with _controllers. Proven hazardous.
-      final controller = state.controller;
-
-      if (controller != null) {
-        /// Collect all the Controllers to the 'root' State object;
-        state._controllers.add(controller);
-      }
     }
   }
 
@@ -2418,19 +2462,19 @@ mixin RootState {
     // Never explicitly set to null
     if (object != null) {
       final state = rootState;
-      state?._dataObj = object;
-      // Call inherited widget to 'rebuild' any dependencies
-      state?.notifyClients();
+      final dataObject = state?._dataObj;
+      // Notify dependencies only if their was a change.
+      if (dataObject == null || dataObject != object) {
+        state?._dataObj = object;
+        // Call inherited widget to 'rebuild' any dependencies
+        state?.notifyClients();
+      }
     }
   }
 
   /// Clear the static reference.
   /// Important to prefix with the class name to 'share' this as a mixin.
   void _clearRootStateX() => RootState._rootStateX = null;
-
-  /// Deprecated soon. Use inDebugMode.
-  @Deprecated('Use inDebugMode instead.')
-  bool get inDebugger => inDebugMode;
 
   /// Determines if running in an IDE or in production.
   /// Returns true if the App is under in the Debugger and not production.
@@ -2497,7 +2541,7 @@ mixin AsyncOps {
   Future<bool> initAsync() async => true;
 
   /// Supply an 'error handler' routine if something goes wrong
-  /// in the corresponding initAsync() routine.
+  /// in the corresponding runAsync() routine.
   void onAsyncError(FlutterErrorDetails details) {}
 }
 
@@ -2516,21 +2560,25 @@ abstract class InheritedStateX<T extends StatefulWidget,
   /// Supply a child Widget to the returning InheritedWidget's child parameter.
   final U Function(Widget child) inheritedBuilder;
 
-  ///
-//  @Deprecated('Replaced by buildIn() function.')
-//  Widget buildChild(BuildContext context);
+  @override
+  void initState() {
+    super.initState();
+    _inheritedKey = ObjectKey(this);
+  }
+
+  // Preserve the subtree
+  late ObjectKey _inheritedKey;
 
   /// Build the 'child' Widget passed to the InheritedWidget.
   Widget buildIn(BuildContext context);
 
-  /// Run the CircularProgressIndicator() until asynchronous operations are
-  /// completed before the app proceeds.
+  /// Implement the build() function if you don't want to use the built-in FutureBuilder
+  /// implemented in mixin FutureBuilderStateMixin
+  /// Explicitly implemented here to highlight the override.
   @override
-  Widget build(BuildContext context) => FutureBuilder<bool>(
-      future: _initAsync(), initialData: false, builder: _futureBuilder);
+  Widget build(BuildContext context) => super.build(context);
 
-  /// Implement this function instead of the build() function
-  /// to utilize a built-in FutureBuilder.
+  /// Implement this function instead of the build() function to utilize a built-in FutureBuilder.
   @override
   Widget buildF(BuildContext context) =>
       _inheritedStatefulWidget = initInheritedState<U>(inheritedBuilder);
@@ -2539,14 +2587,14 @@ abstract class InheritedStateX<T extends StatefulWidget,
   InheritedStatefulWidget? _inheritedStatefulWidget;
 
   /// Initialize the InheritedWidget State object
+  /// Create the StatefulWidget to contain the InheritedWidget
   InheritedStatefulWidget initInheritedState<V extends InheritedWidget>(
           V Function(Widget child) inheritedWidgetBuilder) =>
-      // Create the StatefulWidget to contain the InheritedWidget
-      // GlobalKey to 'keep' this StatefulWidget's state during it lifetime.
       InheritedStatefulWidget<V>(
-          key: GlobalKey(),
+          key: _inheritedKey,
           inheritedWidgetBuilder: inheritedWidgetBuilder,
-          child: _BuildBuilder(key: GlobalKey(), builder: buildIn));
+          // child: _BuildBuilder(key: GlobalKey(), builder: buildIn));
+          child: _BuildBuilder(builder: buildIn));
 
   /// Link a widget to a InheritedWidget of type U
   @override
@@ -2574,12 +2622,6 @@ abstract class InheritedStateX<T extends StatefulWidget,
 
   /// Rebuild the InheritedWidget and its dependencies.
   @override
-  @Deprecated('Replaced by the recognized function, notifyClients')
-  void buildInherited() => setState(() {});
-
-  /// In harmony with Flutter's own API
-  /// Rebuild the InheritedWidget and its dependencies.
-  @override
   void notifyClients() => setState(() {});
 }
 
@@ -2588,11 +2630,10 @@ class InheritedStatefulWidget<U extends InheritedWidget>
     extends StatefulWidget {
   /// No key so the state object is not rebuilt because it can't be.
   InheritedStatefulWidget({
-    Key? key,
+    super.key,
     required this.inheritedWidgetBuilder,
     required this.child,
-  })  : state = _InheritedState(),
-        super(key: key);
+  }) : state = _InheritedState();
 
   /// Supply a child Widget to the returning InheritedWidget's child parameter.
   final U Function(Widget child) inheritedWidgetBuilder;
@@ -2626,21 +2667,8 @@ class InheritedStatefulWidget<U extends InheritedWidget>
     return element;
   }
 
-  /// The 'child' widget passed to the InheritedWidget
-//  Widget get inheritedChildWidget => state.child!;
-
-  /// set the child widget.
-//  set inheritedChildWidget(Widget? child) => state.child = child;
-
   /// Call its State object's setState() function
   void setState(VoidCallback fn) => state._setState(fn);
-
-  // /// Rebuild the InheritedWidget and its dependencies.
-  // @Deprecated('Replaced by the recognized function, notifyClients')
-  // void buildInherited() => setState(() {});
-  //
-  // /// In harmony with Flutter's own API
-  // void notifyClients() => setState(() {});
 }
 
 class _InheritedState extends State<InheritedStatefulWidget> {
@@ -2668,7 +2696,7 @@ class _InheritedState extends State<InheritedStatefulWidget> {
       _widget.inheritedWidgetBuilder(child ??= _widget.child);
 }
 
-/// Creates a Widget but supplying contents to its build() function
+/// Creates a Widget by supplying contents to its build() function
 class _BuildBuilder extends StatelessWidget {
   const _BuildBuilder({Key? key, required this.builder}) : super(key: key);
   final Widget Function(BuildContext context) builder;

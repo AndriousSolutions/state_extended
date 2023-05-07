@@ -15,7 +15,7 @@ class AppController extends StateXController {
   /// Initialize asynchronous items essential to the Mobile Applications.
   /// Typically called within a FutureBuilder() widget.
   @override
-  Future<bool> initAsync() async {
+  Future<bool> runAsync() async {
     // Simply wait for 10 seconds at startup.
     /// In production, this is where databases are opened, logins attempted, etc.
     return Future.delayed(const Duration(seconds: 10), () {

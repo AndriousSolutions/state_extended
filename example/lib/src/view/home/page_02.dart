@@ -32,8 +32,8 @@ class Page2State extends StateX<Page2> {
   late Controller con;
 
   @override
-  Future<bool> initAsync() async {
-    final init = await super.initAsync();
+  Future<bool> runAsync() async {
+    final init = await super.runAsync();
     //
     if (AppController().allowErrors) {
       throw AssertionError('error thrown in Page2State.initAsync()');
@@ -41,6 +41,8 @@ class Page2State extends StateX<Page2> {
     return init;
   }
 
+  /// This function is not really necessary for th app to work
+  /// Merely demonstrating the package's many capabilities to you.
   @override
   void initState() {
     //
@@ -52,8 +54,11 @@ class Page2State extends StateX<Page2> {
     assert(firstState is AppStateX, "Should be the 'root' state object.");
 
     /// The latest BuildContext in the app.
+    /// This is so important, there's a number of ways to get it.
     // ignore: unused_local_variable
-    final BuildContext? lastContext = controller?.state?.endState?.context;
+    BuildContext? lastContext = controller?.state?.endState?.context;
+    lastContext = controller?.rootState?.endState?.context;
+    lastContext = controller?.lastContext;
 
     /// The app's data object
     // ignore: unused_local_variable

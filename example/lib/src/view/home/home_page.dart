@@ -9,8 +9,7 @@ import 'package:example/src/view.dart';
 /// The Home page
 class HomePage extends StatefulWidget {
   /// With a constant constructor, instantiated once.
-  const HomePage({Key? key, this.title = 'Flutter InheritedWidget Demo'})
-      : super(key: key);
+  const HomePage({super.key, this.title = 'Flutter InheritedWidget Demo'});
 
   /// Fields in a StatefulWidget should always be "final".
   final String title;

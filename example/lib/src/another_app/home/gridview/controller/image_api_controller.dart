@@ -16,8 +16,7 @@ import 'package:http/http.dart' as http;
 
 /// This is the 'image API' State Object Controller.
 class ImageAPIController extends StateXController {
-  /// Not a factory constructor and so multiple instances of this class is possible.
-  ImageAPIController() : super();
+  /// No factory constructor and so multiple instances of this class is possible.
 
   /// The List of data returned by the API.
   List<String> _data = [];

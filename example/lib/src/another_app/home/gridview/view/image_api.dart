@@ -34,9 +34,9 @@ class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
 
   late ImageAPIController _con;
 
-  /// Supply the widget to the FutureBuilder. Don't implement an InheritedWidget
+  /// Supply the widget to the built-in FutureBuilder.
   @override
-  Widget buildWidget(context) {
+  Widget buildF(context) {
     controller?.dependOnInheritedWidget(context);
     return GestureDetector(
       onTap: _con.onTap,
@@ -46,6 +46,10 @@ class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
       ),
     );
   }
+
+  /// Allow initAsync() to run repeatedly.
+  @override
+  Future<bool> runAsync() => initAsync();
 
   /// Supply an 'error handler' routine if something goes wrong
   /// in the corresponding initAsync() routine.

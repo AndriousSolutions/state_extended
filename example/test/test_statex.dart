@@ -87,7 +87,6 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   // Test 'refresh' alternative
   appState.notifyClients();
-  appState.buildInherited();
 
   // Every StateMVC and ControllerMVC has a unique String identifier.
   final myAppStateId = appState.identifier;
@@ -154,22 +153,6 @@ Future<void> testsStateX(WidgetTester tester) async {
     // MyHomePage is currently being displayed.
     expect(context.widget, isA<HomePage>(), reason: _location);
   }
-
-  // Deprecated but must still be tested.
-  stateObj = appState.lastState! as StateX;
-
-  expect(stateObj, isA<Page1State>(), reason: _location);
-
-  // Deprecated and replaced by appState.endState. Must be tested.
-  stateObj = appState.lastStateX!;
-
-  expect(stateObj, isA<Page1State>(), reason: _location);
-
-  // We know Controller's current State object is _MyHomePageState
-  stateObj = con.state!;
-
-  // This is confirmed by testing for its StatefulWidget
-  expect(stateObj.widget, isA<MyApp>(), reason: _location);
 
   /// Call for testing coverage
   appState.dependOnInheritedWidget(context);

@@ -31,6 +31,7 @@ class _InheritBirdState extends InheritedStateX<InheritBird, _BirdInherited> {
           controller: BirdController(),
           inheritedBuilder: (child) => _BirdInherited(child: child),
         );
+
   @override
   Widget buildIn(context) => widget.child!;
 }

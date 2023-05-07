@@ -42,7 +42,7 @@ Future<void> integrationTesting(WidgetTester tester) async {
   }
 
   // A Singleton pattern allows for unit testing.
-  final con = Controller();
+  Controller? con = Controller();
 
   // You can retrieve a State object the Controller has collected so far.
   StateX state = con.stateOf<Page2>()!;
@@ -67,11 +67,25 @@ Future<void> integrationTesting(WidgetTester tester) async {
 
   expect(state, isA<Page1State>(), reason: _location);
 
+  con = state.controllerByType<Controller>();
+
+  expect(con, isA<Controller>(), reason: _location);
+
+  String? id = con?.identifier;
+
+  final stateXController = state.controllerById(id);
+
+  expect(stateXController, isA<StateXController?>(), reason: _location);
+
+  con = stateXController as Controller;
+
+  expect(con, isA<Controller>(), reason: _location);
+
   final testController = TestStateController();
 
   // Testing the 'setState()' function called during System events.
   // Testing the activate and deactivate of this State object.
-  final id = state.add(testController);
+  id = state.add(testController);
 
   expect(id, isNotEmpty, reason: _location);
 
@@ -310,10 +324,6 @@ Future<void> testPage2State(WidgetTester tester) async {
   final StateX statePage2 = Controller().stateOf<Page2>()!;
 
   statePage2.notifyClients();
-
-  // Deprecated yet must be tested anyway.
-  // Calls the app's InheritedWidget
-  statePage2.buildInherited();
 
   statePage2.setState(() {});
 }

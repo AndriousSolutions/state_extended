@@ -30,9 +30,6 @@ class _Page3State extends StateX<Page3> {
         },
         counter: () {
           setState(() => count++);
-          // Deprecated, but still needs to be tested.
-          rootState?.rebuildLastState();
-          rootState?.refreshLastState();
         },
         page1counter: () {
           // Merely instantiating the StatefulWidget to call its function.

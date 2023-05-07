@@ -28,6 +28,7 @@ class _InheritCatState extends InheritedStateX<InheritCat, _CatInherited> {
           controller: CatController(),
           inheritedBuilder: (child) => _CatInherited(child: child),
         );
+
   @override
   Widget buildIn(context) => widget.child!;
 }

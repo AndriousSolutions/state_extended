@@ -1,4 +1,16 @@
 
+## 3.1.0
+- Introduced runAsync() in FutureBuilderStateMixin to allow initAsync() to run repeatedly.
+
+## 3.0.0
+May 01, 2023
+- AppStateX can take in multiple instances of the same Controller class
+- AppStateX has controllerById() to retrieve such instances. 
+- StateX can only take in single instances of a Controller class.
+- StateX has controllerByType() to retrieve by class type.
+- AppStateX controllers are available to all StateX objects in the app.
+- _initAsync() in FutureBuilderStateMixin was incorrect!
+
 ## 2.8.0+1
 March 26, 2023
 - mixin StateListener implements RouteAware

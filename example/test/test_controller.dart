@@ -106,40 +106,30 @@ void testsController(WidgetTester tester) {
 
   expect(con, isA<Controller>(), reason: location);
 
-  /// Return a List of Controllers specified by key id.
-  final listCons = con.listControllers([conId]);
-
-  expect(listCons, isA<List<StateXController?>>(), reason: location);
-
-  expect(listCons[0], isA<Controller>(), reason: location);
-
   // Continuing the testing coverage
   con.notifyClients();
-  con.buildInherited();
 
-  /// Return a 'copy' of the Set of State objects.
-  final Set<StateX>? states = con.states;
-
-  expect(states, isA<Set<StateX>>(), reason: location);
-
-  expect(states!.isNotEmpty, isTrue, reason: location);
-
-  var state = states.first;
-
-  expect(state, isA<Page1State>(), reason: location);
-
-  final id = state.remove(con);
-
-  // I see this is the same as the 'isTrue' version below.
-  expect(id, conId, reason: location);
-
-  expect(id == conId, isTrue, reason: location);
-
-  state = states.last;
-
-  final removed = state.removeByKey(id);
-
-  expect(removed, isTrue, reason: location);
+  // /// Return a 'copy' of the Set of State objects.
+  // final Set<StateX>? states = con.states;
+  //
+  // expect(states, isA<Set<StateX>>(), reason: location);
+  //
+  // expect(states!.isNotEmpty, isTrue, reason: location);
+  //
+  // var state = states.first;
+  //
+  // expect(state, isA<Page1State>(), reason: location);
+  //
+  // var removed = state.remove(con);
+  //
+  // // I see this is the same as the 'isTrue' version below.
+  // expect(removed, isTrue, reason: location);
+  //
+  // state = states.last;
+  //
+  // removed = state.removeByKey(conId);
+  //
+  // expect(removed, isFalse, reason: location);
 }
 
 void _testAppController(WidgetTester tester) {

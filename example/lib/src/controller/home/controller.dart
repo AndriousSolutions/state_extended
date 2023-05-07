@@ -327,7 +327,7 @@ class Controller extends StateXController {
   @override
   void didChangeAccessibilityFeatures() {
     // inDebugger is deprecated but still tested here. Use inDebugMode instead.
-    if (inDebugger) {
+    if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: didChangeAccessibilityFeatures in $state');
     }
