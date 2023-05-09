@@ -1,4 +1,8 @@
 
+## 3.2.1
+- StateX's FutureBuilder should only run once.
+  _ranAsync ? buildF(context) : FutureBuilder<bool>( 
+
 ## 3.2.0+1
 - Removed the StateListeners mixin 
 
