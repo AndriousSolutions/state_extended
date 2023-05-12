@@ -1,4 +1,8 @@
 
+## 3.2.2
+- StateX's FutureBuilder will only run once.
+  _ranAsync changes the widget tree and so removed. 
+
 ## 3.2.1
 - StateX's FutureBuilder should only run once.
   _ranAsync ? buildF(context) : FutureBuilder<bool>( 

@@ -1732,10 +1732,8 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// Run the CircularProgressIndicator() until asynchronous operations are
   /// completed before the app proceeds.
   @override
-  Widget build(BuildContext context) => _ranAsync
-      ? buildF(context)
-      : FutureBuilder<bool>(
-          future: runAsync(), initialData: false, builder: _futureBuilder);
+  Widget build(BuildContext context) => FutureBuilder<bool>(
+      future: runAsync(), initialData: false, builder: _futureBuilder);
 
   /// Run the StateX object's initAsync() until it returns true
   Future<bool> runAsync() async {
@@ -1759,7 +1757,7 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
     FlutterErrorDetails? errorDetails;
 
     if (snapshot.hasData && snapshot.data!) {
-      //
+      /// IMPORTANT: Must supply the State object's context: this.context
       widget = buildF(this.context);
       //
     } else if (snapshot.connectionState == ConnectionState.done) {
