@@ -1733,7 +1733,10 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// completed before the app proceeds.
   @override
   Widget build(BuildContext context) => FutureBuilder<bool>(
-      future: runAsync(), initialData: false, builder: _futureBuilder);
+      key: ValueKey<State>(this),
+      future: runAsync(),
+      initialData: false,
+      builder: _futureBuilder);
 
   /// Run the StateX object's initAsync() until it returns true
   Future<bool> runAsync() async {
