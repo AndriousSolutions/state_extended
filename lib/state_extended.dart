@@ -1729,28 +1729,37 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// to utilize a built-in FutureBuilder Widget.
   Widget buildF(BuildContext context) => const SizedBox();
 
-  /// Run the CircularProgressIndicator() until asynchronous operations are
-  /// completed before the app proceeds.
   @override
-  Widget build(BuildContext context) => FutureBuilder<bool>(
-      key: ValueKey<State>(this),
-      future: runAsync(),
-      initialData: false,
-      builder: _futureBuilder);
-
-  /// Run the StateX object's initAsync() until it returns true
-  Future<bool> runAsync() async {
-    // Don't run StateX object's initAsync() if it's already returned true.
+  Widget build(BuildContext context) {
+    // Don't run runAsync() function if already true.
     if (!_ranAsync) {
-      _ranAsync = await initAsync();
+      _future = runAsync();
     }
-    return _ranAsync;
+    return FutureBuilder<bool>(
+      key: ValueKey<State>(this),
+      future: _future,
+      initialData: false,
+      builder: _futureBuilder,
+    );
   }
 
-  /// Don't call initAsync() ever again once it's true.
+  /// Don't call runAsync() and initAsync() ever again once this is true.
   bool _ranAsync = false;
 
-  /// Initialize any asynchronous operations
+  /// IMPORTANT
+  /// The _future must have been created earlier. If the _future is created at the same
+  /// time as the FutureBuilder, then every time the FutureBuilder's parent is
+  /// rebuilt, the asynchronous task will be restarted.
+  late Future<bool> _future;
+
+  /// Run the StateX object's initAsync() function
+  Future<bool> runAsync() async {
+    // Once true, initAsync() function is never run again
+    // unless the runAsync() function is overridden.
+    return _ranAsync = await initAsync();
+  }
+
+  /// You're to override this function and initialize any asynchronous operations
   Future<bool> initAsync() async => true;
 
   /// Returns the appropriate widget when the Future is completed.
