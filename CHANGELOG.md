@@ -1,8 +1,7 @@
 
-## 3.2.2+2
+## 3.2.2+3
 - StateX's FutureBuilder will only run once.
   _ranAsync changed the widget tree and so replaced with _future = runAsync();
-  key: ValueKey<State>(this),
 
 ## 3.2.1
 - StateX's FutureBuilder should only run once.

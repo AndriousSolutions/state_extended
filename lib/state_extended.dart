@@ -1731,8 +1731,8 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
 
   @override
   Widget build(BuildContext context) {
-    // Don't run runAsync() function if already true.
-    if (!_ranAsync) {
+    // Don't run runAsync() function if _ranAsync is true.
+    if (!_ranAsync || _future == null) {
       _future = runAsync();
     }
     return FutureBuilder<bool>(
@@ -1747,10 +1747,10 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   bool _ranAsync = false;
 
   /// IMPORTANT
-  /// The _future must have been created earlier. If the _future is created at the same
+  /// The _future must be created first. If the _future is created at the same
   /// time as the FutureBuilder, then every time the FutureBuilder's parent is
   /// rebuilt, the asynchronous task will be restarted.
-  late Future<bool> _future;
+  Future<bool>? _future;
 
   /// Run the StateX object's initAsync() function
   Future<bool> runAsync() async {
