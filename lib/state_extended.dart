@@ -157,8 +157,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   Future<bool> initAsync() async {
-    //
-    bool init = true;
+    // Always return true. It's got to continue for now.
+    const init = true;
+
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
@@ -167,19 +168,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       try {
         final _init = await con.initAsync();
         if (!_init) {
-          // All were not successful.
-          init = false;
+          // Note the failure but ignore it
+          final e = Exception('${con.runtimeType}.initAsync() returned false!');
+          _initAsyncError(e, con);
         }
       } catch (e) {
-        //
-        final details = FlutterErrorDetails(
-          exception: e,
-          stack: e is Error ? e.stackTrace : null,
-          library: 'state_extended.dart',
-          context: ErrorDescription('${con.runtimeType}.initAsync'),
-        );
-        // To cleanup and recover resources.
-        con.onAsyncError(details);
+        // Pass the error to the controller to handle
+        _initAsyncError(e, con);
         // Have it handled by an error handler.
         rethrow;
       }
@@ -2291,6 +2286,19 @@ mixin AsyncOps {
   /// Supply an 'error handler' routine if something goes wrong
   /// in the corresponding runAsync() routine.
   void onAsyncError(FlutterErrorDetails details) {}
+
+  ///
+  void _initAsyncError(Object e, StateXController con) {
+    //
+    final details = FlutterErrorDetails(
+      exception: e,
+      stack: e is Error ? e.stackTrace : null,
+      library: 'state_extended.dart',
+      context: ErrorDescription('${con.runtimeType}.initAsync'),
+    );
+    // To cleanup and recover resources.
+    con.onAsyncError(details);
+  }
 }
 
 /// A StateX object that inserts a InheritedWidget into the Widget tree.

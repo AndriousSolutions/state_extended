@@ -1,4 +1,7 @@
 
+## 3.3.0
+- Record any errors in initAsync()
+
 ## 3.2.2+3
 - StateX's FutureBuilder will only run once.
   _ranAsync changed the widget tree and so replaced with _future = runAsync();
