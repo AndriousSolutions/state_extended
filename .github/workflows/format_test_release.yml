@@ -40,7 +40,7 @@ jobs:
       - run: flutter pub get
 
       # Check for any formatting issues in the code.
-      - run: flutter format .
+      - run: dart format .
 
       # Analyze our Dart code, but don't fail with there are issues.
       - run: flutter analyze . --preamble --no-fatal-infos --no-fatal-warnings
