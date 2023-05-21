@@ -80,9 +80,13 @@ void testMyApp() {
       // // pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
-      /// Simulate Changing the text size.
+      /// Simulate changing the text size.
       /// Done near the end of testing as it's a very disruptive test
       await testScaleFactor(tester);
+
+      /// Simulate changing the screen size
+      /// Done near the end of testing as it's a very disruptive test
+      await testDidChangeMetrics(tester);
 
       // Now trip an error right at start up.
       (appCon as AppController).errorAtStartup = true;

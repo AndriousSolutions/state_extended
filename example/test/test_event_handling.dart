@@ -36,14 +36,6 @@ Future<void> testEventHandling(WidgetTester tester) async {
   addTearDown(
       tester.binding.platformDispatcher.clearAccessibilityFeaturesTestValue);
 
-  await tester.pump();
-
-  // didChangeMetrics
-  tester.binding.window.physicalSizeTestValue = const Size(42, 42);
-  addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
-
-  await tester.pump();
-
   // Give the app time to recover and indeed resume testing.
   await tester.pumpAndSettle(const Duration(seconds: 5));
 }
@@ -71,4 +63,14 @@ Future<void> testScaleFactor(WidgetTester tester) async {
 
   // Remove the indicated controller
   expect(state.removeByKey(id), isTrue, reason: _location);
+}
+
+Future<void> testDidChangeMetrics(WidgetTester tester) async {
+  // didChangeMetrics
+  /// Done near the end of testing as it's a very disruptive test
+  tester.view.physicalSize = const Size(42, 42);
+  addTearDown(tester.view.resetPhysicalSize);
+
+  // pumpAndSettle() waits for all animations to complete.
+  await tester.pumpAndSettle(const Duration(seconds: 1));
 }

@@ -1,6 +1,7 @@
 
-## 3.3.0
+## 3.3.0+1
 - Record any errors in initAsync()
+- Adjusted code for Dart's future multi-window support
 
 ## 3.2.2+3
 - StateX's FutureBuilder will only run once.
