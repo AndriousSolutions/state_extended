@@ -1290,7 +1290,7 @@ mixin _MapOfStates on State {
 
 /// Your 'working' class most concerned with the app's functionality.
 /// Add it to a 'StateX' object to associate it with that State object.
-class StateXController with StateSetter, StateListener, RootState, AsyncOps {
+class StateXController with SetStateMixin, StateListener, RootState, AsyncOps {
   /// Optionally supply a State object to 'link' to this object.
   /// Thus, assigned as 'current' StateX for this object
   StateXController([StateX? state]) {
@@ -1325,7 +1325,7 @@ class StateXController with StateSetter, StateListener, RootState, AsyncOps {
 
 /// Used by StateXController
 /// Allows you to call 'setState' from the 'current' the State object.
-mixin StateSetter {
+mixin SetStateMixin {
   /// Provide the setState() function to external actors
   void setState(VoidCallback fn) => _stateX?.setState(fn);
 
