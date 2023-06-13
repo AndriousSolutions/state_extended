@@ -29,7 +29,7 @@ Instead, always go up to the '**major**' semantic version number when installing
 And so, in this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-  state_extended:^2.0.0
+  state_extended:^3.0.0
 ```
 
 ## Documentation
