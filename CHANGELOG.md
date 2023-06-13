@@ -1,23 +1,33 @@
 
+## 3.5.0
+June 12, 2023
+- New System event: WidgetsBindingObserver.didRequestAppExit()
+
 ## 3.4.0
+May 27, 2023
 - Rename StateSetter to SetStateMixin. Conflicted with latest Flutter
 
 ## 3.3.0+1
+May 19, 2023
 - Record any errors in initAsync()
 - Adjusted code for Dart's future multi-window support
 
 ## 3.2.2+3
+May 14, 2023
 - StateX's FutureBuilder will only run once.
   _ranAsync changed the widget tree and so replaced with _future = runAsync();
 
 ## 3.2.1
+May 08, 2023
 - StateX's FutureBuilder should only run once.
   _ranAsync ? buildF(context) : FutureBuilder<bool>( 
 
 ## 3.2.0+1
+May 07, 2023
 - Removed the StateListeners mixin 
 
 ## 3.1.0
+May 07, 2023
 - Introduced runAsync() in FutureBuilderStateMixin to allow initAsync() to run repeatedly.
 
 ## 3.0.0

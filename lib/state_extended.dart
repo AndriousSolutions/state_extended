@@ -8,6 +8,8 @@ import 'dart:async' show Future;
 
 import 'dart:math' show Random;
 
+import 'dart:ui' show AppExitResponse;
+
 import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
 
 import 'package:flutter/foundation.dart';
@@ -513,6 +515,47 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// State object was in 'resumed' state
   bool resumed = false;
+
+  /// Called when a request is received from the system to exit the application.
+  @protected
+  @override
+  @mustCallSuper
+  Future<AppExitResponse> didRequestAppExit() async {
+    // A triggered system event
+    _hadSystemEvent = true;
+
+    /// No 'setState()' functions are allowed to fully function at this point.
+    _setStateAllowed = false;
+
+    /// Exiting the application can proceed.
+    var appResponse = AppExitResponse.exit;
+
+    // All must allow an exit or it's cancelled.
+    for (final con in _controllerList) {
+      //
+      final response = await con.didRequestAppExit();
+
+      /// Cancel and do not exit the application.
+      if (response == AppExitResponse.cancel) {
+        // Record the 'cancel' response
+        appResponse = response;
+      }
+    }
+
+    _setStateAllowed = true;
+
+    // If staying with the app and a setState() was requested.
+    if (_setStateRequested && appResponse == AppExitResponse.cancel) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isEndState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+
+    return appResponse;
+  }
 
   /// Called when the system tells the app to pop the current route.
   /// For example, on Android, this is called when the user presses
@@ -1710,6 +1753,13 @@ mixin StateListener implements RouteAware {
     /// This method exposes the `memoryPressure` notification from
     /// [SystemChannels.system].
   }
+
+  /// Called when a request is received from the system to exit the application.
+  /// Exiting the application can proceed with
+  ///    AppExitResponse.exit;
+  /// Cancel and do not exit the application with
+  ///    AppExitResponse.cancel;
+  Future<AppExitResponse> didRequestAppExit() async => AppExitResponse.exit;
 
   /// Called when the system changes the set of active accessibility features.
   void didChangeAccessibilityFeatures() {
