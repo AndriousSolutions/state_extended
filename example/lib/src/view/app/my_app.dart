@@ -22,9 +22,8 @@ class _MyAppState extends AppStateX<MyApp> {
   //
   _MyAppState()
       : super(
-          controller: AppController(),
+          controller: ExampleAppController(),
           controllers: [
-//            Controller(),
             AnotherController(),
             YetAnotherController(),
           ],
@@ -37,26 +36,33 @@ class _MyAppState extends AppStateX<MyApp> {
   /// Try these different 'build' functions so to get access
   /// to a built-in FutureBuilder and or an InheritedWidget.
 
-  /// Override build() and stay with the traditional Flutter approach.
-  // @override
-  // Widget build(BuildContext context) => MaterialApp(
-  //   home: Page1(key: UniqueKey()),
-  // );
+  @override
+  Widget build(BuildContext context) {
+    return super.build(context);
+    // Comment out the super.build() and stay with the traditional Flutter approach.
+    return MaterialApp(
+      home: Page1(key: UniqueKey()),
+    );
+  }
 
-  /// Override buildF() and implement initAsync() to use a FutureBuilder
-  /// to perform asynchronous operations while the State object starts up.
-  // @override
-  // Widget buildF(BuildContext context) => MaterialApp(
-  //       home: Page1(key: UniqueKey()),
-  //     );
+  @override
+  Widget buildF(BuildContext context) {
+    return super.buildF(context);
+    // Comment out super.buildF() and see how the initAsync() uses a FutureBuilder
+    // to perform asynchronous operations while the State object starts up.
+    return MaterialApp(
+      home: Page1(key: UniqueKey()),
+    );
+  }
 
-  /// Override buildIn() to use the built-in FutureBuilder and InheritedWidget.
+  /// Use buildIn() to use the built-in FutureBuilder and InheritedWidget.
+  /// buildIn() replaces build() is most apps
   @override
   Widget buildIn(BuildContext context) {
     // Throw an error right here at the beginning to test recovery code.
-    var throwError = controller is AppController;
+    var throwError = controller is ExampleAppController;
     if (throwError) {
-      final appCon = controller as AppController;
+      final appCon = controller as ExampleAppController;
       throwError = appCon.errorAtStartup;
       // It'll trip again instantly and so don't trip it again.
       appCon.errorAtStartup = false;
@@ -64,10 +70,11 @@ class _MyAppState extends AppStateX<MyApp> {
     if (throwError) {
       throw AssertionError('Error in buildIn!');
     }
-    return MaterialApp(home: Page1(key: UniqueKey()));
+    return MaterialApp(
+      home: state((_) {
+        // a new unique key creates a new unique Page1State object
+        return Page1(key: UniqueKey());
+      }),
+    );
   }
-
-  // ///
-  // @override
-  // bool get inFlutterTester => super.inFlutterTester;
 }

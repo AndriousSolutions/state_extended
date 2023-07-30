@@ -9,7 +9,7 @@ import 'package:example/src/another_app/controller.dart';
 
 import 'package:example/src/another_app/view.dart';
 
-/// This StatefulWidget stores an InheritedWidget
+///
 class InheritBird extends StatefulWidget {
   ///
   const InheritBird({
@@ -18,28 +18,35 @@ class InheritBird extends StatefulWidget {
   }) : super(key: key);
 
   ///
-  final Widget? child;
+  final Widget child;
 
   @override
   State<StatefulWidget> createState() => _InheritBirdState();
 }
 
-/// Supply an InheritedWidget to a StateX object, InheritedStateX
-class _InheritBirdState extends InheritedStateX<InheritBird, _BirdInherited> {
-  _InheritBirdState()
-      : super(
-          controller: BirdController(),
-          inheritedBuilder: (child) => _BirdInherited(child: child),
-        );
+class _InheritBirdState extends StateIn<InheritBird> {
+  _InheritBirdState() : super(controller: BirdController());
 
   @override
-  Widget buildIn(context) => widget.child!;
+  Widget buildIn(context) => widget.child;
 }
 
-/// The InheritedWidget assigned 'dependent' child widgets.
-class _BirdInherited extends InheritedWidget {
-  const _BirdInherited({Key? key, required Widget child})
-      : super(key: key, child: child);
-  @override
-  bool updateShouldNotify(oldWidget) => true;
-}
+// /// Supply an InheritedWidget to a StateX object, InheritedStateX
+// class _InheritBirdState extends InheritedStateX<InheritBird, _BirdInherited> {
+//   _InheritBirdState()
+//       : super(
+//           controller: BirdController(),
+//           inheritedBuilder: (child) => _BirdInherited(child: child),
+//         );
+//
+//   @override
+//   Widget buildIn(context) => widget.child!;
+// }
+//
+// /// The InheritedWidget assigned 'dependent' child widgets.
+// class _BirdInherited extends InheritedWidget {
+//   const _BirdInherited({Key? key, required Widget child})
+//       : super(key: key, child: child);
+//   @override
+//   bool updateShouldNotify(oldWidget) => true;
+// }

@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends StateX<HomePage> {
   /// Let the 'business logic' run in a Controller
-  _HomePageState() : super(Controller()) {
+  _HomePageState() : super(controller: Controller()) {
     /// Acquire a reference to the passed Controller.
     con = controller as Controller;
   }
@@ -123,7 +123,8 @@ class _CounterState extends StateX<CounterWidget> {
   @override
   Widget build(BuildContext context) {
     // Set a dependency to this widget
-    con?.dependOnInheritedWidget(context);
+//    con?.dependOnInheritedWidget(context);
+    rootState?.dependOnInheritedWidget(context);
     return Text(
       '${con?.count ?? 0}',
       style: Theme.of(context).textTheme.headlineMedium,

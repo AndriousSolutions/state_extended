@@ -5,17 +5,17 @@
 import 'package:example/src/view.dart';
 
 /// The 'App Level' Controller
-class AppController extends StateXController {
+class ExampleAppController extends StateXController {
   /// Singleton design pattern is best for Controllers.
-  factory AppController() => _this ??= AppController._();
-  AppController._();
-  static AppController? _this;
+  factory ExampleAppController() => _this ??= ExampleAppController._();
+  ExampleAppController._();
+  static ExampleAppController? _this;
 
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Initialize asynchronous items essential to the Mobile Applications.
   /// Typically called within a FutureBuilder() widget.
   @override
-  Future<bool> runAsync() async {
+  Future<bool> initAsync() async {
     // Simply wait for 10 seconds at startup.
     /// In production, this is where databases are opened, logins attempted, etc.
     return Future.delayed(const Duration(seconds: 10), () {

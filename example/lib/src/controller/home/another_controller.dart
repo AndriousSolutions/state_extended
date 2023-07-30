@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:example/src/controller.dart'
-    show AppController, StateXController;
+    show ExampleAppController, StateXController;
 
 import 'package:example/src/view.dart';
 import 'package:flutter/foundation.dart';
@@ -19,8 +19,8 @@ class AnotherController extends StateXController {
   bool tripError = false;
 
   @override
-  Future<bool> runAsync() async {
-    if (tripError && AppController().allowErrors) {
+  Future<bool> initAsync() async {
+    if (tripError && ExampleAppController().allowErrors) {
       throw AssertionError('Error in AnotherController.initAsync()!');
     }
     return true;

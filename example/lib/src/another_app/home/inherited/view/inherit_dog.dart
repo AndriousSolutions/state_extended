@@ -15,28 +15,35 @@ class InheritDog extends StatefulWidget {
   const InheritDog({Key? key, required this.child}) : super(key: key);
 
   ///
-  final Widget? child;
+  final Widget child;
 
   @override
   State<StatefulWidget> createState() => _InheritDogState();
 }
 
-/// Supply an InheritedWidget to a StateX object: InheritedStateX
-class _InheritDogState extends InheritedStateX<InheritDog, _DogInherited> {
-  _InheritDogState()
-      : super(
-          controller: DogController(),
-          inheritedBuilder: (child) => _DogInherited(child: child),
-        );
+class _InheritDogState extends StateIn<InheritDog> {
+  _InheritDogState() : super(controller: DogController());
 
   @override
-  Widget buildIn(context) => widget.child!;
+  Widget buildIn(context) => widget.child;
 }
 
-/// The InheritedWidget assigned 'dependent' child widgets.
-class _DogInherited extends InheritedWidget {
-  const _DogInherited({Key? key, required Widget child})
-      : super(key: key, child: child);
-  @override
-  bool updateShouldNotify(oldWidget) => true;
-}
+// /// Supply an InheritedWidget to a StateX object: InheritedStateX
+// class _InheritDogState extends InheritedStateX<InheritDog, _DogInherited> {
+//   _InheritDogState()
+//       : super(
+//           controller: DogController(),
+//           inheritedBuilder: (child) => _DogInherited(child: child),
+//         );
+//
+//   @override
+//   Widget buildIn(context) => widget.child!;
+// }
+//
+// /// The InheritedWidget assigned 'dependent' child widgets.
+// class _DogInherited extends InheritedWidget {
+//   const _DogInherited({Key? key, required Widget child})
+//       : super(key: key, child: child);
+//   @override
+//   bool updateShouldNotify(oldWidget) => true;
+// }

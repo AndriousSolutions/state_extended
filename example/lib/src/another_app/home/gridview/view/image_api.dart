@@ -10,14 +10,14 @@ import 'package:example/src/controller.dart';
 import 'package:example/src/view.dart';
 
 /// The State object allows for a web service to be called.
-class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
+class ImageAPIStateX<T extends StatefulWidget> extends StateIn<T>
     implements ImageAPIState {
   ///
   ImageAPIStateX({
     required this.uri,
     this.message,
     StateXController? controller,
-  }) : super(controller) {
+  }) : super(controller: controller) {
     //
     final id = add(ImageAPIController());
     // Retrieve the Controller by its unique id.
@@ -40,10 +40,8 @@ class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
     controller?.dependOnInheritedWidget(context);
     return GestureDetector(
       onTap: _con.onTap,
-      onDoubleTap: _con.onTap,
-      child: Card(
-        child: _con.image ?? const SizedBox(),
-      ),
+      onDoubleTap: _con.onDoubleTap,
+      child: Card(child: _con.image ?? const SizedBox()),
     );
   }
 

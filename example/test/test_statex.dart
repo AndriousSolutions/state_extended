@@ -49,7 +49,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   StateXController? con = stateObj.controller!;
 
-  expect(con, isA<AppController>());
+  expect(con, isA<ExampleAppController>());
 
   // This Controller's current State object is _MyAppState as AppStateMVC
   stateObj = con.state!;
@@ -62,7 +62,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(appState, isA<AppStateX>(), reason: _location);
 
   /// Rebuild InheritedWidget
-  appState.inheritedNeedsBuild('Test');
+  appState.dataObject = 'test';
 
   final exception = Exception('Testing');
 
@@ -98,22 +98,22 @@ Future<void> testsStateX(WidgetTester tester) async {
   // A Controller for the 'app level' to influence the whole app.
   con = appState.controller!;
 
-  expect(con, isA<AppController>(), reason: _location);
+  expect(con, isA<ExampleAppController>(), reason: _location);
 
   final String keyId = con.identifier;
 
   con = appState.controllerById(keyId)!;
 
-  expect(con, isA<AppController>(), reason: _location);
+  expect(con, isA<ExampleAppController>(), reason: _location);
 
   // Deprecated by must still be tested.
   con = appState.controllerByType<TestingController>();
 
   expect(con, isNull, reason: _location);
 
-  con = appState.controllerByType<AppController>();
+  con = appState.controllerByType<ExampleAppController>();
 
-  expect(con, isA<AppController>(), reason: _location);
+  expect(con, isA<ExampleAppController>(), reason: _location);
 
   // As well as the base class, ControllerMVC
   expect(con, isA<StateXController>(), reason: _location);
@@ -123,13 +123,14 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
-  if (appState.inheritedType is InheritedWidget) {
-    // Return the type of 'Inherited Widget' used.
-    expect(appState.inheritedType, isA<InheritedWidget>(), reason: _location);
-  }
+  /// inheritedType not longer necessary
+//   if (appState.inheritedType is InheritedWidget) {
+//     // Return the type of 'Inherited Widget' used.
+//     expect(appState.inheritedType, isA<InheritedWidget>(), reason: _location);
+//   }
 
-  // Testing for Test Coverage. It's the true setState() function for appState
-  appState.setSuperState(() {});
+  // // Testing for Test Coverage. It's the true setState() function for appState
+  // appState.setSuperState(() {});
 
   // The 'state' property is the Controller's current State object
   // it is working with.

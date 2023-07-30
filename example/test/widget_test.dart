@@ -57,7 +57,7 @@ void testMyApp() {
 
       final appCon = appState.controller;
 
-      if (appCon != null && appCon is AppController) {
+      if (appCon != null && appCon is ExampleAppController) {
         // Allow for errors to be thrown.
         appCon.allowErrors = true;
       }
@@ -89,7 +89,7 @@ void testMyApp() {
       await testDidChangeMetrics(tester);
 
       // Now trip an error right at start up.
-      (appCon as AppController).errorAtStartup = true;
+      (appCon as ExampleAppController).errorAtStartup = true;
 
       // hot reload
       await tester.binding.reassembleApplication();

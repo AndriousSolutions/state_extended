@@ -19,7 +19,7 @@ class Page1 extends StatefulWidget {
 class Page1State extends StateX<Page1> {
   /// Supply a controller to this State object
   /// so to call its setState() function below.
-  Page1State() : super(Controller());
+  Page1State() : super(controller: Controller());
 
   /// The counter
   int count = 0;
@@ -81,11 +81,12 @@ class Page1State extends StateX<Page1> {
         count: count,
         counter: () {
           count++;
-          // Commented out since the controller has access to this State object.
+
+          /// Commented out since the controller has access to this State object.
 //          setState(() {});
-          // Look how this Controller has access to this State object!
-          // The incremented counter will not update otherwise! Powerful!
-          // Comment out and the counter will appear not to work.
+          /// Look how this Controller has access to this State object!
+          /// The incremented counter will not update otherwise! Powerful!
+          /// Comment out and the counter will appear not to work.
           controller?.setState(() {});
         },
         row: (BuildContext context) => [

@@ -20,7 +20,7 @@ Future<void> errorHandling(
 
   final appCon = appState.controller;
 
-  if (appCon != null && appCon is AppController) {
+  if (appCon != null && appCon is ExampleAppController) {
     // Allow for errors to be thrown.
     appCon.allowErrors = true;
   }

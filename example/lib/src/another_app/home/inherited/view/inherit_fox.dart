@@ -15,28 +15,35 @@ class InheritFox extends StatefulWidget {
   const InheritFox({Key? key, required this.child}) : super(key: key);
 
   ///
-  final Widget? child;
+  final Widget child;
 
   @override
   State<StatefulWidget> createState() => _InheritFoxState();
 }
 
-/// Supply an InheritedWidget to a StateX object: InheritedStateX
-class _InheritFoxState extends InheritedStateX<InheritFox, _FoxInherited> {
-  _InheritFoxState()
-      : super(
-          controller: FoxController(),
-          inheritedBuilder: (child) => _FoxInherited(child: child),
-        );
+class _InheritFoxState extends StateIn<InheritFox> {
+  _InheritFoxState() : super(controller: FoxController());
 
   @override
-  Widget buildIn(context) => widget.child!;
+  Widget buildIn(context) => widget.child;
 }
 
-/// The InheritedWidget assigned 'dependent' child widgets.
-class _FoxInherited extends InheritedWidget {
-  const _FoxInherited({Key? key, required Widget child})
-      : super(key: key, child: child);
-  @override
-  bool updateShouldNotify(oldWidget) => true;
-}
+// /// Supply an InheritedWidget to a StateX object: InheritedStateX
+// class _InheritFoxState extends InheritedStateX<InheritFox, _FoxInherited> {
+//   _InheritFoxState()
+//       : super(
+//           controller: FoxController(),
+//           inheritedBuilder: (child) => _FoxInherited(child: child),
+//         );
+//
+//   @override
+//   Widget buildIn(context) => widget.child!;
+// }
+//
+// /// The InheritedWidget assigned 'dependent' child widgets.
+// class _FoxInherited extends InheritedWidget {
+//   const _FoxInherited({Key? key, required Widget child})
+//       : super(key: key, child: child);
+//   @override
+//   bool updateShouldNotify(oldWidget) => true;
+// }

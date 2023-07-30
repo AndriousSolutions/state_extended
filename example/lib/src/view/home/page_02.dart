@@ -19,7 +19,7 @@ class Page2 extends StatefulWidget {
 /// It a separate data source, and so the count is never reset to zero.
 class Page2State extends StateX<Page2> {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
-  Page2State() : super(Controller()) {
+  Page2State() : super(controller: Controller()) {
     /// Cast to type, Controller
     con = controller as Controller;
   }
@@ -27,15 +27,16 @@ class Page2State extends StateX<Page2> {
   /// The controller reference property
   late Controller con;
 
-  @override
-  Future<bool> runAsync() async {
-    final init = await super.runAsync();
-    //
-    if (AppController().allowErrors) {
-      throw AssertionError('error thrown in Page2State.initAsync()');
-    }
-    return init;
-  }
+  // @override
+  // Future<bool> runAsync() async {
+  //   final init = await super.runAsync();
+  //   //
+  //   if (ExampleAppController().allowErrors) {
+  //     throw AssertionError(
+  //         'Testing handling of error thrown in Page2State.initAsync()');
+  //   }
+  //   return init;
+  // }
 
   /// This function is not really necessary for th app to work
   /// Merely demonstrating the package's many capabilities to you.
@@ -84,7 +85,7 @@ class Page2State extends StateX<Page2> {
     final context = state?.context;
 
     // Retrieve the app's own controller.
-    final appCon = AppController();
+    final appCon = ExampleAppController();
 
     final rootState = appCon.state;
 

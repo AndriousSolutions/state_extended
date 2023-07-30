@@ -26,14 +26,17 @@ class _Page3State extends StateX<Page3> {
   Widget build(BuildContext context) => _buildPage3(
         count: count,
         newKey: () {
+          // Both access the 'first' StateX object
           startState?.setState(() {});
+          rootState?.setState(() {});
         },
         counter: () {
           setState(() => count++);
         },
         page1counter: () {
           // Merely instantiating the StatefulWidget to call its function.
-          final state = Controller().ofState<Page2State>()!;
+          var state = Controller().ofState<Page2State>()!;
+          state = Controller().stateOf<Page2>()! as Page2State;
           state.onPressed();
         },
         page2counter: () {

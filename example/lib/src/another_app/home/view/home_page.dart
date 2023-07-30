@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends StateX<HomePage> {
-  _HomePageState() : super(HomeController()) {
+  _HomePageState() : super(controller: HomeController()) {
     con = controller as HomeController;
   }
   late HomeController con;

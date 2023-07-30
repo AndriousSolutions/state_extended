@@ -10,6 +10,8 @@ import 'dart:convert' show json;
 
 import 'package:example/src/another_app/home/gridview/view.dart';
 
+import 'package:example/src/controller.dart';
+
 import 'package:example/src/view.dart';
 
 import 'package:http/http.dart' as http;
@@ -24,8 +26,16 @@ class ImageAPIController extends StateXController {
   /// The resulting image from the API.
   Image? image;
 
-  ///
+  /// Change the single image
   void onTap() => state?.setState(() {});
+
+  /// Change all three images
+  void onDoubleTap() {
+    final controller = state?.controller;
+    if (controller is InheritController) {
+      controller.newAnimals();
+    }
+  }
 
   /// The number of images loading using this class.
   static int imageCount = 0;

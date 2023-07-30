@@ -59,10 +59,23 @@ class Controller extends StateXController {
   Future<bool> initAsync() async {
     final init = await super.initAsync();
     //
-    if (AppController().allowErrors) {
-      throw AssertionError('error thrown in Page1State.initAsync()');
+    if (ExampleAppController().allowErrors) {
+      throw AssertionError(
+          'Testing handling error thrown in Page1State.initAsync()');
     }
     return init;
+  }
+
+  /// Supply an 'error handler' routine if something goes wrong
+  /// in the corresponding runAsync() routine.
+  @override
+  void onAsyncError(FlutterErrorDetails details) {
+    // Turn it off now
+    ExampleAppController().allowErrors = false;
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: onAsyncError in $state');
+    }
   }
 
   /// The framework will call this method exactly once.

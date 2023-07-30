@@ -15,28 +15,35 @@ class InheritCat extends StatefulWidget {
   const InheritCat({Key? key, required this.child}) : super(key: key);
 
   ///
-  final Widget? child;
+  final Widget child;
 
   @override
   State<StatefulWidget> createState() => _InheritCatState();
 }
 
-/// Supply an InheritedWidget to a StateX object: InheritedStateX
-class _InheritCatState extends InheritedStateX<InheritCat, _CatInherited> {
-  _InheritCatState()
-      : super(
-          controller: CatController(),
-          inheritedBuilder: (child) => _CatInherited(child: child),
-        );
+class _InheritCatState extends StateIn<InheritCat> {
+  _InheritCatState() : super(controller: CatController());
 
   @override
-  Widget buildIn(context) => widget.child!;
+  Widget buildIn(context) => widget.child;
 }
 
-/// The InheritedWidget assigned 'dependent' child widgets.
-class _CatInherited extends InheritedWidget {
-  const _CatInherited({Key? key, required Widget child})
-      : super(key: key, child: child);
-  @override
-  bool updateShouldNotify(oldWidget) => true;
-}
+// /// Supply an InheritedWidget to a StateX object: InheritedStateX
+// class _InheritCatState extends InheritedStateX<InheritCat, _CatInherited> {
+//   _InheritCatState()
+//       : super(
+//           controller: CatController(),
+//           inheritedBuilder: (child) => _CatInherited(child: child),
+//         );
+//
+//   @override
+//   Widget buildIn(context) => widget.child!;
+// }
+//
+// /// The InheritedWidget assigned 'dependent' child widgets.
+// class _CatInherited extends InheritedWidget {
+//   const _CatInherited({Key? key, required Widget child})
+//       : super(key: key, child: child);
+//   @override
+//   bool updateShouldNotify(oldWidget) => true;
+// }

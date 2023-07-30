@@ -141,7 +141,7 @@ void _testAppController(WidgetTester tester) {
   /// The first Controller added to the App's first State object
   final controller = appState.rootCon;
 
-  expect(controller, isA<AppController>());
+  expect(controller, isA<ExampleAppController>());
 
-  final rootCon = controller as AppController;
+  final rootCon = controller as ExampleAppController;
 }
