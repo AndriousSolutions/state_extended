@@ -1,11 +1,12 @@
 
-## 4.0.0
+## 4.0.0+1
 July 30, 2023
 - StateX now has a built-in InheritedWidget
 - named parameters now in the its constructor:
   StateX({StateXController? controller, bool? useInherited}) {
 - Defaults to not using the built-in InheritedWidget be a subclass uses it:
   abstract class StateIn<T extends StatefulWidget> extends StateX<T> {
+- @protected appropriate methods
 
 ## 3.5.0+1
 June 12, 2023

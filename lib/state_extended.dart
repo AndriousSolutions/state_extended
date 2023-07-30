@@ -53,16 +53,19 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// Use this function instead for the built-in InheritedWidget.
   @override
+  @protected
   Widget buildIn(BuildContext context) => const SizedBox();
 
   /// Implement this function instead of the build() function
   /// so to utilize a built-in FutureBuilder Widget and not the InheritedWidget.
   @override
+  @protected
   Widget buildF(BuildContext context) => super.buildF(context);
 
   /// Implement the build() function if you wish
   /// to not use the mixin, FutureBuilderStateMixin
   @override
+  @protected
   Widget build(BuildContext context) => super.build(context);
 
   /// You need to be able access the widget.
@@ -166,6 +169,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// Asynchronous operations must complete successfully.
   @override
+  @protected
   @mustCallSuper
   Future<bool> initAsync() async {
     // Always return true. It's got to continue for now.
@@ -200,8 +204,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.
-  @protected
   @override
+  @protected
   @mustCallSuper
   void initState() {
     assert(mounted, '${toString()} is not instantiated properly.');
@@ -249,8 +253,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// When a InheritedWidget's build() function is called
   /// the dependent widget's build() function is also called but not before
   /// their didChangeDependencies() function. Subclasses rarely use this method.
-  @protected
   @override
+  @protected
   @mustCallSuper
   void didChangeDependencies() {
     // Important to 'markNeedsBuild()' first
@@ -272,6 +276,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Called when this object is reinserted into the tree after having been
   /// removed via [deactivate].
   @override
+  @protected
   @mustCallSuper
   void activate() {
     /// In most cases, after a [State] object has been deactivated, it is _not_
@@ -314,8 +319,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// The framework calls this method whenever it removes this [State] object
   /// from the tree.
-  @protected
   @override
+  @protected
   @mustCallSuper
   void deactivate() {
     /// The framework calls this method whenever it removes this [State] object
@@ -355,8 +360,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// The framework calls this method when this [StateX] object will never
   /// build again and will be disposed of with garbage collection.
-  @protected
   @override
+  @protected
   @mustCallSuper
   void dispose() {
     /// The State object's lifecycle is terminated.
@@ -400,8 +405,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Returning to this app from another app will re-create the State object
   /// You 'update' the current State object using this function.
   @override
-  @mustCallSuper
   @protected
+  @mustCallSuper
   void updateNewStateX(covariant StateX oldState) {
     /// No 'setState()' functions are allowed
     _setStateAllowed = false;
@@ -417,8 +422,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Override this method to respond when its [StatefulWidget] is re-created.
   /// The framework always calls [build] after calling [didUpdateWidget], which
   /// means any calls to [setState] in [didUpdateWidget] are redundant.
-  @protected
   @override
+  @protected
   @mustCallSuper
   void didUpdateWidget(StatefulWidget oldWidget) {
     /// No 'setState()' functions are allowed
@@ -438,8 +443,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   /// Called when the system puts the app in the background or returns the app to the foreground.
-  @protected
   @override
+  @protected
   @mustCallSuper
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// No 'setState()' functions are allowed to fully function at this point.
@@ -497,6 +502,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
   @override
+  @protected
   void inactiveLifecycleState() {}
 
   /// State object was in 'inactive' state
@@ -505,6 +511,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
   @override
+  @protected
   void pausedLifecycleState() {}
 
   /// State object was in 'paused' state
@@ -513,6 +520,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Either be in the progress of attaching when the  engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
   @override
+  @protected
   void detachedLifecycleState() {}
 
   /// State object was in 'paused' state
@@ -520,14 +528,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// The application is visible and responding to user input.
   @override
+  @protected
   void resumedLifecycleState() {}
 
   /// State object was in 'resumed' state
   bool resumed = false;
 
   /// Called when a request is received from the system to exit the application.
-  @protected
   @override
+  @protected
   @mustCallSuper
   Future<AppExitResponse> didRequestAppExit() async {
     // A triggered system event
@@ -572,8 +581,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Observers are notified in registration order until one returns
   /// true. If none return true, the application quits.
   ///
-  @protected
   @override
+  @protected
   @mustCallSuper
   Future<bool> didPopRoute() async {
     /// Observers are expected to return true if they were able to
@@ -616,8 +625,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Called when the host tells the app to push a new route onto the
   /// navigator.
   ///
-  @protected
   @override
+  @protected
   @mustCallSuper
   Future<bool> didPushRoute(String route) async {
     /// Observers are expected to return true if they were able to
@@ -666,8 +675,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   ///
   /// The default implementation is to call the [didPushRoute] directly with the
   /// [RouteInformation.location].
-  @protected
   @override
+  @protected
   @mustCallSuper
   Future<bool> didPushRouteInformation(
       RouteInformation routeInformation) async {
@@ -2147,9 +2156,9 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
   /// Clean up memory
   /// Called when garbage collecting
+  @override
   @protected
   @mustCallSuper
-  @override
   void dispose() {
     _MapOfStates._states.clear();
     _clearRootStateX();
@@ -2159,24 +2168,18 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// In the SetState class?
   bool _inSetStateBuilder = false;
 
-  //todo: I'm not sure this is necessary either! gp
   // /// Provide a means to rebuild this State object anyway.
   // void setSuperState(VoidCallback fn) => super.setState(fn);
 
-  //todo: I don't know what to do here! gp
-  // /// Calls the State object's setState() function if not
-  // ///  (see class SetState).
-  // @override
-  // void setState(VoidCallback fn) {
-  //   // Don't if already in the SetState.builder() function
-  //   if (!_inSetStateBuilder) {
-  //     // If not called by the buildInherited() function
-  //     if (mounted && !_buildInherited) {
-  //       _inheritedStatefulWidget?.state.child = buildIn(context);
-  //       super.setState(() {});
-  //     }
-  //   }
-  // }
+  /// Calls the State object's setState() function if not
+  ///  (see class SetState).
+  @override
+  void setState(VoidCallback fn) {
+    // Don't if already in the SetState.builder() function
+    if (!_inSetStateBuilder) {
+      super.setState(fn);
+    }
+  }
 
   //todo: I don't know what to do here! gp
   // /// In harmony with Flutter's own API
