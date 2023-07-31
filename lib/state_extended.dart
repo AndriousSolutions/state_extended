@@ -2138,8 +2138,9 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   AppStateX({
     StateXController? controller,
     List<StateXController>? controllers,
+    bool? useInherited,
     Object? object,
-  }) : super(controller: controller, useInherited: true) {
+  }) : super(controller: controller, useInherited: useInherited) {
     //Record this as the 'root' State object.
     setRootStateX(this);
     _dataObj = object;

@@ -1,5 +1,14 @@
 
-## 4.0.0+1
+## 4.1.0
+July 31, 2023
+- For the AppStateX, included the option to use the built-in InheritedWidget or not
+  AppStateX({StateXController? controller,
+    List<StateXController>? controllers,
+    bool? useInherited,
+    Object? object,
+  })
+
+## 4.0.0+2
 July 30, 2023
 - StateX now has a built-in InheritedWidget
 - named parameters now in the its constructor:
