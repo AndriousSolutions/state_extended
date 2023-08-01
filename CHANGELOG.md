@@ -1,4 +1,9 @@
 
+## 4.1.1
+August 01, 2023
+- Unlike StateX, AppStateX uses both its InheritedWidget and its buildIn() function
+  but InheritedWidget can be called separately allowing for only dependencies rebuilds 
+
 ## 4.1.0
 July 31, 2023
 - For the AppStateX, included the option to use the built-in InheritedWidget or not
