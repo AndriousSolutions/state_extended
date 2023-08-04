@@ -52,3 +52,18 @@ certain circumstances in your own app.
 
 | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
 |:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+
+The <b>onError</b>() function is supplied by the mixin, <a href="https://github.com/AndriousSolutions/state_extended/blob/096993bab8d13790af065b94f0bdf32e1967904e/lib/state_extended.dart#L2643">StateXonErrorMixin</a>.
+The <b>StateX</b> class utilizes it, but the <b>StateXController</b> does not. However, it can if the need arises.
+Care must be taken when implementing the <b>onError</b>() function in Controllers as one may catch an error
+intended for another. But if used judiciously, there may be instances where a controller should catch and handle any failed operation of its own doing.
+
+The first screenshot below demonstrates how you might seek out such controllers when the '+' button error occurred.
+The StateX object goes through its controllers and calls those with a <b>onError</b>() function of their own.
+<div>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/6aa1d170-631d-4bc2-b372-2f263f2b796d"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/6aa1d170-631d-4bc2-b372-2f263f2b796d" width="48%" height="60%"></a>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/ea64ab79-a43a-45a2-afd5-d4eefbca4be5"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/ea64ab79-a43a-45a2-afd5-d4eefbca4be5" width="48%" height="60%"></a>
+</div>
+
+| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L192) | [yet_another_controller.dart](https://github.com/AndriousSolutions/state_extended/blob/096993bab8d13790af065b94f0bdf32e1967904e/example/lib/src/controller/home/yet_another_controller.dart#L7) |
+|:-------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|

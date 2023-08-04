@@ -11,10 +11,10 @@
 ## An Extension of the State class
 This package expands the capabilities of Flutter's State class.
 This fundamental component of Flutter's state management had room for improvement.
-The capabilities of Flutter's State class now includes 'State Object Controllers' and the app's 'lifecycle events.'
+The capabilities of Flutter's State class now includes a 'State Object Controller' and the app's 'lifecycle events.'
 
 StateX should not be confused with GetX.
-Both do involve 'controllers' that generally contain the 'business logic' involved in any given app.
+Both do involve 'controllers' that generally contain the 'business logic' involved in an app.
 GetX has its GetxController class while StateX has its StateXController class, 
 but the similarities stops there.
 
@@ -40,22 +40,23 @@ dependencies:
 Turn to this free Medium article for an overview of the package plus examples:
 <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@andrious/statex-b8f57015188f"><img align="right" src="https://user-images.githubusercontent.com/32497443/179269220-80efea47-b852-47c0-a073-b22f502dc437.jpg" alt="StateXMedium" width="500" height="245"></a>
 ## Documentation
-<ul style="list-style-type: none">
-   <li id="started"><a href="https://pub.dev/documentation/state_extended/latest/topics/01%20get%20started-topic.html">Get&nbsp;started</a></li>
-   <li id="statex"><a href="https://pub.dev/documentation/state_extended/latest/topics/02%20statex%20class-topic.html">StateX class</a></li>
-   <li id="controller"><a href="https://pub.dev/documentation/state_extended/latest/topics/03%20Ocontrollers-topic.html">State&nbsp;Object&nbsp;Controller</a></li>
-   <li id="appstate"><a href="https://pub.dev/documentation/state_extended/latest/topics/04%20appstate-topic.html">AppState class</a></li>
-   <li id="error"><a href="https://pub.dev/documentation/state_extended/latest/topics/05%20error-handling-topic.html">App's&nbsp;Preferences</a></li>
-   <li id="testing"><a href="https://pub.dev/documentation/state_extended/latest/topics/06%20testing-topic.html">App object</a></li>
+<ul>
+   <li id="started"><a href="https://pub.dev/documentation/state_extended/latest/topics/Get%20started-topic.html">Get&nbsp;started</a></li>
+   <li id="statex"><a href="https://pub.dev/documentation/state_extended/latest/topics/StateX%20class-topic.html">StateX class</a></li>
+   <li id="controller"><a href="https://pub.dev/documentation/state_extended/latest/topics/State%20Object%20Controller-topic.html">State&nbsp;Object&nbsp;Controller</a></li>
+   <li id="event"><a href="https://pub.dev/documentation/state_extended/latest/topics/Event%20handling-topic.html">Event handling</a></li>
+   <li id="appstate"><a href="https://pub.dev/documentation/state_extended/latest/topics/AppStateX%20class-topic.html">AppState class</a></li>
+   <li id="error"><a href="https://pub.dev/documentation/state_extended/latest/topics/Error%20handling-topic.html">Error Handling</a></li>
+   <li id="testing"><a href="https://pub.dev/documentation/state_extended/latest/topics/Testing-topic.html">Testing</a></li>
 </ul>
 
 The <b>State</b> class is Flutter’s main player in State Management.
 However, the <b>StateX</b> class then extends those capabilities to a separate controller class called, <b>StateXController</b>.
-This arrangement encourage a clean architecture separating all the mutable properties and business logic 
-as well as provide state management from <b><i>outside</i></b> the State class! 
-Not only can it call the <b>setState</b>() function, it has access to the State object’s own properties: <b>widget</b>, <b>mounted</b>, and <b>context</b>.
+This arrangement encourages a clean architecture separating all the mutable properties and business logic 
+from the State object and its interface as well as provide state management from <b><i>outside</i></b> the State class itself! 
+Not only can the controller class call the <b>setState</b>() function, it has access to the State object’s own properties: <b>widget</b>, <b>mounted</b>, and <b>context</b>.
 
-<h3 id="controll">Control The State</h3>
+## Control The State
 When using this package, through the course of an app’s lifecycle, 
 a controller can be registered to any number of StateX objects. 
 A StateXController object works with ‘the last’ State object it’s been assigned to 

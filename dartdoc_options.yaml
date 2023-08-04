@@ -9,7 +9,7 @@ dartdoc:
     "Event handling":
       markdown: doc/04_event_handling.md
     "AppStateX class":
-      markdown: doc/06_appstate.md
+      markdown: doc/05_appstate.md
     "Error handling":
       markdown: doc/07_error-handling.md
     "Testing":
