@@ -1,0 +1,34 @@
+dartdoc:
+  categories:
+    "Get started":
+      markdown: doc/01_get_started.md
+    "StateX class":
+      markdown: doc/02_statex.md
+    "State Object Controller":
+      markdown: doc/03_controllers.md
+    "Event handling":
+      markdown: doc/04_event_handling.md
+    "AppStateX class":
+      markdown: doc/06_appstate.md
+    "Error handling":
+      markdown: doc/07_error-handling.md
+    "Testing":
+      markdown: doc/08_testing.md
+
+  categoryOrder:
+    - "Get started"
+    - "StateX class"
+    - "State Object Controller"
+    - "AppState class"
+    - "Error handling"
+    - "Testing"
+  showUndocumentedCategories: true
+  #  ignore:
+  #    - ambiguous-doc-reference
+  #  errors:
+  #    - unresolved-doc-reference
+  warnings:
+    - tool-error
+  ignore:
+    - broken-link
+    - missing-from-search-index

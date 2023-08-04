@@ -71,6 +71,7 @@ class _MyAppState extends AppStateX<MyApp> {
       throw AssertionError('Error in buildIn!');
     }
     return MaterialApp(
+      // A new unique key will recreate the State object
       home: Page1(key: UniqueKey()),
     );
   }

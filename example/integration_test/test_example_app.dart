@@ -24,6 +24,11 @@ Future<void> integrationTesting(WidgetTester tester) async {
     // Tap the '+' icon and trigger a frame.
     await tester.tap(find.byKey(const Key('+')));
     await tester.pumpAndSettle();
+    // Turn the 'Use InheritedWidget' switch on anf off
+    if (cnt == 3 || cnt == 6) {
+      await tester.tap(find.byKey(const Key('InheritedSwitch')));
+      await tester.pumpAndSettle();
+    }
   }
 
   // Successfully incremented.
@@ -271,17 +276,6 @@ Future<void> testInheritedWidgetApp(WidgetTester tester) async {
   /// Go to Page 3
   await tester.tap(find.byKey(const Key('Page 3')));
   await tester.pumpAndSettle();
-
-  /// Web Services are unreliable during testing.
-  // // Again, this tap doesn't seem to work, and so I go to the Navigator.
-  // await tester.tap(find.byKey(const Key('InheritedWidget example')));
-  // await tester.pumpAndSettle();
-  //
-  // expect(find.text('New Dogs'), findsOneWidget);
-  //
-  // /// Retreat back one screen
-  // await tester.tap(find.byTooltip('Back'));
-  // await tester.pumpAndSettle();
 }
 
 Future<void> testPage2State(WidgetTester tester) async {
@@ -319,12 +313,6 @@ Future<void> resetPage1Count(WidgetTester tester) async {
   // Tapping doesn't seem to work, and so I'll grab the State object itself.
   await tester.tap(find.byKey(const Key('New Key')));
   await tester.pumpAndSettle();
-
-  //todo Don't remember why I did this! Not necessary!
-  // // Find its StatefulWidget first then the 'type' of State object.
-  // final AppStateX rootState = tester.firstState<AppStateX>(find.byType(MyApp));
-  // rootState.setState(() {});
-  // await tester.pumpAndSettle();
 
   // Is there a button labeled, Page 1.
   final page1Finder = find.byKey(const Key('Page 1'));

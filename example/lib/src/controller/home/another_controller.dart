@@ -6,10 +6,10 @@ import 'package:example/src/controller.dart'
     show ExampleAppController, StateXController;
 
 import 'package:example/src/view.dart';
-import 'package:flutter/foundation.dart';
 
 /// Multiple Controllers can be assigned to one State object.
-class AnotherController extends StateXController {
+/// Includes the mixin, StateXonErrorMixin, to supply an error handler
+class AnotherController extends StateXController with StateXonErrorMixin {
   /// It's a good practice to make Controllers using the Singleton pattern
   factory AnotherController() => _this ??= AnotherController._();
   AnotherController._() : super();
@@ -21,15 +21,29 @@ class AnotherController extends StateXController {
   @override
   Future<bool> initAsync() async {
     if (tripError && ExampleAppController().allowErrors) {
+      // Turn it off now
+      ExampleAppController().allowErrors = false;
       throw AssertionError('Error in AnotherController.initAsync()!');
     }
     return true;
   }
 
+  /// Supply an 'error handler' routine if something goes wrong
+  /// in the corresponding runAsync() routine.
   @override
   void onAsyncError(FlutterErrorDetails details) {
-    if (kDebugMode) {
-      print('Called when there is an error.');
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: onAsyncError in AnotherController for $state');
+    }
+  }
+
+  /// Supply an error handler
+  @override
+  void onError(FlutterErrorDetails details) {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: onError in AnotherController for $state');
     }
   }
 
@@ -100,7 +114,8 @@ class AnotherController extends StateXController {
 
   /// Called when the user's locale has changed.
   @override
-  void didChangeLocale(Locale locale) => didChangeLocale(locale);
+  void didChangeLocales(List<Locale>? locales) =>
+      super.didChangeLocales(locales);
 
   /// Called when the system puts the app in the background or
   /// returns the app to the foreground.

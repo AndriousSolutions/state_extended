@@ -23,6 +23,11 @@ import 'package:universal_platform/universal_platform.dart'
     show UniversalPlatform;
 
 /// The extension of the State class.
+///
+/// dartdoc:
+/// {@category Get started}
+/// {@category StateX class}
+/// {@category Error handling}
 abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         // ignore: prefer_mixin
@@ -32,6 +37,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         AsyncOps,
         FutureBuilderStateMixin,
         InheritedWidgetStateMixin,
+        StateXonErrorMixin,
         RecordExceptionMixin,
         _MapOfStates
     implements
@@ -178,7 +184,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       //
       try {
         final _init = await con.initAsync();
@@ -231,10 +237,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     StateXController con;
 
     // While loop so additional controllers can be added in a previous initState()
-    final list = _controllerList.length;
+    final list = controllerList.length;
 
     while (cnt < list) {
-      con = _controllerList[cnt];
+      con = controllerList[cnt];
       // Add this to the _StateSets Map
       con._addStateToSetter(this);
       con.initState();
@@ -263,7 +269,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didChangeDependencies();
     }
 
@@ -297,7 +303,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       // Supply the State object first
       con._pushStateToSetter(this);
 
@@ -336,7 +342,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       //
       con.deactivate();
       // Pop the State object from the controller
@@ -376,7 +382,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.dispose();
     }
 
@@ -411,7 +417,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.updateNewStateX(oldState);
     }
 
@@ -429,7 +435,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didUpdateWidget(oldWidget);
     }
 
@@ -470,7 +476,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         break;
     }
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didChangeAppLifecycleState(state);
       switch (state) {
         case AppLifecycleState.inactive:
@@ -549,7 +555,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     var appResponse = AppExitResponse.exit;
 
     // All must allow an exit or it's cancelled.
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       //
       final response = await con.didRequestAppExit();
 
@@ -600,7 +606,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       final didPop = await con.didPopRoute();
       if (didPop) {
         handled = true;
@@ -641,7 +647,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       final didPush = await con.didPushRoute(route);
       if (didPush) {
         handled = true;
@@ -686,7 +692,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       final didPush = await con.didPushRouteInformation(routeInformation);
       if (didPush) {
         handled = true;
@@ -715,7 +721,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didPopNext();
     }
 
@@ -739,7 +745,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didPush();
     }
 
@@ -763,7 +769,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didPop();
     }
 
@@ -787,7 +793,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didPushNext();
     }
 
@@ -831,7 +837,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didChangeMetrics();
     }
 
@@ -870,7 +876,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didChangeTextScaleFactor();
     }
 
@@ -897,7 +903,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didChangePlatformBrightness();
     }
 
@@ -929,7 +935,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didChangeLocales(locales);
     }
 
@@ -960,7 +966,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didHaveMemoryPressure();
     }
 
@@ -990,7 +996,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       con.didChangeAccessibilityFeatures();
     }
 
@@ -1016,7 +1022,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in _controllerList) {
+    for (final con in controllerList) {
       //
       con.reassemble();
     }
@@ -1066,6 +1072,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
 /// A State object that explicitly implements a built-in InheritedWidget
 ///
+/// dartdoc:
+/// {@category StateX class}
 abstract class StateIn<T extends StatefulWidget> extends StateX<T> {
   ///
   StateIn({StateXController? controller})
@@ -1074,6 +1082,9 @@ abstract class StateIn<T extends StatefulWidget> extends StateX<T> {
 
 /// Collects Controllers of various types.
 /// A State object, by definition, then can't have multiple instances of the same type.
+///
+/// dartdoc:
+/// {@category StateX class}
 mixin _ControllersByType on State {
   /// A collection of Controllers identified by type.
   /// <type, controller>
@@ -1084,7 +1095,7 @@ mixin _ControllersByType on State {
       _mapControllerByType.containsValue(con);
 
   /// List the controllers.
-  List<StateXController> get _controllerList =>
+  List<StateXController> get controllerList =>
       _mapControllerByType.values.toList(growable: false);
 
   /// Add a list of 'Controllers'.
@@ -1144,7 +1155,7 @@ mixin _ControllersByType on State {
   StateXController? controllerById(String? id) {
     StateXController? con;
     if (id != null && id.isNotEmpty) {
-      for (final controller in _controllerList) {
+      for (final controller in controllerList) {
         if (controller.identifier == id) {
           con = controller;
           break;
@@ -1160,7 +1171,7 @@ mixin _ControllersByType on State {
     if (ids != null) {
       for (final id in ids) {
         if (id != null && id.isNotEmpty) {
-          for (final controller in _controllerList) {
+          for (final controller in controllerList) {
             if (controller.identifier == id) {
               controllers.add(controller);
               break;
@@ -1175,7 +1186,7 @@ mixin _ControllersByType on State {
   /// Returns 'the first' StateXController associated with this StateX object.
   /// Returns null if empty.
   StateXController? get rootCon {
-    final list = _controllerList;
+    final list = controllerList;
     return list.isEmpty ? null : list.first;
   }
 
@@ -1187,9 +1198,9 @@ mixin _ControllersByType on State {
     Iterable<StateXController> list;
     // In reversed chronological order
     if (reversed != null && reversed) {
-      list = _controllerList.reversed;
+      list = controllerList.reversed;
     } else {
-      list = _controllerList;
+      list = controllerList;
     }
     for (final StateXController con in list) {
       try {
@@ -1213,6 +1224,9 @@ mixin _ControllersByType on State {
 }
 
 /// Works with the collection of State objects in the App.
+///
+/// dartdoc:
+/// {@category StateX class}
 mixin _MapOfStates on State {
   /// All the State objects in this app.
   static final Map<String, StateX> _states = {};
@@ -1334,6 +1348,10 @@ mixin _MapOfStates on State {
 
 /// Your 'working' class most concerned with the app's functionality.
 /// Add it to a 'StateX' object to associate it with that State object.
+///
+/// dartdoc:
+/// {@category Get started}
+/// {@category State Object Controller}
 class StateXController with SetStateMixin, StateListener, RootState, AsyncOps {
   /// Optionally supply a State object to 'link' to this object.
   /// Thus, assigned as 'current' StateX for this object
@@ -1369,6 +1387,9 @@ class StateXController with SetStateMixin, StateListener, RootState, AsyncOps {
 
 /// Used by StateXController
 /// Allows you to call 'setState' from the 'current' the State object.
+///
+/// dartdoc:
+/// {@category State Object Controller}
 mixin SetStateMixin {
   /// Provide the setState() function to external actors
   void setState(VoidCallback fn) => _stateX?.setState(fn);
@@ -1510,7 +1531,11 @@ mixin SetStateMixin {
 /// Used to explicitly return the 'type' indicated.
 Type _type<U>() => U;
 
-/// Responsible for the event handling in all the Controllers and Views.
+/// Responsible for the event handling in all the Controllers and State objects.
+///
+/// dartdoc:
+/// {@category StateX class}
+/// {@category State Object Controller}
 mixin StateListener implements RouteAware {
   /// A unique key is assigned to all State Controllers, State objects
   /// Used in large projects to separate objects into teams.
@@ -1770,6 +1795,9 @@ mixin StateListener implements RouteAware {
 }
 
 /// Supply a FutureBuilder to a State object.
+///
+/// dartdoc:
+/// {@category StateX class}
 mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// Implement this function instead of the build() function
   /// to utilize a built-in FutureBuilder Widget.
@@ -1880,7 +1908,10 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   void onAsyncError(FlutterErrorDetails details) {}
 }
 
+/// Supplies an InheritedWidget to a State class
 ///
+/// dartdoc:
+/// {@category StateX class}
 mixin InheritedWidgetStateMixin<T extends StatefulWidget> on State<T> {
   // A flag determining whether the built-in InheritedWidget is used or not.
   late bool _useInherited;
@@ -1893,10 +1924,22 @@ mixin InheritedWidgetStateMixin<T extends StatefulWidget> on State<T> {
   // Widget passed to the InheritedWidget.
   Widget? _child;
 
-  ///
+  @override
+  void initState() {
+    super.initState();
+    if (_useInherited) {
+      // Supply an identifier to the InheritedWidget
+      _key = ValueKey<StateX>(this as StateX);
+    }
+  }
+
+  Key? _key;
+
+  /// dartdoc:
+  /// {@category StateX class}
   Widget buildF(BuildContext context) => _useInherited
       ? _StateXInheritedWidget(
-          key: ValueKey<StateX>(this as StateX),
+          key: _key,
           state: this as StateX,
           child: _child ??= buildIn(context),
         )
@@ -1905,6 +1948,9 @@ mixin InheritedWidgetStateMixin<T extends StatefulWidget> on State<T> {
   /// Compiled once and passed to an InheritedWidget.
   ///
   /// Supply the appropriate interface depending on the platform.
+  ///
+  /// dartdoc:
+  /// {@category StateX class}
   Widget buildIn(BuildContext context);
 
   /// Determine if the dependencies should be updated.
@@ -1946,6 +1992,7 @@ mixin InheritedWidgetStateMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void dispose() {
+    _key = null;
     _child = null;
     _inheritedElement = null;
     _dependencies.clear();
@@ -2001,6 +2048,11 @@ class _SetStateWidget extends StatelessWidget {
 
 /// The StateX object at the 'app level.' Used to effect the whole app by
 /// being the 'root' of first State object instantiated.
+///
+/// dartdoc:
+/// {@category Get started}
+/// {@category StateX class}
+/// {@category AppStateX class}
 abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     with _ControllersById {
   ///
@@ -2010,24 +2062,36 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     StateXController? controller,
     List<StateXController>? controllers,
     Object? object,
-  }) : super(controller: controller) {
+    // Save the current error handler
+  })  : _currentErrorFunc = FlutterError.onError,
+        super(controller: controller) {
     //Record this as the 'root' State object.
     setRootStateX(this);
     _dataObj = object;
     addList(controllers?.toList());
+    // If a tester is running, for example, don't switch out its error handler.
+    if (WidgetsBinding.instance is WidgetsFlutterBinding) {
+      // Introduce its own error handler
+      FlutterError.onError = _errorHandler;
+    }
   }
 
   /// The 'data object' available to the framework.
   Object? _dataObj;
 
+  /// Save the current Error Handler.
+  final FlutterExceptionHandler? _currentErrorFunc;
+
   @override
   void initState() {
     super.initState();
     _inheritedState = _InheritedState(this);
+    // Supply an identifier to the InheritedWidget
+    _key = ValueKey<State>(_inheritedState!);
   }
 
   // Contains the app's InheritedWidget
-  late State<StatefulWidget> _inheritedState;
+  State<StatefulWidget>? _inheritedState;
   // Contains the app's buildIn() function
   State<StatefulWidget>? _buildInState;
 
@@ -2038,7 +2102,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   Widget buildF(BuildContext context) {
     // Calls the buildIn() function
     _buildInState?.setState(() {});
-    return _StateStatefulWidget(state: _inheritedState);
+    return _StateStatefulWidget(key: _key, state: _inheritedState!);
   }
 
   /// Implement this function to compose the App's View.
@@ -2055,6 +2119,10 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   void dispose() {
     _MapOfStates._states.clear();
     _clearRootStateX();
+    _key = null;
+    _inheritedState = null;
+    // Return the original error handler
+    FlutterError.onError = _currentErrorFunc;
     super.dispose();
   }
 
@@ -2096,7 +2164,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     final notify = !_inSetStateBuilder;
     if (notify) {
       // Calls the app's InheritedWidget again
-      _inheritedState.setState(() {});
+      _inheritedState?.setState(() {});
     }
     return notify;
   }
@@ -2105,9 +2173,62 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// This 'widget function' will be called again.
   @override
   Widget state(WidgetBuilder? widgetFunc) {
-    widgetFunc ??= (_) => const SizedBox();
+    widgetFunc ??= (_) => const SizedBox(); // Display 'nothing' if not provided
     return _SetStateWidget(stateX: this, widgetFunc: widgetFunc);
   }
+
+  /// Catch any errors in the App
+  /// Free to override if you like
+  @override
+  void onError(FlutterErrorDetails details) {
+    // Don't call this routine within itself.
+    if (_inErrorRoutine) {
+      return;
+    }
+    _inErrorRoutine = true;
+
+    // call the latest SateX object's error routine
+    // Possibly the error occurred there.
+    final state = endState;
+
+    if (state != null) {
+      try {
+        final stack = details.stack?.toString();
+        if (stack != null) {
+          //
+          var name = state.toString();
+          name = name.substring(0, name.indexOf('#'));
+          // That State object's build() function was called.
+          if (state is StateX && stack.contains('$name.build')) {
+            //
+            state.onError(details);
+          }
+        }
+      } catch (e, stack) {
+        recordException(e, stack);
+      }
+      // Always test if there was an error in the error handler
+      // Include it in the error reporting as well.
+      if (hasError) {
+        _onErrorInHandler();
+      }
+    }
+    // Record to logs
+    _logError(details);
+
+    // Always test if there was an error in the error handler
+    // Include it in the error reporting as well.
+    if (hasError) {
+      _onErrorInHandler();
+    }
+
+    // Now out of the error handler
+    _inErrorRoutine = false;
+  }
+
+  /// A flag indicating we're running in the error routine.
+  /// Set to avoid infinite loop if in errors in the error routine.
+  bool _inErrorRoutine = false;
 
   /// Catch and explicitly handle the error.
   void catchError(Exception? ex) {
@@ -2119,6 +2240,57 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     if (WidgetsBinding.instance is WidgetsFlutterBinding) {
       FlutterError.onError!(FlutterErrorDetails(exception: ex));
     }
+  }
+
+  // Handle any errors in this State object.
+  void _errorHandler(FlutterErrorDetails details) {
+    // Set the original error routine. Allows the handler to throw errors.
+    FlutterError.onError = _currentErrorFunc;
+    try {
+      onError(details);
+    } catch (e) {
+      // If the handler also errors, it's throw to be handled
+      // by the original routine.
+      rethrow;
+    }
+    // If handled, return to this State object's error handler.
+    FlutterError.onError = _errorHandler;
+  }
+
+  // Notify the developer there's an error in the error handler.
+  void _onErrorInHandler() {
+    // Always test first that indeed an exception had occurred.
+    if (hasError) {
+      // Important to get the Stack Trace before it's cleared by recordException()
+      final stack = stackTrace;
+      final exception = recordException();
+      if (exception != null) {
+        final details = FlutterErrorDetails(
+          exception: exception,
+          stack: stack,
+          library: 'state_extended.dart',
+          context: ErrorDescription('inside the Error Handler itself!'),
+        );
+        try {
+          // Record the error
+          _logError(details);
+        } catch (e, stack) {
+          // Error in the final error handler? That's a pickle.
+          recordException(e, stack);
+        }
+      }
+    }
+  }
+
+  void _logError(FlutterErrorDetails details) {
+    // Don't when in DebugMode.
+    if (!kDebugMode) {
+      // Resets the count of errors to show a complete error message or an abbreviated one.
+      FlutterError.resetErrorCount();
+    }
+    // https://docs.flutter.dev/testing/errors#errors-caught-by-flutter
+    // Log the error.
+    FlutterError.presentError(details);
   }
 }
 
@@ -2144,24 +2316,39 @@ class _InheritedState extends State<_StateStatefulWidget> {
   @override
   void initState() {
     super.initState();
+    // Identifier for the app's InheritedWidget
+    _key = ValueKey<StateX>(appState);
+    // Contains the App State's buildIn() function
     _buildInState = _BuildInState(appState);
+    // Record this State object so to call its setState((){}) function later.
     appState._buildInState = _buildInState;
     // The StatefulWidget containing the app's buildIn() function
     // Assigned to a property so not to call buildIn() in this State object
-    _stateWidget = _StateStatefulWidget(state: _buildInState);
+    _stateWidget = _StateStatefulWidget(
+        key: ValueKey<State>(_buildInState!), state: _buildInState!);
   }
 
-  late State<StatefulWidget> _buildInState;
-  late Widget _stateWidget;
+  // All nullable so to clear memory at dispose()
+  Key? _key;
+  State<StatefulWidget>? _buildInState;
+  Widget? _stateWidget;
 
   @override
   Widget build(context) {
     // The app's InheritedWidget
     return _StateXInheritedWidget(
-      key: ValueKey<StateX>(appState),
+      key: _key,
       state: appState,
-      child: _stateWidget,
+      child: _stateWidget!,
     );
+  }
+
+  @override
+  void dispose() {
+    _stateWidget = null;
+    _buildInState = null;
+    _key = null;
+    super.dispose();
   }
 }
 
@@ -2195,10 +2382,11 @@ mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
   ///  <id, type>
   final Map<String, Type> _mapControllerTypes = {};
 
-  /// Never supply a public list of all the Controllers.
-  /// User must know the key identifier(s) to access it publicly.
+  /// Should not supply a public list of all the Controllers.
+  /// User must know the key identifier(s) to access it publicly
+  /// but a break; must be permitted in For loops and so...
   @override
-  List<StateXController> get _controllerList =>
+  List<StateXController> get controllerList =>
       _mapControllerById.values.toList(growable: false);
 
   /// Collect a 'StateXController'
@@ -2305,7 +2493,7 @@ mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
   /// Returns null if empty.
   @override
   StateXController? get rootCon {
-    final list = _controllerList;
+    final list = controllerList;
     return list.isEmpty ? null : list.first;
   }
 
@@ -2321,9 +2509,9 @@ mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
     Iterable<StateXController> list;
     // In reversed chronological order
     if (reversed != null && reversed) {
-      list = _controllerList.reversed;
+      list = controllerList.reversed;
     } else {
-      list = _controllerList;
+      list = controllerList;
     }
     for (final StateXController con in list) {
       try {
@@ -2350,8 +2538,9 @@ mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
 ///  Model's ScopedModelDescendant() class.
 ///  This class object will only rebuild if the App's InheritedWidget notifies it
 ///  as it is a dependency.
-///  More information:
-///  https://medium.com/flutter-community/shrine-in-mvc-7984e08d8e6b#488c
+///
+/// dartdoc:
+/// {@category AppStateX class}
 @protected
 class SetState extends StatelessWidget {
   /// Supply a 'builder' passing in the App's 'data object' and latest BuildContext object.
@@ -2386,6 +2575,10 @@ class SetState extends StatelessWidget {
 }
 
 /// Supply access to the 'Root' State object.
+///
+/// dartdoc:
+/// {@category StateX class}
+/// {@category State Object Controller}
 mixin RootState {
   ///Important to record the 'root' StateX object. Its an InheritedWidget!
   bool setRootStateX(StateX state) {
@@ -2447,7 +2640,21 @@ mixin RootState {
   }
 }
 
+/// Supply an 'error handler' routine if something goes wrong.
+/// It need not be implemented, but it's their for your consideration.
+///
+/// dartdoc:
+/// {@category StateX class}
+/// {@category Error handling}
+mixin StateXonErrorMixin {
+  /// Offer an error handler
+  void onError(FlutterErrorDetails details) {}
+}
+
 /// Record an exception
+///
+/// dartdoc:
+/// {@category StateX class}
 mixin RecordExceptionMixin {
   /// Return the 'last' error if any.
   Exception? recordException([Object? error, StackTrace? stack]) {
@@ -2497,6 +2704,10 @@ mixin RecordExceptionMixin {
 }
 
 /// Supply the Async API
+///
+/// dartdoc:
+/// {@category StateX class}
+/// {@category State Object Controller}
 mixin AsyncOps {
   /// Used to complete asynchronous operations
   Future<bool> initAsync() async => true;
@@ -2535,6 +2746,10 @@ mixin AsyncOps {
 /// ### Example
 ///
 ///     final String id = Uuid().generateV4();
+///
+/// dartdoc:
+/// {@category StateX class}
+/// {@category State Object Controller}
 class Uuid {
   final Random _random = Random();
 

@@ -8,6 +8,8 @@ export 'package:example/src/view/app/my_app.dart';
 
 export 'package:example/src/view/home/_view.dart';
 
+export 'package:flutter/cupertino.dart' show CupertinoSwitch;
+
 /// StateSetter is also defined in state_extended.dart
 export 'package:flutter/material.dart' hide StateSetter;
 

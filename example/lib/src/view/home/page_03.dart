@@ -7,7 +7,6 @@ import 'package:example/src/another_app/view.dart' as i;
 import 'package:example/src/controller.dart';
 
 import 'package:example/src/view.dart';
-import 'package:flutter/foundation.dart';
 
 /// The third page displayed in this app.
 class Page3 extends StatefulWidget {
@@ -22,6 +21,8 @@ class _Page3State extends StateX<Page3> {
   //
   int count = 0;
 
+  /// You could use the buildIn() function here instead
+  /// It'll behave has the build() function
   @override
   Widget build(BuildContext context) => _buildPage3(
         count: count,

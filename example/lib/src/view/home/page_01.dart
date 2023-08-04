@@ -19,7 +19,14 @@ class Page1 extends StatefulWidget {
 class Page1State extends StateX<Page1> {
   /// Supply a controller to this State object
   /// so to call its setState() function below.
-  Page1State() : super(controller: Controller());
+  Page1State()
+      : super(
+          controller: Controller(),
+          useInherited: Controller().useInherited,
+        ) {
+    // Add some additional controllers if you like
+    addList([AnotherController(), YetAnotherController()]);
+  }
 
   /// The counter
   int count = 0;
@@ -70,43 +77,133 @@ class Page1State extends StateX<Page1> {
     // Since, I'm confident such a controller will be retrieved
     // I can shortened the process like this.
     anotherController = controllerById(id) as AnotherController;
+
+    /// Note, this controller is present for the life of the app.
+    /// InheritedWidget switch will reset count, but the controller can saves the count
+    final con = controller as Controller;
+    count = con.page1Count;
+    con.page1Count = 0;
   }
 
-  /// Ignore class, BuildPage
-  /// BuildPage is just a 'generic' widget I made for each page to highlight
-  /// the parameters it takes in for demonstration purposes.
+  ///
   @override
-  Widget build(context) => BuildPage(
-        label: '1',
-        count: count,
-        counter: () {
-          count++;
+  Widget buildIn(context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Three-page example'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          key: const Key('+'),
+          onPressed: () {
+            //
+            // No error handler when testing
+            if (WidgetsBinding.instance is WidgetsFlutterBinding) {
+              // Deliberately throw an error to demonstrate error handling.
+              throw Exception('Fake error to demonstrate error handling!');
+            }
 
-          /// Commented out since the controller has access to this State object.
+            count++;
+
+            /// Commented out since the controller has access to this State object.
 //          setState(() {});
-          /// Look how this Controller has access to this State object!
-          /// The incremented counter will not update otherwise! Powerful!
-          /// Comment out and the counter will appear not to work.
-          controller?.setState(() {});
-        },
-        row: (BuildContext context) => [
-          const SizedBox(),
-          Flexible(
-            child: ElevatedButton(
-              key: const Key('Page 2'),
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => const Page2(),
-                  ),
-                );
-              },
-              child: const Text(
-                'Page 2',
+            /// Look how this Controller has access to this State object!
+            /// The incremented counter will not update otherwise! Powerful!
+            /// Comment out and the counter will appear not to work.
+            controller?.setState(() {});
+          },
+          child: const Icon(Icons.add),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Flexible(
+              child: Padding(
+                padding: EdgeInsets.only(top: 50),
+                child: Text(
+                  'You have pushed the button this many times:',
+                ),
               ),
             ),
-          ),
-        ],
+            Flexible(
+              child: state(
+                // Will build this one lone widget
+                (context) => Text(
+                  '$count',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 100),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const SizedBox(),
+                  Flexible(
+                    child: ElevatedButton(
+                      key: const Key('Page 2'),
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => const Page2(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Page 2',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Use built-in InheritedWidget'),
+                Builder(builder: (context) {
+                  final con = controller as Controller;
+                  return CupertinoSwitch(
+                    key: const Key('InheritedSwitch'),
+                    value: con.useInherited,
+                    onChanged: (v) {
+                      // Save the setting
+                      con.useInherited = v;
+                      // Save the count
+                      con.page1Count = count;
+                      // Both access the 'first' StateX object
+                      startState?.setState(() {});
+                      rootState?.setState(() {});
+                    },
+                  );
+                }),
+              ],
+            ),
+          ],
+        ),
       );
+
+  @override
+  void onError(FlutterErrorDetails details) {
+    //
+    final stack = details.stack;
+
+    // Determine the specific error
+    if (stack != null && stack.toString().contains('handleTap')) {
+      // Increment the count like no error occurred
+      count++;
+
+      /// Look how this Controller has access to this State object!
+      controller?.setState(() {});
+    }
+
+    /// You have the option to implement an error handler to individual controllers
+    for (final con in controllerList) {
+      // If it has the onError() function
+      if (con is StateXonErrorMixin) {
+        (con as StateXonErrorMixin).onError(details);
+      }
+    }
+  }
 }

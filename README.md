@@ -17,25 +17,59 @@ StateX should not be confused with GetX, however, they do have their similaritie
 In particular, both involve 'controllers' that generally contain the 'business logic' involved in any given app.
 GetX has its GetxController class while StateX has its StateXController class.
 
+<img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/716e2d31-1cfe-4d79-bed0-fe77dd02b71b" alt="statecontroller" width="700" height="277">
+
+The comparison stops there.
+
 ### Installing
 
 I don't always like the version number suggested in the '[Installing](https://pub.dev/packages/state_extended#-installing-tab-)' page.
-Instead, always go up to the '**major**' semantic version number when installing my library packages. This means always entering a version number trailing with two zero, '**.0.0**'. This allows you to take in any '**minor**' versions introducing new features as well as any '**patch**' versions that involves bugfixes. Semantic version numbers are always in this format: **major.minor.patch**.
+Instead, always go up to the '**minor**' semantic version number when installing my library packages.
+This means always entering a version number trailing with one zero, '**.0**'.
+This allows you to take in any '**patch**' versions that involves bugfixes.
+Semantic version numbers are always in this format: **major.minor.patch**.
 
 1. **patch** - I've made bugfixes
 2. **minor** - I've introduced new features
-3. **major** - I've essentially made a new app. It's broken backwards-compatibility and has a completely new user experience. You won't get this version until you increment the **major** number in the pubspec.yaml file.
+3. **major** - I've essentially made a new app. 
+It's broken backwards-compatibility and has a completely new user experience.
+You won't get this version until you increment the **major** number in the pubspec.yaml file.
 
 And so, in this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-  state_extended:^4.1.0
+  state_extended:^4.2.0
 ```
-
-## Documentation
-
 Turn to this free Medium article for a full overview of the package plus examples:
-[![StateX](https://user-images.githubusercontent.com/32497443/179269220-80efea47-b852-47c0-a073-b22f502dc437.jpg)](https://medium.com/@andrious/statex-b8f57015188f)
+<a target="_blank" rel="noopener noreferrer" href="https://medium.com/@andrious/statex-b8f57015188f"><img align="right" src="https://user-images.githubusercontent.com/32497443/179269220-80efea47-b852-47c0-a073-b22f502dc437.jpg" alt="StateXMedium" width="500" height="245"></a>
+## Documentation
+<ul style="list-style-type: none">
+   <li id="started"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/Get%20started-topic.html">Get&nbsp;started</a></li>
+   <li id="statex"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/StateX%20class-topic.html">StateX class</a></li>
+   <li id="controller"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/State%20Object%20Controller-topic.html">State&nbsp;Object&nbsp;Controller</a></li>
+   <li id="appstate"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/AppState%20class-topic.html">AppState class</a></li>
+   <li id="app-prefs"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/App's%20Preferences-topic.html">App's&nbsp;Preferences</a></li>
+   <li id="app-object"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/App%20object-topic.html">App object</a></li>
+   <li id="error"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/Error%20handling-topic.html">Error&nbsp;handling</a></li>
+   <li id="testing"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/Testing-topic.html">Testing</a></li>
+   <li id="extensions"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/Extensions-topic.html">Extensions</a></li>
+   <li id="device"><a href="https://pub.dev/documentation/fluttery_framework/latest/topics/Device%20Information-topic.html">Device Information</a></li>
+</ul>
+
+The State class is Flutter’s main player in State Management,
+extends the capabilities of Flutter’s own State class with the StateX class.
+
+Doing so ‘rebuilds’ that portion of the screen involving that State object and reflects the changes made to the state object.
+
+In the next screenshot below, you can see highlighted with red arrows that the Controller object is referenced here and there in the State object’s build() function. By design, the controller is providing the data and the event handling necessary for the app to function correctly. However, do you see something missing in the screenshot? There’s no setState() function call?! It’s in the controller and called in the con.onPressed() function.
+
+You’re in a class that can contain all the mutable properties and business logic you want as well as provide state management! It further has access to the State object’s own properties: widget, mounted, and context. Imagine what you’re controller can do with access to those properties as well.
+
+Control The State
+When using this package, through the course of an app’s lifecycle, a controller can be registered to any number of StateX objects. A StateXController object works with ‘the last’ State object it’s been assigned to but keeps a reference of any and all past StateX objects it’s worked with previously in the Widget tree.
+
+When a screen closes (i.e. the current StateX object is disposed of), the controller focus points back to the previous StateX it was assigned to. This allows, for example, for one controller to sustain the app’s business logic for the duration of the running app while conveying that logic across any number of screens (i.e. any number of StateX objects).
+
 
 ## Example Code
 Further examples can be found in its Github repository: 

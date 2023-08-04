@@ -27,17 +27,6 @@ class Page2State extends StateX<Page2> {
   /// The controller reference property
   late Controller con;
 
-  // @override
-  // Future<bool> runAsync() async {
-  //   final init = await super.runAsync();
-  //   //
-  //   if (ExampleAppController().allowErrors) {
-  //     throw AssertionError(
-  //         'Testing handling of error thrown in Page2State.initAsync()');
-  //   }
-  //   return init;
-  // }
-
   /// This function is not really necessary for th app to work
   /// Merely demonstrating the package's many capabilities to you.
   @override
@@ -93,61 +82,59 @@ class Page2State extends StateX<Page2> {
     assert(rootState is AppStateX, "Should be the 'root' state object.");
   }
 
-  /// Define the 'child' Widget that will be passed to the InheritedWidget above.
+  /// Define the 'child' Widget that will be called by the built-in FutureBuilder.
+  /// Ignore BuildPage(). It's used only to highlight the other features in this page
   @override
-  Widget buildF(BuildContext context) {
-    /// Ignore BuildPage(). It's used only to highlight the other features in this page
-    return BuildPage(
-      label: '2',
-      count: con.count,
-      counter: con.onPressed,
-      row: (context) => [
-        Flexible(
-          child: ElevatedButton(
-            key: const Key('Page 1'),
-            style: flatButtonStyle,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text(
-              'Page 1',
+  Widget buildF(BuildContext context) => BuildPage(
+        label: '2',
+        count: con.count,
+        counter: con.onPressed,
+        row: (context) => [
+          Flexible(
+            child: ElevatedButton(
+              key: const Key('Page 1'),
+              style: flatButtonStyle,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Page 1',
+              ),
             ),
           ),
-        ),
-        Flexible(
-          child: ElevatedButton(
-            key: const Key('Page 3'),
-            style: flatButtonStyle,
-            onPressed: () async {
-              //
-              await Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                      builder: (BuildContext context) => const Page3()));
+          Flexible(
+            child: ElevatedButton(
+              key: const Key('Page 3'),
+              style: flatButtonStyle,
+              onPressed: () async {
+                //
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                        builder: (BuildContext context) => const Page3()));
 
-              /// A good habit to get into. Refresh the screen again.
-              /// In this case, to show the count may have changed.
-              setState(() {});
-            },
-            child: const Text(
-              'Page 3',
+                /// A good habit to get into. Refresh the screen again.
+                /// In this case, to show the count may have changed.
+                setState(() {});
+              },
+              child: const Text(
+                'Page 3',
+              ),
             ),
           ),
-        ),
-      ],
-      column: (context) => [
-        const Flexible(child: Text("Has a 'data source' to save the count")),
-      ],
-      persistentFooterButtons: <Widget>[
-        ElevatedButton(
-          key: const Key('Page 1 Counter'),
-          style: flatButtonStyle,
-          onPressed: onPressed,
-          child: const Text('Page 1 Counter'),
-        ),
-      ],
-    );
-  }
+        ],
+        column: (context) => [
+          const Flexible(child: Text("Has a 'data source' to save the count")),
+        ],
+        persistentFooterButtons: <Widget>[
+          ElevatedButton(
+            key: const Key('Page 1 Counter'),
+            style: flatButtonStyle,
+            onPressed: onPressed,
+            child: const Text('Page 1 Counter'),
+          ),
+        ],
+      );
 
   /// Supply a public method to be accessed in Page 3.
   /// Calling another State object's function for demonstration purposes

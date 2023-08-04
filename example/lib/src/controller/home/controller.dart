@@ -23,6 +23,12 @@ class Controller extends StateXController {
   /// Note, the count comes from a separate class, _Model.
   int get count => _model.counter;
 
+  /// The flag indicating if an InheritedWidget is to used.
+  bool useInherited = false;
+
+  /// Page1 count is saved periodically
+  int page1Count = 0;
+
   /// Increment and then call the State object's setState() function to reflect the change.
   void onPressed() => incrementCounter();
 
@@ -54,30 +60,6 @@ class Controller extends StateXController {
 
   /// **************  Life cycle events ****************
 
-  /// Called to complete any asynchronous operations.
-  @override
-  Future<bool> initAsync() async {
-    final init = await super.initAsync();
-    //
-    if (ExampleAppController().allowErrors) {
-      throw AssertionError(
-          'Testing handling error thrown in Page1State.initAsync()');
-    }
-    return init;
-  }
-
-  /// Supply an 'error handler' routine if something goes wrong
-  /// in the corresponding runAsync() routine.
-  @override
-  void onAsyncError(FlutterErrorDetails details) {
-    // Turn it off now
-    ExampleAppController().allowErrors = false;
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: onAsyncError in $state');
-    }
-  }
-
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.
   @override
@@ -95,7 +77,7 @@ class Controller extends StateXController {
   void deactivate() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: deactivate in $state');
+      print('############ Event: deactivate in Controller for $state');
     }
   }
 
@@ -105,7 +87,7 @@ class Controller extends StateXController {
   void activate() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: activate in $state');
+      print('############ Event: activate in Controller for $state');
     }
   }
 
@@ -128,7 +110,8 @@ class Controller extends StateXController {
   void pausedLifecycleState() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: pausedLifecycleState in $state');
+      print(
+          '############ Event: pausedLifecycleState in Controller for $state');
     }
   }
 
@@ -137,7 +120,8 @@ class Controller extends StateXController {
   void resumedLifecycleState() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: resumedLifecycleState in $state');
+      print(
+          '############ Event: resumedLifecycleState in Controller for $state');
     }
   }
 
@@ -150,7 +134,7 @@ class Controller extends StateXController {
     /// This new StateX object may need to be updated with the old State object
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: updateNewStateX in $state');
+      print('############ Event: updateNewStateX in Controller for $state');
     }
   }
 
@@ -159,7 +143,8 @@ class Controller extends StateXController {
   void inactiveLifecycleState() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: inactiveLifecycleState in $state');
+      print(
+          '############ Event: inactiveLifecycleState in Controller for $state');
     }
   }
 
@@ -169,7 +154,8 @@ class Controller extends StateXController {
   void detachedLifecycleState() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: detachedLifecycleState in $state');
+      print(
+          '############ Event: detachedLifecycleState in Controller for $state');
     }
   }
 
@@ -178,7 +164,7 @@ class Controller extends StateXController {
   void didUpdateWidget(StatefulWidget oldWidget) {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didUpdateWidget in $state');
+      print('############ Event: didUpdateWidget in Controller for $state');
     }
   }
 
@@ -189,7 +175,8 @@ class Controller extends StateXController {
   void didChangeDependencies() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didChangeDependencies in $state');
+      print(
+          '############ Event: didChangeDependencies in Controller for $state');
     }
   }
 
@@ -199,7 +186,7 @@ class Controller extends StateXController {
   void reassemble() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: reassemble in $state');
+      print('############ Event: reassemble in Controller for $state');
     }
   }
 
@@ -210,7 +197,7 @@ class Controller extends StateXController {
   Future<bool> didPopRoute() async {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didPopRoute in $state');
+      print('############ Event: didPopRoute in Controller for $state');
     }
     return super.didPopRoute();
   }
@@ -221,7 +208,7 @@ class Controller extends StateXController {
   Future<bool> didPushRoute(String route) async {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didPushRoute in $state');
+      print('############ Event: didPushRoute in Controller for $state');
     }
     return super.didPushRoute(route);
   }
@@ -232,7 +219,8 @@ class Controller extends StateXController {
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didPushRouteInformation in $state');
+      print(
+          '############ Event: didPushRouteInformation in Controller for $state');
     }
     return super.didPushRouteInformation(routeInformation);
   }
@@ -242,7 +230,7 @@ class Controller extends StateXController {
   void didPopNext() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didPopNext in $state');
+      print('############ Event: didPopNext in Controller for $state');
     }
     setState(() {});
   }
@@ -252,7 +240,7 @@ class Controller extends StateXController {
   void didPush() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didPush in $state');
+      print('############ Event: didPush in Controller for $state');
     }
     setState(() {});
   }
@@ -262,7 +250,7 @@ class Controller extends StateXController {
   void didPop() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didPop in $state');
+      print('############ Event: didPop in Controller for $state');
     }
     setState(() {});
   }
@@ -272,7 +260,7 @@ class Controller extends StateXController {
   void didPushNext() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didPushNext in $state');
+      print('############ Event: didPushNext in Controller for $state');
     }
     setState(() {});
   }
@@ -283,7 +271,7 @@ class Controller extends StateXController {
   void didChangeMetrics() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didChangeMetrics in $state');
+      print('############ Event: didChangeMetrics in Controller for $state');
     }
   }
 
@@ -292,7 +280,8 @@ class Controller extends StateXController {
   void didChangeTextScaleFactor() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didChangeTextScaleFactor in $state');
+      print(
+          '############ Event: didChangeTextScaleFactor in Controller for $state');
     }
   }
 
@@ -301,7 +290,8 @@ class Controller extends StateXController {
   void didChangePlatformBrightness() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didChangePlatformBrightness in $state');
+      print(
+          '############ Event: didChangePlatformBrightness in Controller for $state');
     }
   }
 
@@ -310,7 +300,7 @@ class Controller extends StateXController {
   void didChangeLocales(List<Locale>? locales) {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didChangeLocale in $state');
+      print('############ Event: didChangeLocale in Controller for $state');
     }
   }
 
@@ -323,7 +313,8 @@ class Controller extends StateXController {
     /// AppLifecycleState.resume
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didChangeAppLifecycleState in ${this.state}');
+      print(
+          '############ Event: didChangeAppLifecycleState in Controller for ${this.state}');
     }
   }
 
@@ -332,7 +323,8 @@ class Controller extends StateXController {
   void didHaveMemoryPressure() {
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didHaveMemoryPressure in $state');
+      print(
+          '############ Event: didHaveMemoryPressure in Controller for $state');
     }
   }
 
@@ -342,7 +334,8 @@ class Controller extends StateXController {
     // inDebugger is deprecated but still tested here. Use inDebugMode instead.
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: didChangeAccessibilityFeatures in $state');
+      print(
+          '############ Event: didChangeAccessibilityFeatures in Controller for $state');
     }
   }
 }
