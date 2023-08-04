@@ -1,5 +1,5 @@
 
-## 4.2.0+1
+## 4.2.0+2
 August 04, 2023
 - Introduced onError(details) {} to the StateX class
 - _key = ValueKey<StateX>() with the InheritedWidget, _StateXInheritedWidget

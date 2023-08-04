@@ -71,7 +71,8 @@ class AnotherController extends StateXController with StateXonErrorMixin {
 
   /// Override this method to respond when the [StatefulWidget] is recreated.
   @override
-  void didUpdateWidget(StatefulWidget oldWidget) => didUpdateWidget(oldWidget);
+  void didUpdateWidget(StatefulWidget oldWidget) =>
+      super.didUpdateWidget(oldWidget);
 
   /// Called when this [StateX] object is first created immediately after [initState].
   /// Otherwise called only if this [State] object's Widget is a dependency of
