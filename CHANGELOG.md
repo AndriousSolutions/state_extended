@@ -1,9 +1,10 @@
 
-## 4.2.0+3
+## 4.2.0+4
 August 04, 2023
 - Introduced onError(details) {} to the StateX class
 - _key = ValueKey<StateX>() with the InheritedWidget, _StateXInheritedWidget
 - List<StateXController> get controllerList is made available.
+- Increase the testing coverage over the source code
 - Introduce more documentation
 
 ## 4.1.1

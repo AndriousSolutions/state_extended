@@ -46,11 +46,11 @@ void testMyApp() {
       /// Reset the counter to zero on Page 1
       await resetPage1Count(tester);
 
-      /// Testing the StateMVC, ControllerMVC, and ListenerMVC
-      await unitTesting(tester);
-
       /// Now allow for errors to occur even during the testing
       _integrationTest.allowErrors = true;
+
+      /// Unit testing the StateX and StateXController
+      await unitTesting(tester);
 
       // Find its StatefulWidget first then the 'type' of State object.
       final appState = tester.firstState<AppStateX>(find.byType(MyApp));
@@ -108,7 +108,7 @@ class IntegrationTestsBinder extends IntegrationTestWidgetsFlutterBinding {
   void reportExceptionNoticed(FlutterErrorDetails exception) {
     //
     if (allowErrors) {
-      // 'Remove' the error shortly after it occurs to allow for possibly anothers.
+      // 'Remove' the error shortly after it occurs to allow for others.
       Future.delayed(const Duration(milliseconds: 3), () {
         // Only attempt the delay while still 'testing' or testing will fail.
         if (inTest) {

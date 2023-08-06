@@ -59,6 +59,14 @@ class Controller extends StateXController {
   }
 
   /// **************  Life cycle events ****************
+  ///
+  ///
+
+  @override
+  Future<bool> initAsync() async {
+    // Return false to test such a circumstance
+    return !ExampleAppController().allowErrors;
+  }
 
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.

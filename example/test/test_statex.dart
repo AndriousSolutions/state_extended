@@ -47,6 +47,8 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(each, isFalse, reason: _location);
 
+  expect(stateObj.useInherited, isFalse, reason: _location);
+
   StateXController? con = stateObj.controller!;
 
   expect(con, isA<ExampleAppController>());
@@ -57,7 +59,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(stateObj, isA<AppStateX>(), reason: _location);
 
   // The first State object is itself --- _MyAppState
-  AppStateX appState = stateObj.rootState!;
+  var appState = stateObj.rootState!;
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
@@ -118,19 +120,13 @@ Future<void> testsStateX(WidgetTester tester) async {
   // As well as the base class, ControllerMVC
   expect(con, isA<StateXController>(), reason: _location);
 
+  // Test listControllers
+  appState.listControllers([keyId]);
+
   // You can retrieve a State object by the 'type' of its StatefulWidget
   appState = con!.stateOf<MyApp>() as AppStateX;
 
   expect(appState, isA<AppStateX>(), reason: _location);
-
-  /// inheritedType not longer necessary
-//   if (appState.inheritedType is InheritedWidget) {
-//     // Return the type of 'Inherited Widget' used.
-//     expect(appState.inheritedType, isA<InheritedWidget>(), reason: _location);
-//   }
-
-  // // Testing for Test Coverage. It's the true setState() function for appState
-  // appState.setSuperState(() {});
 
   // The 'state' property is the Controller's current State object
   // it is working with.
@@ -141,6 +137,14 @@ Future<void> testsStateX(WidgetTester tester) async {
   StatefulWidget widget = stateObj.widget;
 
   expect(widget, isA<MyApp>(), reason: _location);
+
+  each = stateObj.forEach((con) {
+    if (con is YetAnotherController) {
+      throw AssertionError('Error in forEach()!');
+    }
+  });
+
+  stateObj.listControllers([keyId]);
 
   // Returns the most recent BuildContext/Element created in the App
   context = appState.endState!.context;
@@ -241,6 +245,18 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(id, isNotEmpty, reason: _location);
 
+  try {
+    // Attempt to add the same controller again. (Not factory constructor)
+    stateObj.add(TestingController());
+    //ignore: avoid_catching_errors
+  } on AssertionError catch (e) {
+    // Ignore the error. It was anticipated.
+    if (!e.message
+        .toString()
+        .contains('Multiple instances of the same Controller class')) {
+      rethrow;
+    }
+  }
   final keyList = stateObj.addList(null);
 
   expect(keyList, isEmpty, reason: _location);
@@ -248,6 +264,11 @@ Future<void> testsStateX(WidgetTester tester) async {
   final removed = stateObj.removeByKey(id);
 
   expect(removed, isTrue, reason: _location);
+
+  // It's been removed. Returns null
+  final noController = stateObj.controllerByType<TestingController>();
+
+  expect(noController, isNull, reason: _location);
 
   // Is the widget mounted?
   final mounted = stateObj.mounted;
@@ -259,6 +280,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   var count = 0;
 
+  // Test forEachState
   each = stateObj.forEachState((state) {
     count++;
   });
@@ -296,7 +318,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(boolean, isA<bool>(), reason: _location);
 
   boolean = await stateObj.didPushRouteInformation(RouteInformation(
-      location: WidgetsBinding.instance.window.defaultRouteName));
+      location: WidgetsBinding.instance.platformDispatcher.defaultRouteName));
 
   expect(boolean, isFalse, reason: _location);
 
@@ -341,11 +363,15 @@ Future<void> testsStateX(WidgetTester tester) async {
   stateObj.add(null);
 
   stateObj.setState(() {});
+
+  // Unit test function
+  await stateObj.didRequestAppExit();
 }
 
 /// Merely a 'tester' Controller used in the function above.
 class TestingController extends StateXController {
-  factory TestingController() => _this ??= TestingController._();
-  TestingController._();
-  static TestingController? _this;
+  /// No factory to test multiple attempts of add a Controller to StateX
+  // factory TestingController() => _this ??= TestingController._();
+  // TestingController._();
+  // static TestingController? _this;
 }

@@ -6,14 +6,18 @@ dartdoc:
       markdown: doc/02_statex.md
     "State Object Controller":
       markdown: doc/03_controllers.md
+    "Built-in FutureBuilder":
+      markdown: doc/04_futurebuilder.md
+    "Built-in InheritedWidget":
+      markdown: doc/05_inheritedwidget.md
     "Event handling":
-      markdown: doc/04_event_handling.md
+      markdown: doc/06_event_handling.md
     "AppStateX class":
-      markdown: doc/05_appstate.md
+      markdown: doc/07_appstate.md
     "Error handling":
-      markdown: doc/07_error-handling.md
+      markdown: doc/08_error-handling.md
     "Testing":
-      markdown: doc/08_testing.md
+      markdown: doc/09_testing.md
 
   categoryOrder:
     - "Get started"

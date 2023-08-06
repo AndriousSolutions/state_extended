@@ -9,9 +9,9 @@ import 'test_statex.dart';
 
 Future<void> unitTesting(WidgetTester tester) async {
 //
-  /// Tests StateMVC class
+  /// Tests StateX class
   await testsStateX(tester);
 
-  /// Tests ControllerMVC class
+  /// Tests StateXController class
   testsController(tester);
 }

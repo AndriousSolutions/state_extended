@@ -17,14 +17,31 @@ class Page3 extends StatefulWidget {
   State createState() => _Page3State();
 }
 
-class _Page3State extends StateX<Page3> {
+class _Page3State extends StateIn<Page3> {
   //
   int count = 0;
+
+  // Place a breakpoint here from your favorite IDE and see how it works.
+  @override
+  Widget build(BuildContext context) => super.build(context);
+
+  // Place a breakpoint here from your favorite IDE and see how it works.
+  @override
+  Widget buildF(BuildContext context) => super.buildF(context);
 
   /// You could use the buildIn() function here instead
   /// It'll behave has the build() function
   @override
-  Widget build(BuildContext context) => _buildPage3(
+  Widget buildIn(BuildContext context) {
+    // Comment out this line, and the counter is suddenly not work
+    // state() is a widget that depends on the State InheritedWidget
+    // it will rebuild but only if the InheritedWidget is called again by , notifyClients()
+    return state(_buildIn);
+    // That's because _build() is never called again by the InheritedWidget.
+    return _buildIn(context);
+  }
+
+  Widget _buildIn(BuildContext context) => _buildPage3(
         count: count,
         newKey: () {
           // Both access the 'first' StateX object
@@ -32,7 +49,8 @@ class _Page3State extends StateX<Page3> {
           rootState?.setState(() {});
         },
         counter: () {
-          setState(() => count++);
+          count++;
+          notifyClients();
         },
         page1counter: () {
           // Merely instantiating the StatefulWidget to call its function.

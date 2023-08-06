@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:ui' show AppExitResponse;
+
 import 'package:example/src/controller.dart'
     show ExampleAppController, StateXController;
 
@@ -103,7 +105,11 @@ class AnotherController extends StateXController with StateXonErrorMixin {
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   @override
-  void didChangeMetrics() => super.didChangeMetrics();
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    // call setState() function to test State object
+    rootState?.setState(() {});
+  }
 
   /// Called when the platform's text sizes in the application.
   @override
@@ -131,6 +137,18 @@ class AnotherController extends StateXController with StateXonErrorMixin {
   /// Called when the system is running low on memory.
   @override
   void didHaveMemoryPressure() => super.didHaveMemoryPressure();
+
+  /// Called when a request is received from the system to exit the application.
+  /// Exiting the application can proceed with
+  ///    AppExitResponse.exit;
+  /// Cancel and do not exit the application with
+  ///    AppExitResponse.cancel;
+  @override
+  Future<AppExitResponse> didRequestAppExit() async {
+    /// Cancel the exit and instead call setState() function
+    setState(() {});
+    return AppExitResponse.cancel;
+  }
 
   /// Called when the system changes the set of active accessibility features.
   @override

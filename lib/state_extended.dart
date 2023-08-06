@@ -25,9 +25,13 @@ import 'package:universal_platform/universal_platform.dart'
 /// The extension of the State class.
 ///
 /// dartdoc:
+/// {@category Testing}
 /// {@category Get started}
 /// {@category StateX class}
 /// {@category Error handling}
+/// {@category Event handling}
+/// {@category Built-in FutureBuilder}
+/// {@category Built-in InheritedWidget}
 abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         // ignore: prefer_mixin
@@ -187,8 +191,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final con in controllerList) {
       //
       try {
-        final _init = await con.initAsync();
-        if (!_init) {
+        final init = await con.initAsync();
+        if (!init) {
           // Note the failure but ignore it
           final e = Exception('${con.runtimeType}.initAsync() returned false!');
           _initAsyncError(e, con);
@@ -474,6 +478,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         resumed = true; // The StateX object now resumed will be re-created.
         resumedLifecycleState();
         break;
+      default:
+      // WARNING: Missing case clause for 'hidden'??
     }
 
     for (final con in controllerList) {
@@ -491,6 +497,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         case AppLifecycleState.resumed:
           con.resumedLifecycleState();
           break;
+        default:
+        // WARNING: Missing case clause for 'hidden'??
       }
     }
 
@@ -1118,7 +1126,10 @@ mixin _ControllersByType on State {
     } else {
       id = con.identifier;
       final type = con.runtimeType;
-      if (!_mapControllerByType.containsKey(type)) {
+      if (_mapControllerByType.containsKey(type)) {
+        // Indicate is was not added.
+        id = '';
+      } else {
         _mapControllerByType.addAll({type: con});
       }
     }
@@ -1279,7 +1290,7 @@ mixin _MapOfStates on State {
   /// Loop through the list and return the next available State object
   StateX? _nextStateX({bool? reversed}) {
     reversed = reversed != null && reversed;
-    StateX? _state;
+    StateX? nextState;
     Iterable<StateX> list;
     if (reversed) {
       list = _MapOfStates._states.values.toList(growable: false).reversed;
@@ -1288,11 +1299,11 @@ mixin _MapOfStates on State {
     }
     for (final StateX state in list) {
       if (state.mounted && !state.deactivated) {
-        _state = state;
+        nextState = state;
         break;
       }
     }
-    return _state;
+    return nextState;
   }
 
   /// To externally 'process' through the State objects.
@@ -1350,7 +1361,9 @@ mixin _MapOfStates on State {
 /// Add it to a 'StateX' object to associate it with that State object.
 ///
 /// dartdoc:
+/// {@category Testing}
 /// {@category Get started}
+/// {@category Event handling}
 /// {@category State Object Controller}
 class StateXController with SetStateMixin, StateListener, RootState, AsyncOps {
   /// Optionally supply a State object to 'link' to this object.
@@ -1535,6 +1548,7 @@ Type _type<U>() => U;
 ///
 /// dartdoc:
 /// {@category StateX class}
+/// {@category Event handling}
 /// {@category State Object Controller}
 mixin StateListener implements RouteAware {
   /// A unique key is assigned to all State Controllers, State objects
@@ -1798,6 +1812,7 @@ mixin StateListener implements RouteAware {
 ///
 /// dartdoc:
 /// {@category StateX class}
+/// {@category Built-in FutureBuilder}
 mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// Implement this function instead of the build() function
   /// to utilize a built-in FutureBuilder Widget.
@@ -1912,6 +1927,7 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
 ///
 /// dartdoc:
 /// {@category StateX class}
+/// {@category Built-in InheritedWidget}
 mixin InheritedWidgetStateMixin<T extends StatefulWidget> on State<T> {
   // A flag determining whether the built-in InheritedWidget is used or not.
   late bool _useInherited;
@@ -2655,6 +2671,7 @@ mixin StateXonErrorMixin {
 ///
 /// dartdoc:
 /// {@category StateX class}
+/// {@category Error handling}
 mixin RecordExceptionMixin {
   /// Return the 'last' error if any.
   Exception? recordException([Object? error, StackTrace? stack]) {

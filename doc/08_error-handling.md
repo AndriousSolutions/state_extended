@@ -2,7 +2,7 @@
 
 Any errors that may occur in a StateX object is directed to its function, <b>onError</b>().
 Depending on whether it's a particular exception that can be handled, or an unanticipated error
-that will cause the app to hang and or terminate, the <b>onError</b>() will first receive the details.
+that will cause the app to terminate, the <b>onError</b>() will first receive the details.
 This is an opportunity for you to close any critical resources or service and 'fail gracefully'
 before the error is then recorded in the device logs.
 ```Dart
@@ -22,24 +22,24 @@ before the error is then recorded in the device logs.
     </tbody>
 </table>
 <img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/e5ccb8a5-6f25-441e-8daa-3fcd7ab3466d" width="171" height="357">
-When starting up the example app that accompanies the state_extended package,
+When starting up the example app that accompanies the <b>state_extended</b> package,
 you're presented with a variation of the counter app.
-It's three pages of counter apps each with their own feature to convey.
-With the first page, for example, one is the handling an error every time you press the '+' button.
-The error is caught and the count incremented regardless. 
-That's because the error was anticipated. It's recorded and then the app continues as intended.
-The State object, _Page1State_, catches this particular error in its <b>onError</b>() function.
+It's three pages of counter apps each highlighting particular functions and features.
+With the first page, for example, one feature demonstrated is the handling of an error every time you press the '+' button.
+The error is caught and yet the count incremented regardless. 
+Because the error was anticipated, it's recorded and then the app increments as intended.
+The State object, <i>Page1State</i>, catches this particular error in its <b>onError</b>() function.
 
 In the first screenshot below, is of the <b>FloatingActionButton</b> widget containing the error.
 As you see, an <b>Exception</b> is deliberately thrown when the button is tapped.
-(Note, the error is not thrown when the app is running in a test environment.)
+(Note, the error is not thrown when running in a test environment.)
 Such an error would normally cause Flutter's default handler, <a href="https://api.flutter.dev/flutter/foundation/FlutterError/dumpErrorToConsole.html">dumpErrorToConsole</a>, 
 to record the error in the device's error logs.
 If the error had occurred while attempting to display a widget,
-it would further present a 'red screen' describing the error when in development,
-or a gray screen when in production.
+it would further present a description of the error on a 'red screen' when in development,
+and a gray screen when in production.
 
-In this case, the error logs are still recorded, but the count is still incremented. Flutter's
+In this case, the error logs are written to, but the count still incremented. Flutter's
 <a href="https://api.flutter.dev/flutter/foundation/FlutterError/onError.html">FlutterError.onError</a>
 was assigned an error handler that allows the State object to possibly address its errors.
 In the second screenshot below, the <b>onError</b>() function determines the incrementation was interrupted
