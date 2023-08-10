@@ -90,6 +90,7 @@ class Page2State extends StateX<Page2> {
         count: con.count,
         counter: con.onPressed,
         row: (context) => [
+          /// Page button for Page 1
           Flexible(
             child: ElevatedButton(
               key: const Key('Page 1'),
@@ -102,6 +103,8 @@ class Page2State extends StateX<Page2> {
               ),
             ),
           ),
+
+          /// Page button for Page 3
           Flexible(
             child: ElevatedButton(
               key: const Key('Page 3'),

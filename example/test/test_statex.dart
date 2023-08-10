@@ -53,6 +53,10 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(con, isA<ExampleAppController>());
 
+  final contains = stateObj.contains(con);
+
+  expect(contains, isTrue, reason: _location);
+
   // This Controller's current State object is _MyAppState as AppStateMVC
   stateObj = con.state!;
 

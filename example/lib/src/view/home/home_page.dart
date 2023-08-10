@@ -23,9 +23,12 @@ class _HomePageState extends StateX<HomePage> {
   _HomePageState() : super(controller: Controller()) {
     /// Acquire a reference to the passed Controller.
     con = controller as Controller;
+    timer = CounterTimer();
+    add(timer);
   }
 
   late Controller con;
+  late CounterTimer timer;
 
   @override
   void initState() {
@@ -48,25 +51,27 @@ class _HomePageState extends StateX<HomePage> {
 
   late AppStateX appState;
 
-  /// Build the widget passed to the built-in FutureBuilder.
+  /// The State class' interface
   @override
-  Widget buildF(BuildContext context) {
+  Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.headlineMedium;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Center(
-        /// SetState class is like a setState() function but called
-        /// only when the App's InheritedWidget is rebuilt.
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            /// Display the App's data object if it has something to display
+            timer.counter,
+
+            /// SetState class is like a setState() function but called
+            /// only when the App's InheritedWidget is called again.
             SetState(
               builder: (context, dataObject) => Padding(
                 padding: const EdgeInsets.all(30),
                 child: Text(
+                  /// Display the App's data object if it has something to display
                   dataObject is! String ? '' : dataObject,
                   key: const Key('greetings'),
                   style: TextStyle(

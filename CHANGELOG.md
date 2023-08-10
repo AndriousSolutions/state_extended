@@ -1,4 +1,9 @@
 
+## 4.3.0
+August 10, 2023
+- Added the contains() function in mixin _ControllersById
+- Continue with more documentation
+
 ## 4.2.0+4
 August 04, 2023
 - Introduced onError(details) {} to the StateX class

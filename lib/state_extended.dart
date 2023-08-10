@@ -1,3 +1,7 @@
+/// The extension of the State class.
+///
+/// dartdoc:
+/// {@category Get started}
 library state_extended;
 
 // Copyright 2023 Andrious Solutions Ltd. All rights reserved.
@@ -2483,6 +2487,19 @@ mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
       return null;
     }
     return _mapControllerById[id];
+  }
+
+  /// Returns true if found.
+  @override
+  bool contains(StateXController con) {
+    bool contains = false;
+    for (final controller in controllerList) {
+      contains = controller == con;
+      if (contains) {
+        break;
+      }
+    }
+    return contains;
   }
 
   /// Returns the list of 'Controllers' but you must know their keys.

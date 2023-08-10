@@ -24,7 +24,7 @@ but the similarities stops there.
 
 I don't always like the version number suggested in the '[Installing](https://pub.dev/packages/state_extended#-installing-tab-)' page.
 Instead, always go up to the '**minor**' semantic version number when installing this package.
-Always use a version number but trailing with one zero, '**.0**'.
+Always use a version number trailing with one zero, '**.0**'.
 This allows you to take in any '**patch**' versions that involves bugfixes.
 Semantic version numbers are always in this format: **major.minor.patch**.
 
@@ -56,15 +56,35 @@ This arrangement encourages a clean architecture separating all the mutable prop
 from the State object and its interface as well as provide state management from <b><i>outside</i></b> the State class itself! 
 Not only can the controller class call the <b>setState</b>() function, it has access to the State object’s own properties: <b>widget</b>, <b>mounted</b>, and <b>context</b>.
 
-## Control The State
-When using this package, through the course of an app’s lifecycle, 
-a controller can be registered to any number of StateX objects. 
+<a target="_blank" rel="noopener noreferrer" href="https://miro.medium.com/v2/resize:fit:640/format:webp/1*x1qnWzfmhG8Z9WJVNYvL_Q.png"><img  align="right" src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*x1qnWzfmhG8Z9WJVNYvL_Q.png" width="253" height="286"></a>
+<h2 id="state">The State of Control</h2>
+Through the course of an app’s lifecycle, 
+a controller can be assigned to any number of StateX objects. 
 A StateXController object works with ‘the last’ State object it’s been assigned to 
-but keeps a reference of any and all past StateX objects it’s worked with previously in the Widget tree.
+but keeps a reference of any and all State objects it’s previously worked with in the Widget tree.
+When a screen closes (i.e. the current StateX object is disposed of), the controller returns back to the previous StateX it was assigned to. 
+This allows, for example, for one controller to sustain the app’s business rules for the duration of the running app
+conveying that logic across any number of screens (i.e. any number of StateX objects).
 
-When a screen closes (i.e. the current StateX object is disposed of), the controller focus points back to the previous StateX it was assigned to. 
-This allows, for example, for one controller to sustain the app’s business logic for the duration of the running app while conveying that logic across any number of screens (i.e. any number of StateX objects).
+<h2 id="control">Control The State</h2>
+<a target="_blank" rel="noopener noreferrer" href="https://miro.medium.com/v2/resize:fit:640/format:webp/1*7vctAgGEittQNOJVitNvaw.png"><img align="right" src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*7vctAgGEittQNOJVitNvaw.png" width="253" height="286"></a>
+In turn, the StateX object can assign any number of controllers.
+You're then free to delegate controllers to specific operations.
+Each can be independent of the other controllers and the rest of the app 
+encouraging modular development.
+Remember, the State object's <b>build</b>() function produces the interface,
+your controllers are concerned with everything else.
 
+However, you may choose to instantiate your controllers at the start of the app
+assigning them to the 'root' State object that is the AppStateX class.
+Of course, you could simply instantiate your controller when you need it.
+```Dart
+    /// The controller is was assigned to the 'first' State object.
+    // Note, returns null if not found.
+    anotherController = rootState?.controllerByType<AnotherController>();
+                                 or
+    anotherController = AnotherController();
+```
 
 ## Example Code
 Further examples can be found in its Github repository: 

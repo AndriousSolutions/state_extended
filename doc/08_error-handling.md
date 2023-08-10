@@ -1,4 +1,4 @@
-## _It's Essential Yet Ignored_
+## _Essential Yet Ignored_
 
 Any errors that may occur in a StateX object is directed to its function, <b>onError</b>().
 Depending on whether it's a particular exception that can be handled, or an unanticipated error

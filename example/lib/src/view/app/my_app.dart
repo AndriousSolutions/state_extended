@@ -29,7 +29,7 @@ class _MyAppState extends AppStateX<MyApp> {
           ],
 
           /// Demonstrate passing an 'object' down the Widget tree much like
-          /// in the Scoped Model
+          /// how it's done using the State Management, Scoped Model, but better.
           object: 'Hello!',
         );
 

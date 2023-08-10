@@ -3,4 +3,6 @@ export 'package:example/src/controller/home/another_controller.dart';
 
 export 'package:example/src/controller/home/controller.dart';
 
+export 'package:example/src/controller/home/counter_timer.dart';
+
 export 'package:example/src/controller/home/yet_another_controller.dart';

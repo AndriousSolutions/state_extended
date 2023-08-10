@@ -32,7 +32,7 @@ class Controller extends StateXController {
   /// Increment and then call the State object's setState() function to reflect the change.
   void onPressed() => incrementCounter();
 
-  /// The Controller knows how to 'talk to' the Model and to the View (interface).
+  /// The Controller knows how to 'talk to' the Model and to the interface.
   void incrementCounter() {
     //
     _model.incrementCounter();

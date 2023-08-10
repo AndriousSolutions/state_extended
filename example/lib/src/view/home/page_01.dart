@@ -38,6 +38,8 @@ class Page1State extends StateX<Page1> {
     //
     super.initState();
 
+    /// Below a demonstration of the properties and functions available to you.
+
     // Just used to emphasize null can to returned if the controller is not found.
     StateXController? nullableController;
 
@@ -77,6 +79,16 @@ class Page1State extends StateX<Page1> {
     // Since, I'm confident such a controller will be retrieved
     // I can shortened the process like this.
     anotherController = controllerById(id) as AnotherController;
+
+    final AppStateX rootState = this.rootState!;
+
+    /// The controller is was also assigned to the 'first' State object.
+    // Note, returns null if not found or id == null or empty
+    anotherController = rootState.controllerById(id) as AnotherController;
+
+    /// The controller is was assigned to the 'first' State object.
+    // Note, returns null if not found.
+    anotherController = rootState.controllerByType<AnotherController>();
 
     /// Note, this controller is present for the life of the app.
     /// InheritedWidget switch will reset count, but the controller can saves the count
