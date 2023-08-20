@@ -1,5 +1,5 @@
 
-## 4.4.0
+## 4.4.0+1
 August 19, 2023
 - Includes an onSplashScreen routine
 - onError routine also involves particular libraries

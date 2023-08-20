@@ -333,12 +333,12 @@ class HomeController extends StateXController {
           _countType = CountType.integer;
       }
       // 'Refresh' the home screen to show the new count option
-//          setState(() {});
-      var state = this.state; // The controller's current State object
-      // If you're not confident the its the intended State class.
-      state = stateOf<MyHomePage>();
-      state = ofState<_MyHomePageState>();
-      state?.setState(() {});
+      setState(() {});
+//      var state = this.state; // The controller's current State object
+      // If you're not confident its the intended State class. Retrieve it.
+//      state = stateOf<MyHomePage>();
+//      state = ofState<_MyHomePageState>();
+//      state?.setState(() {});
     },
     offset: const Offset(0, 40),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

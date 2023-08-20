@@ -56,6 +56,8 @@ but a State object doesn't have a FutureBuilder... until now.
 In the video file, you see the README example app starting up
 and its circular progress indicator rotating in the center of the screen.
 The video is demonstrating the built-in FutureBuilder now available to you.
+Instead of a circular progress indicator, you can provide a splash screen
+by returning a widget in the <b>onSplashScreen</b>() function.
 When there's work to be done before a State object can then display it's interface to the screen,
 you now turn to its <b>initAsync</b>() function.
 
@@ -76,7 +78,7 @@ The widgets, ListView and TextFormField to name a few delegate specific tasks to
 <a id="AppController" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/b818775e-b44d-4352-9ac5-1dd259ff1795"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/b818775e-b44d-4352-9ac5-1dd259ff1795" width="48%" height="60%"></a>
 </div>
 
-| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
+| [_MyAppState](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L22) | [AppController](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L633) |
 |:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
 
 <h2 id="control">Control The State</h2>
@@ -91,7 +93,7 @@ has been executed once at start up never to be touched again.
 That's because the <b>buildIn</b>() function was used in the State class, <i>_MyHomePageState</i>. to display the count
 <div>
 <a id="counterApp" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/dbdd79ed-3e35-4504-a3c6-c6d79391922c"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/dbdd79ed-3e35-4504-a3c6-c6d79391922c" width="171" height="357"></a>
-<a id="FloatingActionButton" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/9210d250-15cf-4681-b5f8-d75a40da8d1a"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/9210d250-15cf-4681-b5f8-d75a40da8d1a" width="48%" height="60%"></a>
+<a id="FloatingActionButton" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/6c451e73-f99d-4c48-bb28-a03d3dd58cf7"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/6c451e73-f99d-4c48-bb28-a03d3dd58cf7" width="48%" height="60%"></a>
 </div>
 The screenshot highlights what happens when that button is pressed.
 Again, when using the StateX class, a controller is typically delegated to handle any events, 
@@ -101,18 +103,18 @@ This separation of the interface from the logic makes for more scalable and more
 You'll find the StateXController class an indispensable companion to the StateX class.
 When taken into such a State object, the controller easily 'retains' the state of the overall app.
 With the logic, business rules and event handling residing in a class that, unlike the StatelessWidget and State class,
-is not tethered to a interface allowing for mutable content brings about some dynamic and 
-free level of abstraction. 
+is not tethered to a interface allowing for mutable content brings about some dynamic capabilities
+and an unlimited degree of abstraction. 
 
-| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | 
+| [_MyHomePageState](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L108) | 
 |:-------------------------------------------------------------------------------------------------------------------|
 
 <h2 id="state">State The Control</h2>
 
 The first screenshot below is of the State class, <i>_MyHomePageState</i>, that displays the count. 
 You'll see the count is encapsulated in yet another StatefulWidget called, <i>CounterWidget</i>.
-Such arrangement would keep the count unchanged even if the <b>buildIn</b>() function 
-used in this State class was instead the traditional <b>build</b>() function. 
+Such an arrangement would keep the count unchanged even if the <b>buildIn</b>() function 
+used by this State class was instead the traditional <b>build</b>() function. 
 The CounterWidget has got its own State class. 
 Conventionally, you would have to call the <b>setState</b>() function for that particular State object.
 
@@ -121,10 +123,10 @@ Remember, when the <b>buildIn</b>() function is used, it's only called once
 You can see the <b>dependOnInheritedWidget</b>() function in the second screenshot below.
 It shows the <b>build</b>() function for the CounterWidget's State class.
 
-The <b>dependOnInheritedWidget</b>() function will make the CounterWidget 'depends on' the State object, <i>_MyHomePageState</i>.
+The <b>dependOnInheritedWidget</b>() function will make the CounterWidget a 'client' of the State object, <i>_MyHomePageState</i>.
 More specifically, it will depend on State object's built-in InheritedWidget. 
 And so, every time the button is pressed, and the controller's function, `con.onPressed()`, is called,
-the count is incremented, of course, but then the controller's <b>notifyClients</b>() function is also called.
+the count is incremented. However, then the controller's <b>notifyClients</b>() function is also called.
 The CounterWidget is one of these 'clients' now, and its <b>build</b>() function will then be called
 displaying the new count and leaving the rest of the interface untouched.
 Very nice.
@@ -133,8 +135,8 @@ Very nice.
 <a id="_CounterState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/b61a1cf5-8300-4f02-a7ce-9539c35fabb7"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/b61a1cf5-8300-4f02-a7ce-9539c35fabb7" width="48%" height="60%"></a>
 </div>
 
-| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
-|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [_MyHomePageState](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L102) | [_CounterState](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L134) |
+|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 <h2 id="abstract">Abstract Control</h2>
 
@@ -147,34 +149,35 @@ There's a popup menu that presents you with all three options.
 
 What I'm emphasizing here is the easy separation of the app's interface from its logic
 with the use of controllers. 
-There's also an unlimited level of abstraction available to you when using accompanying controllers
-with your State objects that will make you wonder how you ever did without.
+The level of abstraction available to you when using these accompanying controllers
+with your State objects will make you wonder how you ever did without.
 It's a very very very simple app, but it's hoped the advantages of using controllers will 
-further come to the forefront in the next few minutes.
+further come to the forefront in time.
 
 Note, in the CounterWidget, the line, `Text(con.data, style: Theme.of(context).textTheme.headlineMedium);`,
 is left untouched as you hop from one count option to another listed in the menu.
 As far as the interface side is concerned, the `con.data` simply returns a String (see below).
-There's no sign of what the data is or how or where it was retrieved.
+There's no sign of what the data is or how or where it comes from.
 A Clean Architecture, for example, would have the StatelessWidgets and the StatefulWidgets 
 that make up the interface only concerned with 'how the data' is presented not 'what the data' is.
 State Object Controllers makes this readily possible.
 
 <div>
-<a id="_CounterState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/0fd817e4-63d4-49cb-9634-457cf2c31489"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/0fd817e4-63d4-49cb-9634-457cf2c31489" width="48%" height="60%"></a>
-<a id="_CounterState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/e4a8c152-f264-44b8-96ad-9378abc15cdd"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/e4a8c152-f264-44b8-96ad-9378abc15cdd" width="48%" height="60%"></a>
+<a id="_CounterState1" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/0fd817e4-63d4-49cb-9634-457cf2c31489"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/0fd817e4-63d4-49cb-9634-457cf2c31489" width="48%" height="60%"></a>
+<a id="HomeController" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/e4a8c152-f264-44b8-96ad-9378abc15cdd"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/e4a8c152-f264-44b8-96ad-9378abc15cdd" width="48%" height="60%"></a>
 </div>
 
-| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
-|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [_CounterState](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L134) | [HomeController](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L167) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 <h2 id="source">The Source of Control</h2>
 
 In the second screenshot above, it's abundantly clear there's a lot going on in the HomeController's getter called, <i>data</i>. 
-The code on the interface side, gives no hint there's actually three data sources used by the controller.
+The code on the interface side, gives no hint there's actually three data sources used by the app.
 It's the controller's responsibility to properly deal with 'the data' supplied to this app.
 It's the controller's responsibility, for example, to convert the data to a String so to accommodate the Text widget.
 It's the controller that's concerned with what happens when the app starts up or when a button is pressed.
+That distinction makes for more effective, more scalable coding frankly.
 
 Back to the HomeController class.
 It's displayed in first screenshot below instantiating the three data sources it's to works with.
@@ -188,8 +191,8 @@ The controller increments the appropriate source depending on what was selected 
 <a id="onPressed" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/cf873e37-de83-4b73-8271-1f7993cafe58"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/cf873e37-de83-4b73-8271-1f7993cafe58" width="48%" height="60%"></a>
 </div>
 
-| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
-|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [HomeController](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L102) | [HomeController](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L185) |
+|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 <h2 id="menu">On The Menu</h2>
 
@@ -202,32 +205,32 @@ and the new count will appear on the screen (see the video below).
 <a id="onSelected" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/320da19a-3e96-49fb-a497-5e3329f82416"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/320da19a-3e96-49fb-a497-5e3329f82416" width="48%" height="60%"></a>
 </div>
 
-| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
-|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [_MyHomePageState](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L95) | [HomeController](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L238) |
+|:-------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 <h2 id="set">Set The State</h2>
 
 By the way, in this simple app, we're confident the controller's <b>setState</b>() function will call the <b>setState</b>() function for the State object, <i>_MyHomePageState</i>.
 However, in other circumstances, the specific State object would have to be retrieved to ensure its <b>setState</b>() function is called.
 The State Object Controller, once registered with any number of State objects, is able to retrieve a specific State object.
-If the specified type was not a State object taken in by the controller at that time, null is returned instead (see screenshot below).
+Note, if the specified type was not a State object taken in by the controller at that time, null is returned instead (see screenshot below).
 <div>
-<a id="setState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/a34ced21-2764-47ad-9443-d0a6dd2bdb75"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/a34ced21-2764-47ad-9443-d0a6dd2bdb75" width="48%" height="60%"></a>
 <a id="countTypes02" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/3f8f25dd-d2f4-4949-ae72-7bddbd990889"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/3f8f25dd-d2f4-4949-ae72-7bddbd990889" width="171" height="357"></a>
+<a id="setState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/a34ced21-2764-47ad-9443-d0a6dd2bdb75"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/a34ced21-2764-47ad-9443-d0a6dd2bdb75" width="48%" height="60%"></a>
 </div>
 
-| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
-|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [HomeController](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L249) |
+|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 <h2 id="single">A Single Control</h2>
 
 Despite, being a very simple app, there is more than one controller.
 Each delegated to a particular 'area of responsibility' for the app.
-Remember, there is the, <i>AppController</i>
----its job is to get the app ready at startup and essentially address the 'look and behavior' of the app overall.
-The other controller, <i>HomeController</i>, was 'assigned' to the home page.
+Remember, there is the, <i>AppController</i>.
+Its job is to get the app ready at startup and essentially address the 'look and behavior' of the app overall.
+The other controller, <i>HomeController</i>, was assigned to the home page.
 It's code is concerned with the logic required by the home page.
-Including a controller to a State class allows for very efficient coding and maintainability.
+This delegation of work between each State class using controllers allows for also very efficient coding and maintainability.
 
 <a id="threecomps" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/716e2d31-1cfe-4d79-bed0-fe77dd02b71b"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/716e2d31-1cfe-4d79-bed0-fe77dd02b71b" alt="statecontroller" width="350" height="139"></a>
 
@@ -242,12 +245,13 @@ to the overall dynamics of the running app.
 <a id="HomeController" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/92c4269b-5024-400a-b214-74bc2f364c6d"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/92c4269b-5024-400a-b214-74bc2f364c6d" width="48%" height="60%"></a>
 </div>
 
-| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
+| [AppController](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L633) | [HomeController](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L152) |
 |:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
 
 For example, note how the controller can merely be instantiated in far-flung parts of the app
 and easily supply the 'current state' or the necessary values and properties for a functioning app?
-'Keep it Simple, Keep it Flutter' was the motto: The first screenshot below is the State class, <i>_MyHomePageState</i>.
+'Keep it Simple, Keep it Flutter' was the motto, remember?
+The first screenshot below is the State class, <i>_MyHomePageState</i>.
 It's controller is simply instantiated in its constructor---so the controller then has access to it.
 In the second screenshot, the controller is instantiated so its State object can rebuild the 
 widget, <i>CounterWidget</i>, whenever calling its <b>setState</b>() function.
@@ -256,5 +260,5 @@ widget, <i>CounterWidget</i>, whenever calling its <b>setState</b>() function.
 <a id="_CounterStateController" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/cf53865b-d191-462c-86f4-91054f15c7cd"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/cf53865b-d191-462c-86f4-91054f15c7cd" width="48%" height="60%"></a>
 </div>
 
-| [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
-|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [_MyHomePageState](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L58) | [_CounterState](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L134) |
+|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------:|
