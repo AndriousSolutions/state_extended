@@ -35,7 +35,7 @@ Semantic version numbers are always in this format: **major.minor.patch**.
 In this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-  state_extended:^4.2.0
+  state_extended:^4.4.0
 ```
 Turn to this free Medium article for an overview of the package plus examples:
 <a target="_blank" rel="noopener noreferrer" href="https://medium.com/@andrious/statex-b8f57015188f"><img align="right" src="https://user-images.githubusercontent.com/32497443/179269220-80efea47-b852-47c0-a073-b22f502dc437.jpg" alt="StateXMedium" width="500" height="245"></a>
@@ -54,7 +54,7 @@ The <b>State</b> class is Flutter’s main player in State Management.
 However, the <b>StateX</b> class then extends those capabilities to a separate controller class called, <b>StateXController</b>.
 This arrangement encourages a clean architecture separating all the mutable properties and business logic 
 from the State object and its interface as well as provide state management from <b><i>outside</i></b> the State class itself! 
-Not only can the controller class call the <b>setState</b>() function, it has access to the State object’s own properties: <b>widget</b>, <b>mounted</b>, and <b>context</b>.
+Not only can the controller class call the State object's <b>setState</b>() function, it has access to the object itself and its properties: <b>widget</b>, <b>mounted</b>, and <b>context</b>.
 
 <a target="_blank" rel="noopener noreferrer" href="https://miro.medium.com/v2/resize:fit:640/format:webp/1*x1qnWzfmhG8Z9WJVNYvL_Q.png"><img  align="right" src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*x1qnWzfmhG8Z9WJVNYvL_Q.png" width="253" height="286"></a>
 <h2 id="state">The State of Control</h2>
@@ -68,39 +68,33 @@ conveying that logic across any number of screens (i.e. any number of StateX obj
 
 <h2 id="control">Control The State</h2>
 <a target="_blank" rel="noopener noreferrer" href="https://miro.medium.com/v2/resize:fit:640/format:webp/1*7vctAgGEittQNOJVitNvaw.png"><img align="right" src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*7vctAgGEittQNOJVitNvaw.png" width="253" height="286"></a>
-In turn, the StateX object can assign any number of controllers.
-You're then free to delegate controllers to specific operations.
-Each can be independent of the other controllers and the rest of the app 
-encouraging modular development.
-Remember, the State object's <b>build</b>() function produces the interface,
-your controllers are concerned with everything else.
-
-However, you may choose to instantiate your controllers at the start of the app
-assigning them to the 'root' State object that is the AppStateX class.
-Of course, you could simply instantiate your controller when you need it.
-```Dart
-    /// The controller is was assigned to the 'first' State object.
-    // Note, returns null if not found.
-    anotherController = rootState?.controllerByType<AnotherController>();
-                                 or
-    anotherController = AnotherController();
-```
+In turn, the StateX object can take in any number of controllers.
+You then delegate controllers to specific areas of work.
+Each can be independent of the other encouraging modular development.
+The State object's <b>build</b>() function produces the interface
+while its controllers are concerned with everything else.
 
 ## Example Code
+Copy and paste the 'Counter Example App' below to see a quick and simple implementation.
 Further examples can be found in its Github repository: 
 [example app](https://github.com/AndriousSolutions/state_extended/tree/master/example)
+It will accompany the this package when you download it.
 ```dart
 //
 import 'package:flutter/material.dart';
 
 import 'package:state_extended/state_extended.dart';
 
-void main() => runApp(const MaterialApp(home: MyApp(key: Key('MyApp'))));
+void main() => runApp(const MyApp(key: Key('MyApp')));
 
 /// README.md example app
 class MyApp extends StatefulWidget {
   ///
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key, this.title = 'StateX Demo App'});
+
+  /// Title of the screen
+  // Fields in a StatefulWidget should always be "final".
+  final String title;
 
   /// This is the App's State object
   @override
@@ -109,25 +103,35 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends AppStateX<MyApp> {
   factory _MyAppState() => _this ??= _MyAppState._();
-  _MyAppState._() : super(controller: Controller());
+  _MyAppState._() : super(controller: AppController()) {
+    /// Acquire a reference to the passed Controller.
+    con = controller as AppController;
+  }
   static _MyAppState? _this;
 
-  /// Supplies a widget to AppStateX's InheritedWidget.
+  late AppController con;
+
+  /// Place a breakpoint here to see what's going on 'under the hood.'
   @override
-  Widget buildIn(BuildContext context) => const MyHomePage();
+  Widget build(BuildContext context) => super.build(context);
+
+  /// Define the 'look and fell' of the overall app.
+  /// The body: property takes in a separate widget for the 'home' page.
+  @override
+  Widget buildIn(BuildContext context) => MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: MyHomePage(title: widget.title),
+  );
 }
 
 /// The Home page
 class MyHomePage extends StatefulWidget {
   ///
-  const MyHomePage({
-    Key? key,
-    this.title = 'Flutter InheritedWidget Demo',
-  }) : super(key: key);
+  const MyHomePage({super.key, this.title});
 
   /// Title of the screen
   // Fields in a StatefulWidget should always be "final".
-  final String title;
+  final String? title;
 
   @override
   State createState() => _MyHomePageState();
@@ -137,13 +141,10 @@ class MyHomePage extends StatefulWidget {
 /// This subclass is linked to the App's lifecycle using [WidgetsBindingObserver]
 class _MyHomePageState extends StateX<MyHomePage> {
   /// Let the 'business logic' run in a Controller
-  _MyHomePageState() : super(Controller()) {
-    /// Acquire a reference to the passed Controller.
-    con = controller as Controller;
+  _MyHomePageState() : super(controller: HomeController(), useInherited: true) {
+    con = controller as HomeController;
   }
-
-  late Controller con;
-
+  late HomeController con;
   @override
   void initState() {
     /// Look inside the parent function and see it calls
@@ -165,9 +166,21 @@ class _MyHomePageState extends StateX<MyHomePage> {
 
   late AppStateX appState;
 
+  /// Place a breakpoint here to see what's going on 'under the hood.'
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(widget.title)),
+  Widget build(BuildContext context) => super.build(context);
+
+  /// Place a breakpoint here to see what's going on 'under the hood.'
+  @override
+  Widget buildF(BuildContext context) => super.buildF(context);
+
+  @override
+  Widget buildIn(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: Text(widget.title ?? ''),
+      // popup menu button
+      actions: [con.popupMenuButton],
+    ),
     body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -179,15 +192,14 @@ class _MyHomePageState extends StateX<MyHomePage> {
 
           /// Linked to the built-in InheritedWidget.
           /// A Text widget to display the counter is in here.
-          /// ONLY IS WIDGET is updated with every press of the button.
+          /// ONLY THIS WIDGET is updated with every press of the button.
           const CounterWidget(),
         ],
       ),
     ),
     floatingActionButton: FloatingActionButton(
       key: const Key('+'),
-
-      /// rebuilds only the Text widget containing the counter.
+      // rebuilds only the Text widget containing the counter.
       onPressed: () => con.onPressed(),
       child: const Icon(Icons.add),
     ),
@@ -205,58 +217,133 @@ class CounterWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _CounterState();
 }
 
-class _CounterState extends StateX<CounterWidget> {
+class _CounterState extends State<CounterWidget> {
   @override
-  Widget buildF(BuildContext context) {
+  Widget build(BuildContext context) {
     /// Making this widget dependent will cause the build() function below
     /// to run again if and when the App's InheritedWidget calls its notifyClients() function.
-    final con = Controller();
+    final con = HomeController();
     con.dependOnInheritedWidget(context);
     return Text(
-      '${con.count}',
+      con.data,
       style: Theme.of(context).textTheme.headlineMedium,
     );
   }
 }
 
 /// Everything a State object can do, this Controller can do as well!
-class Controller extends StateXController {
+class HomeController extends StateXController {
   /// Utilizing the Singleton pattern is a good programming practice
-  factory Controller([StateX? state]) => _this ??= Controller._(state);
-  Controller._(StateX? state)
+  factory HomeController() => _this ??= HomeController._();
+  // This constructor is hidden with the underscore.
+  HomeController._()
       : _model = Model(),
-        super(state);
-  static Controller? _this;
+        _letters = AlphabetLetters(),
+        _primes = PrimeNumbers();
+  static HomeController? _this;
 
   final Model _model;
+  final AlphabetLetters _letters;
+  final PrimeNumbers _primes;
 
-  /// Note, the count comes from a separate class, _Model.
-  int get count => _model.integer;
+  /// Note, each count comes from a separate class.
+  String get data {
+    String data;
+    switch (_countType) {
+      case CountType.prime:
+        data = _primes.primeNumber.toString();
+        break;
+      case CountType.alphabet:
+        data = _letters.current;
+        break;
+      default:
+        data = _model.integer.toString();
+    }
+    return data;
+  }
+
+  CountType _countType = CountType.integer;
 
   /// The Controller deals with the event handling and business logic.
   void onPressed() {
+    switch (_countType) {
+      case CountType.prime:
+        _primes.next();
+        break;
+      case CountType.alphabet:
+        _letters.read();
+        break;
+      default:
+        _model.incrementCounter();
+    }
     //
-    _model.incrementCounter();
-    // Call the InheritedWidget in AppStateX to rebuild its dependents.
     notifyClients();
-  }
-
-  /// Used for long asynchronous operations that need to be done
-  /// before the app can be fully available to the user.
-  /// e.g. Opening Databases, accessing Web servers, etc.
-  @override
-  Future<bool> initAsync() async {
-    // Simply wait for 10 seconds at startup.
-    /// In production, this is where databases are opened, logins attempted, etc.
-    return Future.delayed(const Duration(seconds: 10), () {
-      return true;
-    });
   }
 
   /// Supply an 'error handler' routine if something goes wrong
   /// in initAsync() routine above.
   @override
   bool onAsyncError(FlutterErrorDetails details) => false;
+
+  /// Provide a menu to this simple app.
+  PopupMenuButton get popupMenuButton => PopupMenuButton<CountType>(
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        value: CountType.integer,
+        child: Row(
+          children: [
+            if (_countType == CountType.integer)
+              const Icon(Icons.star_rounded, color: Colors.black),
+            const Text("Integers")
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        value: CountType.alphabet,
+        child: Row(
+          children: [
+            if (_countType == CountType.alphabet)
+              const Icon(Icons.star_rounded, color: Colors.black),
+            const Text("Alphabet")
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        value: CountType.prime,
+        child: Row(
+          children: [
+            if (_countType == CountType.prime)
+              const Icon(Icons.star_rounded, color: Colors.black),
+            const Text("Prime Numbers")
+          ],
+        ),
+      ),
+    ],
+    onSelected: (value) {
+      switch (value) {
+        case CountType.prime:
+          _countType = value;
+          break;
+        case CountType.alphabet:
+          _countType = value;
+          break;
+        default:
+        // In case the enumeration class was unknowingly changed
+        // Default to integer
+          _countType = CountType.integer;
+      }
+      // 'Refresh' the home screen to show the new count option
+//          setState(() {});
+      var state = this.state; // The controller's current State object
+      // If you're not confident the its the intended State class.
+      state = stateOf<MyHomePage>();
+      state = ofState<_MyHomePageState>();
+      state?.setState(() {});
+    },
+    offset: const Offset(0, 40),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    elevation: 14,
+  );
 
   /// Like the State object, the Flutter framework will call this method exactly once.
   /// Only when the [StateX] object is first created.
@@ -277,6 +364,7 @@ class Controller extends StateXController {
 
     /// You can retrieve a Controller's state object by its StatefulWidget
     /// Good if the state class type is unknown or private with a leading underscore.
+    //ignore: unused_local_variable
     var stateObj = stateOf<MyHomePage>();
 
     /// Retrieve the 'app level' State object
@@ -304,6 +392,10 @@ class Controller extends StateXController {
   @override
   void deactivate() {
     super.deactivate();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: deactivate in HomeController');
+    }
   }
 
   /// Called when this object is reinserted into the tree after having been
@@ -311,6 +403,10 @@ class Controller extends StateXController {
   @override
   void activate() {
     super.activate();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: activate in HomeController');
+    }
   }
 
   /// The framework calls this method when this [StateX] object will never
@@ -318,6 +414,10 @@ class Controller extends StateXController {
   /// Note: THERE IS NO GUARANTEE THIS METHOD WILL RUN in the Framework.
   @override
   void dispose() {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: dispose in HomeController');
+    }
     super.dispose();
   }
 
@@ -327,6 +427,10 @@ class Controller extends StateXController {
     /// The framework always calls build() after calling [didUpdateWidget], which
     /// means any calls to [setState] in [didUpdateWidget] are redundant.
     super.didUpdateWidget(oldWidget);
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didUpdateWidget in HomeController');
+    }
   }
 
   /// Called when this [StateX] object is first created immediately after [initState].
@@ -334,14 +438,22 @@ class Controller extends StateXController {
   /// is a dependency of [InheritedWidget].
   @override
   void didChangeDependencies() {
-    return super.didChangeDependencies();
+    super.didChangeDependencies();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didChangeDependencies in HomeController');
+    }
   }
 
   /// Called whenever the application is reassembled during debugging, for
   /// example during hot reload.
   @override
   void reassemble() {
-    return super.reassemble();
+    super.reassemble();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: reassemble in HomeController');
+    }
   }
 
   /// Called when the system tells the app to pop the current route.
@@ -355,6 +467,10 @@ class Controller extends StateXController {
   /// [SystemChannels.navigation].
   @override
   Future<bool> didPopRoute() async {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didPopRoute in HomeController');
+    }
     return super.didPopRoute();
   }
 
@@ -365,6 +481,10 @@ class Controller extends StateXController {
   /// [SystemChannels.navigation].
   @override
   Future<bool> didPushRoute(String route) async {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didPushRoute in HomeController');
+    }
     return super.didPushRoute(route);
   }
 
@@ -378,6 +498,10 @@ class Controller extends StateXController {
   /// [RouteInformation.location].
   @override
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didPushRouteInformation in HomeController');
+    }
     return super.didPushRouteInformation(routeInformation);
   }
 
@@ -386,24 +510,41 @@ class Controller extends StateXController {
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didChangeMetrics in HomeController');
+    }
   }
 
   /// Called when the platform's text scale factor changes.
   @override
   void didChangeTextScaleFactor() {
     super.didChangeTextScaleFactor();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didChangeTextScaleFactor in HomeController');
+    }
   }
 
   /// Brightness changed.
   @override
   void didChangePlatformBrightness() {
     super.didChangePlatformBrightness();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print(
+          '############ Event: didChangePlatformBrightness in HomeController');
+    }
   }
 
   /// Called when the system tells the app that the user's locale has changed.
   @override
-  void didChangeLocale(Locale locale) {
-    didChangeLocale(locale);
+  void didChangeLocales(List<Locale>? locales) {
+    super.didChangeLocales(locales);
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didChangeLocales in HomeController');
+    }
   }
 
   /// Called when the system puts the app in the background or returns the app to the foreground.
@@ -415,6 +556,10 @@ class Controller extends StateXController {
     /// AppLifecycleState.detach
     /// AppLifecycleState.resumed
     super.didChangeAppLifecycleState(state);
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didChangeAppLifecycleState in HomeController');
+    }
   }
 
   /// The application is in an inactive state and is not receiving user input.
@@ -434,6 +579,10 @@ class Controller extends StateXController {
   @override
   void inactiveLifecycleState() {
     super.inactiveLifecycleState();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: inactiveLifecycleState in HomeController');
+    }
   }
 
   /// The application is not currently visible to the user, not responding to
@@ -441,6 +590,10 @@ class Controller extends StateXController {
   @override
   void pausedLifecycleState() {
     super.pausedLifecycleState();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: pausedLifecycleState in HomeController');
+    }
   }
 
   /// Either be in the progress of attaching when the engine is first initializing
@@ -448,34 +601,133 @@ class Controller extends StateXController {
   @override
   void detachedLifecycleState() {
     super.detachedLifecycleState();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: detachedLifecycleState in HomeController');
+    }
   }
 
   /// The application is visible and responding to user input.
   @override
   void resumedLifecycleState() {
     super.resumedLifecycleState();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: resumedLifecycleState in HomeController');
+    }
   }
 
   /// Called when the system is running low on memory.
   @override
   void didHaveMemoryPressure() {
     super.didHaveMemoryPressure();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print('############ Event: didHaveMemoryPressure in HomeController');
+    }
   }
 
   /// Called when the system changes the set of active accessibility features.
   @override
   void didChangeAccessibilityFeatures() {
     super.didChangeAccessibilityFeatures();
+    if (inDebugMode) {
+      //ignore: avoid_print
+      print(
+          '############ Event: didChangeAccessibilityFeatures in HomeController');
+    }
   }
 }
 
-/// This example has a separate class that contains the data.
-class Model {
-  /// the public API for this class. Describes you're dealing with an integer.
-  int get integer => _integer;
-  int _integer = 0;
+// The means 'to talk' between the Controller and the Model
+enum CountType { integer, prime, alphabet }
 
-  /// The business logic involves incrementing an integer.
-  int incrementCounter() => ++_integer;
+/// A separate class that contains the data.
+class Model {
+  int _integer = 0;
+  // The external property transferring the value to the outside world.
+  int get integer => _integer;
+
+  /// The business logic involves incrementing something.
+  void incrementCounter() => ++_integer;
+}
+
+/// Goes through the alphabet.
+class AlphabetLetters {
+  // Used for incrementing the alphabet
+  int start = "a".codeUnitAt(0);
+  int end = "z".codeUnitAt(0);
+
+  late int letter = start;
+
+  // The external property transferring the value to the outside world.
+  String get current => String.fromCharCode(letter);
+
+  /// The business logic involves incrementing something.
+  void read() {
+    letter++;
+    if (letter > end) {
+      letter = start;
+    }
+  }
+}
+
+/// Another class. A complete different type of data conceived.
+class PrimeNumbers {
+  PrimeNumbers({int? start, int? end}) {
+    start = start ?? 1;
+    end = end ?? 1000;
+    if (start < 0) {
+      start = 1;
+    }
+    if (end <= start) {
+      end = 1000;
+    }
+    initPrimeNumbers(start, end);
+  }
+  final List<int> _numbers = [];
+
+  int _cnt = 0;
+
+  int get primeNumber => _numbers[_cnt];
+
+  void next() {
+    _cnt++;
+    if (_cnt > _numbers.length) {
+      _cnt = 0;
+    }
+  }
+
+  void initPrimeNumbers(int M, int N) {
+    a:
+    for (var k = M; k <= N; ++k) {
+      for (var i = 2; i <= k / i; ++i) {
+        if (k % i == 0) {
+          continue a;
+        }
+      }
+      _numbers.add(k);
+    }
+  }
+}
+
+/// Everything a State object can do, this Controller can do as well!
+class AppController extends StateXController {
+  factory AppController() => _this ??= AppController._();
+  AppController._();
+
+  static AppController? _this;
+
+  /// Used for long asynchronous operations that need to be done
+  /// before the app can be fully available to the user.
+  /// e.g. Opening Databases, accessing Web servers, etc.
+  @override
+  Future<bool> initAsync() async {
+    // Simply wait for 10 seconds at startup.
+    /// In production, this is where databases are accessed, web services opened, login attempts, etc.
+    return Future.delayed(const Duration(seconds: 10), () {
+      return true;
+    });
+  }
 }
 ```

@@ -1,4 +1,12 @@
 
+## 4.4.0
+August 19, 2023
+- Includes an onSplashScreen routine
+- onError routine also involves particular libraries
+- initAsync() now only ever called once;
+- Includes getter snapshot
+- Continues with documentation: Get Started
+
 ## 4.3.0
 August 10, 2023
 - Added the contains() function in mixin _ControllersById

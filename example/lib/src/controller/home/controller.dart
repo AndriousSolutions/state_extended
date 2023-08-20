@@ -21,7 +21,7 @@ class Controller extends StateXController {
   final Model _model;
 
   /// Note, the count comes from a separate class, _Model.
-  int get count => _model.counter;
+  int get data => _model.counter;
 
   /// The flag indicating if an InheritedWidget is to used.
   bool useInherited = false;
@@ -37,24 +37,14 @@ class Controller extends StateXController {
     //
     _model.incrementCounter();
 
-    /// Retrieve a particular State object. The rest is ignore if not at 'HomePage'
-    final homeState = stateOf<HomePage>();
+    // Rebuild the interface to display any changes.
+    setState(() {});
 
-    // If we're not currently working with this particular State object
-    if (homeState == null) {
+    /// If count is divisible by 5
+    if (_model.counter % 5 == 0) {
+      // Assigning a value will cause 'rootState?.notifyClients()'
       // Update the interface with the latest change.
-      setState(() {});
-    } else {
-      /// If count is divisible by 5
-      if (_model.counter % 5 == 0) {
-        // Assigning a value will cause 'rootState?.notifyClients()'
-        // Update the interface with the latest change.
-        dataObject = _model.sayHello();
-      } else {
-        // Call those widget's 'dependent' on the App's InheritedWidget.
-        // Update the interface with the latest change.
-        rootState!.notifyClients();
-      }
+      dataObject = _model.sayHello();
     }
   }
 

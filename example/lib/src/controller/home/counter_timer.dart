@@ -103,7 +103,7 @@ class CounterTimer extends StateXController {
   Widget get counter {
     Widget counter;
 
-    if (_con.count % 2 == 0) {
+    if (_con.data % 2 == 0) {
       //
       counter = _TheCounter(this);
     } else {
@@ -129,7 +129,7 @@ class CounterTimer extends StateXController {
       //
       _index++;
 
-      if (_index > _con.count) {
+      if (_index > _con.data) {
         _index = 0;
       }
       // Rebuild any 'dependencies'

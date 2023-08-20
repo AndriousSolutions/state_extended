@@ -87,7 +87,7 @@ class Page2State extends StateX<Page2> {
   @override
   Widget buildF(BuildContext context) => BuildPage(
         label: '2',
-        count: con.count,
+        count: con.data,
         counter: con.onPressed,
         row: (context) => [
           /// Page button for Page 1

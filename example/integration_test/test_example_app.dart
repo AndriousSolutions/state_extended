@@ -232,36 +232,56 @@ Future<void> testHomePageApp(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('Hello! example')));
   await tester.pumpAndSettle();
 
-  expect(find.text('Hello!'), findsOneWidget);
-
+  // Max. count for testing
   const count = 5;
 
-  /// Increment the counter
-  for (int cnt = 0; cnt <= count - 1; cnt++) {
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byKey(const Key('+')));
-    await tester.pumpAndSettle();
+  // A Singleton pattern allows for unit testing.
+  final con = Controller();
+
+  // Page 2 and the controller share a counter allowing for some internal testing.
+  // The count may be greater than 5
+  if (con.data < 6) {
+    //
+    expect(find.text('Hello!'), findsOneWidget);
+
+    /// Increment the counter
+    for (int cnt = 0; cnt <= count - 1; cnt++) {
+      // Tap the '+' icon and trigger a frame.
+      await tester.tap(find.byKey(const Key('+')));
+      await tester.pumpAndSettle();
+    }
   }
 
-  expect(find.text('Hello There!'), findsOneWidget);
+  // The count may be greater than 5
+  if (con.data < 11) {
+    //
+    expect(find.text('Hello There!'), findsOneWidget);
 
-  /// Increment the counter
-  for (int cnt = 0; cnt <= count - 1; cnt++) {
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byKey(const Key('+')));
-    await tester.pumpAndSettle();
+    /// Increment the counter
+    for (int cnt = 0; cnt <= count - 1; cnt++) {
+      // Tap the '+' icon and trigger a frame.
+      await tester.tap(find.byKey(const Key('+')));
+      await tester.pumpAndSettle();
+    }
   }
 
-  expect(find.text('How are you?'), findsOneWidget);
+  // The count may be greater than 5
+  if (con.data < 16) {
+    //
+    expect(find.text('How are you?'), findsOneWidget);
 
-  /// Increment the counter
-  for (int cnt = 0; cnt <= count - 1; cnt++) {
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byKey(const Key('+')));
-    await tester.pumpAndSettle();
+    /// Increment the counter
+    for (int cnt = 0; cnt <= count - 1; cnt++) {
+      // Tap the '+' icon and trigger a frame.
+      await tester.tap(find.byKey(const Key('+')));
+      await tester.pumpAndSettle();
+    }
   }
 
-  expect(find.text('Are you good?'), findsOneWidget);
+  // The count may be greater than 5
+  if (con.data < 21) {
+    expect(find.text('Are you good?'), findsOneWidget);
+  }
 
   /// Retreat back one screen
   await tester.tap(find.byTooltip('Back'));

@@ -10,8 +10,4 @@ export 'package:example/src/another_app/home/view.dart';
 
 export 'package:flutter/material.dart' hide StateSetter;
 
-export 'package:state_extended/state_extended.dart'
-//    show InheritedStateX, StateX;
-    show
-        StateIn,
-        StateX;
+export 'package:state_extended/state_extended.dart' show StateIn, StateX;

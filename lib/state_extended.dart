@@ -72,15 +72,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// Implement this function instead of the build() function
   /// so to utilize a built-in FutureBuilder Widget and not the InheritedWidget.
-  @override
-  @protected
-  Widget buildF(BuildContext context) => super.buildF(context);
+  // @override
+  // @protected
+  // Widget buildF(BuildContext context) => super.buildF(context);
 
   /// Implement the build() function if you wish
   /// to not use the mixin, FutureBuilderStateMixin
-  @override
-  @protected
-  Widget build(BuildContext context) => super.build(context);
+  // @override
+  // @protected
+  // Widget build(BuildContext context) => super.build(context);
 
   /// You need to be able access the widget.
   @override
@@ -1822,6 +1822,9 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// to utilize a built-in FutureBuilder Widget.
   Widget buildF(BuildContext context) => const SizedBox();
 
+  /// Supply a 'splash screen' while the FutureBuilder is processing.
+  Widget? onSplashScreen(BuildContext context) => null;
+
   @override
   Widget build(BuildContext context) {
     // Don't run runAsync() function if _ranAsync is true.
@@ -1836,56 +1839,80 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
+  /// Clean up
+  @override
+  void dispose() {
+    _future = null;
+    super.dispose();
+  }
+
   /// Don't call runAsync() and initAsync() ever again once this is true.
   bool _ranAsync = false;
 
   /// IMPORTANT
   /// The _future must be created first. If the _future is created at the same
   /// time as the FutureBuilder, then every time the FutureBuilder's parent is
-  /// rebuilt, the asynchronous task will be restarted.
+  /// rebuilt, the asynchronous task will be performed again.
   Future<bool>? _future;
 
   /// Run the StateX object's initAsync() function
-  Future<bool> runAsync() async {
+  /// Override this function to repeatedly run initAsync()
+  Future<bool> runAsync() {
     // Once true, initAsync() function is never run again
     // unless the runAsync() function is overridden.
-    return _ranAsync = await initAsync();
+    _ranAsync = true;
+    return initAsync();
   }
 
   /// You're to override this function and initialize any asynchronous operations
   Future<bool> initAsync() async => true;
 
+  /// Supply the AsyncSnapshot
+  AsyncSnapshot<bool>? get snapshot => _snapshot;
+  AsyncSnapshot<bool>? _snapshot;
+
+  /// Record any splash screen
+  Widget? _splashScreen;
+
   /// Returns the appropriate widget when the Future is completed.
   Widget _futureBuilder(BuildContext context, AsyncSnapshot<bool> snapshot) {
     //
+    _snapshot = snapshot;
+
     Widget? widget;
     FlutterErrorDetails? errorDetails;
 
-    if (snapshot.hasData && snapshot.data!) {
-      /// IMPORTANT: Must supply the State object's context: this.context
-      widget = buildF(this.context);
-      //
-    } else if (snapshot.connectionState == ConnectionState.done) {
-      // Reset the flag as the runAsync() function was unsuccessful
-      // IMPORTANT Don't move this or '_ranAsync ?' above will no longer work
-      _ranAsync = false;
+    if (snapshot.connectionState == ConnectionState.done) {
+      // No, don't reset. It's done.
+      // // Reset the flag as the runAsync() function was unsuccessful
+      // // IMPORTANT Don't move this line or '_ranAsync ?' above will no longer work
+      // _ranAsync = false;
 
-      if (snapshot.hasError) {
+      // Release any splash screen
+      _splashScreen = null;
+
+      if (snapshot.hasData) {
+        // && snapshot.data!) {
         //
-        final dynamic exception = snapshot.error;
+        /// IMPORTANT: Must supply the State object's context: this.context
+        widget = buildF(this.context);
+        //
+      } else if (snapshot.hasError) {
+        //
+        final exception = snapshot.error!;
 
         errorDetails = FlutterErrorDetails(
           exception: exception,
           stack: exception is Error ? exception.stackTrace : null,
           library: 'state_extended.dart',
-          context: ErrorDescription('while getting ready in FutureBuilder!'),
+          context: ErrorDescription('Error in FutureBuilder'),
         );
 
         // Possibly recover resources and close services before continuing to exit in error.
         onAsyncError(errorDetails);
         //
       } else {
-        //
+        // Since commented out '// && snapshot.data!) {' this bit of code should never run.
         errorDetails = FlutterErrorDetails(
           exception: Exception('App failed to initialize'),
           library: 'state_extended.dart',
@@ -1899,23 +1926,64 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
       // Keep trying until there's an error.
       if (errorDetails == null) {
         //
-        if (UniversalPlatform.isAndroid || UniversalPlatform.isWeb) {
-          //
-          widget = const Center(child: CircularProgressIndicator());
+        // A splash screen may have been supplied
+        if (_splashScreen != null) {
+          widget = _splashScreen;
         } else {
+          try {
+            // Display the splash screen
+            // IMPORTANT: Supply the State object's context: this.context
+            _splashScreen = onSplashScreen(this.context);
+            widget = _splashScreen;
+          } catch (e) {
+            // Don't run the splashScreen ever again. It's in error.
+            _splashScreen = const SizedBox();
+            errorDetails = FlutterErrorDetails(
+              exception: e,
+              stack: e is Error ? e.stackTrace : null,
+              library: 'state_extended.dart',
+              context: ErrorDescription('Error in Splash Screen'),
+            );
+            // Notify developer
+            FlutterError.presentError(errorDetails);
+          }
+        }
+
+        // Still no widget
+        if (widget == null) {
           //
-          widget = const Center(child: CupertinoActivityIndicator());
+          if (UniversalPlatform.isIOS) {
+            //
+            widget = const Center(child: CupertinoActivityIndicator());
+          } else {
+            //
+            widget = const Center(child: CircularProgressIndicator());
+          }
         }
         // There was an error instead.
       } else {
         //
-        FlutterError.reportError(errorDetails);
+        // Resets the count of errors to show a complete error message not an abbreviated one.
+        FlutterError.resetErrorCount();
+        // Log the error
+        FlutterError.presentError(errorDetails);
+
+        // Release any splash screen
+        _splashScreen = null;
 
         try {
           widget = ErrorWidget.builder(errorDetails);
         } catch (e) {
           // Must provide something. Blank then
           widget = const SizedBox();
+          errorDetails = FlutterErrorDetails(
+            exception: e,
+            stack: e is Error ? e.stackTrace : null,
+            library: 'state_extended.dart',
+            context: ErrorDescription('Error in FutureBuilder error routine'),
+          );
+          // Notify developer
+          FlutterError.presentError(errorDetails);
         }
       }
     }
@@ -1923,7 +1991,7 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Supply an 'error handler' routine if something goes wrong
-  /// in the corresponding runAsync() routine.
+  /// in the corresponding runAsync() or initAsync() routine.
   void onAsyncError(FlutterErrorDetails details) {}
 }
 
@@ -2211,18 +2279,27 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Possibly the error occurred there.
     final state = endState;
 
-    if (state != null) {
+    if (state != null && state is StateX) {
       try {
+        //
+        bool caught = false;
+
         final stack = details.stack?.toString();
-        if (stack != null) {
-          //
+        //
+        if (stack == null) {
+          // If it involves particular libraries
+          final library = details.library;
+          caught = library != null &&
+              (library.contains('gesture') || library.contains('widgets'));
+        } else {
+          // That State object's build() function was called.
           var name = state.toString();
           name = name.substring(0, name.indexOf('#'));
-          // That State object's build() function was called.
-          if (state is StateX && stack.contains('$name.build')) {
-            //
-            state.onError(details);
-          }
+          caught = stack.contains('$name.build');
+        }
+        // Call the StateX's onError() function
+        if (caught) {
+          state.onError(details);
         }
       } catch (e, stack) {
         recordException(e, stack);
@@ -2300,17 +2377,6 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         }
       }
     }
-  }
-
-  void _logError(FlutterErrorDetails details) {
-    // Don't when in DebugMode.
-    if (!kDebugMode) {
-      // Resets the count of errors to show a complete error message or an abbreviated one.
-      FlutterError.resetErrorCount();
-    }
-    // https://docs.flutter.dev/testing/errors#errors-caught-by-flutter
-    // Log the error.
-    FlutterError.presentError(details);
   }
 }
 
@@ -2682,6 +2748,17 @@ mixin RootState {
 mixin StateXonErrorMixin {
   /// Offer an error handler
   void onError(FlutterErrorDetails details) {}
+
+  void _logError(FlutterErrorDetails details) {
+    // Don't when in DebugMode.
+    if (!kDebugMode) {
+      // Resets the count of errors to show a complete error message not an abbreviated one.
+      FlutterError.resetErrorCount();
+    }
+    // https://docs.flutter.dev/testing/errors#errors-caught-by-flutter
+    // Log the error.
+    FlutterError.presentError(details);
+  }
 }
 
 /// Record an exception
