@@ -4,6 +4,7 @@ August 28, 2023
 - Localizations in FutureBuilderStateMixin
 - getter usingCupertino
 - notifyClients() has try..catch
+- Update didPushRouteInformation()
 
 ## 4.4.0+1
 August 19, 2023

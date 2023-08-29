@@ -25,12 +25,6 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 
-//import 'package:flutter_test/flutter_test.dart' show TestWidgetsFlutterBinding;
-
-/// Replace 'dart:io' for Web applications
-import 'package:universal_platform/universal_platform.dart'
-    show UniversalPlatform;
-
 /// The extension of the State class.
 ///
 /// dartdoc:
@@ -697,7 +691,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// [SystemChannels.navigation].
   ///
   /// The default implementation is to call the [didPushRoute] directly with the
-  /// [RouteInformation.location].
+  /// [RouteInformation.uri].
   @override
   @protected
   @mustCallSuper
@@ -1711,9 +1705,20 @@ mixin StateListener implements RouteAware {
   /// [SystemChannels.navigation].
   ///
   /// The default implementation is to call the [didPushRoute] directly with the
-  /// [RouteInformation.location].
-  Future<bool> didPushRouteInformation(RouteInformation routeInformation) =>
-      didPushRoute(routeInformation.location!);
+  /// [RouteInformation.uri].
+  Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
+    final Uri uri = routeInformation.uri;
+    return didPushRoute(
+      Uri.decodeComponent(
+        Uri(
+          path: uri.path.isEmpty ? '/' : uri.path,
+          queryParameters:
+              uri.queryParametersAll.isEmpty ? null : uri.queryParametersAll,
+          fragment: uri.fragment.isEmpty ? null : uri.fragment,
+        ).toString(),
+      ),
+    );
+  }
 
   /// The top route has been popped off, and this route shows up.
   @override
@@ -2021,10 +2026,9 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
 
   /// Is the CupertinoApp being used?
   bool get usingCupertino =>
-      _usingCupertino = context.getElementForInheritedWidgetOfExactType<
-              CupertinoUserInterfaceLevel>() !=
-          null;
-  bool? _usingCupertino;
+      context.getElementForInheritedWidgetOfExactType<
+          CupertinoUserInterfaceLevel>() !=
+      null;
 
   /// Supply Localizations before displaying the widget
   Widget _localizeWidget(BuildContext context, Widget child) {
