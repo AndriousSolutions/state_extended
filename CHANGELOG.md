@@ -1,4 +1,10 @@
 
+## 4.5.0
+August 28, 2023
+- Localizations in FutureBuilderStateMixin
+- getter usingCupertino
+- notifyClients() has try..catch
+
 ## 4.4.0+1
 August 19, 2023
 - Includes an onSplashScreen routine

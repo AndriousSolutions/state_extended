@@ -14,7 +14,12 @@ import 'dart:math' show Random;
 
 import 'dart:ui' show AppExitResponse;
 
-import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
+import 'package:flutter/cupertino.dart'
+    show
+        CupertinoActivityIndicator,
+        CupertinoLocalizations,
+        CupertinoUserInterfaceLevel,
+        DefaultCupertinoLocalizations;
 
 import 'package:flutter/foundation.dart';
 
@@ -92,7 +97,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// Provide the 'main' controller to this 'State View.'
   /// If _controller == null, get the 'first assigned' controller if any.
-  StateXController? get controller => _controller ??= rootCon;
+  StateXController? get controller => _controller ??= firstCon;
 
   /// Add a specific StateXController to this View.
   /// Returns the StateXController's unique String identifier.
@@ -1200,9 +1205,16 @@ mixin _ControllersByType on State {
 
   /// Returns 'the first' StateXController associated with this StateX object.
   /// Returns null if empty.
-  StateXController? get rootCon {
+  StateXController? get firstCon {
     final list = controllerList;
     return list.isEmpty ? null : list.first;
+  }
+
+  /// Returns 'the last' StateXController associated with this StateX object.
+  /// Returns null if empty.
+  StateXController? get lastCon {
+    final list = controllerList;
+    return list.isEmpty ? null : list.last;
   }
 
   /// To externally 'process' through the controllers.
@@ -1283,13 +1295,24 @@ mixin _MapOfStates on State {
     return statesById(keys).values.toList();
   }
 
+  /// Returns 'the first' StateXController associated with this StateX object.
+  /// Returns null if empty.
+  StateXController? get rootCon {
+    StateXController? controller;
+    final state = startState;
+    if (state != null) {
+      controller = (state as StateX).controller;
+    }
+    return controller;
+  }
+
   /// Return the first State object
   // Bit of overkill, but some programmers don't appreciate Polymorphism.
-  State? get startState => _nextStateX(); //startStateX;
+  State? get startState => _nextStateX();
 
   /// Return the 'latest' State object
   // Bit of overkill, but some programmers don't appreciate Polymorphism.
-  State? get endState => _nextStateX(reversed: true); //endStateX;
+  State? get endState => _nextStateX(reversed: true);
 
   /// Loop through the list and return the next available State object
   StateX? _nextStateX({bool? reversed}) {
@@ -1399,7 +1422,7 @@ class StateXController with SetStateMixin, StateListener, RootState, AsyncOps {
 
   /// In harmony with Flutter's own API
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
-  void notifyClients() => _stateX?.notifyClients();
+  bool notifyClients() => _stateX?.notifyClients() ?? false;
 }
 
 /// Used by StateXController
@@ -1952,7 +1975,7 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
         // Still no widget
         if (widget == null) {
           //
-          if (UniversalPlatform.isIOS) {
+          if (usingCupertino) {
             //
             widget = const Center(child: CupertinoActivityIndicator());
           } else {
@@ -1986,6 +2009,8 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
           FlutterError.presentError(errorDetails);
         }
       }
+      // Likely needs Localization
+      widget = _localizeWidget(this.context, widget);
     }
     return widget;
   }
@@ -1993,6 +2018,37 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
   /// Supply an 'error handler' routine if something goes wrong
   /// in the corresponding runAsync() or initAsync() routine.
   void onAsyncError(FlutterErrorDetails details) {}
+
+  /// Is the CupertinoApp being used?
+  bool get usingCupertino =>
+      _usingCupertino = context.getElementForInheritedWidgetOfExactType<
+              CupertinoUserInterfaceLevel>() !=
+          null;
+  bool? _usingCupertino;
+
+  /// Supply Localizations before displaying the widget
+  Widget _localizeWidget(BuildContext context, Widget child) {
+    Widget widget;
+    Object? material, cupertino;
+    material =
+        Localizations.of<MaterialLocalizations>(context, MaterialLocalizations);
+    cupertino = Localizations.of<CupertinoLocalizations>(
+        context, CupertinoLocalizations);
+    if (material != null || cupertino != null) {
+      widget = child;
+    } else {
+      widget = Localizations(
+        locale: const Locale('en', 'US'),
+        delegates: const <LocalizationsDelegate<dynamic>>[
+          DefaultWidgetsLocalizations.delegate,
+          DefaultMaterialLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+        ],
+        child: child,
+      );
+    }
+    return widget;
+  }
 }
 
 /// Supplies an InheritedWidget to a State class
@@ -2064,7 +2120,28 @@ mixin InheritedWidgetStateMixin<T extends StatefulWidget> on State<T> {
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   bool notifyClients() {
     if (_useInherited) {
-      setState(() {});
+      try {
+        setState(() {});
+        // catch any errors if called inappropriately
+      } catch (e, stack) {
+        // Throw in DebugMode.
+        if (kDebugMode) {
+          rethrow;
+        } else {
+          //
+          final details = FlutterErrorDetails(
+            exception: e,
+            stack: stack,
+            library: 'state_extended.dart',
+            context: ErrorDescription('notifyClient() error in $this'),
+          );
+          // Resets the count of errors to show a complete error message not an abbreviated one.
+          FlutterError.resetErrorCount();
+          // https://docs.flutter.dev/testing/errors#errors-caught-by-flutter
+          // Log the error.
+          FlutterError.presentError(details);
+        }
+      }
     }
     return _useInherited;
   }
@@ -2251,8 +2328,25 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Don't if already in the SetState.builder() function
     final notify = !_inSetStateBuilder;
     if (notify) {
-      // Calls the app's InheritedWidget again
-      _inheritedState?.setState(() {});
+      try {
+        // Calls the app's InheritedWidget again
+        _inheritedState?.setState(() {});
+        // catch any errors if called inappropriately
+      } catch (e, stack) {
+        // Throw in DebugMode.
+        if (kDebugMode) {
+          rethrow;
+        } else {
+          final details = FlutterErrorDetails(
+            exception: e,
+            stack: stack,
+            library: 'state_extended.dart',
+            context: ErrorDescription('notifyClient() error in $this'),
+          );
+          // Record the error
+          _logError(details);
+        }
+      }
     }
     return notify;
   }

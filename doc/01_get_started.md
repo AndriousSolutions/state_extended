@@ -6,7 +6,7 @@ These features are nothing new to Flutter.
 StateX is an amalgamation of other features already written in Flutter.
 My motto when writing this package has been, 'Keep it simple, Keep it Flutter.'
 
-<table cellspacing="0" cellpadding="0" border="0" align="center">
+<table>
   	<caption>Contents</caption>
     <tbody>
     <tr>
