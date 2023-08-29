@@ -23,7 +23,7 @@ dartdoc:
     - "Get started"
     - "StateX class"
     - "State Object Controller"
-    - "AppState class"
+    - "AppStateX class"
     - "Error handling"
     - "Testing"
   showUndocumentedCategories: true
