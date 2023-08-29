@@ -348,10 +348,10 @@ Future<void> testsStateX(WidgetTester tester) async {
   /// Called when the app's Locale changes
   stateObj.didChangeLocales([locale]);
 
-  /// Testing the Life-cycle Event Handling
+  /// Return the 'first' controller
   final controller = stateObj.rootCon;
 
-  expect(controller, isA<Controller>(), reason: _location);
+  expect(controller, isA<ExampleAppController>(), reason: _location);
 
   final debug = stateObj.inDebugMode;
 
