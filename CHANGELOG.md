@@ -1,12 +1,12 @@
 
-## 4.5.1
+## 4.5.1+2
 August 28, 2023
 - Localizations in FutureBuilderStateMixin
 - getter usingCupertino
 - notifyClients() has try..catch
 - Update didPushRouteInformation()
 - rootCon now returns the 'root' controller
-- Corrected the test routines
+- Corrected the test routines and documentation
 
 ## 4.4.0+1
 August 19, 2023

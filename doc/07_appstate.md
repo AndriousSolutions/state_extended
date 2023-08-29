@@ -77,8 +77,9 @@ or taken in by the State object, <i>_MyAppState</i>.
 <a id="_MyAppStateDevTools" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/01edf1b4-f5f4-4d93-924a-988e628ee6d5"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/01edf1b4-f5f4-4d93-924a-988e628ee6d5" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
-|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L18) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
 <h2 id="control">Control</h2>
 At a glance, you can deduce each controller class has a specific responsibility;
 a particular role to play in the running of this app.
@@ -104,8 +105,9 @@ And so, before this first screen appears, this example app is going to know whic
 <a id="MyAppInitAsync" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/e14287cc-8a79-4b12-aabf-8f71227107db"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/e14287cc-8a79-4b12-aabf-8f71227107db" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
-|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L18) | [myapp_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/controller/myapp_controller.dart#L6) |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
 <h2 id="prefer">Preferences</h2>
 The static function, <i>getBool</i>(), is called to determine the design and is found in the Prefs class.
 As it happens, the Prefs class is another controller (extends StateXController) 
@@ -132,8 +134,9 @@ Regardless, you'll see things are being set up in a consistent fashion.
 <a id="PrefsinitAsync" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/a6aeaed1-aabd-48fa-9aa1-dc470e61a40b"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/a6aeaed1-aabd-48fa-9aa1-dc470e61a40b" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
-|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L18) | [preference_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/controller/preference_controller.dart#L7) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
 <h2 id="fonts">Fonts</h2>
 Next one is the GoogleFontsController.
 In the first screenshot below, you see it taken in by the App's State object.
@@ -152,9 +155,11 @@ Optionally, you could have a 'splash screen' displayed instead.
 <a id="_initFont" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/35cd3796-c75f-4060-bf10-eeb477d62dfc"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/35cd3796-c75f-4060-bf10-eeb477d62dfc" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
-|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L18) | [google_fonts.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/controller/google_fonts.dart#L17C1-L17C1) |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
 <h2 id="get">Get Control</h2>
+
 Ok, there's clearly a separation of responsibility here. 
 Separation blocks on code labeled controllers with ready access to State objects.
 One deals with changing the app's font,
@@ -180,9 +185,11 @@ Regardless, the property variable, <i>googleFonts</i>, is assigned and ready for
 <a id="_MyAppStateInitState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/413f6f28-430f-42fa-87fa-d6770033aeb4"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/413f6f28-430f-42fa-87fa-d6770033aeb4" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
-|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L18) | [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L33) |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
 <h2 id="development">Development</h2>
+
 On the other hand, the property variable, <i>dev</i>, was assigned right away with the App state's constructor.
 It's used to convey any selected development tool if and when any of the class, <i>DevTools</i>,  own properties is set to true
 (see the second screenshot below).
@@ -200,9 +207,11 @@ performing the event handling and business rules receptive by that particular sc
 <a id="buildInUseMaterial" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/8daf3119-a7eb-43b2-af02-d2195ac63650"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/8daf3119-a7eb-43b2-af02-d2195ac63650" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L18) | [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L57) |
 |:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+
 <h2 id="app">Parameters</h2>
+
 Now we're going to take a look at what's inside the _<b>materialView</b>() and _<b>cupertinoView</b>() functions.
 Of course, one utilizes the Material interface design, the other uses widgets for the Cupertino design.
 That means one uses the widget, <i>MaterialApp</i>, the other uses the widget, <i>CupertinoApp</i> (see below).
@@ -216,8 +225,9 @@ Call the <b>setState</b>() function for the AppStateX object, and you'll have a 
 <a id="CupertinoApp" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/68a22daf-b037-498d-9613-fd9e4923fa26"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/68a22daf-b037-498d-9613-fd9e4923fa26" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
-|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L76) | [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L123) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
 <a id="switchInterface" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/c70e2f15-a639-49f8-8916-17c6e2f94a76"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/c70e2f15-a639-49f8-8916-17c6e2f94a76" width="171" height="357"></a>
 <h2 id="face">New Face</h2>
 
@@ -253,8 +263,8 @@ so that, next time the app starts up, the Cupertino interface design is used.
 <a id="onSelected" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/ff33d719-87da-4bcc-9e97-b0138651517b"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/ff33d719-87da-4bcc-9e97-b0138651517b" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
-|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [myapp_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/controller/myapp_controller.dart#L31) | [myapp_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/controller/myapp_controller.dart#L55) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 And so, as you see in the first screenshot below of the App State object's 'build' function again,
 when either the <b>setState</b>() or the <b>rootState</b>() function is called,
@@ -267,9 +277,11 @@ We'll see how that's done next.
 <a id="buildInuseMaterial" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/e3de745e-107a-4b3e-b8ab-5a561eaf0231"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/e3de745e-107a-4b3e-b8ab-5a561eaf0231" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) |
-|:------------------------------------------------------------------------------------------------------------------|
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L56) |
+|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
 <h2 id="new">New Font</h2>
+
 Let's walk with the controller responsible for supplying and changing the app's font.
 It's the <i>GoogleFontsController</i> and, in the first screenshot below, it's instantiated to the App's State object, <i>_MyAppState</i>.
 As you know, it's then assigned to the instance variable, <i>googleFonts</i>, in the State object's <b>initState</b>() function
@@ -280,8 +292,9 @@ That variable is now available to the rest of the State object and its functions
 <a id="GooglefontsInitState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/c0b00fdb-ed6b-4d67-895d-8ac245c94ec7"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/c0b00fdb-ed6b-4d67-895d-8ac245c94ec7" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
-|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L25) | [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L37) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
 For example, further down the State object in its <b>_materialView</b>() function,
 that variable is then utilized to assign the font to be used by the app.
 The GoogleFontsController is displayed in the second screenshot below.
@@ -295,5 +308,5 @@ As easy as all that.
 <a id="showFonts" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/eda71633-93a1-46fc-a013-45551daa1de9"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/eda71633-93a1-46fc-a013-45551daa1de9" width="48%" height="60%"></a>
 </div>
 
-| [my_app.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/home/page_01.dart#L15) |
-|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L81) | [google_fonts.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/controller/google_fonts.dart#L88) |
+|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
