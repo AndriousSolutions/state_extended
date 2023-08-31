@@ -35,6 +35,9 @@ class ExampleAppController extends StateXController {
   /// Error right at the start
   bool errorAtStartup = false;
 
+  /// Allow for a Splash screen or not
+  bool splashScreen = false;
+
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.
   @override

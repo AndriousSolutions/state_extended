@@ -6,6 +6,8 @@
 
 export 'package:example/src/view/app/my_app.dart';
 
+export 'package:example/src/view/app/splash_screen.dart';
+
 export 'package:example/src/view/home/_view.dart';
 
 export 'package:flutter/cupertino.dart' show CupertinoSwitch;

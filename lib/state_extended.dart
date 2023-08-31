@@ -16,7 +16,6 @@ import 'dart:ui' show AppExitResponse;
 
 import 'package:flutter/cupertino.dart'
     show
-        CupertinoActivityIndicator,
         CupertinoLocalizations,
         CupertinoUserInterfaceLevel,
         DefaultCupertinoLocalizations;
@@ -1105,6 +1104,9 @@ mixin _ControllersByType on State {
   bool contains(StateXController con) =>
       _mapControllerByType.containsValue(con);
 
+  /// Returns true if found
+  bool containsType<T>() => _mapControllerByType.containsKey(T);
+
   /// List the controllers.
   List<StateXController> get controllerList =>
       _mapControllerByType.values.toList(growable: false);
@@ -1845,7 +1847,7 @@ mixin StateListener implements RouteAware {
 /// dartdoc:
 /// {@category StateX class}
 /// {@category Built-in FutureBuilder}
-mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
+mixin FutureBuilderStateMixin on State {
   /// Implement this function instead of the build() function
   /// to utilize a built-in FutureBuilder Widget.
   Widget buildF(BuildContext context) => const SizedBox();
@@ -1962,37 +1964,42 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
             // Display the splash screen
             // IMPORTANT: Supply the State object's context: this.context
             _splashScreen = onSplashScreen(this.context);
+
             widget = _splashScreen;
           } catch (e) {
             // Don't run the splashScreen ever again. It's in error.
             _splashScreen = const SizedBox();
-            errorDetails = FlutterErrorDetails(
-              exception: e,
-              stack: e is Error ? e.stackTrace : null,
-              library: 'state_extended.dart',
-              context: ErrorDescription('Error in Splash Screen'),
-            );
-            // Notify developer
-            FlutterError.presentError(errorDetails);
+
+            // Throw in DebugMode.
+            if (kDebugMode) {
+              rethrow;
+            } else {
+              //
+              errorDetails = FlutterErrorDetails(
+                exception: e,
+                stack: e is Error ? e.stackTrace : null,
+                library: 'state_extended.dart',
+                context: ErrorDescription('Error in Splash Screen'),
+              );
+
+              // Resets the count of errors to show a complete error message not an abbreviated one.
+              FlutterError.resetErrorCount();
+
+              // Log errors
+              FlutterError.presentError(errorDetails);
+            }
           }
         }
 
         // Still no widget
-        if (widget == null) {
-          //
-          if (usingCupertino) {
-            //
-            widget = const Center(child: CupertinoActivityIndicator());
-          } else {
-            //
-            widget = const Center(child: CircularProgressIndicator());
-          }
-        }
+        //  CupertinoActivityIndicator used if TargetPlatform.iOS or TargetPlatform.macOS
+        widget ??= const Center(child: CircularProgressIndicator());
+
         // There was an error instead.
       } else {
-        //
         // Resets the count of errors to show a complete error message not an abbreviated one.
         FlutterError.resetErrorCount();
+
         // Log the error
         FlutterError.presentError(errorDetails);
 
@@ -2004,14 +2011,25 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
         } catch (e) {
           // Must provide something. Blank then
           widget = const SizedBox();
-          errorDetails = FlutterErrorDetails(
-            exception: e,
-            stack: e is Error ? e.stackTrace : null,
-            library: 'state_extended.dart',
-            context: ErrorDescription('Error in FutureBuilder error routine'),
-          );
-          // Notify developer
-          FlutterError.presentError(errorDetails);
+
+          // Throw in DebugMode.
+          if (kDebugMode) {
+            rethrow;
+          } else {
+            //
+            errorDetails = FlutterErrorDetails(
+              exception: e,
+              stack: e is Error ? e.stackTrace : null,
+              library: 'state_extended.dart',
+              context: ErrorDescription('Error in FutureBuilder error routine'),
+            );
+
+            // Resets the count of errors to show a complete error message not an abbreviated one.
+            FlutterError.resetErrorCount();
+
+            // Log errors
+            FlutterError.presentError(errorDetails);
+          }
         }
       }
       // Likely needs Localization
@@ -2060,7 +2078,7 @@ mixin FutureBuilderStateMixin<T extends StatefulWidget> on State<T> {
 /// dartdoc:
 /// {@category StateX class}
 /// {@category Built-in InheritedWidget}
-mixin InheritedWidgetStateMixin<T extends StatefulWidget> on State<T> {
+mixin InheritedWidgetStateMixin on State {
   // A flag determining whether the built-in InheritedWidget is used or not.
   late bool _useInherited;
 
@@ -2384,20 +2402,23 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
         final stack = details.stack?.toString();
         //
-        if (stack == null) {
-          // If it involves particular libraries
-          final library = details.library;
-          caught = library != null &&
-              (library.contains('gesture') || library.contains('widgets'));
-        } else {
+        if (stack != null) {
           // That State object's build() function was called.
           var name = state.toString();
           name = name.substring(0, name.indexOf('#'));
           caught = stack.contains('$name.build');
-        }
-        // Call the StateX's onError() function
-        if (caught) {
-          state.onError(details);
+
+          if (!caught) {
+            // If it involves particular libraries
+            final library = details.library;
+            caught = library != null &&
+                (library.contains('gesture') || library.contains('widgets'));
+          }
+
+          // Call the StateX's onError() function
+          if (caught && state != this) {
+            state.onError(details);
+          }
         }
       } catch (e, stack) {
         recordException(e, stack);
@@ -2444,9 +2465,26 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     try {
       onError(details);
     } catch (e) {
-      // If the handler also errors, it's throw to be handled
-      // by the original routine.
-      rethrow;
+      // Throw in DebugMode.
+      if (kDebugMode) {
+        // If the handler also errors, it's throw to be handled
+        // by the original routine.
+        rethrow;
+      } else {
+        //
+        final errorDetails = FlutterErrorDetails(
+          exception: e,
+          stack: e is Error ? e.stackTrace : null,
+          library: 'state_extended.dart',
+          context: ErrorDescription('Error in AppStateX Error Handler'),
+        );
+
+        // Resets the count of errors to show a complete error message not an abbreviated one.
+        FlutterError.resetErrorCount();
+
+        // Log errors
+        FlutterError.presentError(errorDetails);
+      }
     }
     // If handled, return to this State object's error handler.
     FlutterError.onError = _errorHandler;

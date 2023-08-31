@@ -45,7 +45,7 @@ Turn to this free Medium article for an overview of the package plus examples:
    <li id="statex"><a href="https://pub.dev/documentation/state_extended/latest/topics/StateX%20class-topic.html">StateX class</a></li>
    <li id="controller"><a href="https://pub.dev/documentation/state_extended/latest/topics/State%20Object%20Controller-topic.html">State&nbsp;Object&nbsp;Controller</a></li>
    <li id="event"><a href="https://pub.dev/documentation/state_extended/latest/topics/Event%20handling-topic.html">Event handling</a></li>
-   <li id="appstate"><a href="https://pub.dev/documentation/state_extended/latest/topics/AppStateX%20class-topic.html">AppState class</a></li>
+   <li id="appstate"><a href="https://pub.dev/documentation/state_extended/latest/topics/AppStateX%20class-topic.html">AppStateX class</a></li>
    <li id="error"><a href="https://pub.dev/documentation/state_extended/latest/topics/Error%20handling-topic.html">Error Handling</a></li>
    <li id="testing"><a href="https://pub.dev/documentation/state_extended/latest/topics/Testing-topic.html">Testing</a></li>
 </ul>

@@ -1,4 +1,13 @@
 
+# 4.6.0
+August 31, 2023
+- Improved StateX onError() routine
+- More Error handling in _futureBuilder()
+- In development, rethrow errors in error handler
+- Function containsType<T>() in StateX
+- Splash screen in example app
+- Expanded unit testing
+
 ## 4.5.1+2
 August 28, 2023
 - Localizations in FutureBuilderStateMixin

@@ -33,6 +33,18 @@ class _MyAppState extends AppStateX<MyApp> {
           object: 'Hello!',
         );
 
+  @override
+  void initState() {
+    super.initState();
+    final con = controller as ExampleAppController;
+    // No Splash screen when testing
+    if (WidgetsBinding.instance is WidgetsFlutterBinding) {
+      con.splashScreen = true;
+    }
+    // con.allowErrors = true;
+    // con.errorAtStartup = true;
+  }
+
   /// Try these different 'build' functions so to get access
   /// to a built-in FutureBuilder and or an InheritedWidget.
 
@@ -74,5 +86,15 @@ class _MyAppState extends AppStateX<MyApp> {
       // A new unique key will recreate the State object
       home: Page1(key: UniqueKey()),
     );
+  }
+
+  @override
+  Widget? onSplashScreen(context) {
+    Widget? widget;
+    final con = ExampleAppController();
+    if (con.splashScreen) {
+      widget = const SplashScreen();
+    }
+    return widget;
   }
 }

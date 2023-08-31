@@ -67,6 +67,10 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
+  final snapShot = appState.snapshot!;
+
+  expect(snapShot.data, isTrue, reason: _location);
+
   /// Rebuild InheritedWidget
   appState.dataObject = 'test';
 
@@ -112,7 +116,6 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(con, isA<ExampleAppController>(), reason: _location);
 
-  // Deprecated by must still be tested.
   con = appState.controllerByType<TestingController>();
 
   expect(con, isNull, reason: _location);
@@ -123,6 +126,21 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   // As well as the base class, ControllerMVC
   expect(con, isA<StateXController>(), reason: _location);
+
+  var id = appState.add(TestingController());
+
+  /// Remove a specific 'StateXController' by its unique 'key' identifier.
+  var remove = appState.removeByKey(id);
+
+  expect(remove, isTrue, reason: _location);
+
+  var testCon = TestingController();
+
+  appState.add(testCon);
+
+  remove = appState.remove(testCon);
+
+  expect(remove, isTrue, reason: _location);
 
   // Test listControllers
   appState.listControllers([keyId]);
@@ -141,6 +159,18 @@ Future<void> testsStateX(WidgetTester tester) async {
   StatefulWidget widget = stateObj.widget;
 
   expect(widget, isA<MyApp>(), reason: _location);
+
+  /// Returns 'the first' StateXController associated with this StateX object.
+  /// Returns null if empty.
+  con = stateObj.firstCon;
+
+  expect(con, isA<ExampleAppController>(), reason: _location);
+
+  /// Returns 'the last' StateXController associated with this StateX object.
+  /// Returns null if empty.
+  con = stateObj.lastCon;
+
+  expect(con, isA<YetAnotherController>(), reason: _location);
 
   each = stateObj.forEach((con) {
     if (con is YetAnotherController) {
@@ -210,7 +240,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   // It should be from a specific StatefulWidget
   expect(state02!.widget, isA<Page1>(), reason: _location);
 
-  // Returns a List of StateView objects using unique String identifiers.
+  // Returns a List of State objects using unique String identifiers.
   final list = appState.listStates([myAppStateId, keyIdPage1]);
 
   state02 = list[0];
@@ -245,7 +275,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(_state, isA<State>(), reason: _location);
 
   // Test for the unique identifier assigned to every Controller.
-  var id = stateObj.add(TestingController());
+  id = stateObj.add(TestingController());
 
   expect(id, isNotEmpty, reason: _location);
 
@@ -261,6 +291,20 @@ Future<void> testsStateX(WidgetTester tester) async {
       rethrow;
     }
   }
+
+  var hasController = stateObj.containsType<TestingController>();
+
+  expect(hasController, isTrue, reason: _location);
+
+  hasController = stateObj.contains(TestingController());
+
+  expect(hasController, isFalse, reason: _location);
+
+  /// Returns the list of 'Controllers' but you must know their keys.
+  final theController = stateObj.listControllers([id]);
+
+  expect(theController, isNotEmpty, reason: _location);
+
   final keyList = stateObj.addList(null);
 
   expect(keyList, isEmpty, reason: _location);
@@ -312,6 +356,10 @@ Future<void> testsStateX(WidgetTester tester) async {
   id = state01.add(testController);
 
   expect(id, isNotEmpty, reason: _location);
+
+  hasController = stateObj.contains(testController);
+
+  expect(hasController, isTrue, reason: _location);
 
   bool? boolean = await stateObj.didPopRoute();
 
