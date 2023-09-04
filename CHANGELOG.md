@@ -1,5 +1,10 @@
 
-# 4.6.0
+## 4.6.1
+- if (!mounted) { in event handle functions
+- Updating test_statex.dart
+- Updated documentation topic testing
+
+## 4.6.0
 August 31, 2023
 - Improved StateX onError() routine
 - More Error handling in _futureBuilder()

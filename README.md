@@ -35,10 +35,8 @@ Semantic version numbers are always in this format: **major.minor.patch**.
 In this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-  state_extended:^4.5.0
+  state_extended:^4.6.0
 ```
-Turn to this free Medium article for an overview of the package plus examples:
-<a target="_blank" rel="noopener noreferrer" href="https://medium.com/@andrious/statex-b8f57015188f"><img align="right" src="https://user-images.githubusercontent.com/32497443/179269220-80efea47-b852-47c0-a073-b22f502dc437.jpg" alt="StateXMedium" width="500" height="245"></a>
 ## Documentation
 <ul>
    <li id="started"><a href="https://pub.dev/documentation/state_extended/latest/topics/Get%20started-topic.html">Get&nbsp;started</a></li>

@@ -41,7 +41,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   each = stateObj.forEach((con) {
     if (con is YetAnotherController) {
-      throw AssertionError('Error in forEach()!');
+      throw Exception('Error in forEach()!');
     }
   });
 
@@ -74,7 +74,17 @@ Future<void> testsStateX(WidgetTester tester) async {
   /// Rebuild InheritedWidget
   appState.dataObject = 'test';
 
+  appState.state((context) => const SizedBox());
+
   final exception = Exception('Testing');
+
+  final errorDetails = FlutterErrorDetails(
+    exception: exception,
+    library: 'test_statex.dart',
+    context: ErrorDescription('Testing for codecov'),
+  );
+
+  appState.onError(errorDetails);
 
   // Test its if statement.
   appState.catchError(exception);
@@ -174,7 +184,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   each = stateObj.forEach((con) {
     if (con is YetAnotherController) {
-      throw AssertionError('Error in forEach()!');
+      throw Exception('Error in forEach()!');
     }
   });
 
@@ -214,6 +224,9 @@ Future<void> testsStateX(WidgetTester tester) async {
   stateObj = appState.stateByType<Page1State>()!;
 
   expect(stateObj.widget, isA<Page1>(), reason: _location);
+
+  /// Call for testing coverage
+  stateObj.dependOnInheritedWidget(context);
 
   // Test this particular method
   stateObj.updateNewStateX(stateObj);

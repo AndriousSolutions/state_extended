@@ -152,7 +152,7 @@ with the use of controllers.
 The level of abstraction available to you when using these accompanying controllers
 with your State objects will make you wonder how you ever did without.
 It's a very very very simple app, but it's hoped the advantages of using controllers will 
-further come to the forefront in time.
+only become more self-evident.
 
 Note, in the CounterWidget, the line, `Text(con.data, style: Theme.of(context).textTheme.headlineMedium);`,
 is left untouched as you hop from one count option to another listed in the menu.

@@ -555,14 +555,19 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @protected
   @mustCallSuper
   Future<AppExitResponse> didRequestAppExit() async {
+    /// Exiting the application can proceed.
+    var appResponse = AppExitResponse.exit;
+
     // A triggered system event
     _hadSystemEvent = true;
 
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return appResponse;
+    }
+
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
-
-    /// Exiting the application can proceed.
-    var appResponse = AppExitResponse.exit;
 
     // All must allow an exit or it's cancelled.
     for (final con in controllerList) {
@@ -609,12 +614,17 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     ///
     /// This method exposes the `popRoute` notification from
     /// [SystemChannels.navigation].
-    ///
-    /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
 
     /// Set if a StateXController successfully 'handles' the notification.
     bool handled = false;
+
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return handled;
+    }
+
+    /// No 'setState()' functions are allowed to fully function at this point.
+    _setStateAllowed = false;
 
     for (final con in controllerList) {
       final didPop = await con.didPopRoute();
@@ -650,6 +660,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// order until one returns true.
     ///
     /// This method exposes the `pushRoute` notification from
+
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return true;
+    }
 
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
@@ -696,6 +711,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @mustCallSuper
   Future<bool> didPushRouteInformation(
       RouteInformation routeInformation) async {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return true;
+    }
+
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
@@ -728,6 +748,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @protected
   @mustCallSuper
   void didPopNext() {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
@@ -752,6 +777,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @protected
   @mustCallSuper
   void didPush() {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
@@ -776,6 +806,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @protected
   @mustCallSuper
   void didPop() {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
@@ -800,6 +835,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @protected
   @mustCallSuper
   void didPushNext() {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
@@ -844,6 +884,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // A triggered system event
     _hadSystemEvent = true;
 
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
@@ -883,6 +928,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // A triggered system event
     _hadSystemEvent = true;
 
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
@@ -909,6 +959,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   void didChangePlatformBrightness() {
     // A triggered system event
     _hadSystemEvent = true;
+
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
 
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
@@ -939,6 +994,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // A triggered system event
     _hadSystemEvent = true;
 
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+
     ///
     /// This method exposes notifications from [Window.onLocaleChanged].
 
@@ -968,6 +1028,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   void didHaveMemoryPressure() {
     // A triggered system event
     _hadSystemEvent = true;
+
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
 
     ///
     /// This method exposes the `memoryPressure` notification from
@@ -1000,6 +1065,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // A triggered system event
     _hadSystemEvent = true;
 
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+
     ///
     /// This method exposes notifications from [Window.onAccessibilityFeaturesChanged].
 
@@ -1029,6 +1099,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void reassemble() {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
@@ -2604,9 +2679,7 @@ mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
   ///  <id, type>
   final Map<String, Type> _mapControllerTypes = {};
 
-  /// Should not supply a public list of all the Controllers.
-  /// User must know the key identifier(s) to access it publicly
-  /// but a break; must be permitted in For loops and so...
+  /// Supply a public list of all the Controllers.
   @override
   List<StateXController> get controllerList =>
       _mapControllerById.values.toList(growable: false);

@@ -19,13 +19,13 @@ and supply an grid over the app's whole interface. All on a whim.
 You can even switch back and forth the Material design from version 2 to version 3.
 
 Now, those series of changes doesn't involve the home screen.
-What I mean is, as simply as it is, (this app might be to simple an example) 
+What I mean is, as simply as it is, (this app might be too simple an example) 
 the string,'You have pushed the button this many times:', isn't rebuilt with every change.
 By design, the count is rebuilt with every change and with every tap of the button of course, 
 but if the screen was a little more complicated with a few more widgets, in most cases, 
 they would be left untouched like that lone Text widget containing the String (see second screenshot).
 That makes for an efficient app. 
-The less an app's interface is updated, the better they always say.
+The less an app's interface is updated, the better the performance they always say.
 
 Flutter does use the declarative approach rebuilding the whole screen from scratch at times,
 however in this example app, there are two State objects retaining separate states.
@@ -46,6 +46,7 @@ and the floating action button (when the Scaffold widget is being used) is all m
        <td><a href="#app">Parameters</a></td>
        <td><a href="#face">New Face</a></td>
        <td><a href="#new">New Font</a></td>
+       <td><a href="#errors">Errors</a></td>
       </tr>
     </tbody>
 </table>
@@ -73,7 +74,7 @@ it's here where all the necessary controllers that deal with the app's business 
 All the code necessary to run the app as intended is made accessible in instance variables
 or taken in by the State object, <i>_MyAppState</i>.
 <div>
-<a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/977bd3a6-1403-490f-bff9-e3ffb63c145e"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/977bd3a6-1403-490f-bff9-e3ffb63c145e" width="48%" height="60%"></a>
+<a id="AppSateControllers" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/977bd3a6-1403-490f-bff9-e3ffb63c145e"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/977bd3a6-1403-490f-bff9-e3ffb63c145e" width="48%" height="60%"></a>
 <a id="_MyAppStateDevTools" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/01edf1b4-f5f4-4d93-924a-988e628ee6d5"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/01edf1b4-f5f4-4d93-924a-988e628ee6d5" width="48%" height="60%"></a>
 </div>
 
@@ -93,11 +94,11 @@ It could have just as easily been passed in the List using the named parameter, 
 but this is the State object's 'main' controller assigned to the State object's <i>controller</i> property.
 
 In the second screenshot, you can see it has a specific role in the app.
-It is used to determine which interface (Material or Cupertino) is to be display at start up.
+It is to determine which interface (Material or Cupertino) is to be display at start up.
 You can see this controller has its own <b>initAsync</b>() function implemented so to assign the appropriate design.
 If you've read <a href="https://pub.dev/documentation/state_extended/latest/topics/Get%20started-topic.html">Get started</a>,
 you're aware the <b>initAsync</b>() function in both the State and controller objects
-and serves to complete any necessary asynchronous operations before the State object calls its <b>build</b>() function.
+serves to complete any necessary asynchronous operations before the State object calls its <b>build</b>() function.
 And so, before this first screen appears, this example app is going to know which interface design to use.
 
 <div>
@@ -161,7 +162,7 @@ Optionally, you could have a 'splash screen' displayed instead.
 <h2 id="get">Get Control</h2>
 
 Ok, there's clearly a separation of responsibility here. 
-Separation blocks on code labeled controllers with ready access to State objects.
+Separate blocks of code (controllers) with ready access to State objects.
 One deals with changing the app's font,
 one works the color of the app, and one changes the interface design.
 There's one that works with presenting the development tools, 
@@ -176,8 +177,10 @@ Because of this, the <b>controllerByType</b>() function can be used to retrieve 
 However, a factory constructor was used in this class, 
 and so the property variable can just as well be assigned by another constructor call as it will be the same instance
 (see the second screenshot below). 
-Again, not a hardened rule, but the Singleton pattern appears to be most suitable for State Object Controllers,
-and their role.
+Again, not a hardened rule, but the Singleton pattern appears to be most suitable for State Object Controllers
+because of the role they play.
+A single instance for the duration of a running app as a representative of the app's business rules and event handling
+has proven to be most effective.
 Regardless, the property variable, <i>googleFonts</i>, is assigned and ready for use.
 
 <div>
@@ -234,7 +237,6 @@ Call the <b>setState</b>() function for the AppStateX object, and you'll have a 
 When the interface design is switched from Material to Cupertino (see video), 
 all the business involved to make this happen can be found in the controller, <i>MyAppController</i>.
 You'll find even the popup menu is defined in this controller. 
-A personal choice. 
 Since the popup menu was so simple, 
 I chose to place the popup menu code in the App's controller.
 
@@ -266,8 +268,7 @@ so that, next time the app starts up, the Cupertino interface design is used.
 | [myapp_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/controller/myapp_controller.dart#L31) | [myapp_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/controller/myapp_controller.dart#L55) |
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
-And so, as you see in the first screenshot below of the App State object's 'build' function again,
-when either the <b>setState</b>() or the <b>rootState</b>() function is called,
+And so, as you see in the first screenshot below, when either the <b>setState</b>() or the <b>rootState</b>() function is called,
 the App State object's <b>build</b>() function will execute again and the `useMatrial` property determines the appropriate interface.
 
 Now, in the video below, we're repeatedly changing the app's font with no trouble at all.
@@ -310,3 +311,89 @@ As easy as all that.
 
 | [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/view/myapp_view.dart#L81) | [google_fonts.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/a91d2bcdf92cb9b220b845b31080cd25511733a7/lib/app/controller/google_fonts.dart#L88) |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
+<h2 id="errors">Errors</h2>
+<a id="counterApp2" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/c5c52969-bfe1-496b-843e-2f6ad3dce1b9"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/c5c52969-bfe1-496b-843e-2f6ad3dce1b9" width="171" height="357"></a>
+Finally, let's introduce what may be the most important aspect of the AppStateX class:
+it's error handling capability.
+Handle your errors. 
+Your app will have errors and exceptions, and you should anticipate them.
+Flutter actually makes that a distinction with two types of class objects. 
+An Error object represents a program failure that the programmer should have avoided,
+while an Exception object is intended to be caught and contains useful data fields 
+to help you to at least close down resources, notify developers, and fail gracefully.
+
+Every StateX class has an <b>onError</b>() function for you to implement and handle any
+exceptions that may occur while that State object is running.
+The AppStateX class, however, implements its own <b>onError</b>() function to call the <b>onError</b>() function
+of the 'last' State object that was instantiated when the exception occurred. 
+It's a simple, but a powerful arrangement. 
+The AppStateX class records Flutter's current error handler and explicitly assigns this approach instead.
+Before the AppStateX class then terminates, it returns the original error handler.
+Note, there's also an <b>onAsyncError</b>() function for errors occurring while the State object was starting up.
+We'll demonstrate these functions next, and even introduce a custom ErrorWidget builder
+to display a widget when a State object fails to do so.
+
+Such error handling will allow you to possibly recover from the exception and allow the app to continue as intended.
+For example, in this very very simple app there's been a exception occurring with every tap of the count button.
+It would normally result in the count not incrementing at all, but the particular exception is identified,
+and the <b>onError</b>() routine in the controller itself knows what to do to address the issue.
+
+The first screenshot has the exception invoked in the controller's <b>onPressed</b>() function.
+In the second screenshot, the <b>onError</b>() function is called, and the exception is handled.
+The count is successfully incremented and displayed.
+
+<div>
+<a id="onPressed" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/fc7caf1e-8350-4752-b9b6-48ec65a1e56f"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/fc7caf1e-8350-4752-b9b6-48ec65a1e56f" width="48%" height="60%"></a>
+<a id="onError" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/a051ebe8-1baf-4b1d-ba29-437aa6f740e6"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/a051ebe8-1baf-4b1d-ba29-437aa6f740e6" width="48%" height="60%"></a>
+</div>
+
+| [homepage_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/fb922f37580c471889c44d4d899dfa7a1f96e80c/lib/home/controller/homepage_controller.dart#L32) | [homepage_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/fb922f37580c471889c44d4d899dfa7a1f96e80c/lib/home/controller/homepage_controller.dart#L51) |
+|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
+The first screenshot below, shows the <b>onError</b>() and <b>onAsyncError</b>() functions for the State class, <i>_MyHomePageState</i>.
+Again, the _MyHomePageState State object delegates any errors to its controller, <i>MyHomePageController</i>,
+while its <b>onAsyncError</b>() function, in this example, 
+merely prints to the console when triggered by an error.
+In the second screenshot, you see how that particular error is triggered.
+When the State object is starting up and something goes wrong in its <b>initAsync</b>() function or
+in the <b>initAsync</b>() function of one of its controllers,
+its <b>onAsyncError</b>() function is called as a means for the developer to 'clean things up'
+before the app fails. See how that works?
+<div>
+<a id="onAsyncError" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/107055a3-e886-4448-9acc-86f00589c7af"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/107055a3-e886-4448-9acc-86f00589c7af" width="48%" height="60%"></a>
+<a id="initAsyncException" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/ab43414f-5cb9-45ae-be8e-acc6be1af432"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/ab43414f-5cb9-45ae-be8e-acc6be1af432" width="48%" height="60%"></a>
+</div>
+
+| [homepage_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/fb922f37580c471889c44d4d899dfa7a1f96e80c/lib/home/view/homepage_view.dart#L34) | [homepage_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/fb922f37580c471889c44d4d899dfa7a1f96e80c/lib/home/controller/homepage_controller.dart#L9) |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
+The AppStateX class is displayed in the first screenshot. 
+Its <b>buildIn</b>() function is presented, and its controller has the flag, <i>errorInBuild</i>,
+to cause an error right in the State object's 'build' function.
+That means the intended widget is not displayed.
+If this error occurs during development, as you know, a red screen is displayed.
+However, in production, such an error will produce an 'ugly' grey screen to the users.
+Of course, you can always use your own low-level screen instead to display such errors.
+The <i>MyAppController</i>'s constructor is in the second screenshot. 
+Highlighted is the line below replacing the red screen with the custom widget
+from the class, <i>AppWidgetErrorDisplayed</i>: 
+
+`ErrorWidget.builder = (details) =>
+AppWidgetErrorDisplayed(handler: this, stackTrace: kDebugMode).builder(details);`
+
+
+<div>
+<a id="buildInError" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/97bbce6b-281c-4033-9d2a-912ab1a9d044"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/97bbce6b-281c-4033-9d2a-912ab1a9d044" width="48%" height="60%"></a>
+<a id="MyAppController" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/9fdba4d0-9fd8-4134-981f-d4fe4f867a51"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/9fdba4d0-9fd8-4134-981f-d4fe4f867a51" width="48%" height="60%"></a>
+</div>
+
+| [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/fb922f37580c471889c44d4d899dfa7a1f96e80c/lib/app/view/myapp_view.dart#L50) | [myapp_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/fb922f37580c471889c44d4d899dfa7a1f96e80c/lib/app/controller/myapp_controller.dart#L5) |
+|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
+Instead of the unimaginative red screen, you get a screen a little easier read:
+
+<div>
+<a id="oops" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/eb74bfcb-8ec1-4898-815b-b9ec074efc51"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/eb74bfcb-8ec1-4898-815b-b9ec074efc51" width="171" height="357"></a>
+<a id="redScreen" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/dc4a4c8b-37ca-4400-8df1-96fab5b7eebf"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/dc4a4c8b-37ca-4400-8df1-96fab5b7eebf" width="171" height="357"></a>
+</div>

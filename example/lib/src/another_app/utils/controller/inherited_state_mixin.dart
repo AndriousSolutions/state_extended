@@ -127,7 +127,13 @@ class _InheritedState extends State<InheritedStatefulWidget> {
     _widget = widget;
   }
 
-  late InheritedStatefulWidget _widget;
+  InheritedStatefulWidget? _widget;
+
+  @override
+  void didUpdateWidget(covariant InheritedStatefulWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _widget = widget;
+  }
 
   /// Supply an alternate 'child' Widget
   Widget? child;
@@ -137,7 +143,7 @@ class _InheritedState extends State<InheritedStatefulWidget> {
 
   @override
   Widget build(BuildContext context) =>
-      _widget.inheritedWidgetBuilder(child ??= _widget.child);
+      _widget!.inheritedWidgetBuilder(child ??= _widget!.child);
 }
 
 /// Creates a Widget but supplying contents to its build() function

@@ -80,6 +80,10 @@ void testMyApp() {
       // // pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
+      // Go to Page 1
+      await tester.tap(find.byKey(const Key('Page 1')));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
       /// Simulate changing the text size.
       /// Done near the end of testing as it's a very disruptive test
       await testScaleFactor(tester);

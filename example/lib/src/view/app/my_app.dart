@@ -41,6 +41,8 @@ class _MyAppState extends AppStateX<MyApp> {
     if (WidgetsBinding.instance is WidgetsFlutterBinding) {
       con.splashScreen = true;
     }
+
+    /// Set these to run certain error handling
     // con.allowErrors = true;
     // con.errorAtStartup = true;
   }
@@ -80,7 +82,7 @@ class _MyAppState extends AppStateX<MyApp> {
       appCon.errorAtStartup = false;
     }
     if (throwError) {
-      throw AssertionError('Error in buildIn!');
+      throw Exception('Error in buildIn!');
     }
     return MaterialApp(
       // A new unique key will recreate the State object

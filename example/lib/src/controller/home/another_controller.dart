@@ -25,7 +25,7 @@ class AnotherController extends StateXController with StateXonErrorMixin {
     if (tripError && ExampleAppController().allowErrors) {
       // Turn it off now
       ExampleAppController().allowErrors = false;
-      throw AssertionError('Error in AnotherController.initAsync()!');
+      throw Exception('Error in AnotherController.initAsync()!');
     }
     return true;
   }
