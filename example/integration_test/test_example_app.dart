@@ -12,6 +12,7 @@ import '../test/_test_imports.dart';
 
 const _location = '========================== test_example_app.dart';
 
+///
 Future<void> integrationTesting(WidgetTester tester) async {
   //
   const count = 9;

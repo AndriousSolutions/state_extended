@@ -373,15 +373,14 @@ Its <b>buildIn</b>() function is presented, and its controller has the flag, <i>
 to cause an error right in the State object's 'build' function.
 That means the intended widget is not displayed.
 If this error occurs during development, as you know, a red screen is displayed.
-However, in production, such an error will produce an 'ugly' grey screen to the users.
+However, in production, such an error will produce an 'ugly' gray screen.
 Of course, you can always use your own low-level screen instead to display such errors.
 The <i>MyAppController</i>'s constructor is in the second screenshot. 
 Highlighted is the line below replacing the red screen with the custom widget
 from the class, <i>AppWidgetErrorDisplayed</i>: 
 
 `ErrorWidget.builder = (details) =>
-AppWidgetErrorDisplayed(handler: this, stackTrace: kDebugMode).builder(details);`
-
+AppWidgetErrorDisplayed(handler: this, ...`
 
 <div>
 <a id="buildInError" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/97bbce6b-281c-4033-9d2a-912ab1a9d044"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/97bbce6b-281c-4033-9d2a-912ab1a9d044" width="48%" height="60%"></a>
@@ -391,8 +390,10 @@ AppWidgetErrorDisplayed(handler: this, stackTrace: kDebugMode).builder(details);
 | [myapp_view.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/fb922f37580c471889c44d4d899dfa7a1f96e80c/lib/app/view/myapp_view.dart#L50) | [myapp_controller.dart](https://github.com/AndriousSolutions/appstatex_example_app/blob/fb922f37580c471889c44d4d899dfa7a1f96e80c/lib/app/controller/myapp_controller.dart#L5) |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
-Instead of the unimaginative red screen, you get a screen a little easier read:
-
+Instead of the unimaginative red screen, you get a screen a little easier read (see below).
+<br/>
+Take a copy of the file, <a href="https://github.com/AndriousSolutions/appstatex_example_app/blob/04ec949d41b981455ab58d8ab424d76b8ce6cdca/lib/app/view/error_widget.dart" rel="noopener noreferrer">error_widget.dart</a>, 
+and change it for you're own use.
 <div>
 <a id="oops" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/eb74bfcb-8ec1-4898-815b-b9ec074efc51"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/eb74bfcb-8ec1-4898-815b-b9ec074efc51" width="171" height="357"></a>
 <a id="redScreen" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/dc4a4c8b-37ca-4400-8df1-96fab5b7eebf"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/dc4a4c8b-37ca-4400-8df1-96fab5b7eebf" width="171" height="357"></a>

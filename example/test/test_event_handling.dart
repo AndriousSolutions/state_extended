@@ -40,6 +40,7 @@ Future<void> testEventHandling(WidgetTester tester) async {
   await tester.pumpAndSettle(const Duration(seconds: 5));
 }
 
+///
 Future<void> testScaleFactor(WidgetTester tester) async {
   //
   // A Singleton pattern allows for unit testing.
@@ -54,8 +55,10 @@ Future<void> testScaleFactor(WidgetTester tester) async {
 
   expect(id, isNotEmpty, reason: _location);
 
-// didChangeTextScaleFactor
+  // didChangeTextScaleFactor event handler function is called
   tester.binding.platformDispatcher.textScaleFactorTestValue = 4;
+
+  // Clear scale factor after testing is over
   addTearDown(tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
 
   /// Give the app time to recover and indeed resume testing.
@@ -65,10 +68,12 @@ Future<void> testScaleFactor(WidgetTester tester) async {
   expect(state.removeByKey(id), isTrue, reason: _location);
 }
 
+///
 Future<void> testDidChangeMetrics(WidgetTester tester) async {
   // didChangeMetrics
   /// Done near the end of testing as it's a very disruptive test
   tester.view.physicalSize = const Size(42, 42);
+
   addTearDown(tester.view.resetPhysicalSize);
 
   // pumpAndSettle() waits for all animations to complete.
