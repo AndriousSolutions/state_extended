@@ -3,7 +3,7 @@
 The StateX class is truly an extension of Flutter's State class
 providing functions and features found lacking in the original.
 These features are nothing new to Flutter.
-StateX is an amalgamation of other features already written in Flutter.
+StateX is an amalgamation of other features already found in Flutter.
 My motto when writing this package has been, 'Keep it simple, Keep it Flutter.'
 
 <table>
@@ -33,6 +33,12 @@ A FutureBuilder calls the <b>initAsync</b>() function to complete these operatio
 An InheritedWidget is involved here, and so only the <b>state</b>() function and <b>dependOnInheritedWidget</b>() function
 will dictate which widgets are then updated when something changes.
 Instead of building the interface again from scratch, only specified portions on the interface is rebuilt improving performance.
+
+4) If you use the <b>builder</b>() function instead, it's wrapped in a <b>Builder</b> widget so to safely access the widget tree's BuildContext variable, context.
+If you don't use the builder() function, it instead gives you access to the two final build functions.
+
+5) <b>buildAndroid</b>() and <b>buildiOS</b>() supplies the Material interface and the Cupertino interface respectively
+depending on whether you're app is running on a Android phone or iOS phone respectively.
 
 So, why are these other 'build' functions available? Because, they're needed...like, all the time.
 All my apps needed a FutureBuilder to perform time-consuming operations before the app could proceed.

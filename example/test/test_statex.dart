@@ -144,28 +144,30 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(remove, isTrue, reason: _location);
 
-  var testCon = TestingController();
+  final TestingController testCon = TestingController();
 
+  /// Add a controller to a State object
   appState.add(testCon);
 
+  /// Remove a controller to a State object
   remove = appState.remove(testCon);
 
   expect(remove, isTrue, reason: _location);
 
-  // Test listControllers
+  /// Test listControllers
   appState.listControllers([keyId]);
 
-  // You can retrieve a State object by the 'type' of its StatefulWidget
+  /// You can retrieve a State object by the 'type' of its StatefulWidget
   appState = con!.stateOf<MyApp>() as AppStateX;
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
-  // The 'state' property is the Controller's current State object
-  // it is working with.
+  /// The 'state' property is the Controller's current State object
+  /// it is working with.
   stateObj = con.state!;
 
-  // Of course, Flutter provides a reference to the StatefulWidget
-  // thought the State object.
+  /// Of course, Flutter provides a reference to the StatefulWidget
+  /// thought the State object.
   StatefulWidget widget = stateObj.widget;
 
   expect(widget, isA<MyApp>(), reason: _location);
@@ -182,13 +184,15 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(con, isA<YetAnotherController>(), reason: _location);
 
+  /// Test the forEach() function encountering an error
   each = stateObj.forEach((con) {
     if (con is YetAnotherController) {
       throw Exception('Error in forEach()!');
     }
   });
 
-  stateObj.listControllers([keyId]);
+  /// Return a controller by its id in a List
+  final listCon = stateObj.listControllers([keyId]);
 
   // Returns the most recent BuildContext/Element created in the App
   context = appState.endState!.context;

@@ -11,7 +11,7 @@
 ## An Extension of the State class
 This package expands the capabilities of Flutter's State class.
 This fundamental component of Flutter's state management had room for improvement.
-The capabilities of Flutter's State class now includes a 'State Object Controller' and the app's 'lifecycle events.'
+The capabilities of Flutter's State class now includes a 'State Object Controller' and the app's 25 'lifecycle events.'
 
 StateX should not be confused with GetX.
 Both do involve 'controllers' that generally contain the 'business logic' involved in an app.
@@ -20,23 +20,13 @@ but the similarities stops there.
 
 <img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/716e2d31-1cfe-4d79-bed0-fe77dd02b71b" alt="statecontroller" width="700" height="277">
 
-### Installing
+The <b>State</b> class is Flutter’s main player in State Management.
+However, the <b>StateX</b> class then extends those capabilities to a separate controller class called, <b>StateXController</b>.
+This arrangement encourages a clean architecture separating all the mutable properties and business logic 
+from the State object and its interface as well as provide state management from <b><i>outside</i></b> the State class itself! 
+Not only can the controller class call the State object's <b>setState</b>() function, 
+it has access to the object itself, its extended functions, and its many properties (e.g. <b>widget</b>, <b>mounted</b>, <b>context</b>, etc.).
 
-I don't always like the version number suggested in the '[Installing](https://pub.dev/packages/state_extended#-installing-tab-)' page.
-Instead, always go up to the '**minor**' semantic version number when installing this package.
-Always use a version number trailing with one zero, '**.0**'.
-This allows you to take in any '**patch**' versions that involves bugfixes.
-Semantic version numbers are always in this format: **major.minor.patch**.
-
-1. **patch** - I've made bugfixes
-2. **minor** - I've introduced new features
-3. **major** - I've essentially made a new app. 
-
-In this case, add this to your package's pubspec.yaml file instead:
-```javascript
-dependencies:
-  state_extended:^4.6.0
-```
 ## Documentation
 <ul>
    <li id="started"><a href="https://pub.dev/documentation/state_extended/latest/topics/Get%20started-topic.html">Get&nbsp;started</a></li>
@@ -46,37 +36,13 @@ dependencies:
    <li id="appstate"><a href="https://pub.dev/documentation/state_extended/latest/topics/AppStateX%20class-topic.html">AppStateX class</a></li>
    <li id="error"><a href="https://pub.dev/documentation/state_extended/latest/topics/Error%20handling-topic.html">Error Handling</a></li>
    <li id="testing"><a href="https://pub.dev/documentation/state_extended/latest/topics/Testing-topic.html">Testing</a></li>
-</ul>
-
-The <b>State</b> class is Flutter’s main player in State Management.
-However, the <b>StateX</b> class then extends those capabilities to a separate controller class called, <b>StateXController</b>.
-This arrangement encourages a clean architecture separating all the mutable properties and business logic 
-from the State object and its interface as well as provide state management from <b><i>outside</i></b> the State class itself! 
-Not only can the controller class call the State object's <b>setState</b>() function, it has access to the object itself and its properties: <b>widget</b>, <b>mounted</b>, and <b>context</b>.
-
-<a target="_blank" rel="noopener noreferrer" href="https://miro.medium.com/v2/resize:fit:640/format:webp/1*x1qnWzfmhG8Z9WJVNYvL_Q.png"><img  align="right" src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*x1qnWzfmhG8Z9WJVNYvL_Q.png" width="253" height="286"></a>
-<h2 id="state">The State of Control</h2>
-Through the course of an app’s lifecycle, 
-a controller can be assigned to any number of StateX objects. 
-A StateXController object works with ‘the last’ State object it’s been assigned to 
-but keeps a reference of any and all State objects it’s previously worked with in the Widget tree.
-When a screen closes (i.e. the current StateX object is disposed of), the controller returns back to the previous StateX it was assigned to. 
-This allows, for example, for one controller to sustain the app’s business rules for the duration of the running app
-conveying that logic across any number of screens (i.e. any number of StateX objects).
-
-<h2 id="control">Control The State</h2>
-<a target="_blank" rel="noopener noreferrer" href="https://miro.medium.com/v2/resize:fit:640/format:webp/1*7vctAgGEittQNOJVitNvaw.png"><img align="right" src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*7vctAgGEittQNOJVitNvaw.png" width="253" height="286"></a>
-In turn, the StateX object can take in any number of controllers.
-You then delegate controllers to specific areas of work.
-Each can be independent of the other encouraging modular development.
-The State object's <b>build</b>() function produces the interface
-while its controllers are concerned with everything else.
+</ul> 
 
 ## Example Code
 Copy and paste the 'Counter Example App' below to see a quick and simple implementation.
-Further examples can be found in its Github repository: 
+Further examples accompany the this package when you download it: 
 [example app](https://github.com/AndriousSolutions/state_extended/tree/master/example)
-It will accompany the this package when you download it.
+
 ```dart
 //
 import 'package:flutter/material.dart';

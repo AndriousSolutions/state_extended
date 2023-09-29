@@ -88,8 +88,8 @@ class _Page3State extends StateIn<Page3> {
             Flexible(
               child: ElevatedButton(
                 key: const Key('Hello! example'),
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  await Navigator.push(
                       lastContext!,
                       MaterialPageRoute<void>(
                           builder: (BuildContext context) => const HomePage()));
@@ -101,8 +101,8 @@ class _Page3State extends StateIn<Page3> {
             Flexible(
               child: ElevatedButton(
                 key: const Key('InheritedWidget example'),
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  await Navigator.push(
                       endState!.context,
                       MaterialPageRoute<void>(
                           builder: (BuildContext context) =>

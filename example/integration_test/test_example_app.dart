@@ -146,6 +146,11 @@ Future<void> integrationTesting(WidgetTester tester) async {
     expect(event, isTrue, reason: _location);
   }
 
+  if (!state.hidden) {
+    // Should not happen, but don't trip it here regardless! gp
+    expect(state.hidden, isFalse, reason: _location);
+  }
+
   if (!state.mounted) {
     // Should not happen, but don't trip it here regardless! gp
     expect(state.mounted, isFalse, reason: _location);

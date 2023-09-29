@@ -49,7 +49,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     implements
         StateListener {
   //
-  /// With an optional StateXController parameter, this constructor imposes its own Error Handler.
+  /// With an optional StateXController parameter and built-in InheritedWidget use
   StateX({StateXController? controller, bool? useInherited}) {
     // Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
@@ -63,7 +63,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   StateXController? _controller;
 
-  /// Use this function instead for the built-in InheritedWidget.
+  /// Use this function instead of build() to use the built-in InheritedWidget.
   @override
   @protected
   Widget buildIn(BuildContext context) => const SizedBox();
@@ -468,6 +468,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         inactive = true;
         inactiveLifecycleState();
         break;
+      case AppLifecycleState.hidden:
+        hidden = true;
+        hiddenLifecycleState();
+        break;
       case AppLifecycleState.paused:
         paused = true;
         pausedLifecycleState();
@@ -523,6 +527,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// State object was in 'inactive' state
   bool inactive = false;
+
+  @override
+  @protected
+  void hiddenLifecycleState() {}
+
+  /// State object was in a 'hidden' state
+  bool hidden = false;
 
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
@@ -1819,7 +1830,7 @@ mixin StateListener implements RouteAware {
     /// Called when the application's dimensions change. For example,
     /// when a phone is rotated.
     ///
-    /// In general, this is not overriden often as the layout system takes care of
+    /// In general, this is not overridden often as the layout system takes care of
     /// automatically recomputing the application geometry when the application
     /// size changes
     ///
@@ -1862,11 +1873,19 @@ mixin StateListener implements RouteAware {
   /// Called when the system puts the app in the background or returns the app to the foreground.
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// Passing these possible values:
-    /// AppLifecycleState.inactive (may be paused at any time)
-    /// AppLifecycleState.paused (may enter the suspending state at any time)
-    /// AppLifecycleState.detach
+    /// AppLifecycleState.detached
     /// AppLifecycleState.resumed
+    /// AppLifecycleState.inactive (may be paused at any time)
+    /// AppLifecycleState.hidden
+    /// AppLifecycleState.paused (may enter the suspending state at any time)
   }
+
+  /// Either be in the progress of attaching when the engine is first initializing
+  /// or after the view being destroyed due to a Navigator pop.
+  void detachedLifecycleState() {}
+
+  /// The application is visible and responding to user input.
+  void resumedLifecycleState() {}
 
   /// The application is in an inactive state and is not receiving user input.
   ///
@@ -1884,16 +1903,15 @@ mixin StateListener implements RouteAware {
   /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
   void inactiveLifecycleState() {}
 
+  /// All views of an application are hidden, either because the application is
+  /// about to be paused (on iOS and Android), or because it has been minimized
+  /// or placed on a desktop that is no longer visible (on non-web desktop), or
+  /// is running in a window or tab that is no longer visible (on the web).
+  void hiddenLifecycleState() {}
+
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
   void pausedLifecycleState() {}
-
-  /// Either be in the progress of attaching when the engine is first initializing
-  /// or after the view being destroyed due to a Navigator pop.
-  void detachedLifecycleState() {}
-
-  /// The application is visible and responding to user input.
-  void resumedLifecycleState() {}
 
   /// Called when the system is running low on memory.
   void didHaveMemoryPressure() {
@@ -1988,11 +2006,6 @@ mixin FutureBuilderStateMixin on State {
     FlutterErrorDetails? errorDetails;
 
     if (snapshot.connectionState == ConnectionState.done) {
-      // No, don't reset. It's done.
-      // // Reset the flag as the runAsync() function was unsuccessful
-      // // IMPORTANT Don't move this line or '_ranAsync ?' above will no longer work
-      // _ranAsync = false;
-
       // Release any splash screen
       _splashScreen = null;
 
@@ -2303,7 +2316,8 @@ class _SetStateWidget extends StatelessWidget {
   final WidgetBuilder widgetFunc;
   @override
   Widget build(BuildContext context) {
-    context.dependOnInheritedElement(stateX._inheritedElement!);
+//    context.dependOnInheritedElement(stateX._inheritedElement!);
+    stateX.dependOnInheritedWidget(context);
     return widgetFunc(context);
   }
 }
@@ -2362,8 +2376,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @protected
   Widget buildF(BuildContext context) {
-    // Calls the buildIn() function
-    _buildInState?.setState(() {});
+    _buildInState?.setState(() {}); // Calls the buildIn() function
     return _StateStatefulWidget(key: _key, state: _inheritedState!);
   }
 

@@ -38,7 +38,7 @@ Such an error would normally cause Flutter's default handler, <a href="https://a
 to record the error in the device's error logs.
 If the error had occurred while attempting to display a widget,
 it would further present a description of the error on a 'red screen' when in development,
-and a gray screen when in production.
+and on a gray screen when in production.
 
 <h2 id="on">On Error</h2>
 

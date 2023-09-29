@@ -6,6 +6,8 @@ dartdoc:
       markdown: doc/02_statex.md
     "AppStateX class":
       markdown: doc/07_appstate.md
+    "State Object Controller":
+      markdown: doc/03_controllers.md
     "Built-in InheritedWidget":
       markdown: doc/05_inheritedwidget.md
     "Event handling":
@@ -18,8 +20,8 @@ dartdoc:
   categoryOrder:
     - "Get started"
     - "StateX class"
-    - "State Object Controller"
     - "AppStateX class"
+    - "State Object Controller"
     - "Error handling"
     - "Testing"
   showUndocumentedCategories: true

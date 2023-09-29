@@ -19,7 +19,7 @@ out/
 .dart_tool/
 .pub-cache/
 # Ignore API documentation directory created by dartdoc:
-doc/api/
+/doc/api/
 
 # Android Studio
 /*.iml
@@ -91,23 +91,28 @@ obfuscate/
 
 # Android related
 google-services.json
-android/
+/android/
+# hide access tokens
+/android/gradle.properties
+!/android/app/build.gradle
+!/android/build.gradle
 
 # iOS/XCode related
 GoogleService-Info.plist
-ios/
+/ios/
 
 # Linux related
-linux/
+/linux/
 
 # macro related
-macros/
+/macros/
+/macos/
 
 # Web related
-web/
+/web/
 
 # Windows related
-windows/
+/windows/
 
 App.framework
 Flutter.framework
