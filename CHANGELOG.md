@@ -1,11 +1,12 @@
 
-## 4.7.0
+## 4.7.0+1
 September 27, 2023
 - Introduced new event handler: hiddenLifecycleState()
 - Fixed class _SetStateWidget with stateX.dependOnInheritedWidget(context);
 - if (!mounted) { in event handle functions
 - Updating test_statex.dart
 - Updated documentation topic testing
+- Continue with more documentation
 
 ## 4.6.0
 August 31, 2023

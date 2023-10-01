@@ -12,12 +12,12 @@ updating only those widgets that have changed and improve performance.
   	<caption>Contents</caption>
     <tbody>
     <tr>
-       <td><a href="#code">Control Your Code</a></td>
-       <td><a href="#page">_HomePageState</a></td>
-       <td><a href="#sync">Sync The State</a></td>
-       <td><a href="#control">Control The Sync</a></td>
-       <td><a href="#interface">Which Interface?</a></td>
-       <td><a href="#inherit">Inherit The State</a></td>
+       <td><a href="#code">Code</a></td>
+       <td><a href="#page">State Pattern</a></td>
+       <td><a href="#sync">Sync</a></td>
+       <td><a href="#control">Sync</a></td>
+       <td><a href="#interface">Interface?</a></td>
+       <td><a href="#inherit">Inherit</a></td>
       </tr>
     </tbody>
 </table>
@@ -52,7 +52,7 @@ This promotes more modular development where each controller is dedicated to a p
 other controllers. This further relieves any 'controller bloat' common when involving a controller
 (see [State Object Controller](https://pub.dev/documentation/fluttery_framework/latest/topics/State%20Object%20Controller-topic.html)).
 
-<h3 id="page">_HomePageState</h3>
+<h3 id="page">State Pattern</h3>
 A common pattern seen when implementing a controller for use by a StateX object will have the controller object
 instantiated right in the State object and then referenced here and there in the State object’s <b>build</b>() function.
 Thus providing the data and the event handling. For example, the first screenshot below is of the 'counter example app'
@@ -72,7 +72,7 @@ that accompanies the Flutter Framework package. The second screenshot shows how 
 
 <p>There's now a means to deal with asynchronous operations in the State object before rendering its interface.
 In other packages, the approach has been to execute such operations even before the app
-begins. It's a disjointed approach. The operation is not done by the actually State object (the screen) where
+begins---a disjointed approach. The operation is not done by the actual State object (the actual screen) where
 it's relevant or required. However, Flutter has always had the FutureBuilder widget to make this possible.
 A FutureBuilder widget is built into the StateX class, and has its <b>initAsync</b>() function to then
 perform such asynchronous operations. As a result, when such a State object is called,
@@ -124,7 +124,7 @@ It's all easy to read and all in the right location to be implemented.
 It's suggested you implement such operations in a Controller, and not directly in a StateX object.
 Besides, the StateX object's own <b>initAsync</b>() function is already implemented:
 It's calling all the <b>initAsync</b>() functions from its associated State Object Controllers.
-When they're all complete, the StateX object only then calls its <b>build</b>() function.
+When they're all complete, only then does the StateX object call its <b>build</b>() function.
 Since most asynchronous operations have no direct relation to an app’s interface,
 you’ll likely have your asynchronous stuff running in a State Object Controller anyway
 with the rest of the app’s business logic. See how that works?

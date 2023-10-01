@@ -34,12 +34,25 @@ class Page2State extends StateX<Page2> {
     //
     super.initState();
 
-    /// Even the app's 'first' State object has a reference to itself
-    final firstState = controller?.rootState;
+    /// Even the app's 'first' StateX object
+    final firstStateX = controller?.rootState;
 
-    assert(firstState is AppStateX, "Should be the 'root' state object.");
+    assert(firstStateX is StateX, 'Should be a StateX object.');
+
+    assert(firstStateX is AppStateX, 'Should be a AppStateX object.');
+
+    /// Retrieve the first State object
+    final firstState = controller?.state?.startState;
+
+    assert(firstState is State, 'Should be a State object.');
+
+    /// Retrieve the latest, most recent State object.
+    final lastState = controller?.state?.endState;
+
+    assert(lastState is Page2State, 'Should be this State object');
 
     /// The latest BuildContext in the app.
+    /// Note, this State object's own context is not yet defined in initState()
     /// This is so important, there's a number of ways to get it.
     // ignore: unused_local_variable
     BuildContext? lastContext = controller?.state?.endState?.context;

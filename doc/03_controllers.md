@@ -5,9 +5,26 @@ allowing that variable's value to possibly be 'changed' during the runtime of th
 
 <a id="immutable" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/aa306774-cf4e-437c-a048-b05cc90d7edf"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/aa306774-cf4e-437c-a048-b05cc90d7edf" width="48%" height="60%"></a>
 
+<table>
+  	<caption>Contents</caption>
+    <tbody>
+    <tr>
+       <td><a href="#state">State</a></td>
+       <td><a href="#control">Control</a></td>
+       <td><a href="#example">Example</a></td>
+       <td><a href="#setState">Set Control</a></td>
+       <td><a href="#functions">Functions</a></td>
+       <td><a href="#events">Events</a></td>
+       <td><a href="#which">Which State</a></td>
+       <td><a href="#context">Context</a></td>
+       <td><a href="#app">App</a></td>
+     </tr>
+    </tbody>
+</table>
+
 <h2 id="inevitable">It's Inevitably Immutable</h2>
 
-Your app's StatelessWidgets and StatefulWidgets are to contain unchanging (immutable) instance variables, fields or properties.
+Your app's StatelessWidgets and StatefulWidgets are to contain unchanging (immutable) instance fields and properties.
 If not, you're actually impeding Flutter’s general functionality and degrading its overall performance.
 The less that changes, the better.
 Use the keyword, <i>final</i>, for variables assigned only once.
@@ -99,7 +116,7 @@ As an aside, if you don’t want the ‘business side’ of your app dictating t
 simply remove the <b>setState</b>() function call from the controller, and return it back to the <b>build</b>() function (see below). 
 Let the State object dictate when to call its <b>setState</b>() function instead. 
 With the use of such controllers, you have options.
-The second screenshot below of our simple example app below demonstrates some additional controller objects can be linked to a StateX object.
+The second screenshot below of our simple example app demonstrates how some additional controller objects can be linked to a StateX object.
 
 <div>
 <a id="YourController" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/d0884183-a55a-437f-a61e-0ab29addb8dc"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/d0884183-a55a-437f-a61e-0ab29addb8dc" width="48%" height="60%"></a>
@@ -131,7 +148,7 @@ StateX? <b>stateOf</b>\<T extends StatefulWidget\>()
 /// Returns null if not found<br />
 T? <b>ofState</b>\<T extends StateX\>() 
 
-<h2 id="events">Controlled Events</h2>
+<h2 id="events">Control Events</h2>
 
 Lastly, there are some twenty-two (22) event handlers available to a controller when taken in by its StateX object.
 For example, after running its own <b>initState</b>() function, 
@@ -141,20 +158,21 @@ Instead of one large messy <b>initState</b>() function in the one State object,
 there can be individual controllers running their own <b>initState</b>() functions. 
 Very modular.
 Very clean.
-This process comes about with the other twenty-one system events.
+This process comes about with the other twenty-one system events as well.
 
 /// Called exactly once when the State object is first created<br />
 void <b>initState</b>()
 
 /// Called exactly once at the app’s startup to initialize any ‘time-consuming’ operations<br />
 /// that need to complete for the app can continue<br />
-Future<bool> <b>initAsync</b>()
+Future\<bool\> <b>initAsync</b>()
 
 /// When the State object will never build again. Its terminated<br />
 void <b>dispose</b>()
 
-/// Override this method to respond when the State object’s accompanying StatefulWidget is destroyed<br />
-/// and a new one recreated — a very common occurrence in the life of a typical Flutter app<br />
+/// Override this method to respond when the State object’s accompanying StatefulWidget is destroyed
+and a new one recreated<br />
+/// — a very common occurrence in the life of a typical Flutter app<br />
 void <b>didUpdateWidget</b>(StatefulWidget oldWidget)
 
 /// When a dependency of this State object changes<br />
@@ -183,6 +201,8 @@ void <b>didPushRoute</b>(String route)
 void <b>didPushRouteInformation</b>(RouteInformation routeInformation)
 
 /// When the State object is removed from the Widget tree<br />
+/// Best to close things up in this function and not the dispose() function<br />
+/// Like garbage collecting, the dispose() function call is to the discretion of the OS<br />
 void <b>deactivate</b>()
 
 /// When the platform’s text scale factor changes<br />
@@ -212,31 +232,47 @@ void <b>detachedLifecycleState</b>()
 /// The application is visible and responding to user input<br />
 void <b>resumedLifecycleState</b>()
 
-Start up the example app (as depicted in the gif file video running below), 
-and we’ll get you introduced to its functions and features as soon as possible. 
-Initially, one of four example apps that accompany the state_extended package is presented to you. 
-This particular example app demonstrates the ready access you have to any particular State object in your app 
-so as to execute its vital setState() function and rebuild and update the app’s interface accordingly
-— from *outside* its own build() function. Tap on the gif file to zoom in and get a closer look.
+<h2 id="which">Control Which State</h2>
+
+Let's continue by highlighting some of the functions listed above.
+As always, the <a href="https://github.com/AndriousSolutions/state_extended/tree/master/example">example app</a> 
+(depicted in video) is a great resource for you to fully understand what this StateX package can do for you.
+The sample of code below demonstrates the ready access you have to any particular State object used by a controller. 
+It's showing how you can increment the counter displayed in Page 1 from Page 2 of a 3-Page counter app.
+You can see how one is given vital access to the appropriate <b>setState</b>() function
+from *outside* the State object you're working with! 
 
 <div>
 <a id="onPressed" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/c7f8c78a-a872-4185-b9a8-c2f2734684d3"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/c7f8c78a-a872-4185-b9a8-c2f2734684d3" width="48%" height="60%"></a>
 <a id="page1counter" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/247c577c-a998-4184-97e2-448f157e0c0f"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/247c577c-a998-4184-97e2-448f157e0c0f" width="171" height="357"></a>
 </div>
 
-| [statex_counter_app.dart](https://gist.github.com/Andrious/e7d3ce3b8dcd5495978690a24ae5c3d6#file-statex_counter_app-dart-L38) | [statex_counter_app.dart](https://gist.github.com/Andrious/e7d3ce3b8dcd5495978690a24ae5c3d6#file-statex_counter_app-dart-L24) |
-|:------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------:|
+| [page_02.dart](https://github.com/AndriousSolutions/state_extended/blob/6eabcf66cf0e78831f791a7cc2dd700bbb3e8b8a/example/lib/src/view/home/page_02.dart#L136) |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
+<h2 id="context">Control Context</h2>
 
-<h2 id="app">Control The App</h2>
+The screenshot above is of the State class, <i>Page2State</i>.
+Let's take a quick peek of its <b>initState</b>() function displaying for demonstration purposes 
+the properties also available to a controller once associated with a State object.
+Note, even if the controller as not 'added' to a particular State object, some of these properties are still viable.
+For example, in the first screenshot below, every controller has a <b><i>rootState</i></b> property returning the first State object for the app.
+In the second screenshot highlighted are additional properties that provide values whether the controller has been assigned a State object or not. 
+The latest context object is available to you in a number of ways using a controller.
+A 'data object' initially supplied to your app is available to every controller.
+It's an object and so can be anything you imagine and or required by available throughout your app.
+Lastly, there a bool property indicating whether the app is running in production or not
+---a useful indicator during development.
 
 <div>
-<a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/fefad575-3b50-445c-80ab-2624ab2205ab"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/fefad575-3b50-445c-80ab-2624ab2205ab" width="48%" height="60%"></a>
-<a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/fefad575-3b50-445c-80ab-2624ab2205ab"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/fefad575-3b50-445c-80ab-2624ab2205ab" width="48%" height="60%"></a>
+<a id="rootState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/778fb005-0bff-46f7-8fae-7293ab6a9f25"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/778fb005-0bff-46f7-8fae-7293ab6a9f25" width="48%" height="60%"></a>
+<a id="lastContext" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/10afc033-dd05-40b7-90ba-743626dbce8c"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/10afc033-dd05-40b7-90ba-743626dbce8c" width="48%" height="60%"></a>
 </div>
 
-| [home_page.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) | [home_page.dart](https://github.com/AndriousSolutions/state_extended/blob/07847b545764ea1b6feaf9ecae7fc6c64b2a5c37/example/lib/src/view/app/my_app.dart#L21) |
+| [page_02.dart](https://github.com/AndriousSolutions/state_extended/blob/6eabcf66cf0e78831f791a7cc2dd700bbb3e8b8a/example/lib/src/view/home/page_02.dart#L35) | [page_02.dart](https://github.com/AndriousSolutions/state_extended/blob/6eabcf66cf0e78831f791a7cc2dd700bbb3e8b8a/example/lib/src/view/home/page_02.dart#L45) | 
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+
+<h2 id="app">Control The App</h2>
 
 The example app, <a href="https://github.com/AndriousSolutions/appstatex_example_app">appstatex_example_app</a>, 
 was first introduced in the topic, <a href="https://pub.dev/documentation/state_extended/latest/topics/AppStateX%20class-topic.html">AppStateX class</a>.
@@ -258,7 +294,7 @@ to retrieve an instance of the controller class, <i>GoogleFontController</i>.
 Since it was taken in by the State object earlier, this is one means to retrieve that instance.
 Note, the second line there is merely to demonstrate an alternate approach available to you.
 Since, the <i>GoogleFontController</i> class will only ever have one instance because of its factory constructor,
-it's just as acceptable to call its constructor again and again instead to retrieve that one instance.
+it's just as acceptable to call its constructor again and again to instead retrieve that one instance.
 <div>
 <a id="AppSateControllers" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/977bd3a6-1403-490f-bff9-e3ffb63c145e"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/977bd3a6-1403-490f-bff9-e3ffb63c145e" width="48%" height="60%"></a>
 <a id="GooglefontsInitState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/c0b00fdb-ed6b-4d67-895d-8ac245c94ec7"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/c0b00fdb-ed6b-4d67-895d-8ac245c94ec7" width="48%" height="60%"></a>

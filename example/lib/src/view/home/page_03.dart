@@ -23,10 +23,12 @@ class _Page3State extends StateIn<Page3> {
 
   // Place a breakpoint here from your favorite IDE and see how it works.
   @override
+  //ignore: unnecessary_overrides
   Widget build(BuildContext context) => super.build(context);
 
   // Place a breakpoint here from your favorite IDE and see how it works.
   @override
+  //ignore: unnecessary_overrides
   Widget buildF(BuildContext context) => super.buildF(context);
 
   /// You could use the buildIn() function here instead
