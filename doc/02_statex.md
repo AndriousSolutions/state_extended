@@ -25,17 +25,17 @@ The StateX class gives you five new functions and features:
 
 <ul>
    <li>The State Object Controller separates the interface (i.e. the State object's <b>build</b>() function) from everything else:
-   <b><a href="https://pub.dev/documentation/state_extended/latest/controller_app/StateXController-class.html">StateXController</a></b></li>
+   <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/StateXController-class.html">StateXController</a></b></li>
    <li>A function to perform any necessary asynchronous operations before displaying the interface:
    <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/AsyncOps/initAsync.html">initAsync</a></b>()</li>
    <li>A means to update only <i>particular</i> widgets in the interface and not the whole screen improving performance:
-   <b><a href="https://pub.dev/documentation/state_extended/latest/view_app_state/StateX/dependOnInheritedWidget.html">dependOnInheritedWidget</a></b>()
-, <b><a href="https://pub.dev/documentation/state_extended/latest/view_app_state/StateX/didChangeDependencies.html">didChangeDependencies</a></b>()
-, <b><a href="https://pub.dev/documentation/state_extended/latest/view_app_state/StateX/notifyClients.html">notifyClient</a></b>()
-, <b><a href="https://pub.dev/documentation/state_extended/latest/view_app_state/StateX/state.html">state</a></b>()
-, <b><a href="https://pub.dev/documentation/state_extended/latest/view_app_state/StateX/updateShouldNotify.html">updateShouldNotify</a></b>()</li>
+   <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/InheritedWidgetStateMixin/dependOnInheritedWidget.html">dependOnInheritedWidget</a></b>()
+, <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/StateX/didChangeDependencies.html">didChangeDependencies</a></b>()
+, <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/InheritedWidgetStateMixin/notifyClients.html">notifyClient</a></b>()
+, <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/InheritedWidgetStateMixin/state.html">state</a></b>()
+, <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/InheritedWidgetStateMixin/updateShouldNotify.html">updateShouldNotify</a></b>()</li>
    <li>A function that runs if any error occurs. Allows you to 'clean up' and fail gracefully:
-   <b><a href="https://pub.dev/documentation/state_extended/latest/view_app_state/StateXonErrorMixin/onError.html">onError</a></b>()</li>
+   <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/StateXonErrorMixin/onError.html">onError</a></b>()</li>
 </ul>
 
 <h3 id="code">Control Your Code</h3>

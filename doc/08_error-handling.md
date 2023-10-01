@@ -2,9 +2,9 @@
 
 Any errors that may occur in a StateX object is directed to its function, <b>onError</b>().
 Depending on whether it's a particular exception that can be handled, or an unanticipated error
-that will cause the app to terminate, the <b>onError</b>() will first receive the details.
-This is an opportunity for you to close any critical resources or service and 'fail gracefully'
-before the error is then recorded in the device logs.
+that will cause the app to terminate, the <b>onError</b>() will be the first to receive the details.
+This is an opportunity for you to close any critical resources or services and 'fail gracefully'
+before the error is then recorded in the device's logs.
 ```Dart
   /// This function is called when an error occurred.
   void onError(FlutterErrorDetails details) {}

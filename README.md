@@ -11,7 +11,7 @@
 ## An Extension of the State class
 This package expands the capabilities of Flutter's State class.
 This fundamental component of Flutter's state management had room for improvement.
-The capabilities of Flutter's State class now includes a 'State Object Controller' and the app's 25 'lifecycle events.'
+The capabilities of Flutter's State class now includes a 'State Object Controller' and the app's 22 'lifecycle events.'
 
 StateX should not be confused with GetX.
 Both do involve 'controllers' that generally contain the 'business logic' involved in an app.

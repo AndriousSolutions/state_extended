@@ -1,5 +1,5 @@
 
-## 4.7.0+1
+## 4.7.0+2
 September 27, 2023
 - Introduced new event handler: hiddenLifecycleState()
 - Fixed class _SetStateWidget with stateX.dependOnInheritedWidget(context);
