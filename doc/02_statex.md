@@ -6,8 +6,7 @@ This class allows you to use a [State Object Controller](https://pub.dev/documen
 This class provides the <b>initAsync</b>() function to perform any asynchronous operations before displaying its contents.
 It also provides the <b>dependOnInheritedWidget</b>() function to assign a widget as a 'dependency' 
 to the StateX's built-in InheritedWidget.
-It then uses its <b>notifyClients</b>() function to spontaneously rebuilt those widgets
-updating only those widgets that have changed and improve performance.
+It then uses its <b>notifyClients</b>() function to spontaneously rebuilt only those widgets that have changed.
 <table>
   	<caption>Contents</caption>
     <tbody>

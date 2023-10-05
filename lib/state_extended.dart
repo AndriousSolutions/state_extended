@@ -32,8 +32,8 @@ import 'package:flutter/material.dart';
 /// {@category StateX class}
 /// {@category Error handling}
 /// {@category Event handling}
-/// {@category Built-in FutureBuilder}
-/// {@category Built-in InheritedWidget}
+/// {@category Using FutureBuilder}
+/// {@category Using InheritedWidget}
 abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         // ignore: prefer_mixin
@@ -1939,7 +1939,7 @@ mixin StateListener implements RouteAware {
 ///
 /// dartdoc:
 /// {@category StateX class}
-/// {@category Built-in FutureBuilder}
+/// {@category Using FutureBuilder}
 mixin FutureBuilderStateMixin on State {
   /// Implement this function instead of the build() function
   /// to utilize a built-in FutureBuilder Widget.
@@ -2165,7 +2165,7 @@ mixin FutureBuilderStateMixin on State {
 ///
 /// dartdoc:
 /// {@category StateX class}
-/// {@category Built-in InheritedWidget}
+/// {@category Using InheritedWidget}
 mixin InheritedWidgetStateMixin on State {
   // A flag determining whether the built-in InheritedWidget is used or not.
   late bool _useInherited;

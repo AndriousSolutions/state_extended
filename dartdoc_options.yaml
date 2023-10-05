@@ -8,7 +8,9 @@ dartdoc:
       markdown: doc/07_appstate.md
     "State Object Controller":
       markdown: doc/03_controllers.md
-    "Built-in InheritedWidget":
+    "Using FutureBuilder":
+      markdown: doc/04_futurebuilder.md
+    "Using InheritedWidget":
       markdown: doc/05_inheritedwidget.md
     "Event handling":
       markdown: doc/06_event_handling.md
@@ -22,6 +24,8 @@ dartdoc:
     - "StateX class"
     - "AppStateX class"
     - "State Object Controller"
+    - "Using FutureBuilder"
+    - "Using InheritedWidget"
     - "Error handling"
     - "Testing"
   showUndocumentedCategories: true
@@ -31,6 +35,6 @@ dartdoc:
   #    - unresolved-doc-reference
   warnings:
     - tool-error
-  ignore:
-    - broken-link
-    - missing-from-search-index
+#  ignore:
+#    - broken-link
+#    - missing-from-search-index

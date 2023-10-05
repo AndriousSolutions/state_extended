@@ -34,7 +34,7 @@ class ImageAPIStateX<T extends StatefulWidget> extends StateIn<T>
 
   late ImageAPIController _con;
 
-  /// Supply the widget to the built-in FutureBuilder.
+  /// Supply a widget to the built-in FutureBuilder.
   @override
   Widget buildF(context) {
     controller?.dependOnInheritedWidget(context);
