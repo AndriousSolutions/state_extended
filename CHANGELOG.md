@@ -1,4 +1,8 @@
 
+## 4.8.0
+October 23, 2023
+- State? to StateX? for getter startState & endState
+
 ## 4.7.0+3
 September 27, 2023
 - Introduced new event handler: hiddenLifecycleState()

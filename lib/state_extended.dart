@@ -1390,11 +1390,11 @@ mixin _MapOfStates on State {
 
   /// Return the first State object
   // Bit of overkill, but some programmers don't appreciate Polymorphism.
-  State? get startState => _nextStateX();
+  StateX? get startState => _nextStateX();
 
   /// Return the 'latest' State object
   // Bit of overkill, but some programmers don't appreciate Polymorphism.
-  State? get endState => _nextStateX(reversed: true);
+  StateX? get endState => _nextStateX(reversed: true);
 
   /// Loop through the list and return the next available State object
   StateX? _nextStateX({bool? reversed}) {
