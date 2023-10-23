@@ -1383,7 +1383,7 @@ mixin _MapOfStates on State {
     StateXController? controller;
     final state = startState;
     if (state != null) {
-      controller = (state as StateX).controller;
+      controller = state.controller;
     }
     return controller;
   }
@@ -2483,7 +2483,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Possibly the error occurred there.
     final state = endState;
 
-    if (state != null && state is StateX) {
+    if (state != null) {
       try {
         //
         bool caught = false;

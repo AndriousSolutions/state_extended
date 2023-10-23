@@ -1,4 +1,8 @@
 
+## 4.8.1
+October 23, 2023
+- (state != null && state is StateX) remove necessary cast
+
 ## 4.8.0
 October 23, 2023
 - State? to StateX? for getter startState & endState
