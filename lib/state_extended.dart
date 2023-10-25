@@ -134,6 +134,28 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   bool remove(StateXController? controller) =>
       super.remove(controller); // mixin _ControllersByType
 
+  /// Update the 'first' controller if necessary
+  /// Place in the[didUpdateWidget] function in the special case
+  /// the StatefulWidget supplies the controller:
+  /// e.g. didUpdateController(oldWidget.controller, widget.controller);
+  bool didUpdateController(
+    StateXController? oldController,
+    StateXController? newController,
+  ) {
+    bool update =
+        oldController != null && newController != null && _controller != null;
+    // Test if supplied the parameters and there's a 'first' controller, _controller
+    if (update) {
+      // Don't bother if it's the same controller instance.
+      update = _controller!.identifier != oldController.identifier;
+
+      if (update) {
+        _controller = newController;
+      }
+    }
+    return update;
+  }
+
   /// Add a list of 'Controllers' to be associated with this StatX object.
   @override
   List<String> addList(List<StateXController>? list) {

@@ -1,4 +1,8 @@
 
+## 4.8.2
+October 25, 2023
+- didUpdateController() in didUpdateWidget() in special cases
+
 ## 4.8.1
 October 23, 2023
 - (state != null && state is StateX) remove necessary cast
