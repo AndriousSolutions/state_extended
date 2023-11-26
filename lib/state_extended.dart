@@ -230,6 +230,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         // Have it handled by an error handler.
         rethrow;
       }
+      cnt++;
     }
     _setStateAllowed = true;
 

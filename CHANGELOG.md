@@ -1,8 +1,9 @@
 
-## 4.8.4
+## 4.8.5
 November 26, 2023
 - Allow for additional controllers to be added in a previous initAsync()
   while (cnt < controllerList.length) {
+  cnt++;
 
 ## 4.8.3
 November 26, 2023
