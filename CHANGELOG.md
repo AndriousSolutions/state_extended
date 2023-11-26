@@ -1,7 +1,12 @@
 
+## 4.8.4
+November 26, 2023
+- Allow for additional controllers to be added in a previous initAsync()
+  while (cnt < controllerList.length) {
+
 ## 4.8.3
 November 26, 2023
-- Allow additional controllers to call their initState() if added in a previous initState() call
+- Allow for additional controllers to call their initState() if added in a previous initState() call
   while (cnt < controllerList.length) {
 - Container() to SizedBox() in splash_screen.dart
 

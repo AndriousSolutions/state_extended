@@ -211,8 +211,12 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in controllerList) {
-      //
+    int cnt = 0;
+    StateXController con;
+
+    // While loop the active list itself so to allow for additional controllers to be added in a previous initAsync()
+    while (cnt < controllerList.length) {
+      con = controllerList[cnt];
       try {
         final init = await con.initAsync();
         if (!init) {
@@ -263,7 +267,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     int cnt = 0;
     StateXController con;
 
-    // Loop the active list itself the so additional controllers can be added in a previous initState()
+    // While loop the active list itself the so additional controllers can be added in a previous initState()
     while (cnt < controllerList.length) {
       con = controllerList[cnt];
       // Add this to the _StateSets Map
