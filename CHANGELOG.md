@@ -1,4 +1,10 @@
 
+## 4.8.3
+November 26, 2023
+- Allow additional controllers to call their initState() if added in a previous initState() call
+  while (cnt < controllerList.length) {
+- Container() to SizedBox() in splash_screen.dart
+
 ## 4.8.2
 October 25, 2023
 - didUpdateController() in didUpdateWidget() in special cases

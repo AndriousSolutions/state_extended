@@ -7,15 +7,15 @@ class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => OverflowBox(
+  Widget build(BuildContext context) => const OverflowBox(
         minWidth: 0,
         minHeight: 0,
         maxWidth: double.infinity,
         maxHeight: double.infinity,
-        child: Container(
+        child: SizedBox(
           width: 100,
           height: 100,
-          child: const Image(image: AssetImage('assets/images/meow.gif')),
+          child: Image(image: AssetImage('assets/images/meow.gif')),
         ),
       );
 }

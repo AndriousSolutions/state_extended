@@ -138,19 +138,18 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Place in the[didUpdateWidget] function in the special case
   /// the StatefulWidget supplies the controller:
   /// e.g. didUpdateController(oldWidget.controller, widget.controller);
-  bool didUpdateController(
-    StateXController? oldController,
-    StateXController? newController,
-  ) {
-    bool update =
-        oldController != null && newController != null && _controller != null;
+  bool didUpdateController({
+    StateXController? oldCon,
+    StateXController? newCon,
+  }) {
+    bool update = oldCon != null && newCon != null && _controller != null;
     // Test if supplied the parameters and there's a 'first' controller, _controller
     if (update) {
       // Don't bother if it's the same controller instance.
-      update = _controller!.identifier != oldController.identifier;
+      update = _controller!.identifier != oldCon.identifier;
 
       if (update) {
-        _controller = newController;
+        _controller = newCon;
       }
     }
     return update;
@@ -264,10 +263,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     int cnt = 0;
     StateXController con;
 
-    // While loop so additional controllers can be added in a previous initState()
-    final list = controllerList.length;
-
-    while (cnt < list) {
+    // Loop the active list itself the so additional controllers can be added in a previous initState()
+    while (cnt < controllerList.length) {
       con = controllerList[cnt];
       // Add this to the _StateSets Map
       con._addStateToSetter(this);
