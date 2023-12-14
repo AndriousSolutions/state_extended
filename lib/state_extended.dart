@@ -1974,6 +1974,8 @@ mixin FutureBuilderStateMixin on State {
 
   @override
   Widget build(BuildContext context) {
+    // A little trick to determine if the user has overridden this function.
+    _buildOverridden = false;
     // Don't run runAsync() function if _ranAsync is true.
     if (!_ranAsync || _future == null) {
       _future = runAsync();
@@ -1985,6 +1987,10 @@ mixin FutureBuilderStateMixin on State {
       builder: _futureBuilder,
     );
   }
+
+  /// A flag noting if the build() function was overridden or not.
+  bool get buildOverridden => _buildOverridden;
+  bool _buildOverridden = true;
 
   /// Clean up
   @override
@@ -2215,13 +2221,20 @@ mixin InheritedWidgetStateMixin on State {
 
   /// dartdoc:
   /// {@category StateX class}
-  Widget buildF(BuildContext context) => _useInherited
-      ? _StateXInheritedWidget(
-          key: _key,
-          state: this as StateX,
-          child: _child ??= buildIn(context),
-        )
-      : buildIn(context);
+  Widget buildF(BuildContext context) {
+    _buildFOverridden = false;
+    return _useInherited
+        ? _StateXInheritedWidget(
+            key: _key,
+            state: this as StateX,
+            child: _child ??= buildIn(context),
+          )
+        : buildIn(context);
+  }
+
+  /// A flag. Note if build() function was overridden or not.
+  bool get buildFOverridden => _buildFOverridden;
+  bool _buildFOverridden = true;
 
   /// Compiled once and passed to an InheritedWidget.
   ///
@@ -2250,34 +2263,57 @@ mixin InheritedWidgetStateMixin on State {
     return depend;
   }
 
-  /// In harmony with Flutter's own API
+  /// In harmony with Flutter's own API there's also a notifyClients() function
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   bool notifyClients() {
     if (_useInherited) {
-      try {
-        setState(() {});
-        // catch any errors if called inappropriately
-      } catch (e, stack) {
-        // Throw in DebugMode.
-        if (kDebugMode) {
-          rethrow;
-        } else {
-          //
-          final details = FlutterErrorDetails(
-            exception: e,
-            stack: stack,
-            library: 'state_extended.dart',
-            context: ErrorDescription('notifyClient() error in $this'),
-          );
-          // Resets the count of errors to show a complete error message not an abbreviated one.
-          FlutterError.resetErrorCount();
-          // https://docs.flutter.dev/testing/errors#errors-caught-by-flutter
-          // Log the error.
-          FlutterError.presentError(details);
-        }
-      }
+      setState(() {});
     }
     return _useInherited;
+  }
+
+  /// setState() will actually call an InheritedWidget again
+  /// causing a rebuild of any and all dependencies.
+  @override
+  void setState(VoidCallback fn) {
+    //
+    try {
+      super.setState(fn);
+      // catch any errors if called inappropriately
+    } catch (e, stack) {
+      // Throw in DebugMode.
+      if (kDebugMode) {
+        rethrow;
+      } else {
+        //
+        final details = FlutterErrorDetails(
+          exception: e,
+          stack: stack,
+          library: 'state_extended.dart',
+          context: ErrorDescription('setState() error in $this'),
+        );
+        // Resets the count of errors to show a complete error message not an abbreviated one.
+        FlutterError.resetErrorCount();
+        // https://docs.flutter.dev/testing/errors#errors-caught-by-flutter
+        // Log the error.
+        FlutterError.presentError(details);
+      }
+    }
+    assert(() {
+      if (_useInherited && _buildFOverridden) {
+        throw FlutterError.fromParts(<DiagnosticsNode>[
+          ErrorSummary(
+              "StateX object set to use the 'built-in' InheritedWidget and yet not using its buildIn() function."),
+          ErrorDescription(
+              "The 'built-in' InheritedWidget is set either by using the class, StateIn, or the class, StateX, with super(useInherited: true)."
+              ' Either use the State class instead or explicitly use the buildIn() function.'),
+          ErrorHint(
+            'Typically renaming the build() or the buildF() to buildIn() will correct this.',
+          ),
+        ]);
+      }
+      return true;
+    }());
   }
 
   /// Called when the State's InheritedWidget is called again

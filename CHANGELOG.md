@@ -1,4 +1,9 @@
 
+## 4.9.0
+December 14, 2023
+- getter buildOverridden & buildFOverridden set when 'build' functions are overwritten 
+- Notify the developer the 'built-in' InheritedWidget is set for use and yet the buildIn() function is not used.
+
 ## 4.8.5
 November 26, 2023
 - Allow for additional controllers to be added in a previous initAsync()
