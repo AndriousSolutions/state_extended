@@ -1,4 +1,11 @@
 
+## 4.10.0
+January 24, 2023
+- StateX({StateXController? controller, bool? runAsync, bool? useInherited}) {
+  A new optional parameter, runAsync, to run built-in FutureBuilder with every build
+- abstract class StateF<T extends StatefulWidget> extends StateX<T>
+  A State class to run built-in FutureBuilder with every build
+
 ## 4.9.0
 December 14, 2023
 - getter buildOverridden & buildFOverridden set when 'build' functions are overwritten 

@@ -49,10 +49,12 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     implements
         StateListener {
   //
-  /// With an optional StateXController parameter and built-in InheritedWidget use
-  StateX({StateXController? controller, bool? useInherited}) {
+  /// With an optional StateXController parameter and built-in FutureBuilder & InheritedWidget use
+  StateX({StateXController? controller, bool? runAsync, bool? useInherited}) {
     // Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
+    // A flag whether the built-in FutureBuilder runs with every setState() call.
+    _runAsync = runAsync ?? false;
     // A flag determining whether the built-in InheritedWidget is used or not.
     _useInherited = useInherited ?? false;
     // Associate the controller to this State object
@@ -62,6 +64,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   StateXController? _controller;
+
+  /// Run the built-in FutureBuilder with every setState() call
+  late bool _runAsync;
 
   /// Use this function instead of build() to use the built-in InheritedWidget.
   @override
@@ -1169,6 +1174,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         /// Refresh the interface by 'rebuilding' the Widget Tree
         /// Call the State object's setState() function.
         super.setState(fn);
+
+        if (_ranAsync && _runAsync) {
+          // Run the FutureBuilder again and again
+          _ranAsync = false;
+        }
       }
       _setStateAllowed = true;
     } else {
@@ -1188,6 +1198,16 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _recException = state._recException;
     _ranAsync = state._ranAsync;
   }
+}
+
+/// A State object the runs its built-in FutureBuilder with every setState()
+///
+/// dartdoc:
+/// {@category StateX class}
+abstract class StateF<T extends StatefulWidget> extends StateX<T> {
+  ///
+  StateF({StateXController? controller})
+      : super(controller: controller, runAsync: true);
 }
 
 /// A State object that explicitly implements a built-in InheritedWidget
