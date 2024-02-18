@@ -107,7 +107,7 @@ void testsController(WidgetTester tester) {
   expect(con, isA<Controller>(), reason: location);
 
   // The Set of State objects
-  con.states;
+//  con.states; // Deprecated
 
   // Continuing the testing coverage
   con.notifyClients();

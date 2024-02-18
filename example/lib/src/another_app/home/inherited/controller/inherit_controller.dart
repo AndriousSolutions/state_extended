@@ -13,8 +13,8 @@ class InheritController extends StateXController {
   /// The InheritedWidget is the first State object it registered with.
   @override
   bool dependOnInheritedWidget(BuildContext? context) =>
-      states.first.dependOnInheritedWidget(context);
+      startState?.dependOnInheritedWidget(context) ?? false;
 
   /// Rebuild the InheritedWidget to also rebuild its dependencies.
-  void newAnimals() => states.first.notifyClients();
+  void newAnimals() => startState?.notifyClients();
 }

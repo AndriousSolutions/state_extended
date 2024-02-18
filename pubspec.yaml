@@ -1,6 +1,6 @@
 name: state_extended
 description: This class extends the capabilities of Flutter's State class and includes a controller.
-version: 4.10.0
+version: 4.11.0
 homepage: https://www.andrioussolutions.com
 repository: https://github.com/AndriousSolutions/state_extended
 
@@ -32,7 +32,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
 
   # Needed here as well for testing
   flutter_test:

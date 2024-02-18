@@ -1206,8 +1206,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 /// {@category StateX class}
 abstract class StateF<T extends StatefulWidget> extends StateX<T> {
   ///
-  StateF({StateXController? controller})
-      : super(controller: controller, runAsync: true);
+  StateF({super.controller}) : super(runAsync: true);
 }
 
 /// A State object that explicitly implements a built-in InheritedWidget
@@ -1216,8 +1215,7 @@ abstract class StateF<T extends StatefulWidget> extends StateX<T> {
 /// {@category StateX class}
 abstract class StateIn<T extends StatefulWidget> extends StateX<T> {
   ///
-  StateIn({StateXController? controller})
-      : super(controller: controller, useInherited: true);
+  StateIn({super.controller}) : super(useInherited: true);
 }
 
 /// Collects Controllers of various types.
@@ -1687,11 +1685,18 @@ mixin SetStateMixin {
     return state == null ? null : state as T;
   }
 
-  // /// Return a 'copy' of the Set of State objects.
-  // Set<StateX> get states => Set.from(_stateXSet.whereType<StateX>());
+  /// Return a 'copy' of the Set of State objects.
+  // Set<StateX> get states => Set.from(_stateXSet?.whereType<StateX>());
 
   /// The Set of State objects.
+  @Deprecated('Set states is too accessible')
   Set<StateX> get states => _stateXSet;
+
+  /// Return the first State object
+  StateX? get startState => _stateXSet.isEmpty ? null : _stateXSet.first;
+
+  /// Return the 'latest' State object
+  StateX? get endState => _stateXSet.isEmpty ? null : _stateXSet.last;
 }
 
 /// Used to explicitly return the 'type' indicated.
@@ -2388,10 +2393,9 @@ class _StateXInheritedWidget extends InheritedWidget {
 /// Supply a widget to depend upon a StateX's InheritedWidget
 class _SetStateWidget extends StatelessWidget {
   const _SetStateWidget({
-    Key? key,
     required this.stateX,
     required this.widgetFunc,
-  }) : super(key: key);
+  });
   final StateX stateX;
   final WidgetBuilder widgetFunc;
   @override
@@ -2415,12 +2419,11 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// Optionally supply as many State Controllers as you like to work with this App.
   /// Optionally supply a 'data object' to to be accessible to the App's InheritedWidget.
   AppStateX({
-    StateXController? controller,
+    super.controller,
     List<StateXController>? controllers,
     Object? object,
     // Save the current error handler
-  })  : _currentErrorFunc = FlutterError.onError,
-        super(controller: controller) {
+  }) : _currentErrorFunc = FlutterError.onError {
     //Record this as the 'root' State object.
     setRootStateX(this);
     _dataObj = object;
@@ -2687,9 +2690,9 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 /// Pass a State object as a parameter to this StatefulWidget
 class _StateStatefulWidget extends StatefulWidget {
   const _StateStatefulWidget({
-    Key? key,
+    super.key,
     required this.state,
-  }) : super(key: key);
+  });
   final State<StatefulWidget> state;
   @override
   //ignore: no_logic_in_create_state
@@ -2945,7 +2948,7 @@ mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
 @protected
 class SetState extends StatelessWidget {
   /// Supply a 'builder' passing in the App's 'data object' and latest BuildContext object.
-  const SetState({Key? key, required this.builder}) : super(key: key);
+  const SetState({super.key, required this.builder});
 
   /// This is called with every rebuild of the App's inherited widget.
   final Widget Function(BuildContext context, Object? object) builder;

@@ -1,4 +1,12 @@
 
+## 4.11.0
+February 18, 2023
+- Deprecated 
+  Set<StateX> get states - Set of States is too accessible
+- Introduced these getters instead:
+  StateX? get startState
+  StateX? get endState
+
 ## 4.10.0
 January 24, 2023
 - StateX({StateXController? controller, bool? runAsync, bool? useInherited}) {
