@@ -1,4 +1,9 @@
 
+## 4.12.0
+March 17, 2024
+- Deprecated getter, startState. Use getter firstState instead
+- Deprecated getter, endState. Use getter lastState instead
+
 ## 4.11.0
 February 18, 2023
 - Deprecated 

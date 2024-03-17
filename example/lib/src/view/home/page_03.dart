@@ -47,7 +47,7 @@ class _Page3State extends StateIn<Page3> {
         count: count,
         newKey: () {
           // Both access the 'first' StateX object
-          startState?.setState(() {});
+          firstState?.setState(() {});
           rootState?.setState(() {});
         },
         counter: () {
@@ -105,7 +105,7 @@ class _Page3State extends StateIn<Page3> {
                 key: const Key('InheritedWidget example'),
                 onPressed: () async {
                   await Navigator.push(
-                      endState!.context,
+                      lastState!.context,
                       MaterialPageRoute<void>(
                           builder: (BuildContext context) =>
                               const i.HomePage()));

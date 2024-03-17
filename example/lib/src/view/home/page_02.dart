@@ -42,12 +42,12 @@ class Page2State extends StateX<Page2> {
     assert(firstStateX is AppStateX, 'Should be a AppStateX object.');
 
     /// Retrieve the first State object
-    final firstState = controller?.state?.startState;
+    final firstState = controller?.state?.firstState;
 
     assert(firstState is State, 'Should be a State object.');
 
     /// Retrieve the latest, most recent State object.
-    final lastState = controller?.state?.endState;
+    final lastState = controller?.state?.lastState;
 
     assert(lastState is Page2State, 'Should be this State object');
 
@@ -55,8 +55,8 @@ class Page2State extends StateX<Page2> {
     /// Note, this State object's own context is not yet defined in initState()
     /// This is so important, there's a number of ways to get it.
     // ignore: unused_local_variable
-    BuildContext? lastContext = controller?.state?.endState?.context;
-    lastContext = controller?.rootState?.endState?.context;
+    BuildContext? lastContext = controller?.state?.lastState?.context;
+    lastContext = controller?.rootState?.lastState?.context;
     lastContext = controller?.lastContext;
 
     /// The app's data object

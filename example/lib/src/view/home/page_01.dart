@@ -185,7 +185,7 @@ class Page1State extends StateX<Page1> {
                       // Save the count
                       con.page1Count = count;
                       // Both access the 'first' StateX object
-                      startState?.setState(() {});
+                      firstState?.setState(() {});
                       rootState?.setState(() {});
                     },
                   );

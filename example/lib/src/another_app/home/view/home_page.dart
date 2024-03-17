@@ -52,8 +52,8 @@ class _HomePageState extends StateX<HomePage> {
         ),
         persistentFooterButtons: [
           OverflowBar(
-            spacing: 5,
-            overflowAlignment: OverflowBarAlignment.center,
+            // spacing: 5,
+            // overflowAlignment: OverflowBarAlignment.center,
             children: [
               TextButton(
                 onPressed: () => con.newDogs(),

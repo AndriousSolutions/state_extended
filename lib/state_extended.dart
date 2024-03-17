@@ -1423,7 +1423,7 @@ mixin _MapOfStates on State {
   /// Returns null if empty.
   StateXController? get rootCon {
     StateXController? controller;
-    final state = startState;
+    final state = firstState;
     if (state != null) {
       controller = state.controller;
     }
@@ -1432,11 +1432,15 @@ mixin _MapOfStates on State {
 
   /// Return the first State object
   // Bit of overkill, but some programmers don't appreciate Polymorphism.
+  @Deprecated('Use firstState instead')
   StateX? get startState => _nextStateX();
+  StateX? get firstState => _nextStateX();
 
   /// Return the 'latest' State object
   // Bit of overkill, but some programmers don't appreciate Polymorphism.
+  @Deprecated('Use lastState instead')
   StateX? get endState => _nextStateX(reversed: true);
+  StateX? get lastState => _nextStateX(reversed: true);
 
   /// Loop through the list and return the next available State object
   StateX? _nextStateX({bool? reversed}) {
@@ -2564,7 +2568,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
     // call the latest SateX object's error routine
     // Possibly the error occurred there.
-    final state = endState;
+    final state = lastState;
 
     if (state != null) {
       try {
