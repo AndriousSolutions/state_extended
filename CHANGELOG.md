@@ -1,4 +1,9 @@
 
+## 4.13.0
+April 15, 2024
+- catchError() takes FlutterErrorDetails parameters
+- snapshot.stackTrace in _futureBuilder()
+
 ## 4.12.0
 March 17, 2024
 - Deprecated getter, startState. Use getter firstState instead

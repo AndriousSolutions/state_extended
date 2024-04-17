@@ -203,7 +203,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   bool _setStateRequested = false;
 
   /// This is the 'latest' State being viewed by the App.
-  bool get isEndState => this == endState;
+  bool get isEndState => this == lastState;
 
   /// Asynchronous operations must complete successfully.
   @override
@@ -2076,11 +2076,9 @@ mixin FutureBuilderStateMixin on State {
         //
       } else if (snapshot.hasError) {
         //
-        final exception = snapshot.error!;
-
         errorDetails = FlutterErrorDetails(
-          exception: exception,
-          stack: exception is Error ? exception.stackTrace : null,
+          exception: snapshot.error!,
+          stack: snapshot.stackTrace,
           library: 'state_extended.dart',
           context: ErrorDescription('Error in FutureBuilder'),
         );
@@ -2622,14 +2620,31 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   bool _inErrorRoutine = false;
 
   /// Catch and explicitly handle the error.
-  void catchError(Exception? ex) {
+  void catchError(
+    Exception? ex, {
+    StackTrace? stack,
+    String? library,
+    DiagnosticsNode? context,
+    IterableFilter<String>? stackFilter,
+    InformationCollector? informationCollector,
+    bool? silent,
+  }) {
     if (ex == null) {
       return;
     }
 
     /// If a tester is running. Don't handle the error.
     if (WidgetsBinding.instance is WidgetsFlutterBinding) {
-      FlutterError.onError!(FlutterErrorDetails(exception: ex));
+      //
+      FlutterError.onError!(FlutterErrorDetails(
+        exception: ex,
+        stack: stack,
+        library: library ?? '',
+        context: context,
+        stackFilter: stackFilter,
+        informationCollector: informationCollector,
+        silent: silent ?? false,
+      ));
     }
   }
 
@@ -3010,7 +3025,7 @@ mixin RootState {
   AppStateX? get rootState => RootState._rootStateX;
 
   /// Returns the 'latest' context in the App.
-  BuildContext? get lastContext => rootState?.endState?.context;
+  BuildContext? get lastContext => rootState?.lastState?.context;
 
   /// This is of type Object allowing you
   /// to propagate any class object you wish down the widget tree.
