@@ -1,4 +1,9 @@
 
+## 4.15.0
+May 18, 2024
+- _StateXInheritedWidget() to StateXInheritedWidget()
+  making it publicly available.
+
 ## 4.14.0
 May 17, 2024
 - class StateIn, now has abstract method:

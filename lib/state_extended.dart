@@ -2259,7 +2259,7 @@ mixin InheritedWidgetStateMixin on State {
     }
     // buildIn() function must be used
     return _useInherited && _buildInOverridden
-        ? _StateXInheritedWidget(
+        ? StateXInheritedWidget(
             key: _key,
             state: this as StateX,
             child: _child ?? const SizedBox.shrink(),
@@ -2363,8 +2363,8 @@ mixin InheritedWidgetStateMixin on State {
 }
 
 /// The InheritedWidget used by StateX
-class _StateXInheritedWidget extends InheritedWidget {
-  const _StateXInheritedWidget({
+class StateXInheritedWidget extends InheritedWidget {
+  const StateXInheritedWidget({
     super.key,
     required this.state,
     required super.child,
@@ -2748,7 +2748,7 @@ class _InheritedState extends State<_StateStatefulWidget> {
   @override
   Widget build(context) {
     // The app's InheritedWidget
-    return _StateXInheritedWidget(
+    return StateXInheritedWidget(
       key: _key,
       state: appState,
       child: _stateWidget!,
