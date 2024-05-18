@@ -56,34 +56,32 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // A flag whether the built-in FutureBuilder runs with every setState() call.
     _runAsync = runAsync ?? false;
     // A flag determining whether the built-in InheritedWidget is used or not.
-    _useInherited = useInherited ?? false;
+    _useInherited = useInherited ?? true;
     // Associate the controller to this State object
     _controller = controller;
     // Any subsequent calls to add() will be assigned to stateX.
     add(_controller);
   }
 
+  /// Implement buildIn() function in your StateX class instead of build() to use
+  /// the built-in FutureBuilder Widget and built-in InheritedWidget.
+  ///
+  /// Widget buildIn(BuildContext context)
+
+  /// Implement buildF() function in your StateX class instead of the build() function
+  /// to use the built-in FutureBuilder Widget and not the InheritedWidget.
+  ///
+  /// Widget buildF(BuildContext context)
+
+  /// Implement the build() function in your StateX class to NOT use
+  /// the built-in FutureBuilder Widget and built-in InheritedWidget
+  ///
+  /// Widget build(BuildContext context)
+
   StateXController? _controller;
 
   /// Run the built-in FutureBuilder with every setState() call
   late bool _runAsync;
-
-  /// Use this function instead of build() to use the built-in InheritedWidget.
-  @override
-  @protected
-  Widget buildIn(BuildContext context) => const SizedBox();
-
-  /// Implement this function instead of the build() function
-  /// so to utilize a built-in FutureBuilder Widget and not the InheritedWidget.
-  // @override
-  // @protected
-  // Widget buildF(BuildContext context) => super.buildF(context);
-
-  /// Implement the build() function if you wish
-  /// to not use the mixin, FutureBuilderStateMixin
-  // @override
-  // @protected
-  // Widget build(BuildContext context) => super.build(context);
 
   /// You need to be able access the widget.
   @override
@@ -1216,6 +1214,12 @@ abstract class StateF<T extends StatefulWidget> extends StateX<T> {
 abstract class StateIn<T extends StatefulWidget> extends StateX<T> {
   ///
   StateIn({super.controller}) : super(useInherited: true);
+
+  /// Implement this function and not the build() function.
+  /// Returns the 'child' Widget is then passed to an InheritedWidget
+  @override
+  @protected
+  Widget buildIn(BuildContext context);
 }
 
 /// Collects Controllers of various types.
@@ -2250,11 +2254,15 @@ mixin InheritedWidgetStateMixin on State {
   /// {@category StateX class}
   Widget buildF(BuildContext context) {
     _buildFOverridden = false;
-    return _useInherited
+    if (_useInherited) {
+      _child ??= buildIn(context);
+    }
+    // buildIn() function must be used
+    return _useInherited && _buildInOverridden
         ? _StateXInheritedWidget(
             key: _key,
             state: this as StateX,
-            child: _child ??= buildIn(context),
+            child: _child ?? const SizedBox.shrink(),
           )
         : buildIn(context);
   }
@@ -2269,7 +2277,14 @@ mixin InheritedWidgetStateMixin on State {
   ///
   /// dartdoc:
   /// {@category StateX class}
-  Widget buildIn(BuildContext context);
+  Widget buildIn(BuildContext context) {
+    _buildInOverridden = false;
+    return const SizedBox.shrink();
+  }
+
+  /// A flag. Note if buildIn() function was overridden or not.
+  bool get buildInOverridden => _buildInOverridden;
+  bool _buildInOverridden = true;
 
   /// Determine if the dependencies should be updated.
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
@@ -2326,21 +2341,6 @@ mixin InheritedWidgetStateMixin on State {
         FlutterError.presentError(details);
       }
     }
-    assert(() {
-      if (_useInherited && _buildFOverridden) {
-        throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary(
-              "StateX object set to use the 'built-in' InheritedWidget and yet not using its buildIn() function."),
-          ErrorDescription(
-              "The 'built-in' InheritedWidget is set either by using the class, StateIn, or the class, StateX, with super(useInherited: true)."
-              ' Either use the State class instead or explicitly use the buildIn() function.'),
-          ErrorHint(
-            'Typically renaming the build() or the buildF() to buildIn() will correct this.',
-          ),
-        ]);
-      }
-      return true;
-    }());
   }
 
   /// Called when the State's InheritedWidget is called again
@@ -2415,7 +2415,7 @@ class _SetStateWidget extends StatelessWidget {
 /// {@category Get started}
 /// {@category StateX class}
 /// {@category AppStateX class}
-abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
+abstract class AppStateX<T extends StatefulWidget> extends StateIn<T>
     with _ControllersById {
   ///
   /// Optionally supply as many State Controllers as you like to work with this App.

@@ -65,7 +65,7 @@ Future<void> integrationTesting(WidgetTester tester) async {
 
   /// Go to Page 1
   await tester.tap(find.byKey(const Key('Page 1')));
-  await tester.pumpAndSettle();
+  await tester.pumpAndSettle(const Duration(seconds: 2));
 
   expect(find.text((count * 2).toString()), findsOneWidget, reason: _location);
 

@@ -1,4 +1,12 @@
 
+## 4.14.0
+May 17, 2024
+- class StateIn, now has abstract method:
+  Widget buildIn(BuildContext context);
+- Flag defaults to true: _useInherited = useInherited ?? true;
+- Call built-in InheritedWidget is buildIn() function is being used:
+  _useInherited && _buildInOverridden ? _StateXInheritedWidget(
+
 ## 4.13.0
 April 15, 2024
 - catchError() takes FlutterErrorDetails parameters

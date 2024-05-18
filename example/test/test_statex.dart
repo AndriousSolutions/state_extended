@@ -47,7 +47,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(each, isFalse, reason: _location);
 
-  expect(stateObj.useInherited, isFalse, reason: _location);
+  expect(stateObj.useInherited, isTrue, reason: _location);
 
   StateXController? con = stateObj.controller!;
 
