@@ -1,4 +1,10 @@
 
+## 4.16.0
+May 26, 2024
+- The function, runAsync(), is *deprecated*.
+  Set to true the parameter, runAsync, instead.
+- getter, InheritedWidgetStateMixin, moved to InheritedWidgetStateMixin
+
 ## 4.15.0
 May 18, 2024
 - _StateXInheritedWidget() to StateXInheritedWidget()

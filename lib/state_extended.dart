@@ -53,7 +53,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   StateX({StateXController? controller, bool? runAsync, bool? useInherited}) {
     // Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
-    // A flag whether the built-in FutureBuilder runs with every setState() call.
+    // A flag whether the built-in FutureBuilder always runs.
     _runAsync = runAsync ?? false;
     // A flag determining whether the built-in InheritedWidget is used or not.
     _useInherited = useInherited ?? true;
@@ -80,16 +80,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   StateXController? _controller;
 
-  /// Run the built-in FutureBuilder with every setState() call
-  late bool _runAsync;
-
   /// You need to be able access the widget.
   @override
   // ignore: avoid_as
   T get widget => super.widget as T;
 
-  /// A flag determining whether the built-in InheritedWidget is used or not.
-  bool get useInherited => _useInherited;
+  // /// A flag determining whether the built-in InheritedWidget is used or not.
+  // bool get useInherited => _useInherited;
 
   /// Provide the 'main' controller to this 'State View.'
   /// If _controller == null, get the 'first assigned' controller if any.
@@ -1165,6 +1162,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   void setState(VoidCallback fn) {
     //
     if (_setStateAllowed) {
+      //
       _setStateAllowed = false;
 
       // Don't bother if the State object is disposed of.
@@ -1194,7 +1192,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
     // Copy over certain properties
     _recException = state._recException;
-    _ranAsync = state._ranAsync;
+    _runAsync = state._runAsync;
   }
 }
 
@@ -1865,21 +1863,21 @@ mixin StateListener implements RouteAware {
     );
   }
 
-  /// The top route has been popped off, and this route shows up.
-  @override
-  void didPopNext() {}
-
-  /// Called when this route has been pushed.
+  /// Called when this State is *first* added to as a Route observer?!
   @override
   void didPush() {}
 
-  /// Called when this route has been popped off.
+  /// New route has been pushed, and this State object's route is no longer current.
+  @override
+  void didPushNext() {}
+
+  /// Called when this State is popped off a route.
   @override
   void didPop() {}
 
-  /// New route has been pushed, and this route is no longer visible.
+  /// The top route has been popped off, and this route shows up.
   @override
-  void didPushNext() {}
+  void didPopNext() {}
 
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
@@ -2009,8 +2007,9 @@ mixin FutureBuilderStateMixin on State {
   Widget build(BuildContext context) {
     // A little trick to determine if the user has overridden this function.
     _buildOverridden = false;
+    // Generate the future just once or evey time
     // Don't run runAsync() function if _ranAsync is true.
-    if (!_ranAsync || _future == null) {
+    if (!_ranAsync || _runAsync || _future == null) {
       _future = runAsync();
     }
     return FutureBuilder<bool>(
@@ -2025,6 +2024,19 @@ mixin FutureBuilderStateMixin on State {
   bool get buildOverridden => _buildOverridden;
   bool _buildOverridden = true;
 
+  /// Run the StateX object's initAsync() function
+  /// Override this function to repeatedly run initAsync()
+  @Deprecated('Set to true the runAsync parameter instead.')
+  Future<bool> runAsync() {
+    // Once true, initAsync() function is never run again
+    // unless the runAsync() function is overridden.
+    _ranAsync = true;
+    return initAsync();
+  }
+
+  /// Don't call runAsync() and initAsync() ever again once this is true.
+  bool _ranAsync = false;
+
   /// Clean up
   @override
   void dispose() {
@@ -2032,23 +2044,14 @@ mixin FutureBuilderStateMixin on State {
     super.dispose();
   }
 
-  /// Don't call runAsync() and initAsync() ever again once this is true.
-  bool _ranAsync = false;
+  // Call initAsync() all the time if set true.
+  bool _runAsync = false;
 
   /// IMPORTANT
   /// The _future must be created first. If the _future is created at the same
   /// time as the FutureBuilder, then every time the FutureBuilder's parent is
   /// rebuilt, the asynchronous task will be performed again.
   Future<bool>? _future;
-
-  /// Run the StateX object's initAsync() function
-  /// Override this function to repeatedly run initAsync()
-  Future<bool> runAsync() {
-    // Once true, initAsync() function is never run again
-    // unless the runAsync() function is overridden.
-    _ranAsync = true;
-    return initAsync();
-  }
 
   /// You're to override this function and initialize any asynchronous operations
   Future<bool> initAsync() async => true;
@@ -2228,7 +2231,8 @@ mixin FutureBuilderStateMixin on State {
 /// {@category StateX class}
 /// {@category Using InheritedWidget}
 mixin InheritedWidgetStateMixin on State {
-  // A flag determining whether the built-in InheritedWidget is used or not.
+  /// A flag determining whether the built-in InheritedWidget is used or not.
+  bool get useInherited => _useInherited;
   late bool _useInherited;
 
   // Collect any 'widgets' depending on this State's InheritedWidget.
@@ -2348,7 +2352,7 @@ mixin InheritedWidgetStateMixin on State {
   Widget state(WidgetBuilder? widgetFunc) {
     widgetFunc ??= (_) => const SizedBox();
     return _useInherited && this is StateX
-        ? _SetStateWidget(stateX: this as StateX, widgetFunc: widgetFunc)
+        ? _SetStateXWidget(stateX: this as StateX, widgetFunc: widgetFunc)
         : widgetFunc(context);
   }
 
@@ -2393,8 +2397,10 @@ class StateXInheritedWidget extends InheritedWidget {
 }
 
 /// Supply a widget to depend upon a StateX's InheritedWidget
-class _SetStateWidget extends StatelessWidget {
-  const _SetStateWidget({
+class _SetStateXWidget extends StatelessWidget {
+  ///
+  const _SetStateXWidget({
+    super.key,
     required this.stateX,
     required this.widgetFunc,
   });
@@ -2551,7 +2557,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateIn<T>
   @override
   Widget state(WidgetBuilder? widgetFunc) {
     widgetFunc ??= (_) => const SizedBox(); // Display 'nothing' if not provided
-    return _SetStateWidget(stateX: this, widgetFunc: widgetFunc);
+    return _SetStateXWidget(stateX: this, widgetFunc: widgetFunc);
   }
 
   /// Catch any errors in the App
