@@ -21,10 +21,11 @@ class _RandomBirdState extends ImageAPIStateX<RandomBird> {
   _RandomBirdState()
       : super(
           controller: BirdController(),
+          message: 'message',
           uri: Uri(
             scheme: 'https',
-            host: 'shibe.online',
-            path: 'api/birds',
+            host: 'api.sefinek.net',
+            path: 'api/v2/random/animal/bird',
           ),
         );
 }

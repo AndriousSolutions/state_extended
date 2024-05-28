@@ -1,4 +1,8 @@
 
+## 4.16.1
+May 27, 2024
+- Cat and Bird images now come from https:\\api.sefinek.net
+
 ## 4.16.0
 May 26, 2024
 - The function, runAsync(), is *deprecated*.
