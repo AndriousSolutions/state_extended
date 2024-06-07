@@ -1,4 +1,14 @@
 
+## 4.17.0
+June 06, 2024
+- Flag defaults to false: _useInherited = useInherited ?? false;
+- Deprecated class StateF. Instead use StateX class with 'runAsync: true'
+  Deprecated class StateIn. Instead use StateX class with 'useInherited: true'
+- getter, useInherited, is also true if buildIn() id overridden
+- Don't ever use build() now. Instead use new function, builder()
+  Or use buildIn() to work with the built-in InheritedWidget like 'useInherited: true'
+- New getter, builderOverridden
+
 ## 4.16.1
 May 27, 2024
 - Cat and Bird images now come from https:\\api.sefinek.net

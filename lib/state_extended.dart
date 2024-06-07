@@ -56,7 +56,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // A flag whether the built-in FutureBuilder always runs.
     _runAsync = runAsync ?? false;
     // A flag determining whether the built-in InheritedWidget is used or not.
-    _useInherited = useInherited ?? true;
+    _useInherited = useInherited ?? false;
     // Associate the controller to this State object
     _controller = controller;
     // Any subsequent calls to add() will be assigned to stateX.
@@ -84,9 +84,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   // ignore: avoid_as
   T get widget => super.widget as T;
-
-  // /// A flag determining whether the built-in InheritedWidget is used or not.
-  // bool get useInherited => _useInherited;
 
   /// Provide the 'main' controller to this 'State View.'
   /// If _controller == null, get the 'first assigned' controller if any.
@@ -1200,6 +1197,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 ///
 /// dartdoc:
 /// {@category StateX class}
+@Deprecated("Use StateX class with 'runAsync: true' instead")
 abstract class StateF<T extends StatefulWidget> extends StateX<T> {
   ///
   StateF({super.controller}) : super(runAsync: true);
@@ -1209,6 +1207,7 @@ abstract class StateF<T extends StatefulWidget> extends StateX<T> {
 ///
 /// dartdoc:
 /// {@category StateX class}
+@Deprecated("Use StateX class with 'useInherited: true' instead")
 abstract class StateIn<T extends StatefulWidget> extends StateX<T> {
   ///
   StateIn({super.controller}) : super(useInherited: true);
@@ -2232,7 +2231,7 @@ mixin FutureBuilderStateMixin on State {
 /// {@category Using InheritedWidget}
 mixin InheritedWidgetStateMixin on State {
   /// A flag determining whether the built-in InheritedWidget is used or not.
-  bool get useInherited => _useInherited;
+  bool get useInherited => _useInherited || _buildInOverridden;
   late bool _useInherited;
 
   // Collect any 'widgets' depending on this State's InheritedWidget.
@@ -2258,17 +2257,18 @@ mixin InheritedWidgetStateMixin on State {
   /// {@category StateX class}
   Widget buildF(BuildContext context) {
     _buildFOverridden = false;
-    if (_useInherited) {
+    if (useInherited) {
       _child ??= buildIn(context);
+    } else {
+      _child = buildIn(context);
     }
-    // buildIn() function must be used
-    return _useInherited && _buildInOverridden
+    return useInherited
         ? StateXInheritedWidget(
             key: _key,
             state: this as StateX,
             child: _child ?? const SizedBox.shrink(),
           )
-        : buildIn(context);
+        : _child!;
   }
 
   /// A flag. Note if build() function was overridden or not.
@@ -2283,12 +2283,23 @@ mixin InheritedWidgetStateMixin on State {
   /// {@category StateX class}
   Widget buildIn(BuildContext context) {
     _buildInOverridden = false;
-    return const SizedBox.shrink();
+    return builder(context);
   }
 
   /// A flag. Note if buildIn() function was overridden or not.
   bool get buildInOverridden => _buildInOverridden;
   bool _buildInOverridden = true;
+
+  /// This function is wrapped in a Builder widget.
+  /// If you don't use it, use the buildAndroid() or buildiOS() function.
+  Widget builder(BuildContext context) {
+    _builderOverridden = false;
+    return const SizedBox.shrink();
+  }
+
+  /// A flag. Note if builder() function was overridden or not.
+  bool get builderOverridden => _builderOverridden;
+  bool _builderOverridden = true;
 
   /// Determine if the dependencies should be updated.
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
@@ -2298,7 +2309,7 @@ mixin InheritedWidgetStateMixin on State {
   ///
   ///  Return false if not configured to use the InheritedWidget
   bool dependOnInheritedWidget(BuildContext? context) {
-    final depend = _useInherited && context != null;
+    final depend = useInherited && context != null;
     if (depend) {
       if (_inheritedElement == null) {
         _dependencies.add(context);
@@ -2312,10 +2323,11 @@ mixin InheritedWidgetStateMixin on State {
   /// In harmony with Flutter's own API there's also a notifyClients() function
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   bool notifyClients() {
-    if (_useInherited) {
+    final inherited = useInherited;
+    if (inherited) {
       setState(() {});
     }
-    return _useInherited;
+    return inherited;
   }
 
   /// setState() will actually call an InheritedWidget again
@@ -2351,7 +2363,7 @@ mixin InheritedWidgetStateMixin on State {
   /// This 'widget function' will be called again.
   Widget state(WidgetBuilder? widgetFunc) {
     widgetFunc ??= (_) => const SizedBox();
-    return _useInherited && this is StateX
+    return useInherited && this is StateX
         ? _SetStateXWidget(stateX: this as StateX, widgetFunc: widgetFunc)
         : widgetFunc(context);
   }
@@ -2408,7 +2420,6 @@ class _SetStateXWidget extends StatelessWidget {
   final WidgetBuilder widgetFunc;
   @override
   Widget build(BuildContext context) {
-//    context.dependOnInheritedElement(stateX._inheritedElement!);
     stateX.dependOnInheritedWidget(context);
     return widgetFunc(context);
   }

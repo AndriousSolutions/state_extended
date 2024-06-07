@@ -39,7 +39,7 @@ class _HomePageState extends StateX<HomePage> {
 
   /// The State class' interface
   @override
-  Widget build(BuildContext context) {
+  Widget builder(BuildContext context) {
     //
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
