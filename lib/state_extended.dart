@@ -16,6 +16,7 @@ import 'dart:ui' show AppExitResponse;
 
 import 'package:flutter/cupertino.dart'
     show
+        CupertinoActivityIndicator,
         CupertinoLocalizations,
         CupertinoUserInterfaceLevel,
         DefaultCupertinoLocalizations;
@@ -2143,8 +2144,16 @@ mixin FutureBuilderStateMixin on State {
         }
 
         // Still no widget
-        //  CupertinoActivityIndicator used if TargetPlatform.iOS or TargetPlatform.macOS
-        widget ??= const Center(child: CircularProgressIndicator());
+        if (widget == null) {
+          if (usingCupertino) {
+            //
+            widget = const Center(child: CupertinoActivityIndicator());
+          } else {
+            //
+            widget = const Center(child: CircularProgressIndicator());
+          }
+        }
+//        widget ??= const Center(child: CircularProgressIndicator());
 
         // There was an error instead.
       } else {
@@ -2195,9 +2204,10 @@ mixin FutureBuilderStateMixin on State {
 
   /// Is the CupertinoApp being used?
   bool get usingCupertino =>
-      context.getElementForInheritedWidgetOfExactType<
-          CupertinoUserInterfaceLevel>() !=
-      null;
+      _usingCupertino ??= context.getElementForInheritedWidgetOfExactType<
+              CupertinoUserInterfaceLevel>() !=
+          null;
+  bool? _usingCupertino;
 
   /// Supply Localizations before displaying the widget
   Widget _localizeWidget(BuildContext context, Widget child) {

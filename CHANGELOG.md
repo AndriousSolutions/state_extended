@@ -1,4 +1,10 @@
 
+## 4.18.0
+June 15, 2024
+- getter usingCupertino assigned a local variable
+- CupertinoActivityIndicator and CircularProgressIndicator used by default
+- Increase test coverage
+
 ## 4.17.0
 June 06, 2024
 - Flag defaults to false: _useInherited = useInherited ?? false;

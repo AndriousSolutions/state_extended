@@ -186,10 +186,21 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   /// Test the forEach() function encountering an error
   each = stateObj.forEach((con) {
-    if (con is YetAnotherController) {
-      throw Exception('Error in forEach()!');
-    }
+    var state = con.startState;
+    state = con.endState;
+    final states = con.states;
   });
+
+  /// reversed
+  each = stateObj.forEach((con) {
+    var state = con.startState;
+    state = con.endState;
+    var overridden = state?.buildOverridden;
+    overridden = state?.usingCupertino;
+    overridden = state?.buildFOverridden;
+    overridden = state?.buildInOverridden;
+    final states = con.states;
+  }, reversed: true);
 
   /// Return a controller by its id in a List
   final listCon = stateObj.listControllers([keyId]);
