@@ -4,15 +4,17 @@
 
 // Flutter's Material Interface package
 
-export 'package:example/src/view/app/my_app.dart';
-
-export 'package:example/src/view/app/splash_screen.dart';
-
-export 'package:example/src/view/home/_view.dart';
-
 export 'package:flutter/cupertino.dart' show CupertinoSwitch;
 
 /// StateSetter is also defined in state_extended.dart
 export 'package:flutter/material.dart' hide StateSetter;
 
 export 'package:state_extended/state_extended.dart';
+
+export '/src/view/app/common/events_state.dart';
+
+export '/src/view/app/my_app.dart';
+
+export '/src/view/app/splash_screen.dart';
+
+export '/src/view/home/_view.dart';

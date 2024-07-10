@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:example/src/controller.dart';
+import '/src/controller.dart';
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 /// The first page displayed in this app.
 class Page1 extends StatefulWidget {
@@ -16,7 +16,7 @@ class Page1 extends StatefulWidget {
 }
 
 ///
-class Page1State extends StateX<Page1> {
+class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
   /// Supply a controller to this State object
   /// so to call its setState() function below.
   Page1State()

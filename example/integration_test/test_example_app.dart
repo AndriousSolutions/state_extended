@@ -61,7 +61,7 @@ Future<void> integrationTesting(WidgetTester tester) async {
   }
 
   /// This should be the 'latest' State object running in the App
-  expect(state.isEndState, isTrue, reason: _location);
+  expect(state.isLastState, isTrue, reason: _location);
 
   /// Go to Page 1
   await tester.tap(find.byKey(const Key('Page 1')));
@@ -105,26 +105,26 @@ Future<void> integrationTesting(WidgetTester tester) async {
     expect(event, isTrue, reason: _location);
   }
 
-  event = state.paused;
+  event = state.pausedAppLifecycle;
 
   if (event) {
     /// The app has been paused
     expect(event, isTrue, reason: _location);
   }
 
-  event = state.inactive;
+  event = state.inactiveAppLifecycle;
 
   if (event) {
     expect(event, isTrue, reason: _location);
   }
 
-  event = state.detached;
+  event = state.detachedAppLifecycle;
 
   if (event) {
     expect(event, isTrue, reason: _location);
   }
 
-  event = state.resumed;
+  event = state.resumedAppLifecycle;
 
   if (event) {
     expect(event, isTrue, reason: _location);
@@ -146,9 +146,9 @@ Future<void> integrationTesting(WidgetTester tester) async {
     expect(event, isTrue, reason: _location);
   }
 
-  if (!state.hidden) {
+  if (!state.hiddenAppLifecycle) {
     // Should not happen, but don't trip it here regardless! gp
-    expect(state.hidden, isFalse, reason: _location);
+    expect(state.hiddenAppLifecycle, isFalse, reason: _location);
   }
 
   if (!state.mounted) {
@@ -181,11 +181,11 @@ Future<void> integrationTesting(WidgetTester tester) async {
   await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
   // Test the controllers move across different State objects.
-  state = con.state!.startState as StateX;
+  state = con.state!.firstState as StateX;
 
   expect(state, isA<AppStateX>(), reason: _location);
 
-  state = con.state!.endState as StateX;
+  state = con.state!.lastState as StateX;
 
   expect(state, isA<Page2State>(), reason: _location);
 

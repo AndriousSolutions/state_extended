@@ -10,10 +10,12 @@ const _location = '========================== test_event_handling.dart';
 
 /// Simulate some App 'life cycle' events.
 Future<void> testEventHandling(WidgetTester tester) async {
-  //
+  // Simulate a 'release focus' then refocus event
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
-  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.detached);
+  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
   // Give the app time to recover and indeed resume testing.

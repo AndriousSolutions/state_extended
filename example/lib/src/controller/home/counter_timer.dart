@@ -1,12 +1,12 @@
 //
 import 'dart:async';
 
-import 'package:example/src/controller.dart';
+import '/src/controller.dart';
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 ///
-class CounterTimer extends StateXController {
+class CounterTimer extends StateXController with EventsControllerMixin {
   /// Only one instance of the class is required.
   factory CounterTimer({
     int? seconds,

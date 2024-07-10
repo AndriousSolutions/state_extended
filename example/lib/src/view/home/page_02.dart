@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:example/src/controller.dart';
+import '/src/controller.dart';
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 /// The second page displayed in this app.
 class Page2 extends StatefulWidget {
@@ -17,7 +17,7 @@ class Page2 extends StatefulWidget {
 
 /// This works with a separate 'data source'
 /// It a separate data source, and so the count is never reset to zero.
-class Page2State extends StateX<Page2> {
+class Page2State extends StateX<Page2> with EventsStateMixin<Page2> {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
   Page2State() : super(controller: Controller()) {
     /// Cast to type, Controller

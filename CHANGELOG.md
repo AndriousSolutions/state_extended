@@ -1,4 +1,14 @@
 
+## 4.19.0
+July 10, 2024
+- AppState.detachedAppLifecycleState() 'attempts' to call State object's deactivate() and dispose()
+- AppState.didChangeAppLifecycleState() encompasses life cycle event flags.
+- Renamed event flags: inactive, hidden, paused, resumed, detached to
+  _inactiveAppLifecycle, _hiddenAppLifecycle, _pausedAppLifecycle, _resumedAppLifecycle, _detachedAppLifecycle
+- Renamed the functions:
+  inactiveAppLifecycle(), hiddenAppLifecycle(), pausedAppLifecycle(), resumedAppLifecycle(), detachedAppLifecycle()
+- Removed @protected from methods to be used outside an instance member's subclasses:
+
 ## 4.18.0
 June 15, 2024
 - getter usingCupertino assigned a local variable

@@ -4,14 +4,15 @@
 
 import 'dart:ui' show AppExitResponse;
 
-import 'package:example/src/controller.dart'
-    show ExampleAppController, StateXController;
+import '/src/controller.dart'
+    show EventsControllerMixin, ExampleAppController, StateXController;
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 /// Multiple Controllers can be assigned to one State object.
 /// Includes the mixin, StateXonErrorMixin, to supply an error handler
-class AnotherController extends StateXController with StateXonErrorMixin {
+class AnotherController extends StateXController
+    with EventsControllerMixin, StateXonErrorMixin {
   /// It's a good practice to make Controllers using the Singleton pattern
   factory AnotherController() => _this ??= AnotherController._();
   AnotherController._() : super();
@@ -132,6 +133,7 @@ class AnotherController extends StateXController with StateXonErrorMixin {
     /// AppLifecycleState.resumed
     /// AppLifecycleState.inactive (may be paused at any time)
     /// AppLifecycleState.suspending (Android only)
+    super.didChangeAppLifecycleState(state);
   }
 
   /// Called when the system is running low on memory.

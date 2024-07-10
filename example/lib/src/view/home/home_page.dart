@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:example/src/controller.dart';
+import '/src/controller.dart';
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 /// The Home page
 class HomePage extends StatefulWidget {
@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends StateX<HomePage> {
+class _HomePageState extends StateX<HomePage> with EventsStateMixin<HomePage> {
   /// Let the 'business logic' run in a Controller
   _HomePageState() : super(controller: Controller()) {
     /// Acquire a reference to the passed Controller.

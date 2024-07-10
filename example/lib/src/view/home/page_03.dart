@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:example/src/another_app/view.dart' as i;
+import '/src/another_app/view.dart' as i;
 
-import 'package:example/src/controller.dart';
+import '/src/controller.dart';
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 /// The third page displayed in this app.
 class Page3 extends StatefulWidget {
@@ -17,7 +17,9 @@ class Page3 extends StatefulWidget {
   State createState() => _Page3State();
 }
 
-class _Page3State extends StateIn<Page3> {
+class _Page3State extends StateX<Page3> with EventsStateMixin<Page3> {
+  // Use built-in InheritedWidget
+  _Page3State() : super(useInherited: true);
   //
   int count = 0;
 

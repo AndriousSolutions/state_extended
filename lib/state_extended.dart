@@ -196,11 +196,12 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   bool _setStateRequested = false;
 
   /// This is the 'latest' State being viewed by the App.
+  @Deprecated('Use getter, isLastState, instead')
   bool get isEndState => this == lastState;
+  bool get isLastState => isEndState;
 
   /// Asynchronous operations must complete successfully.
   @override
-  @protected
   @mustCallSuper
   Future<bool> initAsync() async {
     // Always return true. It's got to continue for now.
@@ -241,7 +242,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.
   @override
-  @protected
   @mustCallSuper
   void initState() {
     assert(mounted, '${toString()} is not instantiated properly.');
@@ -288,7 +288,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// the dependent widget's build() function is also called but not before
   /// their didChangeDependencies() function. Subclasses rarely use this method.
   @override
-  @protected
   @mustCallSuper
   void didChangeDependencies() {
     // Important to 'markNeedsBuild()' first
@@ -310,7 +309,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Called when this object is reinserted into the tree after having been
   /// removed via [deactivate].
   @override
-  @protected
   @mustCallSuper
   void activate() {
     /// In most cases, after a [State] object has been deactivated, it is _not_
@@ -354,7 +352,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// The framework calls this method whenever it removes this [State] object
   /// from the tree.
   @override
-  @protected
   @mustCallSuper
   void deactivate() {
     /// The framework calls this method whenever it removes this [State] object
@@ -395,7 +392,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// The framework calls this method when this [StateX] object will never
   /// build again and will be disposed of with garbage collection.
   @override
-  @protected
   @mustCallSuper
   void dispose() {
     /// The State object's lifecycle is terminated.
@@ -439,7 +435,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Returning to this app from another app will re-create the State object
   /// You 'update' the current State object using this function.
   @override
-  @protected
   @mustCallSuper
   void updateNewStateX(covariant StateX oldState) {
     /// No 'setState()' functions are allowed
@@ -457,7 +452,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// The framework always calls [build] after calling [didUpdateWidget], which
   /// means any calls to [setState] in [didUpdateWidget] are redundant.
   @override
-  @protected
   @mustCallSuper
   void didUpdateWidget(StatefulWidget oldWidget) {
     /// No 'setState()' functions are allowed
@@ -476,9 +470,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateRequested = false;
   }
 
-  /// Called when the system puts the app in the background or returns the app to the foreground.
+  /// Called when the system puts the app in the background
+  /// or returns the app to the foreground.
   @override
-  @protected
   @mustCallSuper
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// No 'setState()' functions are allowed to fully function at this point.
@@ -487,46 +481,62 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// First, process the State object's own event functions.
     switch (state) {
       case AppLifecycleState.inactive:
-        inactive = true;
-        inactiveLifecycleState();
+        _inactiveAppLifecycle = true;
+        inactiveAppLifecycleState();
+        _hiddenAppLifecycle = false;
         break;
       case AppLifecycleState.hidden:
-        hidden = true;
-        hiddenLifecycleState();
+        _hiddenAppLifecycle = true;
+        hiddenAppLifecycleState();
+        _pausedAppLifecycle = false;
         break;
       case AppLifecycleState.paused:
-        paused = true;
-        pausedLifecycleState();
+        _pausedAppLifecycle = true;
+        pausedAppLifecycleState();
+        _detachedAppLifecycle = false;
+        _resumedAppLifecycle = false;
         break;
       case AppLifecycleState.detached:
-        detached = true;
-        detachedLifecycleState();
+        _detachedAppLifecycle = true;
+        detachedAppLifecycleState();
+        // if (!deactivated) {
+        //   // Not called otherwise?
+        //   deactivate();
+        // }
+        // if (!disposed) {
+        //   // Not called otherwise?
+        //   dispose();
+        // }
         break;
       case AppLifecycleState.resumed:
-        resumed = true; // The StateX object now resumed will be re-created.
-        resumedLifecycleState();
+        _resumedAppLifecycle = true;
+        resumedAppLifecycleState();
+        _inactiveAppLifecycle = false;
         break;
       default:
-      // WARNING: Missing case clause for 'hidden'??
+      // WARNING: Missing case clause
     }
 
     for (final con in controllerList) {
       con.didChangeAppLifecycleState(state);
       switch (state) {
         case AppLifecycleState.inactive:
-          con.inactiveLifecycleState();
+          con.inactiveAppLifecycleState();
+          break;
+        case AppLifecycleState.hidden:
+          con.hiddenAppLifecycleState();
           break;
         case AppLifecycleState.paused:
-          con.pausedLifecycleState();
+          con.pausedAppLifecycleState();
           break;
         case AppLifecycleState.detached:
-          con.detachedLifecycleState();
+          con.detachedAppLifecycleState();
           break;
         case AppLifecycleState.resumed:
-          con.resumedLifecycleState();
+          con.resumedAppLifecycleState();
           break;
         default:
-        // WARNING: Missing case clause for 'hidden'??
+        // WARNING: Missing case clause
       }
     }
 
@@ -544,48 +554,66 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
   @override
-  @protected
+  @Deprecated('Use inactiveAppLifecycleState instead')
   void inactiveLifecycleState() {}
+  @override
+  void inactiveAppLifecycleState() => inactiveLifecycleState();
 
   /// State object was in 'inactive' state
-  bool inactive = false;
+  bool get inactiveAppLifecycle => _inactiveAppLifecycle;
+  bool _inactiveAppLifecycle = false;
 
+  /// All views of an application are hidden, either because the application is
+  /// about to be paused (on iOS and Android), or because it has been minimized
+  /// or placed on a desktop that is no longer visible (on non-web desktop), or
+  /// is running in a window or tab that is no longer visible (on the web).
   @override
-  @protected
+  @Deprecated('Use hiddenLifecycleState instead')
   void hiddenLifecycleState() {}
+  @override
+  void hiddenAppLifecycleState() => hiddenLifecycleState();
 
   /// State object was in a 'hidden' state
-  bool hidden = false;
+  bool get hiddenAppLifecycle => _hiddenAppLifecycle;
+  bool _hiddenAppLifecycle = false;
 
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
   @override
-  @protected
+  @Deprecated('Use pausedLifecycleState instead')
   void pausedLifecycleState() {}
+  @override
+  void pausedAppLifecycleState() {}
 
   /// State object was in 'paused' state
-  bool paused = false;
+  bool get pausedAppLifecycle => _pausedAppLifecycle;
+  bool _pausedAppLifecycle = false;
 
   /// Either be in the progress of attaching when the  engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
   @override
-  @protected
+  @Deprecated('Use detachedLifecycleState instead')
   void detachedLifecycleState() {}
+  @override
+  void detachedAppLifecycleState() {}
 
   /// State object was in 'paused' state
-  bool detached = false;
+  bool get detachedAppLifecycle => _detachedAppLifecycle;
+  bool _detachedAppLifecycle = false;
 
   /// The application is visible and responding to user input.
   @override
-  @protected
+  @Deprecated('Use resumedLifecycleState instead')
   void resumedLifecycleState() {}
+  @override
+  void resumedAppLifecycleState() => resumedLifecycleState();
 
   /// State object was in 'resumed' state
-  bool resumed = false;
+  bool get resumedAppLifecycle => _resumedAppLifecycle;
+  bool _resumedAppLifecycle = false;
 
   /// Called when a request is received from the system to exit the application.
   @override
-  @protected
   @mustCallSuper
   Future<AppExitResponse> didRequestAppExit() async {
     /// Exiting the application can proceed.
@@ -620,7 +648,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested && appResponse == AppExitResponse.cancel) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -636,7 +664,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// true. If none return true, the application quits.
   ///
   @override
-  @protected
   @mustCallSuper
   Future<bool> didPopRoute() async {
     /// Observers are expected to return true if they were able to
@@ -671,7 +698,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -685,7 +712,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// navigator.
   ///
   @override
-  @protected
   @mustCallSuper
   Future<bool> didPushRoute(String route) async {
     /// Observers are expected to return true if they were able to
@@ -717,7 +743,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -740,7 +766,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// The default implementation is to call the [didPushRoute] directly with the
   /// [RouteInformation.uri].
   @override
-  @protected
   @mustCallSuper
   Future<bool> didPushRouteInformation(
       RouteInformation routeInformation) async {
@@ -767,7 +792,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -778,7 +803,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// The top route has been popped off, and this route shows up.
   @override
-  @protected
   @mustCallSuper
   void didPopNext() {
     // Don't if the State object is defunct.
@@ -798,7 +822,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         // Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -807,7 +831,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// Called when this route has been pushed.
   @override
-  @protected
   @mustCallSuper
   void didPush() {
     // Don't if the State object is defunct.
@@ -827,7 +850,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         // Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -836,7 +859,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// Called when this route has been popped off.
   @override
-  @protected
   @mustCallSuper
   void didPop() {
     // Don't if the State object is defunct.
@@ -856,7 +878,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         // Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -865,7 +887,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// New route has been pushed, and this route is no longer visible.
   @override
-  @protected
   @mustCallSuper
   void didPushNext() {
     // Don't if the State object is defunct.
@@ -885,7 +906,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         // Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -899,7 +920,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
-  @protected
   @override
   @mustCallSuper
   void didChangeMetrics() {
@@ -934,7 +954,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -942,7 +962,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   /// Called when the platform's text scale factor changes.
-  @protected
   @override
   @mustCallSuper
   void didChangeTextScaleFactor() {
@@ -978,7 +997,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -986,7 +1005,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   /// Called when the platform brightness changes.
-  @protected
   @override
   @mustCallSuper
   void didChangePlatformBrightness() {
@@ -1010,7 +1028,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -1020,7 +1038,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Called when the system tells the app that the user's locale has
   /// changed. For example, if the user changes the system language
   /// settings.
-  @protected
   @mustCallSuper
   @override
   void didChangeLocales(List<Locale>? locales) {
@@ -1047,7 +1064,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -1055,7 +1072,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   /// Called when the system is running low on memory.
-  @protected
   @override
   @mustCallSuper
   void didHaveMemoryPressure() {
@@ -1083,7 +1099,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -1091,7 +1107,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   /// Called when the system changes the set of currently active accessibility features.
-  @protected
   @override
   @mustCallSuper
   void didChangeAccessibilityFeatures() {
@@ -1118,7 +1133,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (_setStateRequested) {
       _setStateRequested = false;
       // Only the latest State is rebuilt
-      if (isEndState) {
+      if (isLastState) {
         /// Perform a 'rebuild' if requested.
         setState(() {});
       }
@@ -1128,7 +1143,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// During development, if a hot reload occurs, the reassemble method is called.
   /// This provides an opportunity to reinitialize any data that was prepared
   /// in the initState method.
-  @protected
   @override
   @mustCallSuper
   void reassemble() {
@@ -1614,10 +1628,10 @@ mixin SetStateMixin {
 
           // Testing Flutter lifecycle operation
           assert(() {
-            if (_oldStateX!.resumed || _oldStateX!.deactivated) {
+            if (_oldStateX!.resumedAppLifecycle || _oldStateX!.deactivated) {
               if (kDebugMode) {
                 print(
-                    '############ _pushStateToSetter(): resumed: ${_oldStateX!.resumed} deactivated: ${_oldStateX!.deactivated}');
+                    '############ _pushStateToSetter(): resumed: ${_oldStateX!.resumedAppLifecycle} deactivated: ${_oldStateX!.deactivated}');
               }
             }
             return true;
@@ -1777,7 +1791,7 @@ mixin StateListener implements RouteAware {
     /// Use the old one to update properties in the new StateX object.
   }
 
-  /// Override this method to respond when the [StatefulWidget] is recreated.
+  /// Override this method to respond to when the [StatefulWidget] is recreated.
   void didUpdateWidget(StatefulWidget oldWidget) {
     /// The framework always calls build() after calling [didUpdateWidget], which
     /// means any calls to [setState] in [didUpdateWidget] are redundant.
@@ -1879,8 +1893,8 @@ mixin StateListener implements RouteAware {
   @override
   void didPopNext() {}
 
-  /// Called when the application's dimensions change. For example,
-  /// when a phone is rotated.
+  /// Called when the application's UI dimensions change.
+  /// For example, when a phone is rotated.
   void didChangeMetrics() {
     /// Called when the application's dimensions change. For example,
     /// when a phone is rotated.
@@ -1937,10 +1951,14 @@ mixin StateListener implements RouteAware {
 
   /// Either be in the progress of attaching when the engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
+  @Deprecated('Use detachedAppLifecycleState instead')
   void detachedLifecycleState() {}
+  void detachedAppLifecycleState() => detachedLifecycleState();
 
   /// The application is visible and responding to user input.
+  @Deprecated('Use resumedAppLifecycleState instead')
   void resumedLifecycleState() {}
+  void resumedAppLifecycleState() => resumedLifecycleState();
 
   /// The application is in an inactive state and is not receiving user input.
   ///
@@ -1956,17 +1974,23 @@ mixin StateListener implements RouteAware {
   /// a picture-in-picture app, a system dialog, or another window.
   ///
   /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
+  @Deprecated('Use inactiveAppLifecycleState instead')
   void inactiveLifecycleState() {}
+  void inactiveAppLifecycleState() => inactiveLifecycleState();
 
   /// All views of an application are hidden, either because the application is
   /// about to be paused (on iOS and Android), or because it has been minimized
   /// or placed on a desktop that is no longer visible (on non-web desktop), or
   /// is running in a window or tab that is no longer visible (on the web).
+  @Deprecated('Use hiddenAppLifecycleState instead')
   void hiddenLifecycleState() {}
+  void hiddenAppLifecycleState() => hiddenLifecycleState();
 
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
+  @Deprecated('Use pausedAppLifecycleState instead')
   void pausedLifecycleState() {}
+  void pausedAppLifecycleState() => pausedLifecycleState();
 
   /// Called when the system is running low on memory.
   void didHaveMemoryPressure() {
@@ -2422,7 +2446,6 @@ class StateXInheritedWidget extends InheritedWidget {
 class _SetStateXWidget extends StatelessWidget {
   ///
   const _SetStateXWidget({
-    super.key,
     required this.stateX,
     required this.widgetFunc,
   });
@@ -2442,7 +2465,7 @@ class _SetStateXWidget extends StatelessWidget {
 /// {@category Get started}
 /// {@category StateX class}
 /// {@category AppStateX class}
-abstract class AppStateX<T extends StatefulWidget> extends StateIn<T>
+abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     with _ControllersById {
   ///
   /// Optionally supply as many State Controllers as you like to work with this App.
@@ -2452,7 +2475,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateIn<T>
     List<StateXController>? controllers,
     Object? object,
     // Save the current error handler
-  }) : _currentErrorFunc = FlutterError.onError {
+  })  : _currentErrorFunc = FlutterError.onError,
+        super(useInherited: true) {
     //Record this as the 'root' State object.
     setRootStateX(this);
     _dataObj = object;
@@ -2497,6 +2521,37 @@ abstract class AppStateX<T extends StatefulWidget> extends StateIn<T>
   @override
   @protected
   Widget buildIn(BuildContext context);
+
+  /// Calls the deactivate() and dispose() functions
+  /// in all the app's StateX class objects
+  /// It's success will depending on the hosting operating system:
+  /// https://github.com/flutter/flutter/issues/124945#issuecomment-1514159238
+  @override
+  @protected
+  @mustCallSuper
+  void detachedAppLifecycleState() {
+    //
+    forEachState((state) {
+      //
+      try {
+        state.deactivate();
+      } catch (e, stack) {
+        // An error in the error handler. Record the error
+        recordException(e, stack);
+        _onErrorInHandler();
+      }
+
+      try {
+        if (!state.disposed) {
+          state.dispose();
+        }
+      } catch (e, stack) {
+        // An error in the error handler. Record the error
+        recordException(e, stack);
+        _onErrorInHandler();
+      }
+    }, reversed: true);
+  }
 
   /// Clean up memory
   /// Called when garbage collecting
@@ -2577,7 +2632,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateIn<T>
   /// This 'widget function' will be called again.
   @override
   Widget state(WidgetBuilder? widgetFunc) {
-    widgetFunc ??= (_) => const SizedBox(); // Display 'nothing' if not provided
+    widgetFunc ??=
+        (_) => const SizedBox.shrink(); // Display 'nothing' if not provided
     return _SetStateXWidget(stateX: this, widgetFunc: widgetFunc);
   }
 
@@ -3171,7 +3227,8 @@ mixin RecordExceptionMixin {
 /// {@category StateX class}
 /// {@category State Object Controller}
 mixin AsyncOps {
-  /// Used to complete asynchronous operations
+  /// Initialize any 'time-consuming' operations at the beginning.
+  /// Implement any asynchronous operations needed done at start up.
   Future<bool> initAsync() async => true;
 
   /// Supply an 'error handler' routine if something goes wrong
