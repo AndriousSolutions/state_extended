@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:ui' show Locale;
+import 'dart:ui' show AppExitResponse, Locale;
 
 import 'package:flutter/foundation.dart';
 
@@ -50,14 +50,12 @@ mixin EventsControllerMixin on StateXController {
       }
       return true;
     }());
-    super.deactivate();
   }
 
   /// Called when this object is reinserted into the tree after having been
   /// removed via [deactivate].
   @override
   void activate() {
-    super.activate();
     assert(() {
       if (kDebugMode) {
         print('=========== activate() in $className\n');
@@ -71,13 +69,13 @@ mixin EventsControllerMixin on StateXController {
   /// Note: YOU WILL HAVE NO IDEA WHEN THIS WILL RUN in the Framework.
   @override
   void dispose() {
+    super.dispose();
     assert(() {
       if (kDebugMode) {
         print('=========== dispose() in $className\n');
       }
       return true;
     }());
-    super.dispose();
   }
 
   /// Called when this State is *first* added to as a Route observer?!
@@ -149,7 +147,6 @@ mixin EventsControllerMixin on StateXController {
   /// when a phone is rotated.
   @override
   void didChangeMetrics() {
-    super.didChangeMetrics();
     assert(() {
       if (kDebugMode) {
         print('=========== didChangeMetrics() in $className\n');
@@ -161,7 +158,6 @@ mixin EventsControllerMixin on StateXController {
   /// Called when the platform's text scale factor changes.
   @override
   void didChangeTextScaleFactor() {
-    super.didChangeTextScaleFactor();
     assert(() {
       if (kDebugMode) {
         print('=========== didChangeTextScaleFactor() in $className\n');
@@ -173,7 +169,6 @@ mixin EventsControllerMixin on StateXController {
   /// Brightness changed.
   @override
   void didChangePlatformBrightness() {
-    super.didChangePlatformBrightness();
     assert(() {
       if (kDebugMode) {
         print('=========== didChangePlatformBrightness() in $className\n');
@@ -185,34 +180,9 @@ mixin EventsControllerMixin on StateXController {
   /// Called when the system tells the app that the user's locale has changed.
   @override
   void didChangeLocales(List<Locale>? locales) {
-    super.didChangeLocales(locales);
     assert(() {
       if (kDebugMode) {
         print('=========== didChangeLocales() in $className\n');
-      }
-      return true;
-    }());
-  }
-
-  /// Either be in the progress of attaching when the engine is first initializing
-  /// or after the view being destroyed due to a Navigator pop.
-  @override
-  void detachedAppLifecycleState() {
-    assert(() {
-      if (kDebugMode) {
-        print('=========== detachedAppLifecycleState() in $className\n');
-      }
-      return true;
-    }());
-    super.detachedAppLifecycleState();
-  }
-
-  /// The application is visible and responding to user input.
-  @override
-  void resumedAppLifecycleState() {
-    assert(() {
-      if (kDebugMode) {
-        print('=========== resumedAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -254,13 +224,34 @@ mixin EventsControllerMixin on StateXController {
       }
       return true;
     }());
-    super.pausedAppLifecycleState();
+  }
+
+  /// Either be in the progress of attaching when the engine is first initializing
+  /// or after the view being destroyed due to a Navigator pop.
+  @override
+  void detachedAppLifecycleState() {
+    assert(() {
+      if (kDebugMode) {
+        print('=========== detachedAppLifecycleState() in $className\n');
+      }
+      return true;
+    }());
+  }
+
+  /// The application is visible and responding to user input.
+  @override
+  void resumedAppLifecycleState() {
+    assert(() {
+      if (kDebugMode) {
+        print('=========== resumedAppLifecycleState() in $className\n');
+      }
+      return true;
+    }());
   }
 
   /// Called when there's a memory constraint.
   @override
   void didHaveMemoryPressure() {
-    super.didHaveMemoryPressure();
     assert(() {
       if (kDebugMode) {
         print('=========== didHaveMemoryPressure() in $className\n');
@@ -272,12 +263,23 @@ mixin EventsControllerMixin on StateXController {
   /// Called when the system changes the set of active accessibility features.
   @override
   void didChangeAccessibilityFeatures() {
-    super.didChangeAccessibilityFeatures();
     assert(() {
       if (kDebugMode) {
         print('=========== didChangeAccessibilityFeatures() in $className\n');
       }
       return true;
     }());
+  }
+
+  /// Called when a request is received from the system to exit the application.
+  @override
+  Future<AppExitResponse> didRequestAppExit() {
+    assert(() {
+      if (kDebugMode) {
+        print('=========== didRequestAppExit() in $className\n');
+      }
+      return true;
+    }());
+    return super.didRequestAppExit();
   }
 }

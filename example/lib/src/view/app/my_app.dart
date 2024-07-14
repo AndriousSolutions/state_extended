@@ -18,7 +18,7 @@ class MyApp extends StatefulWidget {
 }
 
 ///
-class _MyAppState extends AppStateX<MyApp> with EventsStateMixin<MyApp> {
+class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
   //
   _MyAppState()
       : super(

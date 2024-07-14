@@ -253,12 +253,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// [didUpdateWidget], and then unsubscribe from the object in [dispose].
     super.initState();
 
-    /// Registers the given object as a binding observer. Binding
-    /// observers are notified when various application events occur,
-    /// for example when the system locale changes. Generally, one
-    /// widget in the widget tree registers itself as a binding
-    /// observer, and converts the system state into inherited widgets.
-    WidgetsBinding.instance.addObserver(this);
+    /// If 'AppState' is used
+    if (rootState == null) {
+      /// Registers the given object as a binding observer. Binding
+      /// observers are notified when various application events occur,
+      /// for example when the system locale changes. Generally, one
+      /// widget in the widget tree registers itself as a binding
+      /// observer, and converts the system state into inherited widgets.
+      WidgetsBinding.instance.addObserver(this);
+    }
 
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
@@ -339,8 +342,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Must call the 'super' routine as well.
     super.activate();
 
-    // Registers the given object as a binding observer.
-    WidgetsBinding.instance.addObserver(this);
+    /// If 'AppState' is used
+    if (rootState == null) {
+      // Registers the given object as a binding observer.
+      WidgetsBinding.instance.addObserver(this);
+    }
 
     _setStateAllowed = true;
 
@@ -482,22 +488,26 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     switch (state) {
       case AppLifecycleState.inactive:
         _inactiveAppLifecycle = true;
+        _didChangeAppLifecycleStateXControllers(state);
         inactiveAppLifecycleState();
         _hiddenAppLifecycle = false;
         break;
       case AppLifecycleState.hidden:
         _hiddenAppLifecycle = true;
+        _didChangeAppLifecycleStateXControllers(state);
         hiddenAppLifecycleState();
         _pausedAppLifecycle = false;
         break;
       case AppLifecycleState.paused:
         _pausedAppLifecycle = true;
+        _didChangeAppLifecycleStateXControllers(state);
         pausedAppLifecycleState();
         _detachedAppLifecycle = false;
         _resumedAppLifecycle = false;
         break;
       case AppLifecycleState.detached:
         _detachedAppLifecycle = true;
+        _didChangeAppLifecycleStateXControllers(state);
         detachedAppLifecycleState();
         // if (!deactivated) {
         //   // Not called otherwise?
@@ -510,6 +520,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         break;
       case AppLifecycleState.resumed:
         _resumedAppLifecycle = true;
+        _didChangeAppLifecycleStateXControllers(state);
         resumedAppLifecycleState();
         _inactiveAppLifecycle = false;
         break;
@@ -517,6 +528,21 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       // WARNING: Missing case clause
     }
 
+    _setStateAllowed = true;
+
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isLastState) {
+        /// Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+  }
+
+  /// Loop through the StateX's controllers if any
+  void _didChangeAppLifecycleStateXControllers(AppLifecycleState state) {
+    //
     for (final con in controllerList) {
       con.didChangeAppLifecycleState(state);
       switch (state) {
@@ -537,17 +563,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
           break;
         default:
         // WARNING: Missing case clause
-      }
-    }
-
-    _setStateAllowed = true;
-
-    if (_setStateRequested) {
-      _setStateRequested = false;
-      // Only the latest State is rebuilt
-      if (isEndState) {
-        /// Perform a 'rebuild' if requested.
-        setState(() {});
       }
     }
   }
@@ -713,6 +728,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   ///
   @override
   @mustCallSuper
+  @Deprecated('Use didPushRouteInformation instead. '
+      'This feature was deprecated after v3.8.0-14.0.pre.')
   Future<bool> didPushRoute(String route) async {
     /// Observers are expected to return true if they were able to
     /// handle the notification. Observers are notified in registration
@@ -771,20 +788,20 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       RouteInformation routeInformation) async {
     // Don't if the State object is defunct.
     if (!mounted) {
-      return true;
+      return false;
     }
 
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    /// Set if a StateXController successfully 'handles' the notification.
-    bool handled = false;
+    // /// Set if a StateXController successfully 'handles' the notification.
+    // bool handled = false;
 
     for (final con in controllerList) {
       final didPush = await con.didPushRouteInformation(routeInformation);
-      if (didPush) {
-        handled = true;
-      }
+      // if (didPush) {
+      //   handled = true;
+      // }
     }
 
     _setStateAllowed = true;
@@ -798,7 +815,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       }
     }
 
-    return handled;
+    return super.didPushRouteInformation(routeInformation);
   }
 
   /// The top route has been popped off, and this route shows up.
@@ -1390,337 +1407,27 @@ mixin _ControllersByType on State {
   }
 }
 
-/// Works with the collection of State objects in the App.
+/// Supply an 'error handler' routine if something goes wrong.
+/// It need not be implemented, but it's their for your consideration.
 ///
 /// dartdoc:
 /// {@category StateX class}
-mixin _MapOfStates on State {
-  /// All the State objects in this app.
-  static final Map<String, StateX> _states = {};
+/// {@category Error handling}
+mixin StateXonErrorMixin {
+  /// Offer an error handler
+  void onError(FlutterErrorDetails details) {}
 
-  /// Retrieve the State object by type
-  /// Returns null if not found
-  T? stateByType<T extends StateX>() {
-    StateX? state;
-    try {
-      for (final item in _MapOfStates._states.values) {
-        if (item is T) {
-          state = item;
-          break;
-        }
-      }
-    } catch (_) {
-      state = null;
+  void _logError(FlutterErrorDetails details) {
+    // Don't when in DebugMode.
+    if (!kDebugMode) {
+      // Resets the count of errors to show a complete error message not an abbreviated one.
+      FlutterError.resetErrorCount();
     }
-    return state == null ? null : state as T;
-  }
-
-  /// Returns a StateView object using a unique String identifier.
-  StateX? stateById(String? id) => _MapOfStates._states[id];
-
-  /// Returns a Map of StateView objects using unique String identifiers.
-  Map<String, StateX> statesById(List<String> ids) {
-    final Map<String, StateX> map = {};
-    for (final id in ids) {
-      final state = stateById(id);
-      if (state != null) {
-        map[id] = state;
-      }
-    }
-    return map;
-  }
-
-  /// Returns a List of StateX objects using unique String identifiers.
-  List<StateX> listStates(List<String> keys) {
-    return statesById(keys).values.toList();
-  }
-
-  /// Returns 'the first' StateXController associated with this StateX object.
-  /// Returns null if empty.
-  StateXController? get rootCon {
-    StateXController? controller;
-    final state = firstState;
-    if (state != null) {
-      controller = state.controller;
-    }
-    return controller;
-  }
-
-  /// Return the first State object
-  // Bit of overkill, but some programmers don't appreciate Polymorphism.
-  @Deprecated('Use firstState instead')
-  StateX? get startState => _nextStateX();
-  StateX? get firstState => _nextStateX();
-
-  /// Return the 'latest' State object
-  // Bit of overkill, but some programmers don't appreciate Polymorphism.
-  @Deprecated('Use lastState instead')
-  StateX? get endState => _nextStateX(reversed: true);
-  StateX? get lastState => _nextStateX(reversed: true);
-
-  /// Loop through the list and return the next available State object
-  StateX? _nextStateX({bool? reversed}) {
-    reversed = reversed != null && reversed;
-    StateX? nextState;
-    Iterable<StateX> list;
-    if (reversed) {
-      list = _MapOfStates._states.values.toList(growable: false).reversed;
-    } else {
-      list = _MapOfStates._states.values.toList(growable: false);
-    }
-    for (final StateX state in list) {
-      if (state.mounted && !state.deactivated) {
-        nextState = state;
-        break;
-      }
-    }
-    return nextState;
-  }
-
-  /// To externally 'process' through the State objects.
-  /// Invokes [func] on each StateX possessed by this StateX object.
-  /// With an option to process in reversed chronological order
-  bool forEachState(void Function(StateX state) func, {bool? reversed}) {
-    bool each = true;
-    Iterable<StateX> list;
-    // In reversed chronological order
-    if (reversed != null && reversed) {
-      list = _MapOfStates._states.values.toList(growable: false).reversed;
-    } else {
-      list = _MapOfStates._states.values.toList(growable: false);
-    }
-    for (final StateX state in list) {
-      try {
-        if (state.mounted && !state.deactivated) {
-          func(state);
-        }
-      } catch (e, stack) {
-        each = false;
-        // Record the error
-        if (this is StateX) {
-          (this as StateX).recordException(e, stack);
-        }
-      }
-    }
-    return each;
-  }
-
-  /// This is 'privatized' function as it is an critical method and not for public access.
-  /// This contains the 'main list' of StateX objects present in the app!
-  bool _addToMapOfStates(StateX? state) {
-    final add = state != null;
-    if (add) {
-      _MapOfStates._states[state._id] = state;
-    }
-    //   }
-    return add;
-  }
-
-  /// Remove the specified State object from static Set object.
-  bool _removeFromMapOfStates(StateX? state) {
-    var removed = state != null;
-    if (removed) {
-      final int length = _MapOfStates._states.length;
-      _MapOfStates._states.removeWhere((key, value) => state._id == key);
-      removed = _MapOfStates._states.length < length;
-    }
-    return removed;
+    // https://docs.flutter.dev/testing/errors#errors-caught-by-flutter
+    // Log the error.
+    FlutterError.presentError(details);
   }
 }
-
-/// Your 'working' class most concerned with the app's functionality.
-/// Add it to a 'StateX' object to associate it with that State object.
-///
-/// dartdoc:
-/// {@category Testing}
-/// {@category Get started}
-/// {@category Event handling}
-/// {@category State Object Controller}
-class StateXController with SetStateMixin, StateListener, RootState, AsyncOps {
-  /// Optionally supply a State object to 'link' to this object.
-  /// Thus, assigned as 'current' StateX for this object
-  StateXController([StateX? state]) {
-    addState(state);
-  }
-
-  /// Associate this StateXController to the specified State object
-  /// to use that State object's functions and features.
-  /// Returns that State object's unique identifier.
-  String addState(StateX? state) {
-    if (state == null) {
-      return '';
-    }
-    if (state.add(this).isNotEmpty) {
-      return state.identifier;
-    } else {
-      return '';
-    }
-  }
-
-  /// The current StateX object.
-  StateX? get state => _stateX;
-
-  /// Link a widget to a InheritedWidget
-  bool dependOnInheritedWidget(BuildContext? context) =>
-      _stateX?.dependOnInheritedWidget(context) ?? false;
-
-  /// In harmony with Flutter's own API
-  /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
-  bool notifyClients() => _stateX?.notifyClients() ?? false;
-}
-
-/// Used by StateXController
-/// Allows you to call 'setState' from the 'current' the State object.
-///
-/// dartdoc:
-/// {@category State Object Controller}
-mixin SetStateMixin {
-  /// Provide the setState() function to external actors
-  void setState(VoidCallback fn) => _stateX?.setState(fn);
-
-  /// Retrieve the State object by its StatefulWidget. Returns null if not found.
-  StateX? stateOf<T extends StatefulWidget>() =>
-      _stateWidgetMap.isEmpty ? null : _stateWidgetMap[_type<T>()];
-
-  StateX? _stateX;
-  StateX? _oldStateX;
-  final Set<StateX> _stateXSet = {};
-  final Map<Type, StateX> _stateWidgetMap = {};
-  bool _statePushed = false;
-
-  /// Add the provided State object to the Map object if
-  /// it's the 'current' StateX object in _stateX.
-  void _addStateToSetter(StateX state) {
-    if (_statePushed && _stateX != null && _stateX == state) {
-      _stateWidgetMap.addAll({state.widget.runtimeType: state});
-    }
-  }
-
-  /// Add to a Set object and assigned to as the 'current' StateX
-  /// However, if was already previously added, it's not added
-  /// again to a Set object and certainly not set the 'current' StateX.
-  bool _pushStateToSetter(StateX? state) {
-    //
-    if (state == null) {
-      return false;
-    }
-
-    // It's been opened before
-    if (_oldStateX != null) {
-      // If the previous State was 'resumed'. May want to recover further??
-      if (_oldStateX!._hadSystemEvent) {
-        // Reset so not to cause any side-affects.
-        _oldStateX!._hadSystemEvent = false;
-        // If a different object and the same type. (Thought because it was being recreated, but not the case. gp)
-        if (state != _oldStateX &&
-            state.runtimeType == _oldStateX.runtimeType) {
-          // Copy over certain properties
-          state.copy(_oldStateX);
-          state.updateNewStateX(_oldStateX!);
-          assert(() {
-            if (kDebugMode) {
-              //ignore: avoid_print
-              print(
-                  '############ _pushStateToSetter(): $state copied $_oldStateX');
-            }
-            return true;
-          }());
-
-          // Testing Flutter lifecycle operation
-          assert(() {
-            if (_oldStateX!.resumedAppLifecycle || _oldStateX!.deactivated) {
-              if (kDebugMode) {
-                print(
-                    '############ _pushStateToSetter(): resumed: ${_oldStateX!.resumedAppLifecycle} deactivated: ${_oldStateX!.deactivated}');
-              }
-            }
-            return true;
-          }());
-        }
-      }
-
-      // cleanup
-      _oldStateX = null;
-    }
-
-    _statePushed = _stateXSet.add(state);
-    // If added, assign as the 'current' state object.
-    if (_statePushed) {
-      _stateX = state;
-    }
-    return _statePushed;
-  }
-
-  /// This removes the most recent StateX object added
-  /// to the Set of StateX state objects.
-  /// Primarily internal use only: This disconnects the StateXController from that StateX object.
-  bool _popStateFromSetter([StateX? state]) {
-    // Return false if null
-    if (state == null) {
-      return false;
-    }
-
-    // Remove from the Map and Set object.
-    _stateWidgetMap.removeWhere((key, value) => value == state);
-
-    final pop = _stateXSet.remove(state);
-
-    // Was the 'popped' state the 'current' state?
-    if (state == _stateX) {
-      //
-      _statePushed = false;
-
-      // **IMPORTANT** In certain instances it's destroyed and another created
-      // Retain a copy to update the new StateX object!
-      _oldStateX = _stateX;
-
-      if (_stateXSet.isEmpty) {
-        _stateX = null;
-      } else {
-        _stateX = _stateXSet.last;
-      }
-    }
-    return pop;
-  }
-
-  /// Retrieve the StateX object by type
-  /// Returns null if not found
-  T? ofState<T extends StateX>() {
-    StateX? state;
-    if (_stateXSet.isEmpty) {
-      state = null;
-    } else {
-      final stateList = _stateXSet.toList(growable: false);
-      try {
-        for (final item in stateList) {
-          if (item is T) {
-            state = item;
-            break;
-          }
-        }
-      } catch (_) {
-        state = null;
-      }
-    }
-    return state == null ? null : state as T;
-  }
-
-  /// Return a 'copy' of the Set of State objects.
-  // Set<StateX> get states => Set.from(_stateXSet?.whereType<StateX>());
-
-  /// The Set of State objects.
-  @Deprecated('Set states is too accessible')
-  Set<StateX> get states => _stateXSet;
-
-  /// Return the first State object
-  StateX? get startState => _stateXSet.isEmpty ? null : _stateXSet.first;
-
-  /// Return the 'latest' State object
-  StateX? get endState => _stateXSet.isEmpty ? null : _stateXSet.last;
-}
-
-/// Used to explicitly return the 'type' indicated.
-Type _type<U>() => U;
 
 /// Responsible for the event handling in all the Controllers and State objects.
 ///
@@ -1845,9 +1552,10 @@ mixin StateListener implements RouteAware {
   /// handle the notification. Observers are notified in registration
   /// order until one returns true.
   ///
-  /// This method exposes the `pushRoute` notification from
   // ignore: comment_references
-  /// [SystemChannels.navigation].
+  /// This method exposes the `pushRoute` notification from [SystemChannels.navigation].
+  @Deprecated('Use didPushRouteInformation instead. '
+      'This feature was deprecated after v3.8.0-14.0.pre.')
   Future<bool> didPushRoute(String route) async => false;
 
   /// Called when the host tells the application to push a new
@@ -1857,24 +1565,24 @@ mixin StateListener implements RouteAware {
   /// handle the notification. Observers are notified in registration
   /// order until one returns true.
   ///
-  /// This method exposes the `popRoute` notification from
   // ignore: comment_references
-  /// [SystemChannels.navigation].
+  /// This method exposes the `popRoute` notification from [SystemChannels.navigation].
   ///
   /// The default implementation is to call the [didPushRoute] directly with the
-  /// [RouteInformation.uri].
+  /// [RouteInformation.uri] and will be removed once `didPushRoute` is removed.
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
-    final Uri uri = routeInformation.uri;
-    return didPushRoute(
-      Uri.decodeComponent(
-        Uri(
-          path: uri.path.isEmpty ? '/' : uri.path,
-          queryParameters:
-              uri.queryParametersAll.isEmpty ? null : uri.queryParametersAll,
-          fragment: uri.fragment.isEmpty ? null : uri.fragment,
-        ).toString(),
-      ),
-    );
+    return Future.value(false);
+    // final Uri uri = routeInformation.uri;
+    // return didPushRoute(
+    //   Uri.decodeComponent(
+    //     Uri(
+    //       path: uri.path.isEmpty ? '/' : uri.path,
+    //       queryParameters:
+    //           uri.queryParametersAll.isEmpty ? null : uri.queryParametersAll,
+    //       fragment: uri.fragment.isEmpty ? null : uri.fragment,
+    //     ).toString(),
+    //   ),
+    // );
   }
 
   /// Called when this State is *first* added to as a Route observer?!
@@ -2011,6 +1719,150 @@ mixin StateListener implements RouteAware {
   void didChangeAccessibilityFeatures() {
     /// Called when the system changes the set of currently active accessibility
     /// features.
+  }
+}
+
+/// Works with the collection of State objects in the App.
+///
+/// dartdoc:
+/// {@category StateX class}
+mixin _MapOfStates on State {
+  /// All the State objects in this app.
+  static final Map<String, StateX> _states = {};
+
+  /// Retrieve the State object by type
+  /// Returns null if not found
+  T? stateByType<T extends StateX>() {
+    StateX? state;
+    try {
+      for (final item in _MapOfStates._states.values) {
+        if (item is T) {
+          state = item;
+          break;
+        }
+      }
+    } catch (_) {
+      state = null;
+    }
+    return state == null ? null : state as T;
+  }
+
+  /// Returns a StateView object using a unique String identifier.
+  StateX? stateById(String? id) => _MapOfStates._states[id];
+
+  /// Returns a Map of StateView objects using unique String identifiers.
+  Map<String, StateX> statesById(List<String> ids) {
+    final Map<String, StateX> map = {};
+    for (final id in ids) {
+      final state = stateById(id);
+      if (state != null) {
+        map[id] = state;
+      }
+    }
+    return map;
+  }
+
+  /// Returns a List of StateX objects using unique String identifiers.
+  List<StateX> listStates(List<String> keys) {
+    return statesById(keys).values.toList();
+  }
+
+  /// Return a List of available StateX objects
+  List<StateX> statesList({bool? reversed, StateX? remove}) {
+    List<StateX> list;
+    // In reversed chronological order
+    if (reversed != null && reversed) {
+      list = _MapOfStates._states.values.toList().reversed.toList();
+    } else {
+      list = _MapOfStates._states.values.toList();
+    }
+    // Exclude a particular State.
+    if (remove != null) {
+      list.remove(remove);
+    }
+    return list.toList(growable: false);
+  }
+
+  /// Returns 'the first' StateXController associated with this StateX object.
+  /// Returns null if empty.
+  StateXController? get rootCon {
+    StateXController? controller;
+    final state = firstState;
+    if (state != null) {
+      controller = state.controller;
+    }
+    return controller;
+  }
+
+  /// Return the first State object
+  // Bit of overkill, but some programmers don't appreciate Polymorphism.
+  @Deprecated('Use firstState instead')
+  StateX? get startState => _nextStateX();
+  StateX? get firstState => _nextStateX();
+
+  /// Return the 'latest' State object
+  // Bit of overkill, but some programmers don't appreciate Polymorphism.
+  @Deprecated('Use lastState instead')
+  StateX? get endState => _nextStateX(reversed: true);
+  StateX? get lastState => _nextStateX(reversed: true);
+
+  /// Loop through the list and return the next available State object
+  StateX? _nextStateX({bool? reversed}) {
+    reversed = reversed != null && reversed;
+    StateX? nextState;
+    final list = statesList(reversed: reversed);
+    for (final StateX state in list) {
+      if (state.mounted && !state.deactivated) {
+        nextState = state;
+        break;
+      }
+    }
+    return nextState;
+  }
+
+  /// To externally 'process' through the State objects.
+  /// Invokes [func] on each StateX possessed by this StateX object.
+  /// With an option to process in reversed chronological order
+  bool forEachState(void Function(StateX state) func,
+      {bool? reversed, StateX? remove}) {
+    bool each = true;
+    final list = statesList(reversed: reversed, remove: remove);
+    for (final StateX state in list) {
+      try {
+        if (state.mounted && !state.deactivated) {
+          func(state);
+        }
+      } catch (e, stack) {
+        each = false;
+        // Record the error
+        if (this is StateX) {
+          (this as StateX).recordException(e, stack);
+        }
+      }
+    }
+    return each;
+  }
+
+  /// This is 'privatized' function as it is an critical method and not for public access.
+  /// This contains the 'main list' of StateX objects present in the app!
+  bool _addToMapOfStates(StateX? state) {
+    final add = state != null;
+    if (add) {
+      _MapOfStates._states[state._id] = state;
+    }
+    //   }
+    return add;
+  }
+
+  /// Remove the specified State object from static Set object.
+  bool _removeFromMapOfStates(StateX? state) {
+    var removed = state != null;
+    if (removed) {
+      final int length = _MapOfStates._states.length;
+      _MapOfStates._states.removeWhere((key, value) => state._id == key);
+      removed = _MapOfStates._states.length < length;
+    }
+    return removed;
   }
 }
 
@@ -2458,6 +2310,83 @@ class _SetStateXWidget extends StatelessWidget {
   }
 }
 
+/// Pass a State object as a parameter to this StatefulWidget
+class _StateStatefulWidget extends StatefulWidget {
+  const _StateStatefulWidget({
+    super.key,
+    required this.state,
+  });
+  final State<StatefulWidget> state;
+  @override
+  //ignore: no_logic_in_create_state
+  State<StatefulWidget> createState() => state;
+}
+
+/// Contains the app's InheritedWidget
+/// Allows you to call only its dependencies to rebuild
+/// by calling this State object's setState((){})
+class _InheritedState extends State<_StateStatefulWidget> {
+  _InheritedState(this.appState);
+  final AppStateX appState;
+
+  @override
+  void initState() {
+    super.initState();
+    // Identifier for the app's InheritedWidget
+    _key = ValueKey<StateX>(appState);
+    // Contains the App State's buildIn() function
+    _buildInState = _BuildInState(appState);
+    // Record this State object so to call its setState((){}) function later.
+    appState._buildInState = _buildInState;
+    // The StatefulWidget containing the app's buildIn() function
+    // Assigned to a property so not to call buildIn() in this State object
+    _stateWidget = _StateStatefulWidget(
+        key: ValueKey<State>(_buildInState!), state: _buildInState!);
+  }
+
+  // All nullable so to clear memory at dispose()
+  Key? _key;
+  State<StatefulWidget>? _buildInState;
+  Widget? _stateWidget;
+
+  @override
+  Widget build(context) {
+    // The app's InheritedWidget
+    return StateXInheritedWidget(
+      key: _key,
+      state: appState,
+      child: _stateWidget!,
+    );
+  }
+
+  @override
+  void dispose() {
+    _stateWidget = null;
+    _buildInState = null;
+    _key = null;
+    super.dispose();
+  }
+}
+
+/// Contains the AppStateX's buildIn() function
+/// Allows you to call only that buildIn() function
+/// by calling this State object's setState((){})
+class _BuildInState extends State<_StateStatefulWidget> {
+  _BuildInState(this.appState);
+  final AppStateX appState;
+  @override
+  void initState() {
+    super.initState();
+    // So to only call buildIn() function in the build() function below.
+    builder = appState.buildIn;
+  }
+
+  late WidgetBuilder builder;
+
+  @override
+  Widget build(context) => builder(context);
+}
+
 /// The StateX object at the 'app level.' Used to effect the whole app by
 /// being the 'root' of first State object instantiated.
 ///
@@ -2495,8 +2424,13 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   final FlutterExceptionHandler? _currentErrorFunc;
 
   @override
+  @mustCallSuper
   void initState() {
     super.initState();
+
+    /// Register this as a binding observer. Binding
+    WidgetsBinding.instance.addObserver(this);
+
     _inheritedState = _InheritedState(this);
     // Supply an identifier to the InheritedWidget
     _key = ValueKey<State>(_inheritedState!);
@@ -2511,6 +2445,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// and a separate State object containing the app's buildIn() function
   @override
   @protected
+  @mustCallSuper
   Widget buildF(BuildContext context) {
     _buildInState?.setState(() {}); // Calls the buildIn() function
     return _StateStatefulWidget(key: _key, state: _inheritedState!);
@@ -2521,6 +2456,123 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @protected
   Widget buildIn(BuildContext context);
+
+  /// Called when the system tells the app to pop the current route, such as
+  /// after a system back button press or back gesture.
+  @override
+  @mustCallSuper
+  Future<bool> didPopRoute() async {
+    final pop = super.didPopRoute();
+    // Loop through all the StateX objects
+    final list = statesList(reversed: true, remove: this);
+    for (final StateX state in list) {
+      final popped = await state.didPopRoute();
+      // if (popped) {
+      //   break;
+      // }
+    }
+    return pop;
+  }
+
+  /// Called when the host tells the application to push a new route onto the
+  /// navigator.
+  @override
+  @mustCallSuper
+  @Deprecated('Use didPushRouteInformation instead. '
+      'This feature was deprecated after v3.8.0-14.0.pre.')
+  Future<bool> didPushRoute(String route) async {
+    var push = super.didPushRoute(route);
+    // Loop through all the StateX objects
+    final list = statesList(reversed: true, remove: this);
+    for (final StateX state in list) {
+      final pushed = await state.didPushRoute(route);
+      // if (pushed) {
+      //   break;
+      // }
+    }
+    return push;
+  }
+
+  /// Called when the host tells the application to push a new
+  /// [RouteInformation] and a restoration state onto the router.
+  ///
+  /// The default implementation is to call the [didPushRoute] directly with the
+  /// string constructed from [RouteInformation.uri]'s path and query parameters.
+  @override
+  @mustCallSuper
+  Future<bool> didPushRouteInformation(
+      RouteInformation routeInformation) async {
+    //
+    final handled = super.didPushRouteInformation(routeInformation);
+    // Loop through all the StateX objects
+    final list = statesList(reversed: true, remove: this);
+    for (final StateX state in list) {
+      final handled = await state.didPushRouteInformation(routeInformation);
+      // if(handled){
+      //   break;
+      // }
+    }
+    return handled;
+  }
+
+  /// Called when the application's dimensions change. For example,
+  /// when a phone is rotated.
+  @override
+  @mustCallSuper
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    //
+    forEachState((state) {
+      state.didChangeMetrics();
+    }, reversed: true, remove: this);
+  }
+
+  /// Called when the platform's text scale factor changes.
+  @override
+  @mustCallSuper
+  void didChangeTextScaleFactor() {
+    super.didChangeTextScaleFactor();
+    //
+    forEachState((state) {
+      state.didChangeTextScaleFactor();
+    }, reversed: true, remove: this);
+  }
+
+  /// Called when the platform brightness changes.
+  @override
+  @mustCallSuper
+  void didChangePlatformBrightness() {
+    super.didChangePlatformBrightness();
+    //
+    forEachState((state) {
+      state.didChangePlatformBrightness();
+    }, reversed: true, remove: this);
+  }
+
+  /// Called when the system tells the app that the user's locale has
+  /// changed. For example, if the user changes the system language
+  /// settings.
+  @override
+  @mustCallSuper
+  void didChangeLocales(List<Locale>? locales) {
+    super.didChangeLocales(locales);
+    //
+    forEachState((state) {
+      state.didChangeLocales(locales);
+    }, reversed: true, remove: this);
+  }
+
+  /// Called when the system puts the app in the background or returns
+  /// the app to the foreground.
+  @override
+  @mustCallSuper
+  void didChangeAppLifecycleState(AppLifecycleState lifecycleState) {
+    super.didChangeAppLifecycleState(lifecycleState);
+    //
+    forEachState((state) {
+      state.didChangeAppLifecycleState(lifecycleState);
+    }, reversed: true, remove: this);
+  }
 
   /// Calls the deactivate() and dispose() functions
   /// in all the app's StateX class objects
@@ -2550,7 +2602,63 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         recordException(e, stack);
         _onErrorInHandler();
       }
-    }, reversed: true);
+    }, reversed: true, remove: this);
+  }
+
+  /// Called when a request is received from the system to exit the application.
+  @override
+  @mustCallSuper
+  Future<AppExitResponse> didRequestAppExit() async {
+    //
+    var appResponse = await super.didRequestAppExit();
+    //
+    if (appResponse == AppExitResponse.exit) {
+      //
+      final list = statesList(reversed: true, remove: this);
+      // Loop through all the StateX objects
+      for (final StateX state in list) {
+        //
+        try {
+          //
+          if (state.mounted && !state.deactivated) {
+            //
+            final response = await state.didRequestAppExit();
+
+            if (response == AppExitResponse.cancel) {
+              // Cancel and do not exit the application.
+              appResponse == response;
+              break;
+            }
+          }
+        } catch (e, stack) {
+          // Record the error
+          recordException(e, stack);
+        }
+      }
+    }
+    return appResponse;
+  }
+
+  /// Called when the system is running low on memory.
+  @override
+  @mustCallSuper
+  void didHaveMemoryPressure() {
+    super.didHaveMemoryPressure();
+    //
+    forEachState((state) {
+      state.didHaveMemoryPressure();
+    }, reversed: true, remove: this);
+  }
+
+  /// Called when the system changes the set of currently active accessibility features.
+  @override
+  @mustCallSuper
+  void didChangeAccessibilityFeatures() {
+    super.didChangeAccessibilityFeatures();
+    //
+    forEachState((state) {
+      state.didChangeAccessibilityFeatures();
+    }, reversed: true, remove: this);
   }
 
   /// Clean up memory
@@ -2789,83 +2897,6 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   }
 }
 
-/// Pass a State object as a parameter to this StatefulWidget
-class _StateStatefulWidget extends StatefulWidget {
-  const _StateStatefulWidget({
-    super.key,
-    required this.state,
-  });
-  final State<StatefulWidget> state;
-  @override
-  //ignore: no_logic_in_create_state
-  State<StatefulWidget> createState() => state;
-}
-
-/// Contains the app's InheritedWidget
-/// Allows you to call only its dependencies to rebuild
-/// by calling this State object's setState((){})
-class _InheritedState extends State<_StateStatefulWidget> {
-  _InheritedState(this.appState);
-  final AppStateX appState;
-
-  @override
-  void initState() {
-    super.initState();
-    // Identifier for the app's InheritedWidget
-    _key = ValueKey<StateX>(appState);
-    // Contains the App State's buildIn() function
-    _buildInState = _BuildInState(appState);
-    // Record this State object so to call its setState((){}) function later.
-    appState._buildInState = _buildInState;
-    // The StatefulWidget containing the app's buildIn() function
-    // Assigned to a property so not to call buildIn() in this State object
-    _stateWidget = _StateStatefulWidget(
-        key: ValueKey<State>(_buildInState!), state: _buildInState!);
-  }
-
-  // All nullable so to clear memory at dispose()
-  Key? _key;
-  State<StatefulWidget>? _buildInState;
-  Widget? _stateWidget;
-
-  @override
-  Widget build(context) {
-    // The app's InheritedWidget
-    return StateXInheritedWidget(
-      key: _key,
-      state: appState,
-      child: _stateWidget!,
-    );
-  }
-
-  @override
-  void dispose() {
-    _stateWidget = null;
-    _buildInState = null;
-    _key = null;
-    super.dispose();
-  }
-}
-
-/// Contains the AppStateX's buildIn() function
-/// Allows you to call only that buildIn() function
-/// by calling this State object's setState((){})
-class _BuildInState extends State<_StateStatefulWidget> {
-  _BuildInState(this.appState);
-  final AppStateX appState;
-  @override
-  void initState() {
-    super.initState();
-    // So to only call buildIn() function in the build() function below.
-    builder = appState.buildIn;
-  }
-
-  late WidgetBuilder builder;
-
-  @override
-  Widget build(context) => builder(context);
-}
-
 /// Manages the 'Controllers' associated with this
 /// StateX object at any one time by their unique identifier.
 mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
@@ -3080,6 +3111,244 @@ class SetState extends StatelessWidget {
   }
 }
 
+/// Your 'working' class most concerned with the app's functionality.
+/// Add it to a 'StateX' object to associate it with that State object.
+///
+/// dartdoc:
+/// {@category Testing}
+/// {@category Get started}
+/// {@category Event handling}
+/// {@category State Object Controller}
+class StateXController with SetStateMixin, StateListener, RootState, AsyncOps {
+  /// Optionally supply a State object to 'link' to this object.
+  /// Thus, assigned as 'current' StateX for this object
+  StateXController([StateX? state]) {
+    addState(state);
+  }
+
+  /// Associate this StateXController to the specified State object
+  /// to use that State object's functions and features.
+  /// Returns that State object's unique identifier.
+  String addState(StateX? state) {
+    if (state == null) {
+      return '';
+    }
+    if (state.add(this).isNotEmpty) {
+      return state.identifier;
+    } else {
+      return '';
+    }
+  }
+
+  /// The current StateX object.
+  StateX? get state => _stateX;
+
+  /// Link a widget to a InheritedWidget
+  bool dependOnInheritedWidget(BuildContext? context) =>
+      _stateX?.dependOnInheritedWidget(context) ?? false;
+
+  /// In harmony with Flutter's own API
+  /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
+  bool notifyClients() => _stateX?.notifyClients() ?? false;
+
+  /// The 'Change' event has already been called in a previous State object
+  bool get didCallChangeEvent {
+    bool change = false;
+    final list = _stateXSet.toList(growable: false);
+    for (final StateX state in list) {
+      // You're at the current State object
+      if (state == _stateX) {
+        change = _didCallChange;
+        _didCallChange = false;
+        break;
+      }
+      if (!_didCallChange && state.controllerList.contains(this)) {
+        _didCallChange = true;
+        break;
+      }
+    }
+    return change;
+  }
+
+  bool _didCallChange = false;
+}
+
+/// Used by StateXController
+/// Allows you to call 'setState' from the 'current' the State object.
+///
+/// dartdoc:
+/// {@category State Object Controller}
+mixin SetStateMixin {
+  /// Provide the setState() function to external actors
+  void setState(VoidCallback fn) => _stateX?.setState(fn);
+
+  /// Retrieve the State object by its StatefulWidget. Returns null if not found.
+  StateX? stateOf<T extends StatefulWidget>() =>
+      _stateWidgetMap.isEmpty ? null : _stateWidgetMap[_type<T>()];
+
+  StateX? _stateX;
+  StateX? _oldStateX;
+  final Set<StateX> _stateXSet = {};
+  final Map<Type, StateX> _stateWidgetMap = {};
+  bool _statePushed = false;
+
+  /// Add the provided State object to the Map object if
+  /// it's the 'current' StateX object in _stateX.
+  void _addStateToSetter(StateX state) {
+    if (_statePushed && _stateX != null && _stateX == state) {
+      _stateWidgetMap.addAll({state.widget.runtimeType: state});
+    }
+  }
+
+  /// Add to a Set object and assigned to as the 'current' StateX
+  /// However, if was already previously added, it's not added
+  /// again to a Set object and certainly not set the 'current' StateX.
+  bool _pushStateToSetter(StateX? state) {
+    //
+    if (state == null) {
+      return false;
+    }
+
+    // It's been opened before
+    if (_oldStateX != null) {
+      // If the previous State was 'resumed'. May want to recover further??
+      if (_oldStateX!._hadSystemEvent) {
+        // Reset so not to cause any side-affects.
+        _oldStateX!._hadSystemEvent = false;
+        // If a different object and the same type. (Thought because it was being recreated, but not the case. gp)
+        if (state != _oldStateX &&
+            state.runtimeType == _oldStateX.runtimeType) {
+          // Copy over certain properties
+          state.copy(_oldStateX);
+          state.updateNewStateX(_oldStateX!);
+          assert(() {
+            if (kDebugMode) {
+              //ignore: avoid_print
+              print(
+                  '############ _pushStateToSetter(): $state copied $_oldStateX');
+            }
+            return true;
+          }());
+
+          // Testing Flutter lifecycle operation
+          assert(() {
+            if (_oldStateX!.resumedAppLifecycle || _oldStateX!.deactivated) {
+              if (kDebugMode) {
+                print(
+                    '############ _pushStateToSetter(): resumed: ${_oldStateX!.resumedAppLifecycle} deactivated: ${_oldStateX!.deactivated}');
+              }
+            }
+            return true;
+          }());
+        }
+      }
+
+      // cleanup
+      _oldStateX = null;
+    }
+
+    _statePushed = _stateXSet.add(state);
+    // If added, assign as the 'current' state object.
+    if (_statePushed) {
+      _stateX = state;
+    }
+    return _statePushed;
+  }
+
+  /// This removes the most recent StateX object added
+  /// to the Set of StateX state objects.
+  /// Primarily internal use only: This disconnects the StateXController from that StateX object.
+  bool _popStateFromSetter([StateX? state]) {
+    // Return false if null
+    if (state == null) {
+      return false;
+    }
+
+    // Remove from the Map and Set object.
+    _stateWidgetMap.removeWhere((key, value) => value == state);
+
+    final pop = _stateXSet.remove(state);
+
+    // Was the 'popped' state the 'current' state?
+    if (state == _stateX) {
+      //
+      _statePushed = false;
+
+      // **IMPORTANT** In certain instances it's destroyed and another created
+      // Retain a copy to update the new StateX object!
+      _oldStateX = _stateX;
+
+      if (_stateXSet.isEmpty) {
+        _stateX = null;
+      } else {
+        _stateX = _stateXSet.last;
+      }
+    }
+    return pop;
+  }
+
+  /// Retrieve the StateX object by type
+  /// Returns null if not found
+  T? ofState<T extends StateX>() {
+    StateX? state;
+    if (_stateXSet.isEmpty) {
+      state = null;
+    } else {
+      final stateList = _stateXSet.toList(growable: false);
+      try {
+        for (final item in stateList) {
+          if (item is T) {
+            state = item;
+            break;
+          }
+        }
+      } catch (_) {
+        state = null;
+      }
+    }
+    return state == null ? null : state as T;
+  }
+
+  /// To externally 'process' through the State objects.
+  /// Invokes [func] on each StateX possessed by this object.
+  bool forEachState(void Function(StateX state) func) {
+    bool each = true;
+    final list = _stateXSet.toList(growable: false);
+    for (final StateX state in list) {
+      try {
+        if (state.mounted && !state.deactivated) {
+          func(state);
+        }
+      } catch (e, stack) {
+        each = false;
+        // Record the error
+        state.recordException(e, stack);
+      }
+    }
+    return each;
+  }
+
+  /// Return a 'copy' of the Set of State objects.
+  // Set<StateX> get states => Set.from(_stateXSet?.whereType<StateX>());
+
+  /// The Set of State objects.
+  @Deprecated('Set states is too accessible')
+  Set<StateX> get states => _stateXSet;
+
+  /// Return the first State object
+  @Deprecated('Use firstState instead')
+  StateX? get startState => _stateXSet.isEmpty ? null : _stateXSet.first;
+  StateX? get firstState => startState;
+
+  /// Return the 'latest' State object
+  @Deprecated('Use lastState instead')
+  StateX? get endState => _stateXSet.isEmpty ? null : _stateXSet.last;
+  StateX? get lastState => endState;
+}
+
+/// Used to explicitly return the 'type' indicated.
+Type _type<U>() => U;
+
 /// Supply access to the 'Root' State object.
 ///
 /// dartdoc:
@@ -3143,28 +3412,6 @@ mixin RootState {
     // assert is removed in production.
     assert(inDebugMode = true);
     return inDebugMode;
-  }
-}
-
-/// Supply an 'error handler' routine if something goes wrong.
-/// It need not be implemented, but it's their for your consideration.
-///
-/// dartdoc:
-/// {@category StateX class}
-/// {@category Error handling}
-mixin StateXonErrorMixin {
-  /// Offer an error handler
-  void onError(FlutterErrorDetails details) {}
-
-  void _logError(FlutterErrorDetails details) {
-    // Don't when in DebugMode.
-    if (!kDebugMode) {
-      // Resets the count of errors to show a complete error message not an abbreviated one.
-      FlutterError.resetErrorCount();
-    }
-    // https://docs.flutter.dev/testing/errors#errors-caught-by-flutter
-    // Log the error.
-    FlutterError.presentError(details);
   }
 }
 

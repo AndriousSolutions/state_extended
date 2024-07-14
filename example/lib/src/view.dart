@@ -11,6 +11,8 @@ export 'package:flutter/material.dart' hide StateSetter;
 
 export 'package:state_extended/state_extended.dart';
 
+export '/src/view/app/common/class_name_mixin.dart';
+
 export '/src/view/app/common/events_state.dart';
 
 export '/src/view/app/my_app.dart';

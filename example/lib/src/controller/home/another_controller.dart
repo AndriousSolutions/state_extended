@@ -107,6 +107,10 @@ class AnotherController extends StateXController
   /// when a phone is rotated.
   @override
   void didChangeMetrics() {
+    // Already called by another State object currently running.
+    if (didCallChangeEvent) {
+      return;
+    }
     super.didChangeMetrics();
     // call setState() function to test State object
     rootState?.setState(() {});

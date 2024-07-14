@@ -42,13 +42,13 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   /// Whenever it removes
   @override
   void deactivate() {
+    super.deactivate();
     assert(() {
       if (kDebugMode) {
         print('########### deactivate() in $className\n');
       }
       return true;
     }());
-    super.deactivate();
   }
 
   /// Called when this object is reinserted into the tree after having been
@@ -69,13 +69,13 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   /// Note: YOU WILL HAVE NO IDEA WHEN THIS WILL RUN in the Framework.
   @override
   void dispose() {
+    super.dispose();
     assert(() {
       if (kDebugMode) {
         print('########### dispose() in $className\n');
       }
       return true;
     }());
-    super.dispose();
   }
 
   /// Called when this State is *first* added to as a Route observer?!
@@ -252,7 +252,6 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
       }
       return true;
     }());
-    super.pausedAppLifecycleState();
   }
 
   /// Called when there's a memory constraint.

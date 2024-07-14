@@ -1,4 +1,14 @@
 
+## 4.20.0
+July 14, 2024
+- AppState class loops through all the app's StateX objects when an event occurs.
+  Each StateX class will otherwise register as its own binding observer:
+  WidgetsBinding.instance.addObserver(this);
+- The getter, didCallChangeEvent, serves as a flag for event handling
+  // Already called by another State object currently running.
+  if (didCallChangeEvent) {
+- didPushRoute(String route) is now deprecated after v3.8.0-14.0.pre
+
 ## 4.19.0
 July 10, 2024
 - AppState.detachedAppLifecycleState() 'attempts' to call State object's deactivate() and dispose()
