@@ -798,7 +798,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // bool handled = false;
 
     for (final con in controllerList) {
-      final didPush = await con.didPushRouteInformation(routeInformation);
+      await con.didPushRouteInformation(routeInformation);
+      // final didPush = await con.didPushRouteInformation(routeInformation);
       // if (didPush) {
       //   handled = true;
       // }
@@ -2466,7 +2467,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Loop through all the StateX objects
     final list = statesList(reversed: true, remove: this);
     for (final StateX state in list) {
-      final popped = await state.didPopRoute();
+      await state.didPopRoute();
+      // final popped = await state.didPopRoute();
       // if (popped) {
       //   break;
       // }
