@@ -2,6 +2,8 @@
 ## 4.21.0
 July 22, 2024
 - AppState.errorStateName - String getter naming last State class throwing an error
+- isEndState is deprecated, use lastState instead 
+- startState is deprecated, use firstState instead
 
 ## 4.20.0
 July 14, 2024

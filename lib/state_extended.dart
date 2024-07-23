@@ -2487,10 +2487,11 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Loop through all the StateX objects
     final list = statesList(reversed: true, remove: this);
     for (final StateX state in list) {
-      final pushed = await state.didPushRoute(route);
+      // final pushed = await state.didPushRoute(route);
       // if (pushed) {
       //   break;
       // }
+      await state.didPushRoute(route);
     }
     return push;
   }
@@ -2509,10 +2510,11 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Loop through all the StateX objects
     final list = statesList(reversed: true, remove: this);
     for (final StateX state in list) {
-      final handled = await state.didPushRouteInformation(routeInformation);
+      // final handled = await state.didPushRouteInformation(routeInformation);
       // if(handled){
       //   break;
       // }
+      await state.didPushRouteInformation(routeInformation);
     }
     return handled;
   }
