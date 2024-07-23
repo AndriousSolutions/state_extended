@@ -1,4 +1,8 @@
 
+## 4.21.0
+July 22, 2024
+- AppState.errorStateName - String getter naming last State class throwing an error
+
 ## 4.20.0
 July 14, 2024
 - AppState class loops through all the app's StateX objects when an event occurs.

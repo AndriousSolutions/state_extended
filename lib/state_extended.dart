@@ -2783,7 +2783,10 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
           // Call the StateX's onError() function
           if (caught && state != this) {
+            _errorStateName = name;
             state.onError(details);
+          } else {
+            _errorStateName = null;
           }
         }
       } catch (e, stack) {
@@ -2811,6 +2814,10 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// A flag indicating we're running in the error routine.
   /// Set to avoid infinite loop if in errors in the error routine.
   bool _inErrorRoutine = false;
+
+  /// The name of the State object experiencing an error
+  String get errorStateName => _errorStateName ?? '';
+  String? _errorStateName;
 
   /// Catch and explicitly handle the error.
   void catchError(
