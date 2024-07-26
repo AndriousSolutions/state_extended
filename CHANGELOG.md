@@ -1,4 +1,12 @@
 
+## 4.22.0
+July 25, 2024
+- /// Call the latest SateX object's error routine
+  /// Possibly the error occurred there.
+  bool onStateError(FlutterErrorDetails details) {
+- /// Logs 'every' error as the error count is reset.
+  void logErrorDetails(FlutterErrorDetails details) {
+
 ## 4.21.0
 July 22, 2024
 - AppState.errorStateName - String getter naming last State class throwing an error

@@ -1418,7 +1418,8 @@ mixin StateXonErrorMixin {
   /// Offer an error handler
   void onError(FlutterErrorDetails details) {}
 
-  void _logError(FlutterErrorDetails details) {
+  /// Logs 'every' error as the error count is reset.
+  void logErrorDetails(FlutterErrorDetails details) {
     // Don't when in DebugMode.
     if (!kDebugMode) {
       // Resets the count of errors to show a complete error message not an abbreviated one.
@@ -2733,7 +2734,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
             context: ErrorDescription('notifyClient() error in $this'),
           );
           // Record the error
-          _logError(details);
+          logErrorDetails(details);
         }
       }
     }
@@ -2761,13 +2762,37 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
     // call the latest SateX object's error routine
     // Possibly the error occurred there.
+    onStateError(details);
+
+    // Record to logs
+    logErrorDetails(details);
+
+    // Always test if there was an error in the error handler
+    // Include it in the error reporting as well.
+    if (hasError) {
+      _onErrorInHandler();
+    }
+
+    // Now out of the error handler
+    _inErrorRoutine = false;
+  }
+
+  /// A flag indicating we're running in the error routine.
+  /// Set to avoid infinite loop if in errors in the error routine.
+  bool _inErrorRoutine = false;
+
+  /// Call the latest SateX object's error routine
+  /// Possibly the error occurred there.
+  bool onStateError(FlutterErrorDetails details) {
+    //
     final state = lastState;
 
-    if (state != null) {
+    bool caught = state != null;
+
+    if (caught) {
+      //
       try {
         //
-        bool caught = false;
-
         final stack = details.stack?.toString();
         //
         if (stack != null) {
@@ -2800,22 +2825,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         _onErrorInHandler();
       }
     }
-    // Record to logs
-    _logError(details);
-
-    // Always test if there was an error in the error handler
-    // Include it in the error reporting as well.
-    if (hasError) {
-      _onErrorInHandler();
-    }
-
-    // Now out of the error handler
-    _inErrorRoutine = false;
+    return caught;
   }
-
-  /// A flag indicating we're running in the error routine.
-  /// Set to avoid infinite loop if in errors in the error routine.
-  bool _inErrorRoutine = false;
 
   /// The name of the State object experiencing an error
   String get errorStateName => _errorStateName ?? '';
@@ -2898,7 +2909,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         );
         try {
           // Record the error
-          _logError(details);
+          logErrorDetails(details);
         } catch (e, stack) {
           // Error in the final error handler? That's a pickle.
           recordException(e, stack);
