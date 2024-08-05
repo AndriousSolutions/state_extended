@@ -1,4 +1,9 @@
 
+## 4.23.0
+August 05, 2024
+- @Deprecated('Use stateSet() instead.')
+  Widget state(WidgetBuilder? widgetFunc) {
+
 ## 4.22.1
 August 05, 2024
 - didUpdateWidget(StatefulWidget oldWidget) { to didUpdateWidget(covariant T oldWidget) {
