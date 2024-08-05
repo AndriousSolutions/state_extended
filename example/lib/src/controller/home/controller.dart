@@ -29,6 +29,7 @@ class Controller extends StateXController with EventsControllerMixin {
   /// Page1 count is saved periodically
   int page1Count = 0;
 
+  /// The API matches the name of the Widget's named parameter
   /// Increment and then call the State object's setState() function to reflect the change.
   void onPressed() => incrementCounter();
 
@@ -38,7 +39,22 @@ class Controller extends StateXController with EventsControllerMixin {
     _model.incrementCounter();
 
     // Rebuild the interface to display any changes.
+    // Every setState() listed below performs the same thing.
+
+    // Every StateXController has a setState() function.
     setState(() {});
+    // Every StateXController references its 'current' State object
+    state?.setState(() {});
+
+    // Retrieve the StateX object of type Page2State. Null if not found.
+    final page2State = ofState<Page2State>();
+    page2State?.setState(() {});
+    // Retrieve the StateX object for StatefulWidget, Page2. Null if not found.
+    final stateX = stateOf<Page2>();
+    stateX?.setState(() {});
+
+    // Retrieves the controller's 'latest' State object. Null if no State objects.
+    lastState?.setState(() {});
 
     /// If count is divisible by 5
     if (_model.counter % 5 == 0) {

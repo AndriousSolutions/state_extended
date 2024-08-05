@@ -95,10 +95,9 @@ class Page2State extends StateX<Page2> with EventsStateMixin<Page2> {
     assert(rootState is AppStateX, "Should be the 'root' state object.");
   }
 
-  /// Define the 'child' Widget that will be called by the built-in FutureBuilder.
-  /// Ignore BuildPage(). It's used only to highlight the other features in this page
+  /// Ignore BuildPage(). It's just a generic StatelessWidget to quickly produce a screen.
   @override
-  Widget buildF(BuildContext context) => BuildPage(
+  Widget builder(BuildContext context) => BuildPage(
         label: '2',
         count: con.data,
         counter: con.onPressed,

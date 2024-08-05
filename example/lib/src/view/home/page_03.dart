@@ -37,9 +37,9 @@ class _Page3State extends StateX<Page3> with EventsStateMixin<Page3> {
   /// It'll behave has the build() function
   @override
   Widget buildIn(BuildContext context) {
-    // Comment out this line, and the counter is suddenly not work
+    // Comment out this line, and the counter is suddenly not working
     // state() is a widget that depends on the State InheritedWidget
-    // it will rebuild but only if the InheritedWidget is called again by , notifyClients()
+    // it will rebuild but only if the InheritedWidget is called again by notifyClients()
     return state(_buildIn);
     // That's because _build() is never called again by the InheritedWidget.
     return _buildIn(context);
@@ -107,10 +107,10 @@ class _Page3State extends StateX<Page3> with EventsStateMixin<Page3> {
                 key: const Key('InheritedWidget example'),
                 onPressed: () async {
                   await Navigator.push(
-                      lastState!.context,
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) =>
-                              const i.HomePage()));
+                    lastState!.context,
+                    MaterialPageRoute<void>(
+                        builder: (BuildContext context) => const i.HomePage()),
+                  );
                 },
                 child: const Text("'InheritedWidget' example"),
               ),

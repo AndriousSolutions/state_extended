@@ -459,7 +459,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// means any calls to [setState] in [didUpdateWidget] are redundant.
   @override
   @mustCallSuper
-  void didUpdateWidget(StatefulWidget oldWidget) {
+  void didUpdateWidget(covariant T oldWidget) {
     /// No 'setState()' functions are allowed
     _setStateAllowed = false;
 
@@ -1186,7 +1186,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateRequested = false;
   }
 
-  /// Allows 'external' routines can call this function.
+  /// Allows 'external' routines to  call this function.
   // Note not 'protected' and so can be called by 'anyone.' -gp
   @override
   void setState(VoidCallback fn) {
@@ -1501,7 +1501,7 @@ mixin StateListener implements RouteAware {
   }
 
   /// Override this method to respond to when the [StatefulWidget] is recreated.
-  void didUpdateWidget(StatefulWidget oldWidget) {
+  void didUpdateWidget(covariant StatefulWidget oldWidget) {
     /// The framework always calls build() after calling [didUpdateWidget], which
     /// means any calls to [setState] in [didUpdateWidget] are redundant.
   }
@@ -2249,8 +2249,10 @@ mixin InheritedWidgetStateMixin on State {
 
   /// Called when the State's InheritedWidget is called again
   /// This 'widget function' will be called again.
+  // Widget stateSet(WidgetBuilder? widgetFunc) => state(widgetFunc);
+  // @Deprecated('Use stateSet() instead.')
   Widget state(WidgetBuilder? widgetFunc) {
-    widgetFunc ??= (_) => const SizedBox();
+    widgetFunc ??= (_) => const SizedBox.shrink();
     return useInherited && this is StateX
         ? _SetStateXWidget(stateX: this as StateX, widgetFunc: widgetFunc)
         : widgetFunc(context);
@@ -3207,6 +3209,7 @@ mixin SetStateMixin {
   /// Retrieve the State object by its StatefulWidget. Returns null if not found.
   StateX? stateOf<T extends StatefulWidget>() =>
       _stateWidgetMap.isEmpty ? null : _stateWidgetMap[_type<T>()];
+//      _stateWidgetMap.isEmpty ? null : _stateWidgetMap[T];
 
   StateX? _stateX;
   StateX? _oldStateX;
@@ -3309,7 +3312,7 @@ mixin SetStateMixin {
     return pop;
   }
 
-  /// Retrieve the StateX object by type
+  /// Retrieve the StateX object of type T
   /// Returns null if not found
   T? ofState<T extends StateX>() {
     StateX? state;

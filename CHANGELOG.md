@@ -1,4 +1,8 @@
 
+## 4.22.1
+August 05, 2024
+- didUpdateWidget(StatefulWidget oldWidget) { to didUpdateWidget(covariant T oldWidget) {
+                                             and didUpdateWidget(covariant StatefulWidget oldWidget) {
 ## 4.22.0
 July 25, 2024
 - /// Call the latest SateX object's error routine
