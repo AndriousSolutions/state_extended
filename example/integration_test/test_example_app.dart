@@ -336,7 +336,6 @@ Future<void> resetPage1Count(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('Page 3')));
   await tester.pumpAndSettle();
 
-  // Tapping doesn't seem to work, and so I'll grab the State object itself.
   await tester.tap(find.byKey(const Key('New Key')));
   await tester.pumpAndSettle();
 

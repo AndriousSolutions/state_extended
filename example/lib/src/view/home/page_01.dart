@@ -136,7 +136,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
               ),
             ),
             Flexible(
-              child: state(
+              child: stateSet(
                 // Will build this one lone widget
                 (context) => Text(
                   '$count',

@@ -1,4 +1,12 @@
 
+## 4.24.0
+August 18, 2024
+- AppStateX now has FlutterError.onError = _currentErrorFunc; in deactivate() since removed from dispose()
+- AppStateX now has useInherited = false by default
+- No longer needed class _StateStatefulWidget or class _InheritedState or class _BuildInState
+- if (rootState == null) { WidgetsBinding.instance.removeObserver(this); in deactivate()
+- Deprecated state(WidgetBuilder? widgetFunc) {  Use stateSet(WidgetBuilder? widgetFunc) {  instead
+
 ## 4.23.0
 August 05, 2024
 - @Deprecated('Use stateSet() instead.')

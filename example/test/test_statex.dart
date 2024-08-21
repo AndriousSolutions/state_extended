@@ -47,7 +47,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(each, isFalse, reason: _location);
 
-  expect(stateObj.useInherited, isTrue, reason: _location);
+  expect(stateObj.useInherited, isFalse, reason: _location);
 
   StateXController? con = stateObj.controller!;
 
@@ -74,7 +74,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   /// Rebuild InheritedWidget
   appState.dataObject = 'test';
 
-  appState.state((context) => const SizedBox());
+  appState.stateSet((context) => const SizedBox());
 
   final exception = Exception('Testing');
 
@@ -156,6 +156,11 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   /// Test listControllers
   appState.listControllers([keyId]);
+
+  /// Switch out the 'current' controller
+  final update = appState.didUpdateController(oldCon: con, newCon: con);
+
+  expect(update, isFalse, reason: _location);
 
   /// You can retrieve a State object by the 'type' of its StatefulWidget
   appState = con!.stateOf<MyApp>() as AppStateX;

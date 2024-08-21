@@ -73,6 +73,17 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
   /// buildIn() replaces build() is most apps
   @override
   Widget buildIn(BuildContext context) {
+    return super.buildIn(context);
+    // Comment out super.buildIn() and see how the initAsync() uses a FutureBuilder
+    // to perform asynchronous operations while the State object starts up.
+    return MaterialApp(
+      home: Page1(key: UniqueKey()),
+    );
+  }
+
+  /// Use this instead of the build() function
+  @override
+  Widget builder(BuildContext context) {
     // Throw an error right here at the beginning to test recovery code.
     var throwError = controller is ExampleAppController;
     if (throwError) {

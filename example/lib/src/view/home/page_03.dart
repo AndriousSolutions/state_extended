@@ -48,7 +48,7 @@ class _Page3State extends StateX<Page3> with EventsStateMixin<Page3> {
   Widget _buildIn(BuildContext context) => _buildPage3(
         count: count,
         newKey: () {
-          // Both access the 'first' StateX object
+          // Both do the same thing!
           firstState?.setState(() {});
           rootState?.setState(() {});
         },
