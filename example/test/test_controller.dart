@@ -68,7 +68,7 @@ void testsController(WidgetTester tester) {
   expect(appState.widget, isA<MyApp>(), reason: location);
 
   /// Returns the most recent BuildContext/Element created in the App
-  final BuildContext context = con.state!.endState!.context;
+  final BuildContext context = con.state!.lastState!.context;
 
   expect(context.widget, isA<Page1>(), reason: location);
 

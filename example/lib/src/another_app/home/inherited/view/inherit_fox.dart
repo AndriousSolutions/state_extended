@@ -5,9 +5,9 @@
 ///  This StatefulWidget works with the Fox InheritedWidget.
 ///
 
-import 'package:example/src/another_app/controller.dart';
+import '/src/another_app/controller.dart';
 
-import 'package:example/src/another_app/view.dart';
+import '/src/another_app/view.dart';
 
 /// This StatefulWidget stores an InheritedWidget
 class InheritFox extends StatefulWidget {
@@ -21,11 +21,11 @@ class InheritFox extends StatefulWidget {
   State<StatefulWidget> createState() => _InheritFoxState();
 }
 
-class _InheritFoxState extends StateIn<InheritFox> {
-  _InheritFoxState() : super(controller: FoxController());
+class _InheritFoxState extends StateX<InheritFox> {
+  _InheritFoxState() : super(controller: FoxController(), useInherited: true);
 
   @override
-  Widget buildIn(context) => widget.child;
+  Widget builder(context) => widget.child;
 }
 
 // /// Supply an InheritedWidget to a StateX object: InheritedStateX

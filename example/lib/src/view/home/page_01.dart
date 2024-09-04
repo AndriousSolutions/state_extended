@@ -25,8 +25,11 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
           useInherited: Controller().useInherited,
         ) {
     // Add some additional controllers if you like
-    addList([AnotherController(), YetAnotherController()]);
+    addList([AnotherController(), YetAnotherController(), WordPairsTimer()]);
+    _timer = controllerByType<WordPairsTimer>()!;
   }
+
+  late WordPairsTimer _timer;
 
   /// The counter
   int count = 0;
@@ -99,34 +102,14 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
 
   ///
   @override
-  Widget buildIn(context) => Scaffold(
+  Widget builder(context) => Scaffold(
         appBar: AppBar(
           title: const Text('Three-page example'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          key: const Key('+'),
-          onPressed: () {
-            //
-            // No error handler when testing
-            if (WidgetsBinding.instance is WidgetsFlutterBinding) {
-              // Deliberately throw an error to demonstrate error handling.
-              throw Exception('Fake error to demonstrate error handling!');
-            }
-
-            count++;
-
-            /// Commented out since the controller has access to this State object.
-//          setState(() {});
-            /// Look how this Controller has access to this State object!
-            /// The incremented counter will not update otherwise! Powerful!
-            /// Comment out and the counter will appear not to work.
-            controller?.setState(() {});
-          },
-          child: const Icon(Icons.add),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            _timer.wordPair,
             const Flexible(
               child: Padding(
                 padding: EdgeInsets.only(top: 50),
@@ -194,11 +177,34 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          key: const Key('+'),
+          onPressed: () {
+            //
+            // No error handler when testing
+            if (WidgetsBinding.instance is WidgetsFlutterBinding) {
+              // Deliberately throw an error to demonstrate error handling.
+              throw Exception('Fake error to demonstrate error handling!');
+            }
+
+            count++;
+
+            /// Commented out since the controller has access to this State object.
+//          setState(() {});
+            /// Look how this Controller has access to this State object!
+            /// The incremented counter will not update otherwise! Powerful!
+            /// Comment out and the counter will appear not to work.
+            controller?.setState(() {});
+          },
+          child: const Icon(Icons.add),
+        ),
       );
 
   @override
   void onError(FlutterErrorDetails details) {
     //
+    _timer.onError(details);
+
     final stack = details.stack;
 
     // Determine the specific error

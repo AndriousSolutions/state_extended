@@ -2,14 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 /// This separate class represents 'the Model' (the data) of the App.
 class Model extends StateXController {
   ///
-  factory Model([StateX? state]) => _this ??= Model._(state);
-  Model._(super.state);
-  static Model? _this;
+  Model([super.state]);
 
   ///
   int get counter => _counter;

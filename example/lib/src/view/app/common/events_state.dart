@@ -33,7 +33,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.initState();
     assert(() {
       if (kDebugMode) {
-        print('########### initState() in $className\n');
+        print('=========== initState() in $className\n');
       }
       return true;
     }());
@@ -45,7 +45,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.deactivate();
     assert(() {
       if (kDebugMode) {
-        print('########### deactivate() in $className\n');
+        print('=========== deactivate() in $className\n');
       }
       return true;
     }());
@@ -58,7 +58,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.activate();
     assert(() {
       if (kDebugMode) {
-        print('########### activate() in $className\n');
+        print('=========== activate() in $className\n');
       }
       return true;
     }());
@@ -72,7 +72,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.dispose();
     assert(() {
       if (kDebugMode) {
-        print('########### dispose() in $className\n');
+        print('=========== dispose() in $className\n');
       }
       return true;
     }());
@@ -84,7 +84,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.didPush();
     assert(() {
       if (kDebugMode) {
-        print('########### didPush() in $className\n');
+        print('=========== didPush() in $className\n');
       }
       return true;
     }());
@@ -96,7 +96,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.didPushNext();
     assert(() {
       if (kDebugMode) {
-        print('########### didPushNext() in $className\n');
+        print('=========== didPushNext() in $className\n');
       }
       return true;
     }());
@@ -107,7 +107,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   void didPop() {
     assert(() {
       if (kDebugMode) {
-        print('########### didPop() in $className\n');
+        print('=========== didPop() in $className\n');
       }
       return true;
     }());
@@ -119,7 +119,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   void didPopNext() {
     assert(() {
       if (kDebugMode) {
-        print('########### didPopNext() in $className\n');
+        print('=========== didPopNext() in $className\n');
       }
       return true;
     }());
@@ -137,7 +137,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.didChangeDependencies();
     assert(() {
       if (kDebugMode) {
-        print('########### didChangeDependencies() in $className\n');
+        print('=========== didChangeDependencies() in $className\n');
       }
       return true;
     }());
@@ -150,7 +150,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.didChangeMetrics();
     assert(() {
       if (kDebugMode) {
-        print('########### didChangeMetrics() in $className\n');
+        print('=========== didChangeMetrics() in $className\n');
       }
       return true;
     }());
@@ -162,7 +162,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.didChangeTextScaleFactor();
     assert(() {
       if (kDebugMode) {
-        print('########### didChangeTextScaleFactor() in $className\n');
+        print('=========== didChangeTextScaleFactor() in $className\n');
       }
       return true;
     }());
@@ -174,7 +174,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.didChangePlatformBrightness();
     assert(() {
       if (kDebugMode) {
-        print('########### didChangePlatformBrightness() in $className\n');
+        print('=========== didChangePlatformBrightness() in $className\n');
       }
       return true;
     }());
@@ -186,7 +186,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.didChangeLocales(locales);
     assert(() {
       if (kDebugMode) {
-        print('########### didChangeLocales() in $className\n');
+        print('=========== didChangeLocales() in $className\n');
       }
       return true;
     }());
@@ -198,7 +198,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   void detachedAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('########### detachedAppLifecycleState() in $className\n');
+        print('=========== detachedAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -210,7 +210,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   void resumedAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('########### resumedAppLifecycleState() in $className\n');
+        print('=========== resumedAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -222,7 +222,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   void inactiveAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('########### inactiveAppLifecycleState() in $className\n');
+        print('=========== inactiveAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -236,7 +236,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   void hiddenAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('########### hiddenAppLifecycleState() in $className\n');
+        print('=========== hiddenAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -248,7 +248,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   void pausedAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('########### pausedAppLifecycleState() in $className\n');
+        print('=========== pausedAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -260,7 +260,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.didHaveMemoryPressure();
     assert(() {
       if (kDebugMode) {
-        print('########### didHaveMemoryPressure() in $className\n');
+        print('=========== didHaveMemoryPressure() in $className\n');
       }
       return true;
     }());
@@ -272,7 +272,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.didChangeAccessibilityFeatures();
     assert(() {
       if (kDebugMode) {
-        print('########### didChangeAccessibilityFeatures() in $className\n');
+        print('=========== didChangeAccessibilityFeatures() in $className\n');
       }
       return true;
     }());

@@ -33,19 +33,19 @@ class _Page3State extends StateX<Page3> with EventsStateMixin<Page3> {
   //ignore: unnecessary_overrides
   Widget buildF(BuildContext context) => super.buildF(context);
 
-  /// You could use the buildIn() function here instead
+  /// You could use the builder() function here instead
   /// It'll behave has the build() function
   @override
-  Widget buildIn(BuildContext context) {
+  Widget builder(BuildContext context) {
     // Comment out this line, and the counter is suddenly not working
     // state() is a widget that depends on the State InheritedWidget
     // it will rebuild but only if the InheritedWidget is called again by notifyClients()
-    return state(_buildIn);
+    return stateSet(_builder);
     // That's because _build() is never called again by the InheritedWidget.
-    return _buildIn(context);
+    return _builder(context);
   }
 
-  Widget _buildIn(BuildContext context) => _buildPage3(
+  Widget _builder(BuildContext context) => _buildPage3(
         count: count,
         newKey: () {
           // Both do the same thing!
@@ -88,19 +88,6 @@ class _Page3State extends StateX<Page3> with EventsStateMixin<Page3> {
             ),
           ),
           Row(children: [
-            const SizedBox(width: 5),
-            Flexible(
-              child: ElevatedButton(
-                key: const Key('Hello! example'),
-                onPressed: () async {
-                  await Navigator.push(
-                      lastContext!,
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => const HomePage()));
-                },
-                child: const Text("'Hello!' example"),
-              ),
-            ),
             const SizedBox(width: 5),
             Flexible(
               child: ElevatedButton(

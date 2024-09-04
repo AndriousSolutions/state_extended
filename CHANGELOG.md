@@ -1,4 +1,19 @@
 
+## 5.0.0
+September 04, 2024
+- Remove all deprecated properties, functions, and methods
+- Introduce RouteObserverStates.subscribeRoutes(this); in route_observer_states.dart
+- Print in triggered events with showBinding == true.
+- Remove updateNewStateX() from StateX. Not necessary.
+- detachedAppLifecycleState() in mixin StateListener
+- Remove all commented out code
+- Replace runAsync(); with intiAsync();
+- Replace buildIn() with builder();
+- Introduce _BuilderState and _InheritedWidgetState to AppState.buildF()
+  Calls both builder() and built-in InheritedWidget separately
+- Rename bool forEach() to bool forEachState()
+- mixin RecordExceptionMixin to mixin RecordExceptionMixin on State
+
 ## 4.24.0
 August 18, 2024
 - AppStateX now has FlutterError.onError = _currentErrorFunc; in deactivate() since removed from dispose()

@@ -5,9 +5,9 @@
 ///  This StatefulWidget works with the 'Dog' InheritedWidget
 ///
 
-import 'package:example/src/another_app/controller.dart';
+import '/src/another_app/controller.dart';
 
-import 'package:example/src/another_app/view.dart';
+import '/src/another_app/view.dart';
 
 /// This StatefulWidget stores an InheritedWidget
 class InheritDog extends StatefulWidget {
@@ -21,11 +21,11 @@ class InheritDog extends StatefulWidget {
   State<StatefulWidget> createState() => _InheritDogState();
 }
 
-class _InheritDogState extends StateIn<InheritDog> {
-  _InheritDogState() : super(controller: DogController());
+class _InheritDogState extends StateX<InheritDog> {
+  _InheritDogState() : super(controller: DogController(), useInherited: true);
 
   @override
-  Widget buildIn(context) => widget.child;
+  Widget builder(context) => widget.child;
 }
 
 // /// Supply an InheritedWidget to a StateX object: InheritedStateX

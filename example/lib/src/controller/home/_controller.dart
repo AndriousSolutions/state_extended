@@ -1,8 +1,8 @@
 /// The export file for the directory, home.
-export 'package:example/src/controller/home/another_controller.dart';
+export '/src/controller/home/another_controller.dart';
 
-export 'package:example/src/controller/home/controller.dart';
+export '/src/controller/home/controller.dart';
 
-export 'package:example/src/controller/home/counter_timer.dart';
+export '/src/controller/home/word_pair_timer.dart';
 
-export 'package:example/src/controller/home/yet_another_controller.dart';
+export '/src/controller/home/yet_another_controller.dart';

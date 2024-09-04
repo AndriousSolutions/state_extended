@@ -5,7 +5,7 @@
 ///  The 'Animal' Controller to call the appropriate InheritedWidget.
 ///
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 ///
 class InheritController extends StateXController {
@@ -13,8 +13,8 @@ class InheritController extends StateXController {
   /// The InheritedWidget is the first State object it registered with.
   @override
   bool dependOnInheritedWidget(BuildContext? context) =>
-      startState?.dependOnInheritedWidget(context) ?? false;
+      firstState?.dependOnInheritedWidget(context) ?? false;
 
   /// Rebuild the InheritedWidget to also rebuild its dependencies.
-  void newAnimals() => startState?.notifyClients();
+  void newAnimals() => firstState?.notifyClients();
 }

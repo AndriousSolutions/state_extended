@@ -5,9 +5,9 @@
 ///  Contains the InheritedWidget for updating the Bird Image widgets.
 ///
 
-import 'package:example/src/another_app/controller.dart';
+import '/src/another_app/controller.dart';
 
-import 'package:example/src/another_app/view.dart';
+import '/src/another_app/view.dart';
 
 ///
 class InheritBird extends StatefulWidget {
@@ -24,11 +24,11 @@ class InheritBird extends StatefulWidget {
   State<StatefulWidget> createState() => _InheritBirdState();
 }
 
-class _InheritBirdState extends StateIn<InheritBird> {
-  _InheritBirdState() : super(controller: BirdController());
+class _InheritBirdState extends StateX<InheritBird> {
+  _InheritBirdState() : super(controller: BirdController(), useInherited: true);
 
   @override
-  Widget buildIn(context) => widget.child;
+  Widget builder(context) => widget.child;
 }
 
 // /// Supply an InheritedWidget to a StateX object, InheritedStateX

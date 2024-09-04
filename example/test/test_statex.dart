@@ -191,36 +191,29 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   /// Test the forEach() function encountering an error
   each = stateObj.forEach((con) {
-    var state = con.startState;
-    state = con.endState;
-    final states = con.states;
+    var state = con.firstState;
+    state = con.lastState;
   });
 
   /// reversed
   each = stateObj.forEach((con) {
-    var state = con.startState;
-    state = con.endState;
+    var state = con.firstState;
+    state = con.lastState;
     var overridden = state?.buildOverridden;
     overridden = state?.usingCupertino;
     overridden = state?.buildFOverridden;
-    overridden = state?.buildInOverridden;
-    final states = con.states;
+    overridden = state?.builderOverridden;
   }, reversed: true);
 
   /// Return a controller by its id in a List
   final listCon = stateObj.listControllers([keyId]);
 
   // Returns the most recent BuildContext/Element created in the App
-  context = appState.endState!.context;
+  context = appState.lastState!.context;
 
   if (context.widget is Page1) {
     // Page 1 is currently being displayed.
     expect(context.widget, isA<Page1>(), reason: _location);
-  }
-
-  if (context.widget is HomePage) {
-    // MyHomePage is currently being displayed.
-    expect(context.widget, isA<HomePage>(), reason: _location);
   }
 
   /// Call for testing coverage
@@ -247,9 +240,6 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   /// Call for testing coverage
   stateObj.dependOnInheritedWidget(context);
-
-  // Test this particular method
-  stateObj.updateNewStateX(stateObj);
 
   // If you know their identifiers, you can retrieve a Map of StateMVC objects.
   final Map<String, StateX> map =
@@ -397,15 +387,6 @@ Future<void> testsStateX(WidgetTester tester) async {
   bool? boolean = await stateObj.didPopRoute();
 
   expect(boolean, isA<bool>(), reason: _location);
-
-  boolean = await stateObj.didPushRoute('/');
-
-  expect(boolean, isA<bool>(), reason: _location);
-
-  boolean = await stateObj.didPushRouteInformation(RouteInformation(
-      location: WidgetsBinding.instance.platformDispatcher.defaultRouteName));
-
-  expect(boolean, isFalse, reason: _location);
 
   stateObj.didPopNext();
 

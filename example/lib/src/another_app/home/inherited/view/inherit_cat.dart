@@ -5,9 +5,9 @@
 ///  Stores the InheritedWidget used to update the Cat images.
 ///
 
-import 'package:example/src/another_app/controller.dart';
+import '/src/another_app/controller.dart';
 
-import 'package:example/src/another_app/view.dart';
+import '/src/another_app/view.dart';
 
 /// This StatefulWidget stores an InheritedWidget
 class InheritCat extends StatefulWidget {
@@ -21,11 +21,11 @@ class InheritCat extends StatefulWidget {
   State<StatefulWidget> createState() => _InheritCatState();
 }
 
-class _InheritCatState extends StateIn<InheritCat> {
-  _InheritCatState() : super(controller: CatController());
+class _InheritCatState extends StateX<InheritCat> {
+  _InheritCatState() : super(controller: CatController(), useInherited: true);
 
   @override
-  Widget buildIn(context) => widget.child;
+  Widget builder(context) => widget.child;
 }
 
 // /// Supply an InheritedWidget to a StateX object: InheritedStateX

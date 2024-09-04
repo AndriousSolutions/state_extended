@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:example/src/controller.dart';
+import '/src/controller.dart';
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 /// To be passed to the runApp() function.
 /// This is the app's first StatefulWidget.
@@ -29,7 +29,7 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
           ],
 
           /// Demonstrate passing an 'object' down the Widget tree much like
-          /// how it's done using the State Management, Scoped Model, but better.
+          /// how it's done using Scoped Model, but better.
           object: 'Hello!',
         );
 
@@ -69,18 +69,6 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
     );
   }
 
-  /// Use buildIn() to use the built-in FutureBuilder and InheritedWidget.
-  /// buildIn() replaces build() is most apps
-  @override
-  Widget buildIn(BuildContext context) {
-    return super.buildIn(context);
-    // Comment out super.buildIn() and see how the initAsync() uses a FutureBuilder
-    // to perform asynchronous operations while the State object starts up.
-    return MaterialApp(
-      home: Page1(key: UniqueKey()),
-    );
-  }
-
   /// Use this instead of the build() function
   @override
   Widget builder(BuildContext context) {
@@ -93,9 +81,11 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
       appCon.errorAtStartup = false;
     }
     if (throwError) {
-      throw Exception('Error in buildIn!');
+      throw Exception('Error in builder!');
     }
     return MaterialApp(
+      navigatorObservers:
+          RouteObserverStates.list, // State object aware of route changes
       // A new unique key will recreate the State object
       home: Page1(key: UniqueKey()),
     );

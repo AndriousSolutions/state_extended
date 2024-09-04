@@ -4,10 +4,10 @@
 ///
 ///  References all the StatefulWidgets working with an InheritedWidget
 ///
-export 'package:example/src/another_app/home/inherited/view/inherit_bird.dart';
+export '/src/another_app/home/inherited/view/inherit_bird.dart';
 
-export 'package:example/src/another_app/home/inherited/view/inherit_cat.dart';
+export '/src/another_app/home/inherited/view/inherit_cat.dart';
 
-export 'package:example/src/another_app/home/inherited/view/inherit_dog.dart';
+export '/src/another_app/home/inherited/view/inherit_dog.dart';
 
-export 'package:example/src/another_app/home/inherited/view/inherit_fox.dart';
+export '/src/another_app/home/inherited/view/inherit_fox.dart';

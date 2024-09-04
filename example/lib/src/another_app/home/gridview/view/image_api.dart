@@ -5,19 +5,19 @@
 ///  Manages the API request for specifically 'image' public API's
 ///
 
-import 'package:example/src/controller.dart';
+import '/src/controller.dart';
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 /// The State object allows for a web service to be called.
-class ImageAPIStateX<T extends StatefulWidget> extends StateIn<T>
+class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
     implements ImageAPIState {
   ///
   ImageAPIStateX({
     required this.uri,
     this.message,
-    StateXController? controller,
-  }) : super(controller: controller) {
+    super.controller,
+  }) : super(runAsync: true, useInherited: true) {
     //
     final id = add(ImageAPIController());
     // Retrieve the Controller by its unique id.
@@ -44,10 +44,6 @@ class ImageAPIStateX<T extends StatefulWidget> extends StateIn<T>
       child: Card(child: _con.image ?? const SizedBox()),
     );
   }
-
-  /// Allow initAsync() to run repeatedly.
-  @override
-  Future<bool> runAsync() => initAsync();
 
   /// Supply an 'error handler' routine if something goes wrong
   /// in the corresponding initAsync() routine.

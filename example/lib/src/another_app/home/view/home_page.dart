@@ -4,11 +4,11 @@
 ///
 ///  The StatefulWidget representing the app's Home Page.
 ///
-import 'package:example/src/another_app/home/view.dart';
+import '/src/another_app/home/view.dart';
 
-import 'package:example/src/controller.dart';
+import '/src/controller.dart';
 
-import 'package:example/src/view.dart';
+import '/src/view.dart';
 
 /// The Home page
 class HomePage extends StatefulWidget {
@@ -56,18 +56,22 @@ class _HomePageState extends StateX<HomePage> {
             // overflowAlignment: OverflowBarAlignment.center,
             children: [
               TextButton(
+                key: const Key('New Dogs'),
                 onPressed: () => con.newDogs(),
                 child: const Text('New Dogs'),
               ),
               TextButton(
+                key: const Key('New Cats'),
                 onPressed: () => con.newCats(),
                 child: const Text('New Cats'),
               ),
               TextButton(
+                key: const Key('New Foxes'),
                 onPressed: () => con.newFoxes(),
                 child: const Text('New Foxes'),
               ),
               TextButton(
+                key: const Key('New Birds'),
                 onPressed: () => con.newBirds(),
                 child: const Text('New Birds'),
               ),

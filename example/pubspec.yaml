@@ -33,6 +33,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Generates English word pairs
+  # https://pub.dev/packages/english_words
+  english_words: ^4.0.0
+
   state_extended: #^4.0.0
     path: ../
 

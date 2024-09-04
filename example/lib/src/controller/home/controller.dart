@@ -8,7 +8,7 @@ import '/src/model.dart';
 
 import '/src/view.dart';
 
-///
+/// EventsControllerMixin puts print() in every event method
 class Controller extends StateXController with EventsControllerMixin {
   /// It's a good practice and follow the Singleton pattern.
   /// There's on need for more than one instance of this particular class.
@@ -72,33 +72,5 @@ class Controller extends StateXController with EventsControllerMixin {
   Future<bool> initAsync() async {
     // Return false to test such a circumstance
     return !ExampleAppController().allowErrors;
-  }
-
-  /// The top route has been popped off, and this route shows up.
-  @override
-  void didPopNext() {
-    super.didPopNext();
-    setState(() {});
-  }
-
-  /// Called when this route has been pushed.
-  @override
-  void didPush() {
-    super.didPush();
-    setState(() {});
-  }
-
-  /// Called when this route has been popped off.
-  @override
-  void didPop() {
-    super.didPop();
-    setState(() {});
-  }
-
-  /// New route has been pushed, and this route is no longer visible.
-  @override
-  void didPushNext() {
-    super.didPushNext();
-    setState(() {});
   }
 }

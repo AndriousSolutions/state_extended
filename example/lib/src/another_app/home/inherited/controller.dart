@@ -5,4 +5,4 @@
 ///  References all the Controllers used when working with an InheritedWidget
 ///
 
-export 'package:example/src/another_app/home/inherited/controller/inherit_controller.dart';
+export '/src/another_app/home/inherited/controller/inherit_controller.dart';
