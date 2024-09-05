@@ -82,7 +82,7 @@ class _MyAppState extends AppStateX<MyApp> {
   /// Define the 'look and fell' of the overall app.
   /// The body: property takes in a separate widget for the 'home' page.
   @override
-  Widget buildIn(BuildContext context) => MaterialApp(
+  Widget builder(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
     home: MyHomePage(title: widget.title),
   );
@@ -122,7 +122,7 @@ class _MyHomePageState extends StateX<MyHomePage> {
     final con = appState.controller;
 
     /// Another way to retrieve the 'app level' State object
-    appState = con?.state!.startState as AppStateX;
+    appState = con?.state!.firstState as AppStateX;
 
     /// You can retrieve by type as well
     appState = stateByType<AppStateX>()!;
@@ -139,7 +139,7 @@ class _MyHomePageState extends StateX<MyHomePage> {
   Widget buildF(BuildContext context) => super.buildF(context);
 
   @override
-  Widget buildIn(BuildContext context) => Scaffold(
+  Widget builder(BuildContext context) => Scaffold(
     appBar: AppBar(
       title: Text(widget.title ?? ''),
       // popup menu button
@@ -250,7 +250,7 @@ class HomeController extends StateXController {
   bool onAsyncError(FlutterErrorDetails details) => false;
 
   /// Provide a menu to this simple app.
-  PopupMenuButton get popupMenuButton => PopupMenuButton<CountType>(
+  PopupMenuButton<CountType> get popupMenuButton => PopupMenuButton<CountType>(
     itemBuilder: (context) => [
       PopupMenuItem(
         value: CountType.integer,
@@ -258,7 +258,7 @@ class HomeController extends StateXController {
           children: [
             if (_countType == CountType.integer)
               const Icon(Icons.star_rounded, color: Colors.black),
-            const Text("Integers")
+            const Text('Integers')
           ],
         ),
       ),
@@ -268,7 +268,7 @@ class HomeController extends StateXController {
           children: [
             if (_countType == CountType.alphabet)
               const Icon(Icons.star_rounded, color: Colors.black),
-            const Text("Alphabet")
+            const Text('Alphabet')
           ],
         ),
       ),
@@ -278,7 +278,7 @@ class HomeController extends StateXController {
           children: [
             if (_countType == CountType.prime)
               const Icon(Icons.star_rounded, color: Colors.black),
-            const Text("Prime Numbers")
+            const Text('Prime Numbers')
           ],
         ),
       ),
@@ -438,37 +438,6 @@ class HomeController extends StateXController {
     return super.didPopRoute();
   }
 
-  /// Called when the host tells the app to push a new route onto the
-  /// navigator.
-  /// This method exposes the `pushRoute` notification from
-  // ignore: comment_references
-  /// [SystemChannels.navigation].
-  @override
-  Future<bool> didPushRoute(String route) async {
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didPushRoute in HomeController');
-    }
-    return super.didPushRoute(route);
-  }
-
-  /// Called when the host tells the application to push a new
-  /// [RouteInformation] and a restoration state onto the router.
-  /// This method exposes the `popRoute` notification from
-  // ignore: comment_references
-  /// [SystemChannels.navigation].
-  ///
-  /// The default implementation is to call the [didPushRoute] directly with the
-  /// [RouteInformation.location].
-  @override
-  Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didPushRouteInformation in HomeController');
-    }
-    return super.didPushRouteInformation(routeInformation);
-  }
-
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   @override
@@ -541,8 +510,8 @@ class HomeController extends StateXController {
   ///
   /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
   @override
-  void inactiveLifecycleState() {
-    super.inactiveLifecycleState();
+  void inactiveAppLifecycleState() {
+    super.inactiveAppLifecycleState();
     if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: inactiveLifecycleState in HomeController');
@@ -552,8 +521,8 @@ class HomeController extends StateXController {
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
   @override
-  void pausedLifecycleState() {
-    super.pausedLifecycleState();
+  void pausedAppLifecycleState() {
+    super.pausedAppLifecycleState();
     if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: pausedLifecycleState in HomeController');
@@ -563,8 +532,8 @@ class HomeController extends StateXController {
   /// Either be in the progress of attaching when the engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
   @override
-  void detachedLifecycleState() {
-    super.detachedLifecycleState();
+  void detachedAppLifecycleState() {
+    super.detachedAppLifecycleState();
     if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: detachedLifecycleState in HomeController');
@@ -573,8 +542,8 @@ class HomeController extends StateXController {
 
   /// The application is visible and responding to user input.
   @override
-  void resumedLifecycleState() {
-    super.resumedLifecycleState();
+  void resumedAppLifecycleState() {
+    super.resumedAppLifecycleState();
     if (inDebugMode) {
       //ignore: avoid_print
       print('############ Event: resumedLifecycleState in HomeController');
@@ -603,13 +572,23 @@ class HomeController extends StateXController {
   }
 }
 
-// The means 'to talk' between the Controller and the Model
-enum CountType { integer, prime, alphabet }
+/// The means 'to talk' between the Controller and the Model
+enum CountType {
+  ///
+  integer,
+
+  ///
+  prime,
+
+  ///
+  alphabet,
+}
 
 /// A separate class that contains the data.
 class Model {
   int _integer = 0;
-  // The external property transferring the value to the outside world.
+
+  /// The external property transferring the value to the outside world.
   int get integer => _integer;
 
   /// The business logic involves incrementing something.
@@ -618,13 +597,16 @@ class Model {
 
 /// Goes through the alphabet.
 class AlphabetLetters {
-  // Used for incrementing the alphabet
-  int start = "a".codeUnitAt(0);
-  int end = "z".codeUnitAt(0);
+  /// Used for incrementing the alphabet
+  int start = 'a'.codeUnitAt(0);
 
+  ///
+  int end = 'z'.codeUnitAt(0);
+
+  ///
   late int letter = start;
 
-  // The external property transferring the value to the outside world.
+  /// The external property transferring the value to the outside world.
   String get current => String.fromCharCode(letter);
 
   /// The business logic involves incrementing something.
@@ -638,6 +620,7 @@ class AlphabetLetters {
 
 /// Another class. A complete different type of data conceived.
 class PrimeNumbers {
+  ///
   PrimeNumbers({int? start, int? end}) {
     start = start ?? 1;
     end = end ?? 1000;
@@ -653,8 +636,10 @@ class PrimeNumbers {
 
   int _cnt = 0;
 
+  ///
   int get primeNumber => _numbers[_cnt];
 
+  ///
   void next() {
     _cnt++;
     if (_cnt > _numbers.length) {
@@ -662,6 +647,7 @@ class PrimeNumbers {
     }
   }
 
+  ///
   void initPrimeNumbers(int M, int N) {
     a:
     for (var k = M; k <= N; ++k) {
@@ -677,6 +663,7 @@ class PrimeNumbers {
 
 /// Everything a State object can do, this Controller can do as well!
 class AppController extends StateXController {
+  ///
   factory AppController() => _this ??= AppController._();
   AppController._();
 

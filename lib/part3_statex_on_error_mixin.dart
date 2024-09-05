@@ -4,7 +4,6 @@
 
 part of 'state_extended.dart';
 
-
 /// Supply an 'error handler' routine if something goes wrong.
 /// It need not be implemented, but it's their for your consideration.
 ///

@@ -4,7 +4,6 @@
 
 part of 'state_extended.dart';
 
-
 /// Manages the 'Controllers' associated with this
 /// StateX object at any one time by their unique identifier.
 mixin _ControllersById<T extends StatefulWidget> on StateX<T> {

@@ -4,7 +4,6 @@
 
 part of 'state_extended.dart';
 
-
 ///  Used like the function, setState(), to 'spontaneously' call
 ///  build() functions here and there in your app. Much like the Scoped
 ///  Model's ScopedModelDescendant() class.

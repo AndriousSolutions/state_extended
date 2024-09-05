@@ -1,5 +1,5 @@
 
-## 5.0.0
+## 5.0.0+1
 September 04, 2024
 - Remove all deprecated properties, functions, and methods
 - Introduce RouteObserverStates.subscribeRoutes(this); in route_observer_states.dart
@@ -13,6 +13,7 @@ September 04, 2024
   Calls both builder() and built-in InheritedWidget separately
 - Rename bool forEach() to bool forEachState()
 - mixin RecordExceptionMixin to mixin RecordExceptionMixin on State
+- Update README Example app
 
 ## 4.24.0
 August 18, 2024
