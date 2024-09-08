@@ -99,10 +99,16 @@ mixin SetStateMixin {
 
   /// To externally 'process' through the State objects.
   /// Invokes [func] on each StateX possessed by this object.
-  bool forEachState(void Function(StateX state) func) {
+  bool forEachState(void Function(StateX state) func, {bool? reversed}) {
     bool each = true;
-    final list = _stateXSet.toList(growable: false);
-    for (final StateX state in list) {
+    Iterable<StateX> it;
+    // In reversed chronological order
+    if (reversed != null && reversed) {
+      it = _stateXSet.toList(growable: false).reversed;
+    } else {
+      it = _stateXSet.toList(growable: false);
+    }
+    for (final StateX state in it) {
       try {
         if (state.mounted && !state.deactivated) {
           func(state);

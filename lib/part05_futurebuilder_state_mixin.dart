@@ -208,13 +208,13 @@ mixin FutureBuilderStateMixin on State {
 
   /// Copy particular properties from the 'previous' StateX
   // ignore: unused_element
-  void _copyOverStateFuture([StateX? oldState]) {
-    //
-    if (oldState == null) {
-      return;
-    }
-    _future = oldState._future;
-  }
+  // void _copyOverStateFuture([StateX? oldState]) {
+  //   //
+  //   if (oldState == null) {
+  //     return;
+  //   }
+  //   _future = oldState._future;
+  // }
 
   /// Supply Localizations before displaying the widget
   Widget _localizeWidget(BuildContext context, Widget child) {

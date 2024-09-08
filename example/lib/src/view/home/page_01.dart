@@ -6,6 +6,8 @@ import '/src/controller.dart';
 
 import '/src/view.dart';
 
+import 'run_state_mixins.dart';
+
 /// The first page displayed in this app.
 class Page1 extends StatefulWidget {
   /// Page 1
@@ -109,6 +111,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const RunFutureBuilderStateMixin(), // Merely for testing
             _timer.wordPair,
             const Flexible(
               child: Padding(
@@ -219,7 +222,9 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
     for (final con in controllerList) {
       // If it has the onError() function
       if (con is StateXonErrorMixin) {
-        (con as StateXonErrorMixin).onError(details);
+        final c = con as StateXonErrorMixin;
+        c.onError(details);
+        c.logErrorDetails(details);
       }
     }
   }

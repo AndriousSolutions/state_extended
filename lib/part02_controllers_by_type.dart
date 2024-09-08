@@ -154,14 +154,14 @@ mixin _ControllersByType on State {
 
   /// Copy particular properties from the 'previous' StateX
   // ignore: unused_element
-  void _copyOverStateControllers([StateX? oldState]) {
-    //
-    if (oldState == null) {
-      return;
-    }
-    // Copy over certain properties
-    _mapControllerByType.addAll(oldState._mapControllerByType);
-  }
+  // void _copyOverStateControllers([StateX? oldState]) {
+  //   //
+  //   if (oldState == null) {
+  //     return;
+  //   }
+  //   // Copy over certain properties
+  //   _mapControllerByType.addAll(oldState._mapControllerByType);
+  // }
 
   @override
   void dispose() {

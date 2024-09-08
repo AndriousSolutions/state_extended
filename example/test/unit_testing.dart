@@ -4,14 +4,16 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_controller.dart';
-import 'test_statex.dart';
+import '_test_imports.dart';
 
 Future<void> unitTesting(WidgetTester tester) async {
 //
+  /// Tests AppStateX class
+  await testsAppStateX(tester);
+
   /// Tests StateX class
   await testsStateX(tester);
 
   /// Tests StateXController class
-  testsController(tester);
+  testsStateXController(tester);
 }

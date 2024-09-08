@@ -76,7 +76,7 @@ class RouteObserverStates extends RouteObserver<Route<dynamic>> {
 }
 
 ///
-mixin StateXRouteAware {
-  /// Called when the State's current route has been popped off.
-  void didPopOff() {}
-}
+// mixin StateXRouteAware {
+//   /// Called when the State's current route has been popped off.
+//   void didPopOff() {}
+// }

@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 const location = '========================== test_controller.dart';
 
-void testsController(WidgetTester tester) {
+void testsStateXController(WidgetTester tester) {
   //
 
   /// Explicitly provide what's intentionally should be accessible
@@ -112,27 +112,18 @@ void testsController(WidgetTester tester) {
   // Continuing the testing coverage
   con.notifyClients();
 
-  // /// Return a 'copy' of the Set of State objects.
-  // final Set<StateX>? states = con.states;
-  //
-  // expect(states, isA<Set<StateX>>(), reason: location);
-  //
-  // expect(states!.isNotEmpty, isTrue, reason: location);
-  //
-  // var state = states.first;
-  //
-  // expect(state, isA<Page1State>(), reason: location);
-  //
-  // var removed = state.remove(con);
-  //
-  // // I see this is the same as the 'isTrue' version below.
-  // expect(removed, isTrue, reason: location);
-  //
-  // state = states.last;
-  //
-  // removed = state.removeByKey(conId);
-  //
-  // expect(removed, isFalse, reason: location);
+  // Loop through the Controller's State objects
+  con.forEachState((state) {
+    for (final c in state.controllerList) {
+      if (c == con) {
+      } else {}
+    }
+  });
+
+  // Loop through the Controller's State objects in reverse
+  con.forEachState((state) {
+    if (state.mounted) {}
+  }, reversed: true);
 }
 
 void _testAppController(WidgetTester tester) {

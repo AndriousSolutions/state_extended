@@ -17,9 +17,11 @@ class Page2 extends StatefulWidget {
 
 /// This works with a separate 'data source'
 /// It a separate data source, and so the count is never reset to zero.
-class Page2State extends StateX<Page2> with EventsStateMixin<Page2> {
+class Page2State extends StateX<Page2> {
+  //with EventsStateMixin<Page2> {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
-  Page2State() : super(controller: Controller()) {
+  /// showBinding: Print in console when Binding events are triggered.
+  Page2State() : super(controller: Controller(), showBinding: true) {
     /// Cast to type, Controller
     con = controller as Controller;
   }

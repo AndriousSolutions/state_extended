@@ -14,12 +14,14 @@ export '../integration_test/test_page1.dart';
 
 export '../integration_test/test_page2_state.dart';
 
-export '../test/test_controller.dart';
+export '../test/test_app_state.dart';
 
 export '../test/test_error_handling.dart';
 
 export '../test/test_event_handling.dart';
 
 export '../test/test_statex.dart';
+
+export '../test/test_statexcontroller.dart';
 
 export '../test/unit_testing.dart';

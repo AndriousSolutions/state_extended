@@ -96,13 +96,13 @@ mixin InheritedWidgetStateMixin on State {
 
   /// Copy particular properties from the 'previous' StateX
   // ignore: unused_element
-  void _copyOverStateDependencies([StateX? oldState]) {
-    //
-    if (oldState == null) {
-      return;
-    }
-    _dependencies.addAll(oldState._dependencies);
-  }
+  // void _copyOverStateDependencies([StateX? oldState]) {
+  //   //
+  //   if (oldState == null) {
+  //     return;
+  //   }
+  //   _dependencies.addAll(oldState._dependencies);
+  // }
 
   @override
   void dispose() {

@@ -34,31 +34,31 @@ export 'route_observer_states.dart';
 /// part files /////////////////////////////////////////////////////////////
 
 /// class StateX controllerByType(), controllerById(), initAsync(), didChangeAppLifecycleState()
-part 'part1_statex.dart';
+part 'part01_statex.dart';
 
 /// on State: controllerByType(), controllerById(), firstCon, lastCon
-part 'part2_controllers_by_type.dart';
+part 'part02_controllers_by_type.dart';
 
 /// on State: onError(), logErrorDetails()
-part 'part3_statex_on_error_mixin.dart';
+part 'part03_statex_on_error_mixin.dart';
 
 /// 27 event trigger methods
-part 'part4_state_listener.dart';
+part 'part04_state_listener.dart';
 
 /// on State: nSplashScreen(), initAsync(), onAsyncError(),
-part 'part5_futurebuilder_state_mixin.dart';
+part 'part05_futurebuilder_state_mixin.dart';
 
 /// on State: buildF(), updateShouldNotify(), dependOnInheritedWidget(), notifyClients()
-part 'part6_inherited_widget_state_mixin.dart';
+part 'part06_inherited_widget_state_mixin.dart';
 
 /// class StateXInheritedWidget // The InheritedWidget used by StateX
-part 'part7_statex_inheritedwidget.dart';
+part 'part07_statex_inheritedwidget.dart';
 
 /// class AppStateX: dependOnInheritedWidget(), notifyClients(), stateSet(), onError(), onStateError()
-part 'part8_app_statex.dart';
+part 'part08_app_statex.dart';
 
 /// Called in AppStateX.buildF(): StateXInheritedWidget()
-part 'part9_inheritedwidget_statefulwidget.dart';
+part 'part09_inheritedwidget_statefulwidget.dart';
 
 /// _BuilderStatefulWidget extends StatefulWidget
 part 'part10_builder_statefulwidget.dart';

@@ -14,14 +14,10 @@ import '../test/_test_imports.dart';
 const _location = '========================== test_statex.dart';
 
 Future<void> testsStateX(WidgetTester tester) async {
-  //
-
   /// Explicitly provide what's intentionally should be accessible
   /// but is made accessible for 'internal testing' of this framework.
   // Find its StatefulWidget first then the 'type' of State object.
   StateX stateObj = tester.firstState<AppStateX>(find.byType(MyApp));
-
-  expect(stateObj, isA<AppStateX>(), reason: _location);
 
   var conCount = 0;
 
@@ -47,6 +43,12 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(each, isFalse, reason: _location);
 
+  for (final con in stateObj.controllerList) {
+    conCount++;
+  }
+
+  expect(conCount > 0, isTrue, reason: _location);
+
   expect(stateObj.useInherited, isFalse, reason: _location);
 
   StateXController? con = stateObj.controller!;
@@ -57,56 +59,8 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(contains, isTrue, reason: _location);
 
-  // This Controller's current State object is _MyAppState as AppStateMVC
-  stateObj = con.state!;
-
-  expect(stateObj, isA<AppStateX>(), reason: _location);
-
   // The first State object is itself --- _MyAppState
-  var appState = stateObj.rootState!;
-
-  expect(appState, isA<AppStateX>(), reason: _location);
-
-  final snapShot = appState.snapshot!;
-
-  expect(snapShot.data, isTrue, reason: _location);
-
-  /// Rebuild InheritedWidget
-  appState.dataObject = 'test';
-
-  appState.stateSet((context) => const SizedBox());
-
-  final exception = Exception('Testing');
-
-  final errorDetails = FlutterErrorDetails(
-    exception: exception,
-    library: 'test_statex.dart',
-    context: ErrorDescription('Testing for codecov'),
-  );
-
-  appState.onError(errorDetails);
-
-  // Test its if statement.
-  appState.catchError(exception);
-
-  appState.recordException(exception);
-
-  expect(appState.hasError, isTrue, reason: _location);
-
-  expect(appState.errorMsg == 'Testing', isTrue, reason: _location);
-
-  expect(appState.stackTrace, isNull, reason: _location);
-
-  var ex = appState.recordException();
-
-  expect(ex, isA<Exception>(), reason: _location);
-
-  ex = appState.recordException(FlutterError('Test Error'));
-
-  expect(ex, isA<Exception>(), reason: _location);
-
-  // Test 'refresh' alternative
-  appState.notifyClients();
+  final appState = stateObj.rootState!;
 
   // Every StateMVC and ControllerMVC has a unique String identifier.
   final myAppStateId = appState.identifier;
@@ -114,28 +68,15 @@ Future<void> testsStateX(WidgetTester tester) async {
   BuildContext context = appState.context;
 
   expect(context, isA<BuildContext>(), reason: _location);
-
+  //
   // A Controller for the 'app level' to influence the whole app.
   con = appState.controller!;
-
-  expect(con, isA<ExampleAppController>(), reason: _location);
 
   final String keyId = con.identifier;
 
   con = appState.controllerById(keyId)!;
 
   expect(con, isA<ExampleAppController>(), reason: _location);
-
-  con = appState.controllerByType<TestingController>();
-
-  expect(con, isNull, reason: _location);
-
-  con = appState.controllerByType<ExampleAppController>();
-
-  expect(con, isA<ExampleAppController>(), reason: _location);
-
-  // As well as the base class, ControllerMVC
-  expect(con, isA<StateXController>(), reason: _location);
 
   var id = appState.add(TestingController());
 
@@ -153,19 +94,6 @@ Future<void> testsStateX(WidgetTester tester) async {
   remove = appState.remove(testCon);
 
   expect(remove, isTrue, reason: _location);
-
-  /// Test listControllers
-  appState.listControllers([keyId]);
-
-  /// Switch out the 'current' controller
-  final update = appState.didUpdateController(oldCon: con, newCon: con);
-
-  expect(update, isFalse, reason: _location);
-
-  /// You can retrieve a State object by the 'type' of its StatefulWidget
-  appState = con!.stateOf<MyApp>() as AppStateX;
-
-  expect(appState, isA<AppStateX>(), reason: _location);
 
   /// The 'state' property is the Controller's current State object
   /// it is working with.
@@ -224,6 +152,9 @@ Future<void> testsStateX(WidgetTester tester) async {
   // Of course, you can retrieve the State object its collected.
   // In this case, there's only one, the one in con.state.
   final StateX state01 = con.stateOf<Page1>()!;
+
+  // print() functions called or not during development
+  expect(state01.showWidgetsBinding, isFalse, reason: _location);
 
   // Test looking up State objects by id.
   // The unique key identifier for this State object.
@@ -384,9 +315,11 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(hasController, isTrue, reason: _location);
 
-  bool? boolean = await stateObj.didPopRoute();
+  final boolean = await stateObj.didPopRoute();
 
   expect(boolean, isA<bool>(), reason: _location);
+
+//  await stateObj.didPushRouteInformation(RouteInformation());
 
   stateObj.didPopNext();
 

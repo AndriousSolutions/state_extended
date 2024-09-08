@@ -58,11 +58,11 @@ mixin RecordExceptionMixin on State {
 
   /// Copy particular properties from the 'previous' StateX
   // ignore: unused_element
-  void _copyOverStateException([StateX? oldState]) {
-    //
-    if (oldState == null) {
-      return;
-    }
-    _recException = oldState._recException;
-  }
+  // void _copyOverStateException([StateX? oldState]) {
+  //   //
+  //   if (oldState == null) {
+  //     return;
+  //   }
+  //   _recException = oldState._recException;
+  // }
 }
