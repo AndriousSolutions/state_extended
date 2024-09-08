@@ -14,8 +14,7 @@ class RunFutureBuilderStateMixin extends StatefulWidget {
 }
 
 /// Calling the 'default' functions without a subclass.
-class _State extends State<StatefulWidget>
-    with FutureBuilderStateMixin, InheritedWidgetStateMixin {
+class _State extends State<StatefulWidget> with FutureBuilderStateMixin {
   @override
   void initState() {
     super.initState();
@@ -25,9 +24,6 @@ class _State extends State<StatefulWidget>
   @override
   Widget build(BuildContext context) {
     buildF(context);
-    builder(context);
-    dependOnInheritedWidget(context);
-    stateSet(null);
     return const SizedBox.shrink();
   }
 }

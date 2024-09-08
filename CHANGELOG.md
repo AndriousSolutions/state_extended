@@ -1,5 +1,5 @@
 
-## 5.0.0+2
+## 5.0.0+3
 September 04, 2024
 - Remove all deprecated properties, functions, and methods
 - Introduce RouteObserverStates.subscribeRoutes(this); in route_observer_states.dart
@@ -18,6 +18,7 @@ September 04, 2024
 - Renamed part files
 - Commented out mixin StateXRouteAware 
 - Commented out void '_copyOver' functions
+- Removed InheritedWidgetStateMixin testing in RunFutureBuilderStateMixin Widget
 
 ## 4.24.0
 August 18, 2024
