@@ -63,14 +63,4 @@ class Controller extends StateXController with EventsControllerMixin {
       dataObject = _model.sayHello();
     }
   }
-
-  /// **************  Life cycle events ****************
-  ///
-  ///
-
-  @override
-  Future<bool> initAsync() async {
-    // Return false to test such a circumstance
-    return !ExampleAppController().allowErrors;
-  }
 }

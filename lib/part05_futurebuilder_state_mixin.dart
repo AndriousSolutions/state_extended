@@ -24,6 +24,16 @@ mixin FutureBuilderStateMixin on State {
     // Generate the Future evey time or just once
     if (_runAsync || _future == null) {
       _future = initAsync();
+      _future?.catchError(
+        (Object e) {
+          catchAsyncError(e);
+          // Always false. snapshot.data == false
+          // snapshot.hasError likely true so ErrorWidget.builder() displayed
+          return false;
+        },
+        // It's got to be handled, and so it's always true to call catchError()
+        test: (_) => true,
+      );
     }
     return FutureBuilder<bool>(
       key: ValueKey<State>(this),
@@ -59,6 +69,14 @@ mixin FutureBuilderStateMixin on State {
   /// Supply the AsyncSnapshot
   AsyncSnapshot<bool>? get snapshot => _snapshot;
   AsyncSnapshot<bool>? _snapshot;
+
+  /// initAsync() has failed and a 'error' widget instead will be displayed.
+  /// This takes in the snapshot.error details.
+  void onAsyncError(FlutterErrorDetails details) {}
+
+  /// Catch it if the initAsync() throws an error
+  /// The FutureBuilder will fail, but you can examine the error
+  void catchAsyncError(Object error) {}
 
   /// Record any splash screen
   Widget? _splashScreen;
@@ -194,10 +212,6 @@ mixin FutureBuilderStateMixin on State {
     }
     return widget;
   }
-
-  /// Supply an 'error handler' routine if something goes wrong
-  /// in the corresponding runAsync() or initAsync() routine.
-  void onAsyncError(FlutterErrorDetails details) {}
 
   /// Is the CupertinoApp being used?
   bool get usingCupertino =>

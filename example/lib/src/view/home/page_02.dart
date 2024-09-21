@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:example/src/view/home/run_state_mixins.dart';
+
 import '/src/controller.dart';
 
 import '/src/view.dart';

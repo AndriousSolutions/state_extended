@@ -31,6 +31,7 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
           /// Demonstrate passing an 'object' down the Widget tree much like
           /// how it's done using Scoped Model, but better.
           object: 'Hello!',
+          showBinding: true, // Print event function calls
         );
 
   @override

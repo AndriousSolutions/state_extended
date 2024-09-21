@@ -6,7 +6,6 @@
 
 part of 'state_extended.dart';
 
-/// A UUID generator, useful for generating unique IDs.
 /// Shamelessly extracted from the author of Scoped Model plugin,
 /// Who maybe took from the Flutter source code. I'm not telling!
 ///

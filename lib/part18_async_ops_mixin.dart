@@ -14,8 +14,8 @@ mixin AsyncOps {
   /// Implement any asynchronous operations needed done at start up.
   Future<bool> initAsync() async => true;
 
-  /// Supply an 'error handler' routine if something goes wrong
-  /// in the corresponding runAsync() routine.
+  /// initAsync() has failed and a 'error' widget instead will be displayed.
+  /// This takes in the snapshot.error details.
   void onAsyncError(FlutterErrorDetails details) {}
 
   ///

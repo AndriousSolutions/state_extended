@@ -1,4 +1,8 @@
 
+## 5.1.0
+September 20, 2024
+- catchAsyncError() for mixin FutureBuilderStateMixin
+
 ## 5.0.0+3
 September 04, 2024
 - Remove all deprecated properties, functions, and methods

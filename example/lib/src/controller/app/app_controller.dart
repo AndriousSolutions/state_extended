@@ -25,9 +25,8 @@ class ExampleAppController extends StateXController with EventsControllerMixin {
     });
   }
 
-  /// Supply an 'error handler' routine if something goes wrong
-  /// in the corresponding initAsync() routine.
-  /// Returns true if the error was properly handled.
+  /// The initAsync() function has failed and a 'error' widget will be displayed.'
+  /// This takes in the snapshot.error details.
   @override
   void onAsyncError(FlutterErrorDetails details) {}
 
