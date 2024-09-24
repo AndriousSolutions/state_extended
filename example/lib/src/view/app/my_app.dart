@@ -31,7 +31,7 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
           /// Demonstrate passing an 'object' down the Widget tree much like
           /// how it's done using Scoped Model, but better.
           object: 'Hello!',
-          showBinding: true, // Print event function calls
+          printEvents: true, // Print event function calls
         );
 
   @override
@@ -74,14 +74,9 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
   @override
   Widget builder(BuildContext context) {
     // Throw an error right here at the beginning to test recovery code.
-    var throwError = controller is ExampleAppController;
-    if (throwError) {
-      final appCon = controller as ExampleAppController;
-      throwError = appCon.errorAtStartup;
-      // It'll trip again instantly and so don't trip it again.
-      appCon.errorAtStartup = false;
-    }
-    if (throwError) {
+    final appCon = controller as ExampleAppController;
+    if (appCon.errorInBuilder) {
+      appCon.errorInBuilder = false;
       throw Exception('Error in builder!');
     }
     return MaterialApp(

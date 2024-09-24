@@ -154,7 +154,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   final StateX state01 = con.stateOf<Page1>()!;
 
   // print() functions called or not during development
-  expect(state01.showWidgetsBinding, isFalse, reason: _location);
+  expect(state01.printEvents, isFalse, reason: _location);
 
   // Test looking up State objects by id.
   // The unique key identifier for this State object.

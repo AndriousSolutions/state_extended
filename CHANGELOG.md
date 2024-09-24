@@ -1,4 +1,11 @@
 
+## 5.2.0
+September 23, 2024
+- Parameter, 'showBinding', renamed 'printEvents'
+- catchAsyncError() with try..catch in FutureBuilderStateMixin
+- con.onAsyncError() with try..catch  in part18_async_ops_mixin.dart
+- appState.builder() with try..catch in part10_builder_statefulwidget.dart
+
 ## 5.1.0
 September 20, 2024
 - catchAsyncError() for mixin FutureBuilderStateMixin

@@ -19,13 +19,11 @@ class AnotherController extends StateXController
   static AnotherController? _this;
 
   /// Explicitly cause an error
-  bool tripError = false;
+  bool initAsyncError = false;
 
   @override
   Future<bool> initAsync() async {
-    if (tripError && ExampleAppController().allowErrors) {
-      // Turn it off now
-      ExampleAppController().allowErrors = false;
+    if (initAsyncError) {
       throw Exception('Error in AnotherController.initAsync()!');
     }
     return true;

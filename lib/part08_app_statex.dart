@@ -20,7 +20,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     super.controller,
     List<StateXController>? controllers,
     Object? object,
-    super.showBinding,
+    super.printEvents,
     // Save the current error handler
   }) : _currentErrorFunc = FlutterError.onError {
     // If a tester is running, for example, don't switch out its error handler.
@@ -463,19 +463,12 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         // by the original routine.
         rethrow;
       } else {
-        //
-        final errorDetails = FlutterErrorDetails(
-          exception: e,
-          stack: e is Error ? e.stackTrace : null,
-          library: 'state_extended.dart',
-          context: ErrorDescription('Error in AppStateX Error Handler'),
+        // Record error in log
+        _logPackageError(
+          e,
+          library: 'part08_app_statex.dart',
+          description: 'Error in AppStateX Error Handler',
         );
-
-        // Resets the count of errors to show a complete error message not an abbreviated one.
-        FlutterError.resetErrorCount();
-
-        // Log errors
-        FlutterError.presentError(errorDetails);
       }
     }
     // If handled, return to this State object's error handler.
@@ -522,4 +515,44 @@ class _SetStateXWidget extends StatelessWidget {
     stateX.dependOnInheritedWidget(context);
     return widgetFunc(context);
   }
+}
+
+/// Used in the package to present error to the console
+void _logPackageError(
+  Object? error, {
+  String? library,
+  String? description,
+  DiagnosticsNode? context,
+}) {
+  // Must have an error
+  if (error == null) {
+    return;
+  }
+
+  if (library == null || library.isEmpty) {
+    library = 'state_extended package';
+  } else {
+    library = library.trim();
+  }
+
+  if (context == null) {
+    if (description != null && description.isNotEmpty) {
+      context = ErrorDescription(description);
+    }
+  }
+
+  final details = FlutterErrorDetails(
+    exception: error,
+    stack: error is Error ? error.stackTrace : null,
+    library: library,
+    context: context,
+  );
+  // Don't when in DebugMode.
+  if (!kDebugMode) {
+    // Resets the count of errors to show a complete error message not an abbreviated one.
+    FlutterError.resetErrorCount();
+  }
+  // https://docs.flutter.dev/testing/errors#errors-caught-by-flutter
+  // Log error
+  FlutterError.presentError(details);
 }

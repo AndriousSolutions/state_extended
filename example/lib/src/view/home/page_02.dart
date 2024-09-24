@@ -23,7 +23,7 @@ class Page2State extends StateX<Page2> {
   //with EventsStateMixin<Page2> {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
   /// showBinding: Print in console when Binding events are triggered.
-  Page2State() : super(controller: Controller(), showBinding: true) {
+  Page2State() : super(controller: Controller(), printEvents: true) {
     /// Cast to type, Controller
     con = controller as Controller;
   }

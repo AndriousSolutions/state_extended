@@ -20,23 +20,17 @@ Future<void> errorHandling(
 
   final appCon = appState.controller;
 
-  if (appCon != null && appCon is ExampleAppController) {
-    // Allow for errors to be thrown.
-    appCon.allowErrors = true;
-  }
-
   final con = AnotherController();
 
-  con.tripError = true;
+  con.initAsyncError = true;
 
   // hot reload
   await binding.reassembleApplication();
 
   // pumpAndSettle() waits for all animations to complete.
-  await tester.pumpAndSettle();
-  await tester.pumpAndSettle();
+  await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
   /// Go to Page 2
   await tester.tap(find.byKey(const Key('Page 2')));
-  await tester.pumpAndSettle();
+  await tester.pumpAndSettle(const Duration(milliseconds: 200));
 }

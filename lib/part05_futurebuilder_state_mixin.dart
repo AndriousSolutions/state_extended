@@ -26,7 +26,16 @@ mixin FutureBuilderStateMixin on State {
       _future = initAsync();
       _future?.catchError(
         (Object e) {
-          catchAsyncError(e);
+          try {
+            catchAsyncError(e);
+          } catch (e) {
+            // Record error in log
+            _logPackageError(
+              e,
+              library: 'part05_futurebuilder_state_mixin.dart',
+              description: 'Exception in catchAsyncError()',
+            );
+          }
           // Always false. snapshot.data == false
           // snapshot.hasError likely true so ErrorWidget.builder() displayed
           return false;
@@ -94,16 +103,14 @@ mixin FutureBuilderStateMixin on State {
       _splashScreen = null;
 
       if (snapshot.hasData) {
-        //
-        /// IMPORTANT: Must supply the State object's context: this.context
+        // IMPORTANT: Must supply the State object's context: this.context
         widget = buildF(this.context);
-        //
       } else if (snapshot.hasError) {
         //
         errorDetails = FlutterErrorDetails(
           exception: snapshot.error!,
           stack: snapshot.stackTrace,
-          library: 'state_extended.dart',
+          library: 'part05_futurebuilder_state_mixin.dart',
           context: ErrorDescription('Error in FutureBuilder'),
         );
 
@@ -143,19 +150,12 @@ mixin FutureBuilderStateMixin on State {
             if (kDebugMode) {
               rethrow;
             } else {
-              //
-              errorDetails = FlutterErrorDetails(
-                exception: e,
-                stack: e is Error ? e.stackTrace : null,
+              // Record error in log
+              _logPackageError(
+                e,
                 library: 'state_extended.dart',
-                context: ErrorDescription('Error in Splash Screen'),
+                description: 'Error in Splash Screen',
               );
-
-              // Resets the count of errors to show a complete error message not an abbreviated one.
-              FlutterError.resetErrorCount();
-
-              // Log errors
-              FlutterError.presentError(errorDetails);
             }
           }
         }
@@ -174,10 +174,8 @@ mixin FutureBuilderStateMixin on State {
       } else {
         // Resets the count of errors to show a complete error message not an abbreviated one.
         FlutterError.resetErrorCount();
-
         // Log the error
         FlutterError.presentError(errorDetails);
-
         // Release any splash screen
         _splashScreen = null;
 
@@ -191,19 +189,12 @@ mixin FutureBuilderStateMixin on State {
           if (kDebugMode) {
             rethrow;
           } else {
-            //
-            errorDetails = FlutterErrorDetails(
-              exception: e,
-              stack: e is Error ? e.stackTrace : null,
+            // Record error in log
+            _logPackageError(
+              e,
               library: 'state_extended.dart',
-              context: ErrorDescription('Error in FutureBuilder error routine'),
+              description: 'Error in FutureBuilder error routine',
             );
-
-            // Resets the count of errors to show a complete error message not an abbreviated one.
-            FlutterError.resetErrorCount();
-
-            // Log errors
-            FlutterError.presentError(errorDetails);
           }
         }
       }

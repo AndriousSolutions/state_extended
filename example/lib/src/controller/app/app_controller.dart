@@ -30,11 +30,8 @@ class ExampleAppController extends StateXController with EventsControllerMixin {
   @override
   void onAsyncError(FlutterErrorDetails details) {}
 
-  /// Store the boolean allowing for errors or not.
-  bool allowErrors = false;
-
   /// Error right at the start
-  bool errorAtStartup = false;
+  bool errorInBuilder = false;
 
   /// Allow for a Splash screen or not
   bool splashScreen = false;

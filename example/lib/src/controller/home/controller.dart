@@ -26,6 +26,9 @@ class Controller extends StateXController with EventsControllerMixin {
   /// The flag indicating if an InheritedWidget is to used.
   bool useInherited = false;
 
+  /// The flag indicating if the catchAsyncError, in turn, throws an error
+  bool errorCatchAsyncError = false;
+
   /// Page1 count is saved periodically
   int page1Count = 0;
 

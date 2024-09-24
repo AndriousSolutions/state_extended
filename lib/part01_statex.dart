@@ -32,7 +32,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     StateXController? controller,
     bool? runAsync,
     bool? useInherited,
-    bool? showBinding,
+    bool? printEvents,
   }) {
     // Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
@@ -41,7 +41,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // A flag determining whether the built-in InheritedWidget is used or not.
     _useInherited = useInherited ?? false;
     // Show the 'event' functions WidgetsBinding.instance.addObserver(this)
-    _showWidgetsBinding = showBinding ?? false;
+    _printEvents = printEvents ?? false;
     // Associate the controller to this State object
     _controller = controller;
     // Any subsequent calls to add() will be assigned to stateX.
@@ -64,9 +64,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Widget build(BuildContext context)
   ///
 
-  // Show the 'event' functions from WidgetsBinding.instance.addObserver(this)
-  bool get showWidgetsBinding => _showWidgetsBinding;
-  bool _showWidgetsBinding = false;
+  // debugPrint the 'event' functions from WidgetsBinding.instance.addObserver(this)
+  bool get printEvents => _printEvents;
+  bool _printEvents = false;
 
   // Current controller
   StateXController? _controller;
@@ -225,7 +225,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateRequested = false;
 
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: initAsync() in $this');
       }
       return true;
@@ -280,7 +280,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateRequested = false;
 
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: initState() in $this');
       }
       return true;
@@ -312,7 +312,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateRequested = false;
 
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didChangeDependencies() in $this');
       }
       return true;
@@ -368,7 +368,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateRequested = false;
 
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: activate() in $this');
       }
       return true;
@@ -479,7 +479,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateRequested = false;
 
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: deactivate() in $this');
       }
       return true;
@@ -521,7 +521,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateRequested = false;
 
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: dispose() in $this');
       }
       return true;
@@ -558,7 +558,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didUpdateWidget() in $this');
       }
       return true;
@@ -622,7 +622,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         //ignore: avoid_print
         print(
             '============ Event: didChangeAppLifecycleState($state) in $this');
@@ -747,7 +747,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didRequestAppExit() in $this');
       }
       return true;
@@ -805,7 +805,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didPopRoute() in $this');
       }
       return true;
@@ -855,7 +855,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didPushRouteInformation() in $this');
       }
       return true;
@@ -893,7 +893,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didPopNext() in $this');
       }
       return true;
@@ -929,7 +929,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didPush() in $this');
       }
       return true;
@@ -965,7 +965,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didPop() in $this');
       }
       return true;
@@ -1001,7 +1001,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didPushNext() in $this');
       }
       return true;
@@ -1057,7 +1057,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didChangeMetrics() in $this');
       }
       return true;
@@ -1108,7 +1108,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didChangeTextScaleFactor() in $this');
       }
       return true;
@@ -1147,7 +1147,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint(
             '============ Event: didChangePlatformBrightness() in $this');
       }
@@ -1192,7 +1192,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didChangeLocales() in $this');
       }
       return true;
@@ -1235,7 +1235,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: didHaveMemoryPressure() in $this');
       }
       return true;
@@ -1277,7 +1277,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint(
             '============ Event: didChangeAccessibilityFeatures() in $this');
       }
@@ -1314,7 +1314,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_showWidgetsBinding) {
+      if (_printEvents) {
         debugPrint('============ Event: reassemble() in $this');
       }
       return true;

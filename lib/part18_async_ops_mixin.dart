@@ -27,7 +27,16 @@ mixin AsyncOps {
       library: 'state_extended.dart',
       context: ErrorDescription('${con.runtimeType}.initAsync'),
     );
-    // To cleanup and recover resources.
-    con.onAsyncError(details);
+    try {
+      // To cleanup and recover resources.
+      con.onAsyncError(details);
+    } catch (e) {
+      // Record error in log
+      _logPackageError(
+        e,
+        library: 'part18_async_ops_mixin.dart',
+        description: 'Exception in ${con.runtimeType}.onAsyncError()',
+      );
+    }
   }
 }

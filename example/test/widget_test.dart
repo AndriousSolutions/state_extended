@@ -1,6 +1,7 @@
 // Copyright 2018 Andrious Solutions Ltd. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:io' show exit;
 
 import 'package:example/src/controller.dart';
 
@@ -13,12 +14,34 @@ import 'package:integration_test/integration_test.dart'
 
 import '../test/_test_imports.dart';
 
-void main() => testMyApp();
+void main() => group('Test state_extended', testApp);
 
 late IntegrationTestsBinder _integrationTest;
 
 /// Also called in package's own testing file, test/widget_test.dart
-void testMyApp() {
+void testApp() {
+  //
+  /// Set up anything necessary before testing begins.
+  /// Runs once before ALL tests or groups
+  setUpAll(() async {});
+
+  /// Be sure the close the app after all the testing.
+  /// Runs once after ALL tests or groups
+  tearDownAll(() {});
+
+  /// Runs before EACH test or group
+  setUp(() async {
+    // // (TODO: Tip # 4) Consider configuring your default screen size here.
+    // // You can reset it to something else within a test
+    // binding.window.physicalSizeTestValue = _deskTopSize;
+  });
+
+  /// Runs after EACH test or group
+  tearDown(() async {
+    // Code that clears caches can go here
+//    exit(0);
+  });
+
   // Call this function instead of using the 'default' TestWidgetsFlutterBinding
   // Allows one or two errors to be ignored. The error handling is also tested.
   _integrationTest =
@@ -26,7 +49,7 @@ void testMyApp() {
 
   // testWidgets calls TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets(
-    'test state_extended',
+    'StateX & StateXController',
     (WidgetTester tester) async {
       //
       final app = MyApp(key: UniqueKey());
@@ -36,7 +59,6 @@ void testMyApp() {
 
       /// Flutter won’t automatically rebuild your widget in the test environment.
       /// Use pump() or pumpAndSettle() to ask Flutter to rebuild the widget.
-
       /// pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle();
 
@@ -52,36 +74,16 @@ void testMyApp() {
       /// Unit testing the StateX and StateXController
       await unitTesting(tester);
 
-      // Find its StatefulWidget first then the 'type' of State object.
-      final appState = tester.firstState<AppStateX>(find.byType(MyApp));
-
-      final appCon = appState.controller;
-
-      if (appCon != null && appCon is ExampleAppController) {
-        // Allow for errors to be thrown.
-        appCon.allowErrors = true;
-      }
-
-      // hot reload
-      await tester.binding.reassembleApplication();
+      // Go to Page 2
+      await tester.tap(find.byKey(const Key('Page 2')));
 
       // pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      // Go to Page 2
-      await tester.tap(find.byKey(const Key('Page 2')));
-      await tester.pumpAndSettle(const Duration(seconds: 1));
-
-      AnotherController().tripError = true;
-
-      // hot reload
-      await tester.binding.reassembleApplication();
-
-      // // pumpAndSettle() waits for all animations to complete.
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-
       // Go to Page 1
       await tester.tap(find.byKey(const Key('Page 1')));
+
+      // pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
       /// Simulate changing the text size.
@@ -91,9 +93,42 @@ void testMyApp() {
       /// Simulate changing the screen size
       /// Done near the end of testing as it's a very disruptive test
       await testDidChangeMetrics(tester);
+    },
+  );
 
-      // Now trip an error right at start up.
-      (appCon as ExampleAppController).errorAtStartup = true;
+  testWidgets('Error in Builder', (WidgetTester tester) async {
+    //
+    final app = MyApp(key: UniqueKey());
+
+    // Tells the tester to build a UI based on the widget tree passed to it
+    await tester.pumpWidget(app);
+
+    // pumpAndSettle() waits for all animations to complete.
+    await tester.pumpAndSettle();
+
+    // Now trip an error right at start up.
+    ExampleAppController().errorInBuilder = true;
+
+    // hot reload
+    await tester.binding.reassembleApplication();
+
+    // pumpAndSettle() waits for all animations to complete.
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+  });
+
+  testWidgets(
+    'onError & catchAsyncError',
+    (WidgetTester tester) async {
+      //
+      final app = MyApp(key: UniqueKey());
+
+      // Tells the tester to build a UI based on the widget tree passed to it
+      await tester.pumpWidget(app);
+
+      // pumpAndSettle() waits for all animations to complete.
+      await tester.pumpAndSettle();
+
+      AnotherController().initAsyncError = true;
 
       // hot reload
       await tester.binding.reassembleApplication();
@@ -102,6 +137,29 @@ void testMyApp() {
       await tester.pumpAndSettle(const Duration(seconds: 1));
     },
   );
+
+  //
+  testWidgets('catchAsyncError', (WidgetTester tester) async {
+    //
+    final app = MyApp(key: UniqueKey());
+
+    // Tells the tester to build a UI based on the widget tree passed to it
+    await tester.pumpWidget(app);
+
+    // pumpAndSettle() waits for all animations to complete.
+    await tester.pumpAndSettle();
+
+    AnotherController().initAsyncError = true;
+
+    // Now trip an error right at start up.
+    Controller().errorCatchAsyncError = true;
+
+    // hot reload
+    await tester.binding.reassembleApplication();
+
+    // pumpAndSettle() waits for all animations to complete.
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+  });
 }
 
 class IntegrationTestsBinder extends IntegrationTestWidgetsFlutterBinding {
