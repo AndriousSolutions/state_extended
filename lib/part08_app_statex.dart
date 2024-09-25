@@ -204,7 +204,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
       }
 
       try {
-        if (!state.disposed) {
+        if (!state._disposed) {
           state.dispose();
         }
       } catch (e, stack) {
@@ -230,7 +230,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         //
         try {
           //
-          if (state.mounted && !state.deactivated) {
+          if (state.mounted && !state._deactivated) {
             //
             final response = await state.didRequestAppExit();
 

@@ -110,7 +110,7 @@ mixin SetStateMixin {
     }
     for (final StateX state in it) {
       try {
-        if (state.mounted && !state.deactivated) {
+        if (state.mounted && !state._deactivated) {
           func(state);
         }
       } catch (e, stack) {

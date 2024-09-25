@@ -334,7 +334,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// the tree to another due to the use of a [GlobalKey]).
 
     // Likely was deactivated.
-    deactivated = false;
+    _deactivated = false;
 
     // Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
@@ -444,8 +444,13 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// from the tree. Subclasses should override this method to clean up any links between
     /// this object and other elements in the tree.
 
+    /// Users may have explicitly call this.
+    if (_deactivated) {
+      return;
+    }
+
     // Indicate this State object is deactivated.
-    deactivated = true;
+    _deactivated = true;
 
     /// Ignore Route changes
     RouteObserverStates.unsubscribeRoutes(this);
@@ -487,7 +492,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   /// State object's deactivated() was called.
-  bool deactivated = false;
+  bool get deactivated => _deactivated;
+  bool _deactivated = false;
 
   /// The framework calls this method when this [StateX] object will never
   /// build again and will be disposed of with garbage collection.
@@ -500,12 +506,18 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Subclasses should override deactivate() method instead
     /// to release any resources  (e.g., stop any active animations).
 
+    /// Users may have explicitly call this.
+    if (_disposed || !_deactivated) {
+      return;
+    }
+
     /// Indicate this State object is terminated.
-    disposed = true;
+    _disposed = true;
 
     // No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
+    /// Call its controllers' dispose() functions
     for (final con in controllerList) {
       con.dispose();
     }
@@ -533,7 +545,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Flag indicating this State object is disposed.
   /// Will be garbage collected.
   /// property, mounted, is then set to false.
-  bool disposed = false;
+  bool get disposed => _disposed;
+  bool _disposed = false;
 
   /// Override this method to respond when its [StatefulWidget] is re-created.
   /// The framework always calls [build] after calling [didUpdateWidget], which

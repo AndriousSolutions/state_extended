@@ -1,10 +1,17 @@
 
-## 5.2.0
+
+## 5.2.1
+September 25, 2024
+- Introduce getters, deactivated and disposed in part01_statex.dart
+  if (_deactivated) and if (_disposed || !_deactivated) in part01_statex.dart
+
+## 5.2.0+1
 September 23, 2024
 - Parameter, 'showBinding', renamed 'printEvents'
 - catchAsyncError() with try..catch in FutureBuilderStateMixin
 - con.onAsyncError() with try..catch  in part18_async_ops_mixin.dart
 - appState.builder() with try..catch in part10_builder_statefulwidget.dart
+- Call a group of tests: group('Test state_extended', testStateExtended);
 
 ## 5.1.0
 September 20, 2024

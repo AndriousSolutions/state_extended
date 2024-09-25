@@ -88,7 +88,7 @@ mixin _MapOfStates on State {
     StateX? nextState;
     final list = statesList(reversed: reversed);
     for (final StateX state in list) {
-      if (state.mounted && !state.deactivated) {
+      if (state.mounted && !state._deactivated) {
         nextState = state;
         break;
       }
@@ -105,7 +105,7 @@ mixin _MapOfStates on State {
     final list = statesList(reversed: reversed, remove: remove);
     for (final StateX state in list) {
       try {
-        if (state.mounted && !state.deactivated) {
+        if (state.mounted && !state._deactivated) {
           func(state);
         }
       } catch (e, stack) {

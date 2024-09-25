@@ -14,12 +14,15 @@ import 'package:integration_test/integration_test.dart'
 
 import '../test/_test_imports.dart';
 
-void main() => group('Test state_extended', testApp);
+void main() => testExampleApp();
+
+/// Call a group of tests.
+void testExampleApp() => group('Test state_extended', testStateExtended);
 
 late IntegrationTestsBinder _integrationTest;
 
 /// Also called in package's own testing file, test/widget_test.dart
-void testApp() {
+void testStateExtended() {
   //
   /// Set up anything necessary before testing begins.
   /// Runs once before ALL tests or groups
@@ -39,7 +42,7 @@ void testApp() {
   /// Runs after EACH test or group
   tearDown(() async {
     // Code that clears caches can go here
-//    exit(0);
+//    exit(0);  // Closes the whole thing!
   });
 
   // Call this function instead of using the 'default' TestWidgetsFlutterBinding
