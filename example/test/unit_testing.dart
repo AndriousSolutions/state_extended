@@ -16,4 +16,7 @@ Future<void> unitTesting(WidgetTester tester) async {
 
   /// Tests StateXController class
   testsStateXController(tester);
+
+  /// Run some Mixins to satisfy CodeCov
+  await testRunMixins(tester);
 }

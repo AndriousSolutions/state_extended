@@ -55,10 +55,8 @@ void testStateExtended() {
     'StateX & StateXController',
     (WidgetTester tester) async {
       //
-      final app = MyApp(key: UniqueKey());
-
       // Tells the tester to build a UI based on the widget tree passed to it
-      await tester.pumpWidget(app);
+      await tester.pumpWidget(MyApp(key: UniqueKey()));
 
       /// Flutter won’t automatically rebuild your widget in the test environment.
       /// Use pump() or pumpAndSettle() to ask Flutter to rebuild the widget.
@@ -101,10 +99,8 @@ void testStateExtended() {
 
   testWidgets('Error in Builder', (WidgetTester tester) async {
     //
-    final app = MyApp(key: UniqueKey());
-
     // Tells the tester to build a UI based on the widget tree passed to it
-    await tester.pumpWidget(app);
+    await tester.pumpWidget(MyApp(key: UniqueKey()));
 
     // pumpAndSettle() waits for all animations to complete.
     await tester.pumpAndSettle();
@@ -120,13 +116,11 @@ void testStateExtended() {
   });
 
   testWidgets(
-    'onError & catchAsyncError',
+    'initAsyncError',
     (WidgetTester tester) async {
       //
-      final app = MyApp(key: UniqueKey());
-
       // Tells the tester to build a UI based on the widget tree passed to it
-      await tester.pumpWidget(app);
+      await tester.pumpWidget(MyApp(key: UniqueKey()));
 
       // pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle();
@@ -144,10 +138,8 @@ void testStateExtended() {
   //
   testWidgets('catchAsyncError', (WidgetTester tester) async {
     //
-    final app = MyApp(key: UniqueKey());
-
     // Tells the tester to build a UI based on the widget tree passed to it
-    await tester.pumpWidget(app);
+    await tester.pumpWidget(MyApp(key: UniqueKey()));
 
     // pumpAndSettle() waits for all animations to complete.
     await tester.pumpAndSettle();

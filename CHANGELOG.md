@@ -1,9 +1,10 @@
 
 
-## 5.2.1
+## 5.2.1+1
 September 25, 2024
 - Introduce getters, deactivated and disposed in part01_statex.dart
   if (_deactivated) and if (_disposed || !_deactivated) in part01_statex.dart
+- Provide test_run_mixins.dart with more tests.
 
 ## 5.2.0+1
 September 23, 2024
