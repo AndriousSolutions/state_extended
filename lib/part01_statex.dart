@@ -508,6 +508,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     /// Users may have explicitly call this.
     if (_disposed || !_deactivated) {
+      assert(() {
+        debugPrint('StateX: dispose() already called in $this');
+        return true;
+      }());
       return;
     }
 
@@ -539,7 +543,16 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       return true;
     }());
 
-    super.dispose();
+    // Special case: Test if already disposed
+    // _element is assigned null AFTER a dispose() call;
+    if (mounted) {
+      super.dispose();
+    } else {
+      assert(() {
+        debugPrint('StateX: Not mounted so dispose() not called in $this');
+        return true;
+      }());
+    }
   }
 
   /// Flag indicating this State object is disposed.

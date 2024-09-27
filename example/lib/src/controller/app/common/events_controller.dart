@@ -35,7 +35,7 @@ mixin EventsControllerMixin on StateXController {
     super.initState();
     assert(() {
       if (kDebugMode) {
-        print('=========== initState() in $className\n');
+        debugPrint('=========== initState() in $className\n');
       }
       return true;
     }());
@@ -46,7 +46,7 @@ mixin EventsControllerMixin on StateXController {
   void deactivate() {
     assert(() {
       if (kDebugMode) {
-        print('=========== deactivate() in $className\n');
+        debugPrint('=========== deactivate() in $className\n');
       }
       return true;
     }());
@@ -58,7 +58,7 @@ mixin EventsControllerMixin on StateXController {
   void activate() {
     assert(() {
       if (kDebugMode) {
-        print('=========== activate() in $className\n');
+        debugPrint('=========== activate() in $className\n');
       }
       return true;
     }());
@@ -72,7 +72,7 @@ mixin EventsControllerMixin on StateXController {
     super.dispose();
     assert(() {
       if (kDebugMode) {
-        print('=========== dispose() in $className\n');
+        debugPrint('=========== dispose() in $className\n');
       }
       return true;
     }());
@@ -84,7 +84,7 @@ mixin EventsControllerMixin on StateXController {
     super.didPush();
     assert(() {
       if (kDebugMode) {
-        print('=========== didPush() in $className\n');
+        debugPrint('=========== didPush() in $className\n');
       }
       return true;
     }());
@@ -96,7 +96,7 @@ mixin EventsControllerMixin on StateXController {
     super.didPushNext();
     assert(() {
       if (kDebugMode) {
-        print('=========== didPushNext() in $className\n');
+        debugPrint('=========== didPushNext() in $className\n');
       }
       return true;
     }());
@@ -107,7 +107,7 @@ mixin EventsControllerMixin on StateXController {
   void didPop() {
     assert(() {
       if (kDebugMode) {
-        print('=========== didPop() in $className\n');
+        debugPrint('=========== didPop() in $className\n');
       }
       return true;
     }());
@@ -119,7 +119,7 @@ mixin EventsControllerMixin on StateXController {
   void didPopNext() {
     assert(() {
       if (kDebugMode) {
-        print('=========== didPopNext() in $className\n');
+        debugPrint('=========== didPopNext() in $className\n');
       }
       return true;
     }());
@@ -137,7 +137,7 @@ mixin EventsControllerMixin on StateXController {
     super.didChangeDependencies();
     assert(() {
       if (kDebugMode) {
-        print('=========== didChangeDependencies() in $className\n');
+        debugPrint('=========== didChangeDependencies() in $className\n');
       }
       return true;
     }());
@@ -149,7 +149,7 @@ mixin EventsControllerMixin on StateXController {
   void didChangeMetrics() {
     assert(() {
       if (kDebugMode) {
-        print('=========== didChangeMetrics() in $className\n');
+        debugPrint('=========== didChangeMetrics() in $className\n');
       }
       return true;
     }());
@@ -160,7 +160,7 @@ mixin EventsControllerMixin on StateXController {
   void didChangeTextScaleFactor() {
     assert(() {
       if (kDebugMode) {
-        print('=========== didChangeTextScaleFactor() in $className\n');
+        debugPrint('=========== didChangeTextScaleFactor() in $className\n');
       }
       return true;
     }());
@@ -171,7 +171,7 @@ mixin EventsControllerMixin on StateXController {
   void didChangePlatformBrightness() {
     assert(() {
       if (kDebugMode) {
-        print('=========== didChangePlatformBrightness() in $className\n');
+        debugPrint('=========== didChangePlatformBrightness() in $className\n');
       }
       return true;
     }());
@@ -182,7 +182,7 @@ mixin EventsControllerMixin on StateXController {
   void didChangeLocales(List<Locale>? locales) {
     assert(() {
       if (kDebugMode) {
-        print('=========== didChangeLocales() in $className\n');
+        debugPrint('=========== didChangeLocales() in $className\n');
       }
       return true;
     }());
@@ -194,7 +194,7 @@ mixin EventsControllerMixin on StateXController {
   void inactiveAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('=========== inactiveAppLifecycleState() in $className\n');
+        debugPrint('=========== inactiveAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -208,7 +208,7 @@ mixin EventsControllerMixin on StateXController {
   void hiddenAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('=========== hiddenAppLifecycleState() in $className\n');
+        debugPrint('=========== hiddenAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -220,7 +220,7 @@ mixin EventsControllerMixin on StateXController {
   void pausedAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('=========== pausedAppLifecycleState() in $className\n');
+        debugPrint('=========== pausedAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -232,7 +232,7 @@ mixin EventsControllerMixin on StateXController {
   void detachedAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('=========== detachedAppLifecycleState() in $className\n');
+        debugPrint('=========== detachedAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -243,7 +243,7 @@ mixin EventsControllerMixin on StateXController {
   void resumedAppLifecycleState() {
     assert(() {
       if (kDebugMode) {
-        print('=========== resumedAppLifecycleState() in $className\n');
+        debugPrint('=========== resumedAppLifecycleState() in $className\n');
       }
       return true;
     }());
@@ -254,7 +254,7 @@ mixin EventsControllerMixin on StateXController {
   void didHaveMemoryPressure() {
     assert(() {
       if (kDebugMode) {
-        print('=========== didHaveMemoryPressure() in $className\n');
+        debugPrint('=========== didHaveMemoryPressure() in $className\n');
       }
       return true;
     }());
@@ -265,7 +265,8 @@ mixin EventsControllerMixin on StateXController {
   void didChangeAccessibilityFeatures() {
     assert(() {
       if (kDebugMode) {
-        print('=========== didChangeAccessibilityFeatures() in $className\n');
+        debugPrint(
+            '=========== didChangeAccessibilityFeatures() in $className\n');
       }
       return true;
     }());
@@ -276,7 +277,7 @@ mixin EventsControllerMixin on StateXController {
   Future<AppExitResponse> didRequestAppExit() {
     assert(() {
       if (kDebugMode) {
-        print('=========== didRequestAppExit() in $className\n');
+        debugPrint('=========== didRequestAppExit() in $className\n');
       }
       return true;
     }());

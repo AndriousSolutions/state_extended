@@ -1,4 +1,9 @@
 
+## 5.2.2
+September 26, 2024
+- Replace print() with debugPrint() functions
+- if (mounted) {  // Special case: Test if already disposed
+    super.dispose();
 
 ## 5.2.1+1
 September 25, 2024
