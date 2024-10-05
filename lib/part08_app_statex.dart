@@ -335,7 +335,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   }
 
   /// Catch any errors in the App
-  /// Free to override if you must
+  /// Free for you to override
   @override
   void onError(FlutterErrorDetails details) {
     _onErrorOverridden = false;
@@ -425,32 +425,26 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
     //  its own Error handler
     if (!_onErrorOverridden && _prevErrorFunc != null) {
-      _prevErrorFunc?.call(details);
+      _prevErrorFunc!.call(details);
     }
 
     // Now out of the error handler
     _inErrorRoutine = false;
   }
 
-  /// An State object has caught an error
-  bool get stateErrorHandled => _stateErrorHandled;
-
-  /// Set an error handled indication
-  set stateErrorHandled(bool? caught) {
-    if (caught != null && caught) {
-      _stateErrorHandled = true;
+  /// Record and return details of the 'last' handled error
+  FlutterErrorDetails? lastFlutterError([FlutterErrorDetails? details]) {
+    FlutterErrorDetails? lastErrorDetails;
+    if (details == null) {
+      lastErrorDetails = _handledErrorDetails;
+    } else {
+      lastErrorDetails = _handledErrorDetails = details;
     }
+    return lastErrorDetails;
   }
 
-  // Indicating a State object 'handled' the error
-  bool _stateErrorHandled = false;
-
-  /// Reset the flag with every call
-  bool handledStateError() {
-    final caught = _stateErrorHandled;
-    _stateErrorHandled = false;
-    return caught;
-  }
+  // Record the details of the last error if any
+  FlutterErrorDetails? _handledErrorDetails;
 
   /// A flag indicating we're running in the error routine.
   /// Set to avoid infinite loop if in errors in the error routine.

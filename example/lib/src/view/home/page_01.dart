@@ -206,7 +206,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
     // Determine the specific error
     if (stack != null && stack.toString().contains('handleTap')) {
       // Indicate the error has been handled
-      rootState?.stateErrorHandled = true;
+      rootState?.lastFlutterError(details);
       // Increment the count like no error occurred
       count++;
       // Look how this Controller has access to this State object!

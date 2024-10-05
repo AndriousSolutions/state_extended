@@ -99,8 +99,20 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
 
   @override
   void onError(FlutterErrorDetails details) {
-    // For demonstration purposes a rudimentary test if an error was handled.
-    if (!handledStateError()) {
+    // For demonstration purposes, test if a particular error was handled.
+    final errorDetails = lastFlutterError();
+
+    String message;
+
+    if (errorDetails == null) {
+      message = '';
+    } else {
+      message = errorDetails.exceptionAsString();
+    }
+
+    // If not handled, call the parent class routine
+    if (message.isEmpty ||
+        !message.contains('Fake error to demonstrate error handling!')) {
       super.onError(details);
     }
   }

@@ -1,4 +1,9 @@
 
+## 5.2.4
+October 05, 2024
+- Class, AppState, has lastFlutterError() to record and return 
+  the 'last' Flutter error.
+
 ## 5.2.3
 October 04, 2024
 - Removed 'default' Error Handler mistakenly left in Production.
