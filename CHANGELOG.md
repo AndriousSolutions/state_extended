@@ -1,4 +1,13 @@
 
+## 5.2.3
+October 04, 2024
+- Removed 'default' Error Handler mistakenly left in Production.
+- Removed 'default' Error Widget Builder mistakenly left in Production.
+- User Error Handler, onError(), in part08_app_statex.dart.
+- If onError() is not overridden, Flutter's own Error Handler is called.
+- New getter, stateErrorHandled, can be set true by user.
+- Function, handledStateError(), reads getter value and resets to false.
+
 ## 5.2.2
 September 26, 2024
 - Replace print() with debugPrint() functions

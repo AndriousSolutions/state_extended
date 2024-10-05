@@ -96,4 +96,12 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
     }
     return widget;
   }
+
+  @override
+  void onError(FlutterErrorDetails details) {
+    // For demonstration purposes a rudimentary test if an error was handled.
+    if (!handledStateError()) {
+      super.onError(details);
+    }
+  }
 }
