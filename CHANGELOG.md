@@ -1,4 +1,8 @@
 
+## 5.3.0
+October 06, 2024
+- getter, lastErrorMessage, in AppState class in part08_app_statex.dart
+
 ## 5.2.4
 October 05, 2024
 - Class, AppState, has lastFlutterError() to record and return 

@@ -379,7 +379,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     try {
       //
       _onError(details);
-    } catch (e) {
+    } catch (e, stack) {
       // Throw in DebugMode.
       if (kDebugMode) {
         // Set the original error routine. Allows the handler to throw errors.
@@ -387,7 +387,10 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         // Rethrow to be handled by the original routine.
         rethrow;
       } else {
-        // Record error in log
+        // Record the error
+        recordException(e, stack);
+
+        // Record error in device's log
         _logPackageError(
           e,
           library: 'part08_app_statex.dart',
@@ -423,7 +426,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // The App's error handler
     onError(details);
 
-    //  its own Error handler
+    //  If no App Error Handler, run its own Error handler
     if (!_onErrorOverridden && _prevErrorFunc != null) {
       _prevErrorFunc!.call(details);
     }
@@ -432,23 +435,43 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     _inErrorRoutine = false;
   }
 
+  /// A flag indicating we're running in the error routine.
+  /// Set to avoid infinite loop if in errors in the error routine.
+  bool _inErrorRoutine = false;
+
+  /// Supply the last Flutter Error Details if any.
+  FlutterErrorDetails? get lastFlutterErrorDetails => _lastFlutterErrorDetails;
+
   /// Record and return details of the 'last' handled error
+  /// Not, simply retrieving the last error will 'clear' the storage.
   FlutterErrorDetails? lastFlutterError([FlutterErrorDetails? details]) {
     FlutterErrorDetails? lastErrorDetails;
     if (details == null) {
-      lastErrorDetails = _handledErrorDetails;
+      lastErrorDetails = _lastFlutterErrorDetails;
+      _lastFlutterErrorDetails = null; // Clear the storage for next time.
     } else {
-      lastErrorDetails = _handledErrorDetails = details;
+      lastErrorDetails = _lastFlutterErrorDetails = details;
     }
     return lastErrorDetails;
   }
 
   // Record the details of the last error if any
-  FlutterErrorDetails? _handledErrorDetails;
+  FlutterErrorDetails? _lastFlutterErrorDetails;
 
-  /// A flag indicating we're running in the error routine.
-  /// Set to avoid infinite loop if in errors in the error routine.
-  bool _inErrorRoutine = false;
+  /// Return the message of th 'last' Flutter Error if any.
+  String get lastFlutterErrorMessage {
+    String message;
+    final details = _lastFlutterErrorDetails;
+    if (details == null) {
+      message = '';
+    } else {
+      message = details.exceptionAsString();
+    }
+    if (message.contains('<no message available>')) {
+      message = '';
+    }
+    return message;
+  }
 
   /// Call the latest SateX object's error routine
   /// Possibly the error occurred there.

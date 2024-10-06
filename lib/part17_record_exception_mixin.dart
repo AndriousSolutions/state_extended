@@ -4,7 +4,7 @@
 
 part of 'state_extended.dart';
 
-/// Record an exception
+/// Record an exception for review by the developer
 ///
 /// dartdoc:
 /// {@category StateX class}
@@ -35,6 +35,8 @@ mixin RecordExceptionMixin on State {
   Exception? _recException;
 
   /// Simply display the exception.
+  String get exceptionMessage => errorMsg;
+  @Deprecated('Use exceptionMessage instead.')
   String get errorMsg {
     String message;
     if (_recException == null) {
