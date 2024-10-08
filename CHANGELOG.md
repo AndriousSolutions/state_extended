@@ -1,4 +1,8 @@
 
+## 5.4.0
+October 07, 2024
+- Built-in InheritedWidget is now called with AppState's setState() function
+
 ## 5.3.0
 October 06, 2024
 - getter, lastErrorMessage, in AppState class in part08_app_statex.dart

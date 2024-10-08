@@ -116,4 +116,16 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
       super.onError(details);
     }
   }
+
+  @override
+  // ignore: unnecessary_overrides
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+    return super.updateShouldNotify(oldWidget);
+  }
+
+  @override
+  // ignore: unnecessary_overrides
+  bool dependOnInheritedWidget(BuildContext? context) {
+    return super.dependOnInheritedWidget(context);
+  }
 }

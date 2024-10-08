@@ -73,6 +73,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   Widget buildF(BuildContext context) {
     _buildFOverridden = false;
     _builderState?.setState(() {}); // calls builder()
+    _inheritedState?.setState(() {}); // calls the InheritedWidget
     return const _InheritedWidgetStatefulWidget();
   }
 

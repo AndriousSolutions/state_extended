@@ -26,26 +26,27 @@ When it comes to building your interface with this State class, you've got optio
 
 1) If you use the traditional <b>build</b>() function then you're using the StateX class like Flutter's original State class.
 
-2) If you use the <b>buildF</b>() function then you have the <b>initAsync</b>() function to perform any asynchronous operations.
-A FutureBuilder calls the <b>initAsync</b>() function to complete these operations before calling the <b>buildF</b>() function that then displays the interface.
+2) However, if you use the <b>builder</b>() function instead, you have the <b>initAsync</b>() 
+function to perform any asynchronous operations. A FutureBuilder calls the <b>initAsync</b>() function
+to complete these operations before continuing to display the interface.
 
-3) If you instead use the <b>buildIn</b>() function to return your interface, it will only run once and is never called again.
-An InheritedWidget is involved here, and so only the <b>state</b>() function and <b>dependOnInheritedWidget</b>() function
-will dictate which widgets are then updated when something changes.
-Instead of building the interface again from scratch, only specified portions on the interface is rebuilt improving performance.
+3) When instantiating the StateX class, you can set the parameter, <i>useInherited</i>, to true.
+This means the built-in InheritedWidget will now be used. 
+This also means the interface will only be built once and will never change--- 
+only the <b>stateSet</b>() function and <b>dependOnInheritedWidget</b>() function
+will dictate which widgets in the interface are updated when something is to change.
+Instead of building the interface from scratch again and again, 
+only specified portions on the interface is rebuilt improving performance.
 
-4) If you use the <b>builder</b>() function instead, it's wrapped in a <b>Builder</b> widget so to safely access the widget tree's BuildContext variable, context.
-If you don't use the builder() function, it instead gives you access to the two final build functions.
+4) <b>buildAndroid</b>() and <b>buildiOS</b>() supplies the Material interface 
+and the Cupertino interface respectively depending on whether you're app is running 
+on a Android phone or iOS phone respectively.
 
-5) <b>buildAndroid</b>() and <b>buildiOS</b>() supplies the Material interface and the Cupertino interface respectively
-depending on whether you're app is running on a Android phone or iOS phone respectively.
-
-So, why are these other 'build' functions available? Because, they're needed...like, all the time.
-All my apps needed a FutureBuilder to perform time-consuming operations before the app could proceed.
-And as I worked with Flutter, I came to appreciate the benefits of rebuilding as
+So, why these other functions and features? Because, they're needed...all the time.
+All my apps need to perform time-consuming operations before the app can proceed.
+And I've come to appreciate the benefits of rebuilding as
 little as possible with every change of the interface.
-Granted, Flutter's widget tree helps immensely with its pseudo-declarative approach of rebuilding from scratch,
-but in the end, the less rebuilt, the better the performance, and the InheritedWidget allows for this.
+The less rebuilt, the better the performance, and an InheritedWidget allows for this.
 
 Let's run through the example app found in the README.md file and demonstrate these features.
 After this, you could turn to the extensive <a href="https://github.com/AndriousSolutions/state_extended/tree/master/example">example</a> app that comes with the package to learn more.
@@ -96,7 +97,7 @@ Note, as simply as this app is, the only widget that is being updated is the Tex
 Everything else (the Scaffold widget, its AppBar containing the title, 'StateX Demo App', 
 the Text widget with the string, 'You have pushed the button this many times:', etc.) 
 has been executed once at start up never to be touched again.
-That's because the <b>buildIn</b>() function was used in the State class, <i>_MyHomePageState</i>. to display the count
+That's because the parameter, <i>useInherited</i>, was set true in the State class, <i>_MyHomePageState</i>. to display the count
 <div>
 <a id="counterApp" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/dbdd79ed-3e35-4504-a3c6-c6d79391922c"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/dbdd79ed-3e35-4504-a3c6-c6d79391922c" width="171" height="357"></a>
 <a id="FloatingActionButton" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/6c451e73-f99d-4c48-bb28-a03d3dd58cf7"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/6c451e73-f99d-4c48-bb28-a03d3dd58cf7" width="48%" height="60%"></a>
@@ -124,8 +125,9 @@ used by this State class was instead the traditional <b>build</b>() function.
 The CounterWidget has got its own State class. 
 Conventionally, you would have to call the <b>setState</b>() function for that particular State object.
 
-Remember, when the <b>buildIn</b>() function is used, it's only called once
---its content is displayed and would never change if not for the <b>state</b>() function and or the <b>dependOnInheritedWidget</b>() function. 
+Remember, when the parameter, <i>useInherited</i>, is et true, the interface is built only once
+--its content is displayed and would never change if not for the <b>setState</b>() function 
+and the <b>dependOnInheritedWidget</b>() function. 
 You can see the <b>dependOnInheritedWidget</b>() function in the second screenshot below.
 It shows the <b>build</b>() function for the CounterWidget's State class.
 
