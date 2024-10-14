@@ -22,7 +22,7 @@ mixin FutureBuilderStateMixin on State {
     // A little trick to determine if the user has overridden this function.
     _buildOverridden = false;
     // Generate the Future evey time or just once
-    if (_runAsync || _future == null) {
+    if ((_runAsync && runInitAsync()) || _future == null) {
       _future = initAsync();
       _future?.catchError(
         (Object e) {
@@ -65,6 +65,11 @@ mixin FutureBuilderStateMixin on State {
 
   // Call initAsync() all the time if set true.
   bool _runAsync = false;
+
+  /// Call initAsync() all the time if return true.
+  /// Conditional calls initAsync() creating a Future with every rebuild
+  @protected
+  bool runInitAsync() => true;
 
   /// IMPORTANT
   /// The _future must be created first. If the _future is created at the same

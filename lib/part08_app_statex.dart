@@ -20,9 +20,11 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     super.controller,
     List<StateXController>? controllers,
     Object? object,
+    bool? notifyClientsInBuild,
     super.printEvents,
     // Save the current error handler
-  }) : _prevErrorFunc = FlutterError.onError {
+  })  : _prevErrorFunc = FlutterError.onError,
+        _notifyClientsInBuild = notifyClientsInBuild ?? true {
     // Introduce its own error handler
     FlutterError.onError = _errorHandler;
 
@@ -36,6 +38,9 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
   // The 'data object' available to the framework.
   Object? _dataObj;
+
+  // Call the built-in InheritedWidget during rebuilds
+  final bool _notifyClientsInBuild;
 
   @override
   @mustCallSuper
@@ -73,7 +78,9 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   Widget buildF(BuildContext context) {
     _buildFOverridden = false;
     _builderState?.setState(() {}); // calls builder()
-    _inheritedState?.setState(() {}); // calls the InheritedWidget
+    if (_notifyClientsInBuild) {
+      _inheritedState?.setState(() {}); // calls the InheritedWidget
+    }
     return const _InheritedWidgetStatefulWidget();
   }
 

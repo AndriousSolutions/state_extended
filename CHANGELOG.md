@@ -1,4 +1,11 @@
 
+## 5.5.0
+Octobter 14, 2024
+- AppStateX class now has the notifyClientsInBuild parameter. Defaults to true.
+  Notify any dependencies when calling for a rebuild
+- The runInitAsync() function in every StateX object
+  now allows their initAsync() functions to be conditionally called wit every rebuild.
+
 ## 5.4.0
 October 07, 2024
 - Built-in InheritedWidget is now called with AppState's setState() function
