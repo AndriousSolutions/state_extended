@@ -1,10 +1,16 @@
 
+## 5.6.0
+November 15, 2024
+- Introduce setBuilder() in every Controller. Will rebuild with every setState() call.
+- Replacing stateSet(WidgetBuilder? builder) with the name, setBuilder in class, StateX and AppStateX
+- class StateXController now includes mixin, ChangeNotifier and ListenableWidgetBuilderMixin
+
 ## 5.5.0
-Octobter 14, 2024
+October 14, 2024
 - AppStateX class now has the notifyClientsInBuild parameter. Defaults to true.
-  Notify any dependencies when calling for a rebuild
+  This then notifies any dependencies when calling for a rebuild.
 - The runInitAsync() function in every StateX object
-  now allows their initAsync() functions to be conditionally called wit every rebuild.
+  now allows their initAsync() functions to be conditionally called with every rebuild.
 
 ## 5.4.0
 October 07, 2024
@@ -21,8 +27,8 @@ October 05, 2024
 
 ## 5.2.3
 October 04, 2024
-- Removed 'default' Error Handler mistakenly left in Production.
-- Removed 'default' Error Widget Builder mistakenly left in Production.
+- *BUGFIX* Removed 'default' Error Handler mistakenly left in Production.
+- *BUGFIX* Removed 'default' Error Widget Builder mistakenly left in Production.
 - User Error Handler, onError(), in part08_app_statex.dart.
 - If onError() is not overridden, Flutter's own Error Handler is called.
 - New getter, stateErrorHandled, can be set true by user.

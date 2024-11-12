@@ -4,11 +4,10 @@
 ///
 ///  The StatefulWidget representing the app's Home Page.
 ///
-import '/src/another_app/home/view.dart';
 
-import '/src/controller.dart';
+import '/src/another_app/controller_another_app.dart';
 
-import '/src/view.dart';
+import '/src/another_app/view_another_app.dart';
 
 /// The Home page
 class HomePage extends StatefulWidget {

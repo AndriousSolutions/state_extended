@@ -2,7 +2,7 @@
 ///
 ///
 
-import 'package:example/src/controller.dart';
+import '/src/another_app/controller_another_app.dart';
 
 ///
 class FoxController extends InheritController {

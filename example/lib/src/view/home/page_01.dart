@@ -24,11 +24,12 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
           controller: Controller(),
           useInherited: Controller().useInherited,
         ) {
+    _con = controller as Controller;
     // Add some additional controllers if you like
     addList([AnotherController(), YetAnotherController(), WordPairsTimer()]);
     _timer = controllerByType<WordPairsTimer>()!;
   }
-
+  late Controller _con;
   late WordPairsTimer _timer;
 
   /// The counter
@@ -93,11 +94,9 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
     // Note, returns null if not found.
     anotherController = rootState.controllerByType<AnotherController>();
 
-    /// Note, this controller is present for the life of the app.
     /// InheritedWidget switch will reset count, but the controller can saves the count
-    final con = controller as Controller;
-    count = con.page1Count;
-    con.page1Count = 0;
+    count = _con.page1Count;
+    _con.page1Count = 0;
   }
 
   ///
@@ -119,7 +118,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
               ),
             ),
             Flexible(
-              child: stateSet(
+              child: setBuilder(
                 // Will build this one lone widget
                 (context) => Text(
                   '$count',
@@ -157,22 +156,19 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text('Use built-in InheritedWidget'),
-                Builder(builder: (context) {
-                  final con = controller as Controller;
-                  return CupertinoSwitch(
-                    key: const Key('InheritedSwitch'),
-                    value: con.useInherited,
-                    onChanged: (v) {
-                      // Save the setting
-                      con.useInherited = v;
-                      // Save the count
-                      con.page1Count = count;
-                      // Both access the 'first' StateX object
-                      firstState?.setState(() {});
-                      rootState?.setState(() {});
-                    },
-                  );
-                }),
+                CupertinoSwitch(
+                  key: const Key('InheritedSwitch'),
+                  value: _con.useInherited,
+                  onChanged: (v) {
+                    // Save the setting
+                    _con.useInherited = v;
+                    // Save the count
+                    _con.page1Count = count;
+                    // Both access the 'first' StateX object
+                    firstState?.setState(() {});
+                    rootState?.setState(() {});
+                  },
+                ),
               ],
             ),
           ],

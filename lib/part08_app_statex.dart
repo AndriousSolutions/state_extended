@@ -226,17 +226,12 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     var appResponse = await super.didRequestAppExit();
     //
     if (appResponse == AppExitResponse.exit) {
-      //
       final list = statesList(reversed: true, remove: this);
       // Loop through all the StateX objects
       for (final StateX state in list) {
-        //
         try {
-          //
           if (state.mounted && !state._deactivated) {
-            //
             final response = await state.didRequestAppExit();
-
             if (response == AppExitResponse.cancel) {
               // Cancel and do not exit the application.
               appResponse == response;
@@ -336,10 +331,15 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// Called when the State's InheritedWidget is called again
   /// This 'widget function' will be called again.
   @override
+  Widget setBuilder(WidgetBuilder? widgetFunc) => stateSet(widgetFunc);
+  /// Called when the State's InheritedWidget is called again
+  /// This 'widget function' will be called again.
+  @override
+//  @Deprecated('Use stateBuilder() instead.')
   Widget stateSet(WidgetBuilder? widgetFunc) {
     widgetFunc ??=
         (_) => const SizedBox.shrink(); // Display 'nothing' if not provided
-    return _SetStateXWidget(stateX: this, widgetFunc: widgetFunc);
+    return _SetStateXWidget(stateX: this, builder: widgetFunc);
   }
 
   /// Catch any errors in the App
@@ -565,14 +565,14 @@ class _SetStateXWidget extends StatelessWidget {
   ///
   const _SetStateXWidget({
     required this.stateX,
-    required this.widgetFunc,
+    required this.builder,
   });
   final StateX stateX;
-  final WidgetBuilder widgetFunc;
+  final WidgetBuilder builder;
   @override
   Widget build(BuildContext context) {
     stateX.dependOnInheritedWidget(context);
-    return widgetFunc(context);
+    return builder(context);
   }
 }
 

@@ -1,26 +1,22 @@
-// Copyright 2022 Andrious Solutions Ltd. All rights reserved.
+// Copyright 2024 Andrious Solutions Ltd. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
-import 'package:example/src/view/home/run_state_mixins.dart';
 
 import '/src/controller.dart';
 
 import '/src/view.dart';
 
-/// The second page displayed in this app.
+///
 class Page2 extends StatefulWidget {
   ///
   const Page2({super.key});
 
   @override
-  State createState() => Page2State();
+  State<StatefulWidget> createState() => Page2State();
 }
 
-/// This works with a separate 'data source'
-/// It a separate data source, and so the count is never reset to zero.
-class Page2State extends StateX<Page2> {
-  //with EventsStateMixin<Page2> {
+///
+class Page2State extends StateX<Page2> with EventsStateMixin<Page2> {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
   /// showBinding: Print in console when Binding events are triggered.
   Page2State() : super(controller: Controller(), printEvents: true) {
@@ -99,61 +95,114 @@ class Page2State extends StateX<Page2> {
     assert(rootState is AppStateX, "Should be the 'root' state object.");
   }
 
-  /// Ignore BuildPage(). It's just a generic StatelessWidget to quickly produce a screen.
   @override
-  Widget builder(BuildContext context) => BuildPage(
-        label: '2',
-        count: con.data,
-        counter: con.onPressed,
-        row: (context) => [
-          /// Page button for Page 1
-          Flexible(
-            child: ElevatedButton(
-              key: const Key('Page 1'),
-              style: flatButtonStyle,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Page 1',
-              ),
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: const Text('Three-page example'),
+    ),
+    persistentFooterButtons: [
+      ElevatedButton(
+        key: const Key('Page 1 Counter'),
+        style: flatButtonStyle,
+        onPressed: () {
+          final con = controller!;
+          // Retrieve specific State object (thus it can't be private)
+          Page1State state = con.ofState<Page1State>()!;
+          // Retrieve State object by its StatefulWidget (will have to cast)
+          state = con.stateOf<Page1>() as Page1State;
+          state.count++;
+          state.setState(() {});
+        },
+        child: const Text('Page 1 Counter'),
+      ),
+    ],
+    floatingActionButton: FloatingActionButton(
+      key: const Key('+'),
+      onPressed: con.onPressed,
+      child: const Icon(Icons.add),
+    ),
+    body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        const Padding(
+          padding: EdgeInsets.only(top: 100),
+          child: Text("You're on page:"),
+        ),
+        const Flexible(
+          child: Text(
+            '2',
+            style: TextStyle(fontSize: 48),
+          ),
+        ),
+        const Flexible(
+          child: Padding(
+            padding: EdgeInsets.only(top: 50),
+            child: Text(
+              'You have pushed the button this many times:',
             ),
           ),
-
-          /// Page button for Page 3
-          Flexible(
-            child: ElevatedButton(
-              key: const Key('Page 3'),
-              style: flatButtonStyle,
-              onPressed: () async {
-                //
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                        builder: (BuildContext context) => const Page3()));
-
-                /// A good habit to get into. Refresh the screen again.
-                /// In this case, to show the count may have changed.
-                setState(() {});
-              },
-              child: const Text(
-                'Page 3',
+        ),
+        Flexible(
+          child: Text(
+            '${con.data}',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 100),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              /// Page button for Page 1
+              Flexible(
+                child: ElevatedButton(
+                  key: const Key('Page 1'),
+                  style: flatButtonStyle,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Page 1',
+                  ),
+                ),
               ),
-            ),
+
+              /// Page button for Page 3
+              Flexible(
+                child: ElevatedButton(
+                  key: const Key('Page 3'),
+                  style: flatButtonStyle,
+                  onPressed: () async {
+                    //
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                            const Page3()));
+
+                    /// A good habit to get into. Refresh the screen again.
+                    /// In this case, to show the count may have changed.
+                    setState(() {});
+                  },
+                  child: const Text(
+                    'Page 3',
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-        column: (context) => [
-          const Flexible(child: Text("Has a 'data source' to save the count")),
-        ],
-        persistentFooterButtons: <Widget>[
-          ElevatedButton(
-            key: const Key('Page 1 Counter'),
-            style: flatButtonStyle,
-            onPressed: onPressed,
-            child: const Text('Page 1 Counter'),
-          ),
-        ],
-      );
+        ),
+        const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(child: Text("Has a 'data source' to save the count")),
+          ],
+        ),
+      ],
+    ),
+  );
 
   /// Supply a public method to be accessed in Page 3.
   /// Calling another State object's function for demonstration purposes

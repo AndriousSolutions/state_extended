@@ -10,7 +10,7 @@ part of 'state_extended.dart';
 /// dartdoc:
 /// {@category State Object Controller}
 mixin SetStateMixin {
-  /// Provide the setState() function to external actors
+  /// Calls the 'current' State object's setState() function if any.
   void setState(VoidCallback fn) => _stateX?.setState(fn);
 
   /// Retrieve the State object by its StatefulWidget. Returns null if not found.

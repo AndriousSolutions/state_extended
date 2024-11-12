@@ -5,6 +5,8 @@
 /// Export libraries concerned with the Home Page's 'Event Handling' (the Business Logic)
 ///
 
-export 'package:example/src/another_app/home/controller/home_controller.dart';
+export '/src/another_app/home/controller/home_controller.dart';
 
-export 'package:example/src/another_app/home/inherited/controller.dart';
+export '/src/another_app/home/gridview/controller_gridview.dart';
+
+export '/src/another_app/home/inherited/controller_inherited.dart';

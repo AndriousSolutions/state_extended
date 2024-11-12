@@ -5,8 +5,6 @@
 ///  All the SOC's used in this app's GridView widget
 ///  SOC stands for State Object Controllers.
 ///
-export '/src/another_app/home/controller.dart';
-
 export '/src/another_app/home/gridview/controller/image_api_controller.dart';
 
-export '/src/another_app/home/gridview/images/controller.dart';
+export '/src/another_app/home/gridview/images/controller_images.dart';

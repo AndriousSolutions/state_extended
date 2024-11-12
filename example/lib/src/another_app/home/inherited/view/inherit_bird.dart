@@ -5,9 +5,9 @@
 ///  Contains the InheritedWidget for updating the Bird Image widgets.
 ///
 
-import '/src/another_app/controller.dart';
+import '/src/controller.dart';
 
-import '/src/another_app/view.dart';
+import '/src/view.dart';
 
 ///
 class InheritBird extends StatefulWidget {

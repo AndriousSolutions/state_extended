@@ -12,7 +12,14 @@ part of 'state_extended.dart';
 /// {@category Get started}
 /// {@category Event handling}
 /// {@category State Object Controller}
-class StateXController with SetStateMixin, StateListener, RootState, AsyncOps {
+class StateXController
+    with
+        ChangeNotifier,
+        SetStateMixin,
+        ListenableWidgetBuilderMixin,
+        StateListener,
+        RootState,
+        AsyncOps {
   /// Optionally supply a State object to 'link' to this object.
   /// Thus, assigned as 'current' StateX for this object
   StateXController([StateX? state]) {
@@ -46,6 +53,14 @@ class StateXController with SetStateMixin, StateListener, RootState, AsyncOps {
 
   /// The current StateX object.
   StateX? get state => _stateX;
+
+  /// Call a State object's setState()
+  /// and notify any listeners
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    notifyListeners();
+  }
 
   /// Link a widget to an InheritedWidget
   bool dependOnInheritedWidget(BuildContext? context) =>

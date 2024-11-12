@@ -5,9 +5,9 @@
 ///  The Controller for this app's Home Page StatefulWidget.
 ///
 
-import '/src/another_app/controller.dart';
+import '/src/another_app/controller_another_app.dart';
 
-import '/src/another_app/view.dart';
+import '/src/another_app/view_another_app.dart';
 
 ///
 class HomeController extends StateXController {

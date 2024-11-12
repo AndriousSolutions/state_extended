@@ -5,9 +5,9 @@
 ///  This widget works with the free Bird API.
 ///
 
-import 'package:example/src/another_app/controller.dart';
+import '/src/another_app/controller_another_app.dart';
 
-import 'package:example/src/another_app/view.dart';
+import '/src/another_app/view_another_app.dart';
 
 ///
 class RandomBird extends StatefulWidget {
@@ -28,4 +28,17 @@ class _RandomBirdState extends ImageAPIStateX<RandomBird> {
             path: 'api/v2/random/animal/bird',
           ),
         );
+
+  /// Place a breakpoint on this build() function and see how things work.
+  @override
+  // ignore: unnecessary_overrides
+  Widget build(BuildContext context) => super.build(context);
+
+  @override
+  // ignore: unnecessary_overrides
+  Widget buildF(BuildContext context) => super.buildF(context);
+
+  @override
+  // ignore: unnecessary_overrides
+  Widget builder(context) => super.builder(context);
 }

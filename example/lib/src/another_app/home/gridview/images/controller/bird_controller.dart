@@ -5,7 +5,7 @@
 ///
 ///
 
-import 'package:example/src/controller.dart';
+import '/src/another_app/controller_another_app.dart';
 
 /// This SOC is associated with the Bird images and works with
 /// InheritBird StatefulWidget and the InheritedWidget, _BirdInherited

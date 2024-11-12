@@ -5,9 +5,9 @@
 ///  This widget works with the free Fox API.
 ///
 
-import 'package:example/src/another_app/controller.dart';
+import '/src/another_app/controller_another_app.dart';
 
-import 'package:example/src/another_app/view.dart';
+import '/src/another_app/view_another_app.dart';
 
 ///
 class RandomFox extends StatefulWidget {

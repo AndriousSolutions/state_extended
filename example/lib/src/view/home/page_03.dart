@@ -1,26 +1,31 @@
-// Copyright 2022 Andrious Solutions Ltd. All rights reserved.
+// Copyright 2024 Andrious Solutions Ltd. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
-import '/src/another_app/view.dart' as i;
 
 import '/src/controller.dart';
 
 import '/src/view.dart';
 
-/// The third page displayed in this app.
+///
 class Page3 extends StatefulWidget {
-  /// You can instantiate the State Controller in the StatefulWidget;
+  ///
   const Page3({super.key});
 
   @override
-  State createState() => _Page3State();
+  State<StatefulWidget> createState() => Page3State();
 }
 
-class _Page3State extends StateX<Page3> with EventsStateMixin<Page3> {
-  // Use built-in InheritedWidget
-  _Page3State() : super(useInherited: true);
-  //
+///
+class Page3State extends StateX<Page3> with EventsStateMixin<Page3> {
+  /// Use built-in InheritedWidget
+  Page3State() : super(controller: Controller(), useInherited: true) {
+    /// Cast to type, Controller
+    con = controller as Controller;
+  }
+
+  /// The controller reference property
+  late Controller con;
+  ///
   int count = 0;
 
   // Place a breakpoint here from your favorite IDE and see how it works.
@@ -36,105 +41,135 @@ class _Page3State extends StateX<Page3> with EventsStateMixin<Page3> {
   /// You could use the builder() function here instead
   /// It'll behave has the build() function
   @override
-  Widget builder(BuildContext context) {
-    // Comment out this line, and the counter is suddenly not working
-    // state() is a widget that depends on the State InheritedWidget
-    // it will rebuild but only if the InheritedWidget is called again by notifyClients()
-    return stateSet(_builder);
-    // That's because _build() is never called again by the InheritedWidget.
-    return _builder(context);
-  }
-
-  Widget _builder(BuildContext context) => _buildPage3(
-        count: count,
-        newKey: () {
-          // Both do the same thing!
-          firstState?.setState(() {});
-          rootState?.setState(() {});
-        },
-        counter: () {
-          count++;
-          notifyClients();
-        },
-        page1counter: () {
-          // Merely instantiating the StatefulWidget to call its function.
-          var state = Controller().ofState<Page2State>()!;
-          state = Controller().stateOf<Page2>()! as Page2State;
-          state.onPressed();
-        },
-        page2counter: () {
-          Controller().onPressed();
-        },
-      );
-
-  /// Ignore this function. Study the features above instead.
-  Widget _buildPage3({
-    int count = 0,
-    required void Function() counter,
-    required void Function() newKey,
-    required void Function() page1counter,
-    required void Function() page2counter,
-  }) =>
-      BuildPage(
-        label: '3',
-        count: count,
-        counter: counter,
-        column: (_) => [
-          Flexible(
-            child: ElevatedButton(
-              key: const Key('New Key'),
-              onPressed: newKey,
-              child: const Text('New Key for Page 1'),
+  Widget builder(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Three-page example'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(top: 100),
+              child: Text("You're on page:"),
             ),
-          ),
-          Row(children: [
-            const SizedBox(width: 5),
-            Flexible(
-              child: ElevatedButton(
-                key: const Key('InheritedWidget example'),
-                onPressed: () async {
-                  await Navigator.push(
-                    lastState!.context,
-                    MaterialPageRoute<void>(
-                        builder: (BuildContext context) => const i.HomePage()),
-                  );
-                },
-                child: const Text("'InheritedWidget' example"),
+            const Flexible(
+              child: Text(
+                '3',
+                style: TextStyle(fontSize: 48),
               ),
             ),
-          ]),
-        ],
-        row: (BuildContext context) => [
-          Flexible(
-            child: ElevatedButton(
-              key: const Key('Page 1'),
-              onPressed: () {
-                Navigator.of(context)
-                  ..pop()
-                  ..pop();
-              },
-              child: const Text('Page 1'),
+            const Flexible(
+              child: Padding(
+                padding: EdgeInsets.only(top: 50),
+                child: Text(
+                  'You have pushed the button this many times:',
+                ),
+              ),
             ),
-          ),
-          Flexible(
-            child: ElevatedButton(
-              key: const Key('Page 2'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Page 2'),
+            Flexible(
+              child: con.setBuilder(
+                (context) => Text(
+                  '$count',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
             ),
-          ),
-        ],
-        persistentFooterButtons: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 100),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Flexible(
+                    child: ElevatedButton(
+                      key: const Key('Page 1'),
+                      onPressed: () {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop();
+                      },
+                      child: const Text('Page 1'),
+                    ),
+                  ),
+                  Flexible(
+                    child: ElevatedButton(
+                      key: const Key('Page 2'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Page 2'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: ElevatedButton(
+                    key: const Key('New Key'),
+                    onPressed: () {
+                      // Both do the same thing!
+                      firstState?.setState(() {});
+                      rootState?.setState(() {});
+                    },
+                    child: const Text('New Key for Page 1'),
+                  ),
+                ),
+                Row(children: [
+                  const SizedBox(width: 5),
+                  Flexible(
+                    child: ElevatedButton(
+                      key: const Key('InheritedWidget example'),
+                      onPressed: () async {
+                        await Navigator.push(
+                          lastState!.context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => const HomePage(),
+                          ),
+                        );
+                      },
+                      child: const Text("'InheritedWidget' example"),
+                    ),
+                  ),
+                ]),
+              ],
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          key: const Key('+'),
+          onPressed: () {
+            count++;
+            con.setState((){});
+          },
+          child: const Icon(Icons.add),
+        ),
+        persistentFooterButtons: [
           ElevatedButton(
             key: const Key('Page 1 Counter'),
-            onPressed: page1counter,
+            onPressed: () {
+              // Return State object by its type or by its StatefulWidget Type
+              // Both returns null if not found.
+              var page2State = con.ofState<Page2State>();
+              final stateX = con.stateOf<Page2>();
+
+              if(stateX != null && stateX is Page2State){
+                // ignore: unnecessary_cast
+                page2State = stateX as Page2State;
+              }
+              // Merely instantiating the StatefulWidget to call its function.
+              page2State?.onPressed();
+            },
             child: const Text('Page 1 Counter'),
           ),
           ElevatedButton(
             key: const Key('Page 2 Counter'),
-            onPressed: page2counter,
+            onPressed: () {
+              con.onPressed();
+            },
             child: const Text('Page 2 Counter'),
           ),
         ],

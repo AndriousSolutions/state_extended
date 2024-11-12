@@ -72,20 +72,23 @@ part 'part12_set_state.dart';
 /// class StateXController: dependOnInheritedWidget(), notifyClients()
 part 'part13_statex_controller.dart';
 
+/// [Listenable] widget builder
+part 'part14_listenable_widget_builder_mixin.dart';
+
 /// For StateXController, setState(), stateOf(), ofState(), firstState, and lastState
-part 'part14_set_state_mixin.dart';
+part 'part15_set_state_mixin.dart';
 
 /// State object's controllerByType(), controllerById(), rootCon
-part 'part15_controllers_by_id_mixin.dart';
+part 'part16_controllers_by_id_mixin.dart';
 
 /// The 'Root' State object: lastContext, dataObject and inDebugMode
-part 'part16_root_state_mixin.dart';
+part 'part17_root_state_mixin.dart';
 
 /// Record an exception in a State object
-part 'part17_record_exception_mixin.dart';
+part 'part18_record_exception_mixin.dart';
 
 /// Supply the Async API: initAsync() and onAsyncError()
-part 'part18_async_ops_mixin.dart';
+part 'part19_async_ops_mixin.dart';
 
 /// A UUID generator, useful for generating unique IDs.
-part 'part19_uuid.dart';
+part 'part20_uuid.dart';

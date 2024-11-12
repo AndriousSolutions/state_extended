@@ -29,7 +29,7 @@ If not, you're actually impeding Flutter’s general functionality and degrading
 The less that changes, the better.
 Use the keyword, <i>final</i>, for variables assigned only once.
 Better still, use the keyword, <i>const</i>, if you know the property's value 
-before compile-time will never change.
+ will never change before compile-time.
 As your app runs, Flutter is calling those widgets over and over again.
 
 <b>“There is no imperative changing of the UI itself (like widget.setText)—you change the state,
@@ -38,19 +38,18 @@ and the UI rebuilds from scratch.”</b>
 — flutter.dev <a href="https://docs.flutter.dev/data-and-backend/state-mgmt/declarative">Start thinking declaratively</a>
 
 Now, I suspect in the beginning, all your ‘mutable’ code was going into your State class. 
-A reasonable idea at first glance. 
 After all, you always want ready access to the State object and its <b>setState</b>() function. 
-However, that can make for a rather large and unmanageable Dart file
-placing all the business logic and such under one State class.
-I quickly found, more often than not, placing such code in a separate Dart file in a separate class made for a better approach.
+However, that can make for a very large and unmanageable Dart file
+placing all the business logic one State class.
+I quickly found placing such code in a separate Dart file in a separate class made for a better approach.
 You're explicitly separating the app's interface from its business rules.
-Looking how Flutter implemented such an approach already using Controllers in widgets,
-I created the 'State Object Controller' class.
+Flutter already implemented such an approach using Controllers in many widgets,
+I've done the same by creating the 'State Object Controller' class.
 
-Again, however, when working with Flutter, you always need reliable access to a particular State object so to call its <b>setState</b>() function 
-(other developer's choose instead the StatefulElement’s <b>markNeedsBuild</b>() function). 
-Doing so ‘rebuilds’ that portion of the screen involving that State object and reflects the changes made.
-That means the State Object controller would need access to its designated State object.
+When working with Flutter, you always need reliable access to a particular State object so to call its <b>setState</b>() function 
+(other developer's instead call the StatefulElement’s <b>markNeedsBuild</b>() function). 
+This ‘rebuilds’ that portion of the screen involving that State object.
+The State Object controller needs ready access to its designated State object.
 
 <a target="_blank" rel="noopener noreferrer" href="https://miro.medium.com/v2/resize:fit:640/format:webp/1*x1qnWzfmhG8Z9WJVNYvL_Q.png"><img  align="right" src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*x1qnWzfmhG8Z9WJVNYvL_Q.png" width="253" height="286"></a>
 
@@ -59,8 +58,8 @@ That means the State Object controller would need access to its designated State
 Through the course of an app’s lifecycle,
 a controller can be assigned to any number of StateX objects.
 A StateXController object works with ‘the last’ State object it’s been assigned to
-but keeps a reference of any and all State objects it’s previously worked with in the Widget tree.
-When a screen closes (i.e. the current StateX object is disposed of), the controller returns back to the previous StateX it was assigned to.
+but keeps a reference all the State objects it’s previously worked with.
+When a screen closes (i.e. the current StateX object is disposed of), the controller returns back to its previous StateX.
 This allows, for example, for one controller to sustain the app’s business rules for the duration of the running app
 conveying that logic across any number of screens (i.e. any number of StateX objects).
 
@@ -75,7 +74,7 @@ while its controllers are concerned with everything else.
 
 <h2 id="example">Show By Example</h2>
 
-Here is a gist file for you to download and follow along: <a href="https://gist.github.com/Andrious/e7d3ce3b8dcd5495978690a24ae5c3d6">statex_counter_app.dart</a>
+Here is a gist file for you to download and follow along: <a href="https://gist.github.com/Andrious/c68d9f4edcc5e2344a3f50e49b269f2e">statex_counter_app.dart</a>
 <br />
 As you see in the first screenshot below, the traditional State class has been replaced with the class, StateX, 
 and takes in a StateXController object named, <i>YourController</i>. 
@@ -87,11 +86,11 @@ However, note there’s no <b>setState</b>() function call.
 It’s in the controller and called in the con.<b>onPressed</b>() function.
 
 <div>
-<a id="_StateXCounterPageState" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/99061be8-b6f2-48b0-a33b-b4e0dc469b3e"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/99061be8-b6f2-48b0-a33b-b4e0dc469b3e" width="48%" height="60%"></a>
+<a id="_StateXCounterPageState" target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/57cf5ae6-081b-40e7-82a3-57cc8056ae8c"><img src="https://github.com/user-attachments/assets/57cf5ae6-081b-40e7-82a3-57cc8056ae8c" width="48%" height="60%"></a>
 <a id="conBuildFunc" target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/a72a2131-66b4-420d-a50d-d968933293ad"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/a72a2131-66b4-420d-a50d-d968933293ad" width="48%" height="60%"></a>
 </div>
 
-| [statex_counter_app.dart](https://gist.github.com/Andrious/e7d3ce3b8dcd5495978690a24ae5c3d6#file-statex_counter_app-dart-L24) | [statex_counter_app.dart](https://gist.github.com/Andrious/e7d3ce3b8dcd5495978690a24ae5c3d6#file-statex_counter_app-dart-L39) |
+| [statex_counter_app.dart](https://gist.github.com/Andrious/c68d9f4edcc5e2344a3f50e49b269f2e#file-statex_counter_app-dart-L24) | [statex_counter_app.dart](https://gist.github.com/Andrious/e7d3ce3b8dcd5495978690a24ae5c3d6#file-statex_counter_app-dart-L39) |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 <h2 id="setState">Set Control</h2>

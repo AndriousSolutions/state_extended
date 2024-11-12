@@ -4,9 +4,10 @@
 ///
 ///  This widget works with the free Cat API.
 ///
-import 'package:example/src/another_app/controller.dart';
 
-import 'package:example/src/another_app/view.dart';
+import '/src/another_app/controller_another_app.dart';
+
+import '/src/another_app/view_another_app.dart';
 
 ///
 class RandomCat extends StatefulWidget {
@@ -27,4 +28,8 @@ class _RandomCatState extends ImageAPIStateX<RandomCat> {
             path: 'api/v2/random/animal/cat',
           ),
         );
+
+  /// Supply a 'splash screen' while the FutureBuilder is processing.
+  @override
+  Widget? onSplashScreen(BuildContext context) => const SplashScreen();
 }

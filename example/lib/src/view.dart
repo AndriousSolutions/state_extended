@@ -6,10 +6,11 @@
 
 export 'package:flutter/cupertino.dart' show CupertinoSwitch;
 
-/// StateSetter is also defined in state_extended.dart
-export 'package:flutter/material.dart' hide StateSetter;
+export 'package:flutter/material.dart';
 
 export 'package:state_extended/state_extended.dart';
+
+export '/src/another_app/view_another_app.dart';
 
 export '/src/view/app/common/class_name_mixin.dart';
 

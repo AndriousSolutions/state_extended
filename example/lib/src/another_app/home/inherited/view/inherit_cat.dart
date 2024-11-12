@@ -5,9 +5,9 @@
 ///  Stores the InheritedWidget used to update the Cat images.
 ///
 
-import '/src/another_app/controller.dart';
+import '/src/controller.dart';
 
-import '/src/another_app/view.dart';
+import '/src/view.dart';
 
 /// This StatefulWidget stores an InheritedWidget
 class InheritCat extends StatefulWidget {
