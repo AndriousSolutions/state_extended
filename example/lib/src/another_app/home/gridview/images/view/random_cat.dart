@@ -31,5 +31,10 @@ class _RandomCatState extends ImageAPIStateX<RandomCat> {
 
   /// Supply a 'splash screen' while the FutureBuilder is processing.
   @override
-  Widget? onSplashScreen(BuildContext context) => const SplashScreen();
+  Widget? onSplashScreen(BuildContext context) {
+    // Return if possibly running in Testing
+    if(WidgetsBinding.instance is! WidgetsFlutterBinding){
+      return null;
+    }
+    return const SplashScreen();}
 }

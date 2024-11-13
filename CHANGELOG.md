@@ -1,9 +1,10 @@
 
-## 5.6.0
+## 5.6.0+1
 November 15, 2024
 - Introduce setBuilder() in every Controller. Will rebuild with every setState() call.
 - Replacing stateSet(WidgetBuilder? builder) with the name, setBuilder in class, StateX and AppStateX
 - class StateXController now includes mixin, ChangeNotifier and ListenableWidgetBuilderMixin
+- Updated example app
 
 ## 5.5.0
 October 14, 2024
