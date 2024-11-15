@@ -14,9 +14,8 @@ part of 'state_extended.dart';
 /// {@category State Object Controller}
 class StateXController
     with
-        ChangeNotifier,
         SetStateMixin,
-        ListenableWidgetBuilderMixin,
+        ImplNotifyListenersChangeNotifierMixin,
         StateListener,
         RootState,
         AsyncOps {
@@ -32,6 +31,8 @@ class StateXController
   @override
   @mustCallSuper
   void dispose() {
+    // Call the dispose of the implementation of Change Notifier
+    disposeChangeNotifier();
     /// Controllers state property is now null from deactivate() function
     /// Always call 'initializing' routines in initState() and activate()
     super.dispose();
@@ -54,14 +55,6 @@ class StateXController
   /// The current StateX object.
   StateX? get state => _stateX;
 
-  /// Call a State object's setState()
-  /// and notify any listeners
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(fn);
-    notifyListeners();
-  }
-
   /// Link a widget to an InheritedWidget
   bool dependOnInheritedWidget(BuildContext? context) =>
       _stateX?.dependOnInheritedWidget(context) ?? false;
@@ -69,6 +62,14 @@ class StateXController
   /// In harmony with Flutter's own API
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   bool notifyClients() => _stateX?.notifyClients() ?? false;
+
+  /// Call a State object's setState()
+  /// and notify any listeners
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    notifyListeners();
+  }
 
   /// The 'Change' event has already been called in a previous State object
   bool get didCallChangeEvent {

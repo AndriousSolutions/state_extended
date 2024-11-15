@@ -287,6 +287,30 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }());
   }
 
+  // /// Notify all the [Listenable] objects that are the State object's controllers.
+  // void notifyListeners() {
+  //
+  //   /// No 'setState()' functions are allowed to fully function at this point.
+  //   _setStateAllowed = false;
+  //
+  //   for (final con in controllerList) {
+  //     con.notifyListeners();
+  //   }
+  //
+  //   _setStateAllowed = true;
+  //
+  //   // The InheritedWidget will dictate if widgets are rebuilt.
+  //   _setStateRequested = false;
+  //
+  //   assert(() {
+  //     if (_printEvents) {
+  //       debugPrint('============ Event: notifyListeners() in $this');
+  //     }
+  //     return true;
+  //   }());
+  // }
+
+
   /// This method is also called immediately after [initState].
   /// Otherwise called only if this [State] object's Widget
   /// is a dependency of [InheritedWidget].
@@ -1361,6 +1385,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         /// Refresh the interface by 'rebuilding' the Widget Tree
         /// Call the State object's setState() function.
         super.setState(fn);
+        // /// Call any [Listenable] objects.
+        // notifyListeners();
       }
       _setStateAllowed = true;
     } else {

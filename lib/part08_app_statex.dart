@@ -331,15 +331,16 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// Called when the State's InheritedWidget is called again
   /// This 'widget function' will be called again.
   @override
-  Widget setBuilder(WidgetBuilder? widgetFunc) => stateSet(widgetFunc);
+  Widget setBuilder(WidgetBuilder? builder) => stateSet(builder);
+
   /// Called when the State's InheritedWidget is called again
   /// This 'widget function' will be called again.
   @override
 //  @Deprecated('Use stateBuilder() instead.')
-  Widget stateSet(WidgetBuilder? widgetFunc) {
-    widgetFunc ??=
+  Widget stateSet(WidgetBuilder? builder) {
+    builder ??=
         (_) => const SizedBox.shrink(); // Display 'nothing' if not provided
-    return _SetStateXWidget(stateX: this, builder: widgetFunc);
+    return StateDependentWidget(stateMixin: this, builder: builder);
   }
 
   /// Catch any errors in the App
@@ -560,19 +561,20 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   }
 }
 
-/// Supply a widget to depend upon a StateX's InheritedWidget
-class _SetStateXWidget extends StatelessWidget {
+/// Supply a widget from a widget builder and possibly depend on InheritedWidget
+class StateDependentWidget extends StatelessWidget {
   ///
-  const _SetStateXWidget({
-    required this.stateX,
-    required this.builder,
+  const StateDependentWidget({
+    super.key,
+    this.stateMixin,
+    this.builder,
   });
-  final StateX stateX;
-  final WidgetBuilder builder;
+  final InheritedWidgetStateMixin? stateMixin;
+  final WidgetBuilder? builder;
   @override
   Widget build(BuildContext context) {
-    stateX.dependOnInheritedWidget(context);
-    return builder(context);
+    stateMixin?.dependOnInheritedWidget(context);
+    return builder?.call(context) ?? const SizedBox.shrink();
   }
 }
 

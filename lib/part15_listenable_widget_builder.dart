@@ -4,35 +4,15 @@
 
 part of 'state_extended.dart';
 
-/// setBuilder(WidgetBuilder? builder) rebuilds with every setState() call.
-///
-/// dartdoc:
-/// {@category StateX class}
-/// {@category State Object Controller}
-mixin ListenableWidgetBuilderMixin {
+// Widget builder allows for null
+typedef MaybeBuildWidgetType = Widget? Function(BuildContext context);
 
-  /// Returns a widget from builder assuming the current object is a [Listenable]
-  /// const SizedBox.shrink() otherwise
-  Widget setBuilder(WidgetBuilder? builder) {
-    if (builder != null) {
-      _widgetBuilderUsed = true;
-    }
-    return _ListenableWidgetBuilder(
-      listenable: this,
-      builder: builder,
-    );
-  }
-
-  /// A flag. Noting if the function above is ever used.
-  bool get setBuilderUsed => _widgetBuilderUsed;
-  bool _widgetBuilderUsed = false;
-}
-
-/// Creates a widget that rebuilds when the given listenable calls.
+/// Creates a widget that rebuilds when the given listenable calls
 /// notifyListeners() function
-class _ListenableWidgetBuilder extends StatefulWidget {
+class ListenableWidgetBuilder extends StatefulWidget {
   /// The arguments is not required.
-  const _ListenableWidgetBuilder({
+  const ListenableWidgetBuilder({
+    super.key,
     this.listenable,
     this.builder,
   });
@@ -41,7 +21,7 @@ class _ListenableWidgetBuilder extends StatefulWidget {
   final dynamic listenable;
 
   /// Supply a Widget builder
-  final WidgetBuilder? builder;
+  final MaybeBuildWidgetType? builder;
 
   /// Subclasses typically do not override this method.
   @override
@@ -55,28 +35,31 @@ class _ListenableWidgetBuilder extends StatefulWidget {
 }
 
 //
-class _ListenableState extends State<_ListenableWidgetBuilder> {
+class _ListenableState extends State<ListenableWidgetBuilder> {
+  //
   @override
   void initState() {
     super.initState();
-    // May be actually be a Listenable
+    // May actually be a Listenable
     if (widget.builder != null && widget.listenable is Listenable) {
-      widgetBuilder = widget.builder!;
+      builder = widget.builder!;
       listenable = widget.listenable;
       listenable?.addListener(_callBuild);
     } else {
       // A widget must be provided. Even if it's nothing
-      widgetBuilder = (_) => const SizedBox.shrink();
+      builder = (_) => const SizedBox.shrink();
     }
   }
 
   // Possibly not provided
   Listenable? listenable;
   // A Widget will be returned no matter what is provided.
-  late WidgetBuilder widgetBuilder;
+  late MaybeBuildWidgetType builder;
+  // Store the past widget displayed, and use it if builder returns null.
+  Widget? _widget;
 
   @override
-  void didUpdateWidget(_ListenableWidgetBuilder oldWidget) {
+  void didUpdateWidget(ListenableWidgetBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Possibly a O(2) expense if oldWidget == widget
     if (oldWidget.listenable is Listenable) {
@@ -89,21 +72,29 @@ class _ListenableState extends State<_ListenableWidgetBuilder> {
 
   @override
   void dispose() {
+    _widget = null;
     listenable?.removeListener(_callBuild);
     listenable = null;
     super.dispose();
   }
 
   void _callBuild() {
-    //
-    if (!mounted) {
-      return;
+    if (mounted) {
+      setState(() {
+        // Call the build() function again
+      });
     }
-    setState(() {
-      // Call the build() function again
-    });
   }
 
   @override
-  Widget build(BuildContext context) => widgetBuilder.call(context);
+  Widget build(BuildContext context) {
+    final widget = builder.call(context);
+    // The builder is allowed to return null.
+    if (widget == null) {
+      _widget ??= const SizedBox.shrink();
+    } else {
+      _widget = widget;
+    }
+    return _widget!;
+  }
 }

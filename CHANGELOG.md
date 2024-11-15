@@ -1,6 +1,12 @@
 
+## 5.6.1
+November 15,2024
+- Removed mixin, ChangeNotifier, from class StateXController to be accessed indirectly
+  using a new mixin, ImplNotifyListenersChangeNotifierMixin, that contains it as a property.
+  This is because ChangeNotifier has no, super.dispose(), in its dispose() function.
+
 ## 5.6.0+1
-November 15, 2024
+November 14, 2024
 - Introduce setBuilder() in every Controller. Will rebuild with every setState() call.
 - Replacing stateSet(WidgetBuilder? builder) with the name, setBuilder in class, StateX and AppStateX
 - class StateXController now includes mixin, ChangeNotifier and ListenableWidgetBuilderMixin

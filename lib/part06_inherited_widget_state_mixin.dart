@@ -89,12 +89,12 @@ mixin InheritedWidgetStateMixin on State {
   /// This 'widget function' will be called again.
   Widget setBuilder(WidgetBuilder? builder) => stateSet(builder);
   /// Called when the State's InheritedWidget is called again
-  /// This 'widget function' will be called again.
+  /// This 'widget builder' will be called again.
   //@Deprecated('Use statBuilder() instead.')
   Widget stateSet(WidgetBuilder? builder) {
     builder ??= (_) => const SizedBox.shrink();
     return useInherited && this is StateX
-        ? _SetStateXWidget(stateX: this as StateX, builder: builder)
+        ? StateDependentWidget(stateMixin: this as StateX, builder: builder)
         : builder(context);
   }
 
