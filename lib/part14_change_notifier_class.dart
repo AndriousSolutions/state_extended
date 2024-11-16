@@ -16,19 +16,22 @@ part of 'state_extended.dart';
 mixin ImplNotifyListenersChangeNotifierMixin {
   //
 
-  // Initialize the Change Notifier
+  // Instantiate the Change Notifier
   void initChangeNotifier() {
-    implChangeNotifier ??= ImplNotifyListenersChangeNotifier();
+    _implChangeNotifier ??= ImplNotifyListenersChangeNotifier();
   }
+
+  /// A flag. Instantiated Change Notifier
+  bool get hasChangeNotifierImpl => _implChangeNotifier != null;
 
   /// Don't forget to call dispose() function!
   void disposeChangeNotifier() {
-    implChangeNotifier?.dispose();
-    implChangeNotifier = null;
+    _implChangeNotifier?.dispose();
+    _implChangeNotifier = null;
   }
 
   // Implementation of the ChangeNotifier
-  ImplNotifyListenersChangeNotifier? implChangeNotifier;
+  ImplNotifyListenersChangeNotifier? _implChangeNotifier;
 
   /// Returns a widget from builder assuming the current object is a [Listenable]
   /// const SizedBox.shrink() otherwise
@@ -40,7 +43,7 @@ mixin ImplNotifyListenersChangeNotifierMixin {
       _widgetBuilderUsed = true;
     }
     return ListenableWidgetBuilder(
-      listenable: implChangeNotifier,
+      listenable: _implChangeNotifier,
       builder: builder,
     );
   }
@@ -50,22 +53,22 @@ mixin ImplNotifyListenersChangeNotifierMixin {
   bool _widgetBuilderUsed = false;
 
   /// Whether any listeners are currently registered.
-  bool get hasListeners => implChangeNotifier?.hasListeners ?? false;
+  bool get hasChangeListeners => _implChangeNotifier?.hasChangeListeners ?? false;
 
   /// Call all the registered listeners.
   bool notifyListeners()  {
-    final notify = implChangeNotifier != null;
+    final notify = _implChangeNotifier != null;
     if (notify) {
-      implChangeNotifier?.notifyListeners();
+      _implChangeNotifier?.notifyListeners();
     }
     return notify;
   }
 
   /// Register a closure to be called when the object changes.
   bool addListener(VoidCallback listener) {
-    final add = implChangeNotifier != null;
+    final add = _implChangeNotifier != null;
     if (add) {
-      implChangeNotifier?.addListener(listener);
+      _implChangeNotifier?.addListener(listener);
     }
     return add;
   }
@@ -73,9 +76,9 @@ mixin ImplNotifyListenersChangeNotifierMixin {
   /// Remove a previously registered closure from the list of closures that are
   /// notified when the object changes.
   bool removeListener(VoidCallback listener) {
-    final remove = implChangeNotifier != null;
+    final remove = _implChangeNotifier != null;
     if (remove) {
-      implChangeNotifier?.removeListener(listener);
+      _implChangeNotifier?.removeListener(listener);
     }
     return remove;
   }
@@ -84,9 +87,7 @@ mixin ImplNotifyListenersChangeNotifierMixin {
 /// Implementing ChangeNotifier
 class ImplNotifyListenersChangeNotifier with ChangeNotifier {
   /// Whether any listeners are currently registered.
-  @override
-  // ignore: unnecessary_overrides
-  bool get hasListeners => super.hasListeners;
+  bool get hasChangeListeners => super.hasListeners;
 
   /// Call all the registered listeners.
   @override

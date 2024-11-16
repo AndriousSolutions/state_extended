@@ -1,4 +1,8 @@
 
+## 5.7.0
+November 16, 2024
+- Make ChangeNotifier private in mixin, ImplNotifyListenersChangeNotifierMixin
+
 ## 5.6.1
 November 15,2024
 - Removed mixin, ChangeNotifier, from class StateXController to be accessed indirectly
