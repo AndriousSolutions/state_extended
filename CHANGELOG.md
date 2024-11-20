@@ -1,4 +1,9 @@
 
+## 5.8.0
+November 20, 2024
+- Allow the setState() function call in a number of event handlers
+  // _setStateAllowed = false;
+
 ## 5.7.0
 November 16, 2024
 - Make ChangeNotifier private in mixin, ImplNotifyListenersChangeNotifierMixin

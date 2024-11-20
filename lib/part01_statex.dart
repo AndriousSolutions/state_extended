@@ -196,7 +196,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     const init = true;
 
     // No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+    // _setStateAllowed = false;
 
     int cnt = 0;
     StateXController con;
@@ -260,7 +260,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     RouteObserverStates.subscribeRoutes(this);
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+    //_setStateAllowed = false;
 
     int cnt = 0;
     StateXController con;
@@ -364,7 +364,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _addToMapOfStates(this);
 
     // No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+ //   _setStateAllowed = false;
 
     for (final con in controllerList) {
       // Supply the State object first
@@ -486,7 +486,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
 
     // No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+//    _setStateAllowed = false;
 
     for (final con in controllerList) {
       //
@@ -592,7 +592,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @mustCallSuper
   void didUpdateWidget(covariant T oldWidget) {
     /// No 'setState()' functions are allowed
-    _setStateAllowed = false;
+//    _setStateAllowed = false;
 
     for (final con in controllerList) {
       con.didUpdateWidget(oldWidget);
@@ -621,7 +621,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @mustCallSuper
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+ //   _setStateAllowed = false;
 
     /// First, process the State object's own event functions.
     switch (state) {
@@ -833,7 +833,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+ //   _setStateAllowed = false;
 
     for (final con in controllerList) {
       final didPop = await con.didPopRoute();
@@ -924,7 +924,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
 
     // No 'setState()' functions are allowed
-    _setStateAllowed = false;
+ //   _setStateAllowed = false;
 
     for (final con in controllerList) {
       con.didPopNext();
@@ -996,7 +996,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
 
     // No 'setState()' functions are allowed
-    _setStateAllowed = false;
+ //   _setStateAllowed = false;
 
     for (final con in controllerList) {
       con.didPop();
@@ -1088,7 +1088,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+//    _setStateAllowed = false;
 
     for (final con in controllerList) {
       con.didChangeMetrics();
@@ -1139,7 +1139,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+//    _setStateAllowed = false;
 
     for (final con in controllerList) {
       con.didChangeTextScaleFactor();
@@ -1178,7 +1178,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+//    _setStateAllowed = false;
 
     for (final con in controllerList) {
       con.didChangePlatformBrightness();
@@ -1223,7 +1223,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// This method exposes notifications from [Window.onLocaleChanged].
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+//    _setStateAllowed = false;
 
     for (final con in controllerList) {
       con.didChangeLocales(locales);
@@ -1266,7 +1266,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// [SystemChannels.system].
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+//    _setStateAllowed = false;
 
     for (final con in controllerList) {
       con.didHaveMemoryPressure();
@@ -1308,7 +1308,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// This method exposes notifications from [Window.onAccessibilityFeaturesChanged].
 
     /// No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
+//    _setStateAllowed = false;
 
     for (final con in controllerList) {
       con.didChangeAccessibilityFeatures();

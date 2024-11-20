@@ -24,7 +24,7 @@ mixin ImplNotifyListenersChangeNotifierMixin {
   /// A flag. Instantiated Change Notifier
   bool get hasChangeNotifierImpl => _implChangeNotifier != null;
 
-  /// Don't forget to call dispose() function!
+  /// Don't forget to call this method in the appropriate dispose() function!
   void disposeChangeNotifier() {
     _implChangeNotifier?.dispose();
     _implChangeNotifier = null;
@@ -95,6 +95,6 @@ class ImplNotifyListenersChangeNotifier with ChangeNotifier {
   void notifyListeners() => super.notifyListeners();
 
 // The 'unnecessary overrides' prevent the Dart Analysis warning:
-// The member 'hasListeners' can only be used within instance members of
+// The member 'notifyListeners' can only be used within instance members of
 // subclasses of 'package: change_notifier.dart'.
 }

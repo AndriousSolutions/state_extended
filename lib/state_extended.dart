@@ -73,7 +73,7 @@ part 'part12_set_state.dart';
 part 'part13_statex_controller.dart';
 
 /// Implemented [Listenable] class
-part 'part14_change_notifier_class.dart';
+part 'part14_impl_change_notifier_mixin.dart';
 
 /// [Listenable] widget builder
 part 'part15_listenable_widget_builder.dart';
