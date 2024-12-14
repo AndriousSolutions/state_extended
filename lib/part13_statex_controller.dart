@@ -33,6 +33,7 @@ class StateXController
   void dispose() {
     // Call the dispose of the implementation of Change Notifier
     disposeChangeNotifier();
+
     /// Controllers state property is now null from deactivate() function
     /// Always call 'initializing' routines in initState() and activate()
     super.dispose();
@@ -61,7 +62,11 @@ class StateXController
 
   /// In harmony with Flutter's own API
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
-  bool notifyClients() => _stateX?.notifyClients() ?? false;
+  bool notifyClients() {
+    final notify = _stateX?.notifyClients() ?? false;
+    notifyListeners();
+    return notify;
+  }
 
   /// Call a State object's setState()
   /// and notify any listeners

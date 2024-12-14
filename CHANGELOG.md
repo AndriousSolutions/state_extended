@@ -1,4 +1,9 @@
 
+## 5.9.0
+December 14 ,2024
+- in part13_statex_controller.dart, call all listeners in both
+  notifyClients(); and setState(); using notifyListeners();
+- 
 ## 5.8.0
 November 20, 2024
 - Allow the setState() function call in a number of event handlers

@@ -410,7 +410,6 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   }
 
   /// Catch any errors in the App
-  /// Free to override if you must
   void _onError(FlutterErrorDetails details) {
     // Don't call this routine within itself.
     if (_inErrorRoutine) {
