@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-export '../integration_test/_test_example_app.dart';
+export '../integration_test/_integration_testing.dart';
 export '../integration_test/reset_page1_count.dart';
 export '../integration_test/test_controller.dart';
 export '../integration_test/test_inheritedwidget_app.dart';

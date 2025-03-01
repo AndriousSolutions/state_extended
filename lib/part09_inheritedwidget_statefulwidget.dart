@@ -17,7 +17,7 @@ class _InheritedWidgetState extends State<_InheritedWidgetStatefulWidget> {
   void initState() {
     super.initState();
     // Record this State object
-    appState = RootState._rootStateX!;
+    appState = RootStateMixin._rootStateX!;
     appState._inheritedState = this;
   }
 

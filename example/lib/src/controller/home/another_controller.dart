@@ -147,12 +147,9 @@ class AnotherController extends StateXController
   ///    AppExitResponse.exit;
   /// Cancel and do not exit the application with
   ///    AppExitResponse.cancel;
+  // Windows only
   @override
-  Future<AppExitResponse> didRequestAppExit() async {
-    /// Cancel the exit and instead call setState() function
-    setState(() {});
-    return AppExitResponse.cancel;
-  }
+  Future<AppExitResponse> didRequestAppExit() async => AppExitResponse.exit;
 
   /// Called when the system changes the set of active accessibility features.
   @override

@@ -9,16 +9,16 @@ part of 'state_extended.dart';
 /// dartdoc:
 /// {@category StateX class}
 /// {@category State Object Controller}
-mixin RootState {
+mixin RootStateMixin {
   ///Important to record the 'root' StateX object. Its an InheritedWidget!
   bool setRootStateX(StateX? state) {
     // This can only be called once successfully. Subsequent calls are ignored.
     // Important to prefix with the class name to 'share' this as a mixin.
     final set =
-        state != null && RootState._rootStateX == null && state is AppStateX;
+        state != null && RootStateMixin._rootStateX == null && state is AppStateX;
     if (set) {
       // Important to prefix with the class name to 'share' this as a mixin.
-      RootState._rootStateX = state;
+      RootStateMixin._rootStateX = state;
     }
     return set;
   }
@@ -30,14 +30,14 @@ mixin RootState {
 
   /// Returns the 'first' StateX object in the App
   // Important to prefix with the class name to 'share' this as a mixin.
-  AppStateX? get rootState => RootState._rootStateX;
+  AppStateX? get rootState => RootStateMixin._rootStateX;
 
   /// Returns the 'latest' context in the App.
-  BuildContext? get lastContext => RootState._rootStateX?.lastState?.context;
+  BuildContext? get lastContext => RootStateMixin._rootStateX?.lastState?.context;
 
   /// This is of type Object allowing you
   /// to propagate any class object you wish down the widget tree.
-  Object? get dataObject => RootState._rootStateX?._dataObj;
+  Object? get dataObject => RootStateMixin._rootStateX?._dataObj;
 
   /// Assign an object to the property, dataObject.
   /// It will not assign null and if SetState objects are implemented,
@@ -46,7 +46,7 @@ mixin RootState {
   set dataObject(Object? object) {
     // Never explicitly set to null
     if (object != null) {
-      final state = RootState._rootStateX;
+      final state = RootStateMixin._rootStateX;
       final dataObject = state?._dataObj;
       // Notify dependencies only if their was a change.
       if (dataObject == null || dataObject != object) {
@@ -59,7 +59,7 @@ mixin RootState {
 
   /// Clear the static reference.
   /// Important to prefix with the class name to 'share' this as a mixin.
-  void _clearRootStateX() => RootState._rootStateX = null;
+  void _clearRootStateX() => RootStateMixin._rootStateX = null;
 
   /// Determines if running in an IDE or in production.
   /// Returns true if the App is under in the Debugger and not production.

@@ -26,7 +26,7 @@ class SetState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //
-    final rootState = RootState._rootStateX;
+    final rootState = RootStateMixin._rootStateX;
 
     if (rootState != null) {
       /// Go up the widget tree and link to the App's inherited widget.

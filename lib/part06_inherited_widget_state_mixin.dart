@@ -26,12 +26,12 @@ mixin InheritedWidgetStateMixin on State {
   /// {@category StateX class}
   Widget buildF(BuildContext context) {
     _buildFOverridden = false;
-    if (useInherited) {
+    if (_useInherited) {
       _child ??= builder(context);
     } else {
       _child = builder(context);
     }
-    return useInherited
+    return _useInherited
         ? StateXInheritedWidget(
             state: this as StateX,
             child: _child ?? const SizedBox.shrink(),
@@ -90,7 +90,7 @@ mixin InheritedWidgetStateMixin on State {
   Widget setBuilder(WidgetBuilder? builder) => stateSet(builder);
   /// Called when the State's InheritedWidget is called again
   /// This 'widget builder' will be called again.
-  //@Deprecated('Use statBuilder() instead.')
+  @Deprecated('Use setBuilder() instead.')
   Widget stateSet(WidgetBuilder? builder) {
     builder ??= (_) => const SizedBox.shrink();
     return useInherited && this is StateX

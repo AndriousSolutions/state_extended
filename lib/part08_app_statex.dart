@@ -422,6 +422,9 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Possibly the error occurred there.
     onStateError(details);
 
+    // Record the error
+    lastFlutterError(details);
+
     // Record to logs
     logErrorDetails(details);
 
@@ -432,11 +435,11 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     }
 
     // The App's error handler
-    onError(details);
-
-    //  If no App Error Handler, run its own Error handler
-    if (!_onErrorOverridden && _prevErrorFunc != null) {
-      _prevErrorFunc!.call(details);
+    if (_onErrorOverridden) {
+      onError(details);
+    }else{
+      //  If no App Error Handler, run its own Error handler
+      _prevErrorFunc?.call(details);
     }
 
     // Now out of the error handler
@@ -445,6 +448,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
   /// A flag indicating we're running in the error routine.
   /// Set to avoid infinite loop if in errors in the error routine.
+  bool get inErrorRoutine => _inErrorRoutine;
   bool _inErrorRoutine = false;
 
   /// Supply the last Flutter Error Details if any.
@@ -487,7 +491,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     //
     final state = lastState;
 
-    bool caught = state != null;
+    // If it's this object, it will call its own later
+    bool caught = state != null && state != this;
 
     if (caught) {
       //
@@ -511,7 +516,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
           }
 
           // Call the StateX's onError() function
-          if (caught && state != this) {
+          if (caught) {
             _errorStateName = name;
             state.onError(details);
           } else {

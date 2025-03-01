@@ -19,11 +19,11 @@ mixin AsyncOps {
   void onAsyncError(FlutterErrorDetails details) {}
 
   ///
-  void _initAsyncError(Object e, StateXController con) {
+  void _initAsyncError(Object e, StateXController con, {StackTrace? stack}) {
     //
     final details = FlutterErrorDetails(
       exception: e,
-      stack: e is Error ? e.stackTrace : null,
+      stack: stack ?? (e is Error ? e.stackTrace : null),
       library: 'state_extended.dart',
       context: ErrorDescription('${con.runtimeType}.initAsync'),
     );

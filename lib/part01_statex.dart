@@ -18,7 +18,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         WidgetsBindingObserver,
         _ControllersByType,
-        RootState,
+        RootStateMixin,
         AsyncOps,
         FutureBuilderStateMixin,
         InheritedWidgetStateMixin,
@@ -211,9 +211,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
           final e = Exception('${con.runtimeType}.initAsync() returned false!');
           _initAsyncError(e, con);
         }
-      } catch (e) {
+      } catch (e, stack) {
         // Pass the error to the controller to handle
-        _initAsyncError(e, con);
+        _initAsyncError(e, con, stack: stack);
         // Have it handled by an error handler.
         rethrow;
       }
@@ -655,7 +655,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         resumedAppLifecycleState();
         _inactiveAppLifecycle = false;
         break;
-      default:
+      // default:
       // WARNING: Missing case clause
     }
 
@@ -673,8 +673,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Record the triggered event
     assert(() {
       if (_printEvents) {
-        //ignore: avoid_print
-        print(
+        debugPrint(
             '============ Event: didChangeAppLifecycleState($state) in $this');
       }
       return true;
@@ -702,7 +701,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         case AppLifecycleState.resumed:
           con.resumedAppLifecycleState();
           break;
-        default:
+        // default:
         // WARNING: Missing case clause
       }
     }
