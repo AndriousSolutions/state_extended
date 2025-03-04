@@ -1,11 +1,12 @@
 
-## 5.10.0
+## 5.10.0+1
 February 28, 2025
 - In StateX class:  catch (e) { to catch (e, stack) {
 - In InheritedWidgetStateMixin: Replace stateSet() with setBuilder(WidgetBuilder? builder)
 - New getter in AppStateX class: inErrorRoutine
 - Rewrite of class _BuilderState
 - Renamed mixin RootState to RootStateMixin
+- Update: universal_platform: ^1.0.0 -> ^1.1.0
 
 ## 5.9.0
 December 14 ,2024
