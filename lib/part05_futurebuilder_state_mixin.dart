@@ -25,10 +25,11 @@ mixin FutureBuilderStateMixin on State {
     if ((_runAsync && runInitAsync()) || _future == null) {
       _future = initAsync();
       _future?.catchError(
-        (Object e) {
+        (Object e) async {
           try {
-            catchAsyncError(e);
+            _caughtAsyncError = await catchAsyncError(e);
           } catch (e) {
+            _caughtAsyncError = false;
             // Record error in log
             _logPackageError(
               e,
@@ -36,9 +37,8 @@ mixin FutureBuilderStateMixin on State {
               description: 'Exception in catchAsyncError()',
             );
           }
-          // Always false. snapshot.data == false
-          // snapshot.hasError likely true so ErrorWidget.builder() displayed
-          return false;
+          // May possibly recover from the error or exception
+          return _caughtAsyncError;
         },
         // It's got to be handled, and so it's always true to call catchError()
         test: (_) => true,
@@ -48,13 +48,25 @@ mixin FutureBuilderStateMixin on State {
       key: ValueKey<State>(this),
       future: _future,
       initialData: false,
-      builder: _futureBuilder,
+      builder: (context, snapshot) {
+        // We're ignoring an error or exception.
+        // Hope you know what you're doing!
+        if (_caughtAsyncError) {
+          snapshot =
+              AsyncSnapshot<bool>.withData(snapshot.connectionState, true);
+        }
+        return _futureBuilder(context, snapshot);
+      },
     );
   }
 
   /// A flag noting if the build() function was overridden or not.
   bool get buildOverridden => _buildOverridden;
   bool _buildOverridden = true;
+
+  /// A flag noting an Async error was caught or not
+  bool get caughtAsyncError => _caughtAsyncError;
+  bool _caughtAsyncError = false;
 
   /// Clean up
   @override
@@ -89,8 +101,9 @@ mixin FutureBuilderStateMixin on State {
   void onAsyncError(FlutterErrorDetails details) {}
 
   /// Catch it if the initAsync() throws an error
-  /// The FutureBuilder will fail, but you can examine the error
-  void catchAsyncError(Object error) {}
+  /// WITH GREAT POWER COMES GREAT RESPONSIBILITY
+  /// Return true to ignore the error, false to continue the error handling
+  Future<bool> catchAsyncError(Object error) async => false;
 
   /// Record any splash screen
   Widget? _splashScreen;

@@ -52,11 +52,11 @@ Future<void> testsAppStateX(WidgetTester tester) async {
 
   appState.recordException(exception);
 
-  expect(appState.hasError, isTrue, reason: _location);
+  expect(appState.recHasError, isTrue, reason: _location);
 
   expect(appState.errorMsg == 'Testing', isTrue, reason: _location);
 
-  expect(appState.stackTrace, isNull, reason: _location);
+  expect(appState.recStackTrace, isNull, reason: _location);
 
   var ex = appState.recordException();
 
@@ -66,9 +66,11 @@ Future<void> testsAppStateX(WidgetTester tester) async {
 
   appState.catchError(exception);
 
-  ex = appState.recordException(FlutterError('Test Error'));
+  appState.recordException(FlutterError('Test Error'));
 
-  expect(ex, isA<Exception>(), reason: _location);
+  ex = appState.recordException();
+
+  expect(ex, isA<Error>(), reason: _location);
 
   appState.didHaveMemoryPressure();
 

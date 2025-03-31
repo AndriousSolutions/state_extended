@@ -425,12 +425,12 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Record the error
     lastFlutterError(details);
 
-    // Record to logs
+    // Log the error
     logErrorDetails(details);
 
     // Always test if there was an error in the error handler
     // Include it in the error reporting as well.
-    if (hasError) {
+    if (recHasError) {
       _onErrorInHandler();
     }
 
@@ -462,7 +462,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
       lastErrorDetails = _lastFlutterErrorDetails;
       _lastFlutterErrorDetails = null; // Clear the storage for next time.
     } else {
-      lastErrorDetails = _lastFlutterErrorDetails = details;
+      _lastFlutterErrorDetails = details;
+      lastErrorDetails = details;
     }
     return lastErrorDetails;
   }
@@ -522,14 +523,32 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
           } else {
             _errorStateName = null;
           }
+
+          // // Always test if there was an error in the error handler
+          // // Include it in the error reporting as well.
+          // if (hasError) {
+          //   _onErrorInHandler();
+          // }
         }
       } catch (e, stack) {
-        recordException(e, stack);
-      }
-      // Always test if there was an error in the error handler
-      // Include it in the error reporting as well.
-      if (hasError) {
-        _onErrorInHandler();
+        // This is a public function. ALWAYS catch any error or exception
+        // Throw in DebugMode.
+        if (kDebugMode) {
+          // Set the original error routine. Allows the handler to throw errors.
+          FlutterError.onError = _prevErrorFunc;
+          // Rethrow to be handled by the original routine.
+          rethrow;
+        } else {
+          // Record the error
+          recordException(e, stack);
+
+          // Record error in device's log
+          _logPackageError(
+            e,
+            library: 'part08_app_statex.dart',
+            description: 'Error in onStateError()',
+          );
+        }
       }
     }
     return caught;
@@ -542,9 +561,9 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   // Notify the developer there's an error in the error handler.
   void _onErrorInHandler() {
     // Always test first that indeed an exception had occurred.
-    if (hasError) {
+    if (recHasError) {
       // Important to get the Stack Trace before it's cleared by recordException()
-      final stack = stackTrace;
+      final stack = recStackTrace;
       final exception = recordException();
       if (exception != null) {
         final details = FlutterErrorDetails(

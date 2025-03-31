@@ -1,4 +1,13 @@
 
+## 5.11.0
+March 31, 2025
+- Future<bool> catchAsyncError(Object error)  // Catch errors in initAsync() throws an error
+- getter caughtAsyncError // Error is caught and handled accordingly
+- bool onStateError() rethrow error while in developing
+- getter recErrorException gives the  recorded error or exception
+- getter recHasError indicates if an exception had occurred.
+- getter recStackTrace returns recorded Stack Trace
+
 ## 5.10.0+1
 February 28, 2025
 - In StateX class:  catch (e) { to catch (e, stack) {

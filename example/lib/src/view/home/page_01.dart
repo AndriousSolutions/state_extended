@@ -223,11 +223,12 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
   /// Catch it if the initAsync() throws an error
   /// The FutureBuilder will fail, but you can examine the error
   @override
-  void catchAsyncError(Object error) {
+  Future<bool> catchAsyncError(Object error) async {
     final con = Controller();
     if (con.errorCatchAsyncError) {
       con.errorCatchAsyncError = false;
       throw AssertionError('Error in Catch!');
     }
+    return false;
   }
 }

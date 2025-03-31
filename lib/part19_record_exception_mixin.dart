@@ -11,38 +11,33 @@ part of 'state_extended.dart';
 /// {@category Error handling}
 mixin RecordExceptionMixin on State {
   /// Return the 'last' error if any.
-  Exception? recordException([Object? error, StackTrace? stack]) {
+  Object? recordException([Object? error, StackTrace? stack]) {
     // Retrieved the currently recorded exception
-    var ex = _recException;
+    var e = _recErrorException;
+
     if (error == null) {
-      // Once retrieved, empty this of the exception.
-      _recException = null;
+      // Once retrieved, empty this
+      _recErrorException = null;
       _stackTrace = null;
     } else {
-      if (error is! Exception) {
-        _recException = Exception(error.toString());
-      } else {
-        _recException = error;
-      }
-      // Return the current exception
-      ex = _recException;
+      //
+      _recErrorException = error;
       _stackTrace = stack;
     }
-    return ex;
+    return e;
   }
 
-  // Store the current exception
-  Exception? _recException;
-
   /// Simply display the exception.
+  String get recErrorMsg => errorMsg;
+  @Deprecated('Use recErrorMsg instead.')
   String get exceptionMessage => errorMsg;
-  @Deprecated('Use exceptionMessage instead.')
+  @Deprecated('Use recErrorMsg instead.')
   String get errorMsg {
     String message;
-    if (_recException == null) {
+    if (_recErrorException == null) {
       message = '';
     } else {
-      message = _recException.toString();
+      message = _recErrorException.toString();
       final colon = message.lastIndexOf(': ');
       if (colon > -1 && colon + 2 <= message.length) {
         message = message.substring(colon + 2);
@@ -51,20 +46,15 @@ mixin RecordExceptionMixin on State {
     return message;
   }
 
+  /// The Error or Exception
+  Object? get recErrorException => _recErrorException;
+  // Store the current error or exception
+  Object? _recErrorException;
+
   /// Indicate if an exception had occurred.
-  bool get hasError => _recException != null;
+  bool get recHasError => _recErrorException != null;
 
   /// The StackTrace
-  StackTrace? get stackTrace => _stackTrace;
+  StackTrace? get recStackTrace => _stackTrace;
   StackTrace? _stackTrace;
-
-  /// Copy particular properties from the 'previous' StateX
-  // ignore: unused_element
-  // void _copyOverStateException([StateX? oldState]) {
-  //   //
-  //   if (oldState == null) {
-  //     return;
-  //   }
-  //   _recException = oldState._recException;
-  // }
 }
