@@ -18,7 +18,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         WidgetsBindingObserver,
         _ControllersByType,
-        RootStateMixin,
+        AppStateMixin,
         AsyncOps,
         FutureBuilderStateMixin,
         InheritedWidgetStateMixin,
@@ -36,6 +36,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }) {
     // Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
+
     // A flag whether the built-in FutureBuilder always runs.
     _runAsync = runAsync ?? false;
     // A flag determining whether the built-in InheritedWidget is used or not.
@@ -143,14 +144,18 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return update;
   }
 
+  @override
+  @Deprecated('Use addAll() instead.')
+  List<String> addList(List<StateXController>? list) => addAll(list);
+
   /// Add a list of 'Controllers' to be associated with this StatX object.
   @override
-  List<String> addList(List<StateXController>? list) {
+  List<String> addAll(List<StateXController>? list) {
     if (list == null) {
       return <String>[];
     }
     // Associate a list of 'Controllers' to this StateX object at one time.
-    return super.addList(list);
+    return super.addAll(list);
   }
 
   /// The unique identifier for this State object.
@@ -168,14 +173,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     U? con = super.controllerByType<U>();
 
     // Check the 'App State' by type  if not yet found
-    return con ??= rootState?.controllerByType<U>();
+    return con ??= appStateX?.controllerByType<U>();
   }
 
   /// Retrieve a StateXController by its a unique String identifier.
   @override
   StateXController? controllerById(String? id) {
-    // It's by id, look in the root state first
-    StateXController? con = rootState?.controllerById(id);
+    // It's by id, look in the 'App State' first
+    StateXController? con = appStateX?.controllerById(id);
     return con ??= super.controllerById(id);
   }
 
@@ -247,7 +252,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     super.initState();
 
     /// If 'AppState' is not used
-    if (rootState == null) {
+    if (appStateX == null) {
       /// Registers the given object as a binding observer. Binding
       /// observers are notified when various application events occur,
       /// for example when the system locale changes. Generally, one
@@ -286,30 +291,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       return true;
     }());
   }
-
-  // /// Notify all the [Listenable] objects that are the State object's controllers.
-  // void notifyListeners() {
-  //
-  //   /// No 'setState()' functions are allowed to fully function at this point.
-  //   _setStateAllowed = false;
-  //
-  //   for (final con in controllerList) {
-  //     con.notifyListeners();
-  //   }
-  //
-  //   _setStateAllowed = true;
-  //
-  //   // The InheritedWidget will dictate if widgets are rebuilt.
-  //   _setStateRequested = false;
-  //
-  //   assert(() {
-  //     if (_printEvents) {
-  //       debugPrint('============ Event: notifyListeners() in $this');
-  //     }
-  //     return true;
-  //   }());
-  // }
-
 
   /// This method is also called immediately after [initState].
   /// Otherwise called only if this [State] object's Widget
@@ -360,9 +341,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Likely was deactivated.
     _deactivated = false;
 
-    // Add to the list of StateX objects present in the app!
-    _addToMapOfStates(this);
-
     // No 'setState()' functions are allowed to fully function at this point.
  //   _setStateAllowed = false;
 
@@ -379,8 +357,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// Become aware of Route changes
     RouteObserverStates.subscribeRoutes(this);
 
-    /// If 'AppState' is not used
-    if (rootState == null) {
+    // If 'AppState' is not used
+    if (appStateX == null) {
       // Registers the given object as a binding observer.
       WidgetsBinding.instance.addObserver(this);
     }
@@ -398,66 +376,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       return true;
     }());
   }
-
-  /// Let the StateX simply be re-created
-//   StateX? _oldStateX;
-//
-//   //
-//   void _copyOverState() {
-//     // Nothing to copy over
-//     if (_oldStateX == null) {
-//       return;
-//     }
-//     // Local variable
-//     final oldStateX = _oldStateX!;
-//
-//     // If the previous State was 'resumed'. May want to recover further??
-//     if (oldStateX._hadSystemEvent) {
-//       // Reset so not to cause any side-affects.
-//       oldStateX._hadSystemEvent = false;
-//       // If a different object and the same type. (Thought because it was being recreated, but not the case. gp)
-// //      if (this != oldStateX && runtimeType == oldStateX.runtimeType) {
-//
-//       var copyOver = this != oldStateX;
-//
-//       if (copyOver && controller != null && oldStateX.controller != null) {
-//         copyOver = controller!.identifier == oldStateX.controller!.identifier;
-//       }
-//
-//       if (copyOver) {
-//         copyOver = controller.runtimeType == oldStateX.runtimeType;
-//       }
-//
-//       if (copyOver) {
-//         // Copy over certain properties
-//         _copyOverStateFuture(oldStateX);
-//         _copyOverStateControllers(oldStateX);
-//         _copyOverStateException(oldStateX);
-//         _copyOverStateDependencies(oldStateX);
-//         updateNewStateX(oldStateX);
-//
-//         assert(() {
-//           if (kDebugMode) {
-//             debugPrint('============ _copyOverState(): $this copied $oldStateX');
-//           }
-//           return true;
-//         }());
-//
-//         // Testing Flutter lifecycle operation
-//         assert(() {
-//           if (oldStateX.resumedAppLifecycle || oldStateX.deactivated) {
-//             if (kDebugMode) {
-//               print(
-//                   '============ _copyOverState(): resumed: ${oldStateX.resumedAppLifecycle} deactivated: ${oldStateX.deactivated}');
-//             }
-//           }
-//           return true;
-//         }());
-//       }
-//     }
-//     // cleanup
-//     _oldStateX = null;
-//   }
 
   /// The framework calls this method whenever it removes this [State] object
   /// from the tree.
@@ -480,7 +398,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     RouteObserverStates.unsubscribeRoutes(this);
 
     /// If 'AppState' is not used
-    if (rootState == null) {
+    if (appStateX == null || this is AppStateX) {
       // Unregisters the given observer.
       WidgetsBinding.instance.removeObserver(this);
     }
@@ -1385,7 +1303,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         /// Call the State object's setState() function.
         super.setState(fn);
         // /// Call any [Listenable] objects.
-        // notifyListeners();
+        // notifyListeners();  // notifyListeners() is below
       }
       _setStateAllowed = true;
     } else {
@@ -1393,4 +1311,27 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _setStateRequested = true;
     }
   }
+
+// /// Notify all the [Listenable] objects that are the State object's controllers.
+// void notifyListeners() {
+//
+//   /// No 'setState()' functions are allowed to fully function at this point.
+//   _setStateAllowed = false;
+//
+//   for (final con in controllerList) {
+//     con.notifyListeners();
+//   }
+//
+//   _setStateAllowed = true;
+//
+//   // The InheritedWidget will dictate if widgets are rebuilt.
+//   _setStateRequested = false;
+//
+//   assert(() {
+//     if (_printEvents) {
+//       debugPrint('============ Event: notifyListeners() in $this');
+//     }
+//     return true;
+//   }());
+// }
 }

@@ -12,7 +12,7 @@ part of 'state_extended.dart';
 mixin InheritedWidgetStateMixin on State {
   /// A flag determining whether the built-in InheritedWidget is used or not.
   bool get useInherited => _useInherited;
-  late bool _useInherited;
+  bool _useInherited = false;
 
   // Collect any 'widgets' depending on this State's InheritedWidget.
   final Set<BuildContext> _dependencies = {};
@@ -85,13 +85,13 @@ mixin InheritedWidgetStateMixin on State {
     return inherited;
   }
 
-  /// Called when the State's InheritedWidget is called again
-  /// This 'widget function' will be called again.
-  Widget setBuilder(WidgetBuilder? builder) => stateSet(builder);
+
+  @Deprecated('Use setBuilder() instead.')
+  Widget stateSet(WidgetBuilder? builder) => setBuilder(builder);
+
   /// Called when the State's InheritedWidget is called again
   /// This 'widget builder' will be called again.
-  @Deprecated('Use setBuilder() instead.')
-  Widget stateSet(WidgetBuilder? builder) {
+  Widget setBuilder(WidgetBuilder? builder) {
     builder ??= (_) => const SizedBox.shrink();
     return useInherited && this is StateX
         ? StateDependentWidget(stateMixin: this as StateX, builder: builder)

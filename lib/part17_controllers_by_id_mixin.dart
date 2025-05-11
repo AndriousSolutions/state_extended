@@ -8,11 +8,11 @@ part of 'state_extended.dart';
 /// StateX object at any one time by their unique identifier.
 mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
   /// Stores the Controller by its Id
-  ///  <id, controller>
+  ///  [<id, controller>]
   final Map<String, StateXController> _mapControllerById = {};
 
   /// List the runtimeType of the stored controllers.
-  ///  <id, type>
+  ///  [<id, type>]
   final Map<String, Type> _mapControllerTypes = {};
 
   /// Supply a public list of all the Controllers.

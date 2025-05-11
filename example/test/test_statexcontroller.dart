@@ -42,7 +42,7 @@ void testsStateXController(WidgetTester tester) {
 
   expect(conId, isEmpty);
 
-  appState = con.rootState!;
+  appState = con.appStateX!;
 
   expect(appState, isA<AppStateX>(), reason: location);
 
@@ -63,7 +63,7 @@ void testsStateXController(WidgetTester tester) {
   expect(con, isA<Controller>(), reason: location);
 
   /// Even the 'first' State object has a reference to itself
-  appState = appState.rootState!;
+  appState = appState.appStateX!;
 
   expect(appState.widget, isA<MyApp>(), reason: location);
 
@@ -133,7 +133,7 @@ void _testAppController(WidgetTester tester) {
   final StateX appState = tester.firstState<AppStateX>(find.byType(MyApp));
 
   /// The first Controller added to the App's first State object
-  final controller = appState.rootCon;
+  final controller = appState.appCon;
 
   expect(controller, isA<ExampleAppController>());
 

@@ -11,22 +11,17 @@ class _InheritedWidgetStatefulWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _InheritedWidgetState();
 }
 
-// Reference this State object in the notifyClients()
+// App's InheritedWidget
+// Every time it's called, its dependencies are rebuilt.
 class _InheritedWidgetState extends State<_InheritedWidgetStatefulWidget> {
   @override
   void initState() {
     super.initState();
-    // Record this State object
-    appState = RootStateMixin._rootStateX!;
-    appState._inheritedState = this;
+    // Reference this State object so to call in the notifyClients()
+    AppStateX._instance?._inheritedState = this;
   }
 
-  late AppStateX appState;
-
-  // App's InheritedWidget
   @override
   Widget build(BuildContext context) => StateXInheritedWidget(
-        state: appState,
-        child: const _BuilderStatefulWidget(),
-      );
+      state: AppStateX._instance!, child: const _BuilderStatefulWidget());
 }

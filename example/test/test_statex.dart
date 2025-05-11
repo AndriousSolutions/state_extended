@@ -60,7 +60,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(contains, isTrue, reason: _location);
 
   // The first State object is itself --- _MyAppState
-  final appState = stateObj.rootState!;
+  final appState = stateObj.appStateX!;
 
   // Every StateMVC and ControllerMVC has a unique String identifier.
   final myAppStateId = appState.identifier;
@@ -259,7 +259,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(theController, isNotEmpty, reason: _location);
 
-  final keyList = stateObj.addList(null);
+  final keyList = stateObj.addAll(null);
 
   expect(keyList, isEmpty, reason: _location);
 
@@ -344,7 +344,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   stateObj.didChangeLocales([locale]);
 
   /// Return the 'first' controller
-  final controller = stateObj.rootCon;
+  final controller = stateObj.appCon;
 
   expect(controller, isA<ExampleAppController>(), reason: _location);
 

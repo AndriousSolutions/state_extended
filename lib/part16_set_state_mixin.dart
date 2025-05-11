@@ -127,6 +127,18 @@ mixin SetStateMixin {
 
   /// Return the 'latest' State object
   StateX? get lastState => _stateXSet.isEmpty ? null : _stateXSet.last;
+
+  /// Returns the 'latest' context in the App.
+  BuildContext? get lastContext => lastState?.context;
+
+  /// Determines if running in an IDE or in production.
+  /// Returns true if the App is under in the Debugger and not production.
+  bool get inDebugMode {
+    var inDebugMode = false;
+    // assert is removed in production.
+    assert(inDebugMode = true);
+    return inDebugMode;
+  }
 }
 
 /// Used to explicitly return the 'type' indicated.

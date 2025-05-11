@@ -16,13 +16,8 @@ class _BuilderState extends State<_BuilderStatefulWidget> {
   @override
   void initState() {
     super.initState();
-    // Record this State object
-    appState = RootStateMixin._rootStateX!;
-    appState._builderState = this;
+    AppStateX._instance?._builderState = this;
   }
-
-  late AppStateX appState;
-
   @override
-  Widget build(BuildContext context) => appState.builder(context);
+  Widget build(BuildContext context) => AppStateX._instance!.builder(context);
 }

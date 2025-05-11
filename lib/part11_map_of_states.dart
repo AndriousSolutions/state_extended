@@ -8,9 +8,33 @@ part of 'state_extended.dart';
 ///
 /// dartdoc:
 /// {@category StateX class}
+/// {@category StateXController class}
 mixin _MapOfStates on State {
+// mixin _MapOfStates on State {
   /// All the State objects in this app.
   static final Map<String, StateX> _states = {};
+
+  /// This is 'privatized' function as it is an critical method and not for public access.
+  /// This contains the 'main list' of StateX objects present in the app!
+  bool _addToMapOfStates(StateX? state) {
+    final add = state != null;
+    if (add) {
+      //
+      _MapOfStates._states[state._id] = state;
+    }
+    return add;
+  }
+
+  /// Remove the specified State object from static Set object.
+  bool _removeFromMapOfStates(StateX? state) {
+    var removed = state != null;
+    if (removed) {
+      final int length = _MapOfStates._states.length;
+      _MapOfStates._states.removeWhere((key, value) => state._id == key);
+      removed = _MapOfStates._states.length < length;
+    }
+    return removed;
+  }
 
   /// Retrieve the State object by type
   /// Returns null if not found
@@ -65,9 +89,11 @@ mixin _MapOfStates on State {
     return list.toList(growable: false);
   }
 
+  @Deprecated('Use appCon instead.')
+  StateXController? get rootCon => appCon;
   /// Returns 'the first' StateXController associated with this StateX object.
   /// Returns null if empty.
-  StateXController? get rootCon {
+  StateXController? get appCon {
     StateXController? controller;
     final state = firstState;
     if (state != null) {
@@ -81,6 +107,9 @@ mixin _MapOfStates on State {
 
   /// Return the 'latest' State object
   StateX? get lastState => _nextStateX(reversed: true);
+
+  /// Returns the 'latest' context in the App.
+  BuildContext? get lastContext => lastState?.context;
 
   /// Loop through the list and return the next available State object
   StateX? _nextStateX({bool? reversed}) {
@@ -119,25 +148,12 @@ mixin _MapOfStates on State {
     return each;
   }
 
-  /// This is 'privatized' function as it is an critical method and not for public access.
-  /// This contains the 'main list' of StateX objects present in the app!
-  bool _addToMapOfStates(StateX? state) {
-    final add = state != null;
-    if (add) {
-      _MapOfStates._states[state._id] = state;
-    }
-    //   }
-    return add;
-  }
-
-  /// Remove the specified State object from static Set object.
-  bool _removeFromMapOfStates(StateX? state) {
-    var removed = state != null;
-    if (removed) {
-      final int length = _MapOfStates._states.length;
-      _MapOfStates._states.removeWhere((key, value) => state._id == key);
-      removed = _MapOfStates._states.length < length;
-    }
-    return removed;
+  /// Determines if running in an IDE or in production.
+  /// Returns true if the App is under in the Debugger and not production.
+  bool get inDebugMode {
+    var inDebugMode = false;
+    // assert is removed in production.
+    assert(inDebugMode = true);
+    return inDebugMode;
   }
 }

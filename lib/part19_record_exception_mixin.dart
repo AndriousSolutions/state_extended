@@ -28,11 +28,7 @@ mixin RecordExceptionMixin on State {
   }
 
   /// Simply display the exception.
-  String get recErrorMsg => errorMsg;
-  @Deprecated('Use recErrorMsg instead.')
-  String get exceptionMessage => errorMsg;
-  @Deprecated('Use recErrorMsg instead.')
-  String get errorMsg {
+  String get recErrorMsg {
     String message;
     if (_recErrorException == null) {
       message = '';

@@ -29,7 +29,7 @@ Future<void> testsAppStateX(WidgetTester tester) async {
   expect(stateObj, isA<AppStateX>(), reason: _location);
 
 // The first State object is itself --- _MyAppState
-  appState = stateObj?.rootState;
+  appState = stateObj?.appStateX;
 
   expect(appState, isA<AppStateX>(), reason: _location);
 
@@ -40,7 +40,7 @@ Future<void> testsAppStateX(WidgetTester tester) async {
   /// Rebuild InheritedWidget
   appState.dataObject = 'test';
 
-  appState.stateSet((context) => const SizedBox());
+  appState.setBuilder((context) => const SizedBox());
 
   final exception = Exception('Testing');
 
@@ -54,7 +54,7 @@ Future<void> testsAppStateX(WidgetTester tester) async {
 
   expect(appState.recHasError, isTrue, reason: _location);
 
-  expect(appState.errorMsg == 'Testing', isTrue, reason: _location);
+  expect(appState.recErrorMsg == 'Testing', isTrue, reason: _location);
 
   expect(appState.recStackTrace, isNull, reason: _location);
 

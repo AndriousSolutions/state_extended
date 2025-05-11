@@ -358,7 +358,7 @@ class HomeController extends StateXController {
     super.deactivate();
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: deactivate in HomeController');
+      print('########### deactivate in HomeController');
     }
   }
 
@@ -369,7 +369,7 @@ class HomeController extends StateXController {
     super.activate();
     if (inDebugMode) {
       //ignore: avoid_print
-      print('############ Event: activate in HomeController');
+      print('########### activate in HomeController');
     }
   }
 

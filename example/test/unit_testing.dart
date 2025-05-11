@@ -19,4 +19,7 @@ Future<void> unitTesting(WidgetTester tester) async {
 
   /// Run some Mixins to satisfy CodeCov
   await testRunMixins(tester);
+
+  /// Simulate some events (eg. paused and resumed the app)
+  await testEventHandling(tester);
 }

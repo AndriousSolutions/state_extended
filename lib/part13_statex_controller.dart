@@ -17,7 +17,7 @@ class StateXController
         SetStateMixin,
         ImplNotifyListenersChangeNotifierMixin,
         StateListener,
-        RootStateMixin,
+        AppStateMixin,
         AsyncOps {
   /// Optionally supply a State object to 'link' to this object.
   /// Thus, assigned as 'current' StateX for this object

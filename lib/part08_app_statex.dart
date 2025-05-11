@@ -20,27 +20,28 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     super.controller,
     List<StateXController>? controllers,
     Object? object,
+    @Deprecated('notifyClientsInBuild no longer necessary')
     bool? notifyClientsInBuild,
     super.printEvents,
     // Save the current error handler
-  })  : _prevErrorFunc = FlutterError.onError,
-        _notifyClientsInBuild = notifyClientsInBuild ?? true {
+  }) : _prevErrorFunc = FlutterError.onError {
     // Introduce its own error handler
     FlutterError.onError = _errorHandler;
 
-    //Record this as the 'root' State object.
-    setRootStateX(this);
+    // Supply a package-wide reference.
+    _instance = this;
+
     _dataObj = object;
     addList(controllers?.toList());
   }
   // Save the current Error Handler.
   final FlutterExceptionHandler? _prevErrorFunc;
 
+  // Provide a global instance.
+  static AppStateX? _instance;
+
   // The 'data object' available to the framework.
   Object? _dataObj;
-
-  // Call the built-in InheritedWidget during rebuilds
-  final bool _notifyClientsInBuild;
 
   @override
   @mustCallSuper
@@ -69,7 +70,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   }
 
   /// Reference the State object returning the variable, _child
-  _BuilderState? _builderState;
+  State? _builderState;
 
   /// Reference the State object containing the app's InheritedWidget
   _InheritedWidgetState? _inheritedState;
@@ -77,10 +78,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   Widget buildF(BuildContext context) {
     _buildFOverridden = false;
+    _inheritedState?.setState(() {}); // calls App's InheritedWidget
     _builderState?.setState(() {}); // calls builder()
-    if (_notifyClientsInBuild) {
-      _inheritedState?.setState(() {}); // calls the InheritedWidget
-    }
     return const _InheritedWidgetStatefulWidget();
   }
 
@@ -92,7 +91,6 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   void dispose() {
     _builderState = null;
     _inheritedState = null;
-    _clearRootStateX();
     _MapOfStates._states.clear();
     super.dispose();
   }
@@ -285,7 +283,6 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   ///
   ///  Set the specified widget (through its context) as a dependent of the InheritedWidget
   ///
-  ///  Return false if not configured to use the InheritedWidget
   @override
   bool dependOnInheritedWidget(BuildContext? context) {
     final depend = context != null;
@@ -331,12 +328,13 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// Called when the State's InheritedWidget is called again
   /// This 'widget function' will be called again.
   @override
+  // ignore: deprecated_member_use_from_same_package
   Widget setBuilder(WidgetBuilder? builder) => stateSet(builder);
 
   /// Called when the State's InheritedWidget is called again
   /// This 'widget function' will be called again.
   @override
-//  @Deprecated('Use stateBuilder() instead.')
+  @Deprecated('Use setBuilder() instead.')
   Widget stateSet(WidgetBuilder? builder) {
     builder ??=
         (_) => const SizedBox.shrink(); // Display 'nothing' if not provided
@@ -418,12 +416,12 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
     _inErrorRoutine = true;
 
+    // Assign the error to a variable
+    lastFlutterError(details);
+
     // Call the latest SateX object's error routine
     // Possibly the error occurred there.
     onStateError(details);
-
-    // Record the error
-    lastFlutterError(details);
 
     // Log the error
     logErrorDetails(details);
@@ -437,7 +435,19 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // The App's error handler
     if (_onErrorOverridden) {
       onError(details);
-    }else{
+      // If in testing, after the supplied handler, call Flutter Testing Error handler
+      if (WidgetsBinding.instance is! WidgetsFlutterBinding) {
+        // An `Error` is a failure that the programmer should have avoided.
+        if (details.exception is TestFailure || details.exception is Error) {
+          // Allow an error to be ignored. Once!
+          if (ignoreErrorInTesting) {
+            _ignoreErrorInTesting = false;
+          } else {
+            _prevErrorFunc?.call(details);
+          }
+        }
+      }
+    } else {
       //  If no App Error Handler, run its own Error handler
       _prevErrorFunc?.call(details);
     }
@@ -445,6 +455,29 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Now out of the error handler
     _inErrorRoutine = false;
   }
+
+  /// A flag testing the Error routine *INSIDE* the testing
+  /// It's set and reset *ONLY* when testing.
+  /// Allows a one-time even to ignore an error during testing.
+  bool get ignoreErrorInTesting => _ignoreErrorInTesting ?? false;
+
+  // Only set to true once and only in testing
+  set ignoreErrorInTesting(bool? ignore) {
+    // Assigns a value only in testing.
+    if (ignore != null && WidgetsBinding.instance is! WidgetsFlutterBinding) {
+      // if (_ignoreErrorInTesting == null) {
+        _ignoreErrorInTesting = ignore;
+      // } else {
+      //   // Once set false, it can't be changed again
+      //   if (_ignoreErrorInTesting!) {
+      //     _ignoreErrorInTesting = ignore;
+      //   }
+      // }
+    }
+  }
+
+  //
+  bool? _ignoreErrorInTesting;
 
   /// A flag indicating we're running in the error routine.
   /// Set to avoid infinite loop if in errors in the error routine.
@@ -582,6 +615,12 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
       }
     }
   }
+}
+
+/// Ensure there's no collision.
+class _PrivateGlobalKey<T extends State<StatefulWidget>>
+    extends GlobalObjectKey<T> {
+  const _PrivateGlobalKey(super.value);
 }
 
 /// Supply a widget from a widget builder and possibly depend on InheritedWidget

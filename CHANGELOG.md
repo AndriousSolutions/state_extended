@@ -1,4 +1,21 @@
 
+## 6.0.0
+May 04, 2025
+- AppStateX now has static AppStateX? _instance
+- AppStateX parameter, bool? notifyClientsInBuild, no longer offered.
+- AppStateX stateSet() renamed setBuilder()
+  built-in InheritedWidget is always called with every setState((){});
+- Renamed RootStateMixin to AppStateMixin (rootState to appState)
+- @Deprecated('Use appCon instead.')
+  StateXController? get rootCon => appCon;
+- bool get inDebugMode {
+- class SetState renamed class SetBuilder
+  _key = _PrivateGlobalKey<_SetBuilderState>(_SetBuilderState(builder));
+- lastContext in a StateXController is the 'latest' State object it's associated with.
+- Removed universal_platform: ^1.0.0
+- Updated Example app
+- Reorganized the files and directories
+
 ## 5.11.0
 March 31, 2025
 - Future<bool> catchAsyncError(Object error)  // Catch errors in initAsync() throws an error

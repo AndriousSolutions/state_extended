@@ -20,8 +20,6 @@ Future<void> testRunMixins(WidgetTester tester) async {
 
   testMixins.onAsyncError(details);
 
-  await testMixins.didPushRoute('/');
-
   await testMixins.didPushRouteInformation(
     RouteInformation(
       uri: Uri(

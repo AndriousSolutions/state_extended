@@ -1,7 +1,7 @@
 // Copyright 2018 Andrious Solutions Ltd. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-import 'dart:io' show exit;
+// import 'dart:io' show exit;
 
 import 'package:example/src/controller.dart';
 
@@ -147,7 +147,7 @@ void testStateExtended() {
     AnotherController().initAsyncError = true;
 
     // Now trip an error right at start up.
-    Controller().errorCatchAsyncError = true;
+    ExampleAppController().errorCatchAsyncError = true;
 
     // hot reload
     await tester.binding.reassembleApplication();

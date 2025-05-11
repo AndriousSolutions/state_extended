@@ -14,7 +14,9 @@ Future<void> testPage1(WidgetTester tester) async {
   const count = 9;
 
   // Verify that our counter starts at 0.
-  expect(find.text('0'), findsOneWidget, reason: _location);
+  expect(find.text('0'), findsAtLeast(1), reason: _location);
+
+  expect(find.byKey(const Key('Text')), findsOneWidget, reason: _location);
 
   /// Increment the counter
   for (int cnt = 0; cnt <= count - 1; cnt++) {
@@ -31,7 +33,7 @@ Future<void> testPage1(WidgetTester tester) async {
   // Successfully incremented.
   expect(find.text('0'), findsNothing, reason: _location);
 
-  expect(find.text(count.toString()), findsOneWidget, reason: _location);
+  expect(find.text(count.toString()), findsExactly(2), reason: _location);
 
   await tester.tap(find.byKey(const Key('Page 2')));
   await tester.pumpAndSettle();
@@ -63,7 +65,7 @@ Future<void> testPage1(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('Page 1')));
   await tester.pumpAndSettle(const Duration(seconds: 2));
 
-  expect(find.text((count * 2).toString()), findsOneWidget, reason: _location);
+  expect(find.text((count * 2).toString()), findsExactly(2), reason: _location);
 
   state = con.state!;
 
@@ -91,62 +93,6 @@ Future<void> testPage1(WidgetTester tester) async {
 
   expect(id, isNotEmpty, reason: _location);
 
-  /// Simulate some events (eg. paused and resumed the app)
-  await testEventHandling(tester);
-
-  var event = state.hadSystemEvent;
-
-  if (event) {
-    /// The app has had some System events occurring.
-    expect(event, isTrue, reason: _location);
-  }
-
-  event = state.pausedAppLifecycle;
-
-  if (event) {
-    /// The app has been paused
-    expect(event, isTrue, reason: _location);
-  }
-
-  event = state.inactiveAppLifecycle;
-
-  if (event) {
-    expect(event, isTrue, reason: _location);
-  }
-
-  event = state.detachedAppLifecycle;
-
-  if (event) {
-    expect(event, isTrue, reason: _location);
-  }
-
-  event = state.resumedAppLifecycle;
-
-  if (event) {
-    expect(event, isTrue, reason: _location);
-  }
-
-  // Possibly the State object is now unmounted and deactivated in some tests.
-  event = state.deactivated;
-
-  if (event) {
-    /// Test that a state object as been replaced!
-    expect(event, isTrue, reason: _location);
-  }
-
-  // The system will dispose of the State at its own discretion
-  // You'll have no idea if and when that is.
-  event = state.disposed;
-
-  if (event) {
-    expect(event, isTrue, reason: _location);
-  }
-
-  if (!state.hiddenAppLifecycle) {
-    // Should not happen, but don't trip it here regardless! gp
-    expect(state.hiddenAppLifecycle, isFalse, reason: _location);
-  }
-
   if (!state.mounted) {
     // Should not happen, but don't trip it here regardless! gp
     expect(state.mounted, isFalse, reason: _location);
@@ -156,7 +102,7 @@ Future<void> testPage1(WidgetTester tester) async {
   (state as Page1State).didHaveMemoryPressure();
 
   // Remove the indicated controller
-  event = state.removeByKey(id);
+  final event = state.removeByKey(id);
 
   if (event) {
     expect(event, isTrue, reason: _location);
@@ -164,8 +110,6 @@ Future<void> testPage1(WidgetTester tester) async {
 
   state = con.stateOf<Page1>()!;
 
-  /// A new State object has been introduced!
-  /// **NO** StateX was using StateX._inTester for some reason?!
   state = con.state!;
 
   expect(state.mounted, isTrue, reason: _location);

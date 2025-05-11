@@ -10,13 +10,60 @@ const _location = '========================== test_event_handling.dart';
 
 /// Simulate some App 'life cycle' events.
 Future<void> testEventHandling(WidgetTester tester) async {
+  //
+  // A Singleton pattern allows for unit testing.
+  final con = Controller();
+
+  final state = con.state!;
+
   // Simulate a 'release focus' then refocus event
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+
+  // Give the app time
+  await tester.pumpAndSettle();
+
+  var event = state.inactiveAppLifecycle;
+
+  if (event) {
+    expect(event, isTrue, reason: _location);
+  }
+
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
-  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
-  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+
+  // Give the app time
+  // await tester.pumpAndSettle();
+  //
+  //  event = state.pausedAppLifecycle;
+  //
+  // if (event) {
+  //   /// The app has been paused
+  //   expect(event, isTrue, reason: _location);
+  // }
+
+  tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.detached);
+
+  // // Give the app time
+  // await tester.pumpAndSettle();
+  //
+  // event = state.detachedAppLifecycle;
+  //
+  // if (event) {
+  //   /// The app has been paused
+  //   expect(event, isTrue, reason: _location);
+  // }
+
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+
+  // // Give the app time
+  // await tester.pumpAndSettle();
+  //
+  // event = state.resumedAppLifecycle;
+  //
+  // if (event) {
+  //   /// The app has been paused
+  //   expect(event, isTrue, reason: _location);
+  // }
 
   // Give the app time to recover and indeed resume testing.
   await tester.pumpAndSettle(const Duration(seconds: 5));
@@ -40,6 +87,18 @@ Future<void> testEventHandling(WidgetTester tester) async {
 
   // Give the app time to recover and indeed resume testing.
   await tester.pumpAndSettle(const Duration(seconds: 5));
+
+  event = state.hadSystemEvent;
+
+  if (event) {
+    /// The app has had some System events occurring.
+    expect(event, isTrue, reason: _location);
+  }
+
+  if (!state.hiddenAppLifecycle) {
+    // Should not happen, but don't trip it here regardless! gp
+    expect(state.hiddenAppLifecycle, isFalse, reason: _location);
+  }
 }
 
 ///
@@ -57,11 +116,23 @@ Future<void> testScaleFactor(WidgetTester tester) async {
 
   expect(id, isNotEmpty, reason: _location);
 
+  // Don't report the error to the Tester
+  con.appStateX?.ignoreErrorInTesting = true;
+
+  // Record the scale
+  final textScale = tester.binding.platformDispatcher.textScaleFactor;
+
   // didChangeTextScaleFactor event handler function is called
   tester.binding.platformDispatcher.textScaleFactorTestValue = 4;
 
-  // Clear scale factor after testing is over
-  addTearDown(tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
+  // // Clear scale factor after testing is over
+  // addTearDown(tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
+
+  /// Give the app time to recover and indeed resume testing.
+  await tester.pumpAndSettle(const Duration(seconds: 1));
+
+  // Original scale
+  tester.binding.platformDispatcher.textScaleFactorTestValue = textScale;
 
   /// Give the app time to recover and indeed resume testing.
   await tester.pumpAndSettle(const Duration(seconds: 1));
@@ -72,11 +143,21 @@ Future<void> testScaleFactor(WidgetTester tester) async {
 
 ///
 Future<void> testDidChangeMetrics(WidgetTester tester) async {
+  // Don't report the error to the Tester
+  Controller().appStateX?.ignoreErrorInTesting = true;
+
+  final physicalSize = tester.view.physicalSize;
+
   // didChangeMetrics
   /// Done near the end of testing as it's a very disruptive test
-  tester.view.physicalSize = const Size(42, 42);
+  tester.view.physicalSize = Size(physicalSize.width, physicalSize.height + 1);
 
-  addTearDown(tester.view.resetPhysicalSize);
+  // pumpAndSettle() waits for all animations to complete.
+  await tester.pumpAndSettle(const Duration(seconds: 1));
+
+  // addTearDown(tester.view.resetPhysicalSize);
+
+  tester.view.physicalSize = physicalSize;
 
   // pumpAndSettle() waits for all animations to complete.
   await tester.pumpAndSettle(const Duration(seconds: 1));

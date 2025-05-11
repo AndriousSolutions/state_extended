@@ -1,3 +1,4 @@
+library;
 // Copyright 2023 Andrious Solutions Ltd. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -6,8 +7,6 @@
 ///
 /// dartdoc:
 /// {@category Get started}
-library state_extended;
-
 import 'dart:async' show Future;
 
 import 'dart:math' show Random;
@@ -27,6 +26,9 @@ import 'package:flutter/foundation.dart';
 
 /// Note when routes are pushed n popped
 import 'route_observer_states.dart';
+
+/// For testing
+import 'package:flutter_test/flutter_test.dart' show TestFailure;
 
 /// Supply to user
 export 'route_observer_states.dart';
@@ -85,7 +87,7 @@ part 'part16_set_state_mixin.dart';
 part 'part17_controllers_by_id_mixin.dart';
 
 /// The 'Root' State object: lastContext, dataObject and inDebugMode
-part 'part18_root_state_mixin.dart';
+part 'part18_app_state_mixin.dart';
 
 /// Record an exception in a State object
 part 'part19_record_exception_mixin.dart';

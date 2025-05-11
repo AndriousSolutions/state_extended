@@ -190,10 +190,10 @@ mixin FutureBuilderStateMixin on State {
         }
         // There was an error instead.
       } else {
-        // Resets the count of errors to show a complete error message not an abbreviated one.
-        FlutterError.resetErrorCount();
-        // Log the error
-        FlutterError.presentError(errorDetails);
+        // // Resets the count of errors to show a complete error message not an abbreviated one.
+        // FlutterError.resetErrorCount();
+        // // Log the error
+        // FlutterError.presentError(errorDetails);
         // Release any splash screen
         _splashScreen = null;
 
@@ -243,10 +243,18 @@ mixin FutureBuilderStateMixin on State {
   Widget _localizeWidget(BuildContext context, Widget child) {
     Widget widget;
     Object? material, cupertino;
-    material =
-        Localizations.of<MaterialLocalizations>(context, MaterialLocalizations);
-    cupertino = Localizations.of<CupertinoLocalizations>(
-        context, CupertinoLocalizations);
+    //
+    StateX state;
+    bool disposed = false;
+    if (this is StateX) {
+      disposed = (this as StateX).disposed;
+    }
+    if (context.mounted && !disposed) {
+      material = Localizations.of<MaterialLocalizations>(
+          context, MaterialLocalizations);
+      cupertino = Localizations.of<CupertinoLocalizations>(
+          context, CupertinoLocalizations);
+    }
     if (material != null || cupertino != null) {
       widget = child;
     } else {

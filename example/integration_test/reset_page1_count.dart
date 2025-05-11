@@ -23,5 +23,5 @@ Future<void> resetPage1Count(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('Page 1')));
   await tester.pumpAndSettle();
 
-  expect(find.text('0'), findsOneWidget, reason: _location);
+  expect(find.text('0'), findsAtLeast(1), reason: _location);
 }

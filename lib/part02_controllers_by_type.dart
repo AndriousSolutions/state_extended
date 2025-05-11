@@ -11,7 +11,7 @@ part of 'state_extended.dart';
 /// {@category StateX class}
 mixin _ControllersByType on State {
   /// A collection of Controllers identified by type.
-  /// <type, controller>
+  /// [<type, controller>]
   final Map<Type, StateXController> _mapControllerByType = {};
 
   /// Returns true if found.
@@ -25,8 +25,10 @@ mixin _ControllersByType on State {
   List<StateXController> get controllerList =>
       _mapControllerByType.values.toList(growable: false);
 
+  @Deprecated('Use addAll() instead.')
+  List<String> addList(List<StateXController> list) => addAll(list);
   /// Add a list of 'Controllers'.
-  List<String> addList(List<StateXController> list) {
+  List<String> addAll(List<StateXController> list) {
     final List<String> keyIds = [];
     for (final con in list) {
       if (!_mapControllerByType.containsKey(con.runtimeType)) {

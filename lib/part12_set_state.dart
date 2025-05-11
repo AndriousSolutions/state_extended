@@ -4,6 +4,15 @@
 
 part of 'state_extended.dart';
 
+// Widget builder allows for null
+typedef BuilderMaybeObjectType = Widget Function(
+    BuildContext context, Object? dataObj);
+
+@Deprecated('Use SetBuilder instead')
+class SetState extends SetBuilder {
+  SetState({super.key, required super.builder});
+}
+
 ///  Used like the function, setState(), to 'spontaneously' call
 ///  build() functions here and there in your app. Much like the Scoped
 ///  Model's ScopedModelDescendant() class.
@@ -13,34 +22,49 @@ part of 'state_extended.dart';
 /// dartdoc:
 /// {@category AppStateX class}
 @protected
-class SetState extends StatelessWidget {
+class SetBuilder extends StatelessWidget {
   /// Supply a 'builder' passing in the App's 'data object' and latest BuildContext object.
-  const SetState({super.key, required this.builder});
+  SetBuilder({super.key, required this.builder})
+      : _key = _PrivateGlobalKey<_SetBuilderState>(_SetBuilderState(builder));
+
+  final _PrivateGlobalKey _key;
 
   /// This is called with every rebuild of the App's inherited widget.
-  final Widget Function(BuildContext context, Object? object) builder;
+  final BuilderMaybeObjectType builder;
+
+  @override
+  Widget build(BuildContext context) => _SetBuilderWidget(key: _key);
+}
+
+class _SetBuilderWidget extends StatefulWidget {
+  const _SetBuilderWidget({super.key});
+  @override
+  State<StatefulWidget> createState() =>
+      // ignore: no_logic_in_create_state
+      (key as GlobalObjectKey).value as State;
+}
+
+class _SetBuilderState extends State<_SetBuilderWidget> {
+  _SetBuilderState(this.builder);
+  BuilderMaybeObjectType builder;
 
   /// Calls the required Function object:
-  /// Function(BuildContext context, T? object)
+  /// Function(BuildContext context, T? dataObj)
   /// and passes along the app's custom 'object'
   @override
   Widget build(BuildContext context) {
     //
-    final rootState = RootStateMixin._rootStateX;
+    /// Go up the widget tree and link to the App's inherited widget.
+    AppStateX._instance?.dependOnInheritedWidget(context);
+    AppStateX._instance?._inSetStateBuilder = true;
 
-    if (rootState != null) {
-      /// Go up the widget tree and link to the App's inherited widget.
-      rootState.dependOnInheritedWidget(context);
-      rootState._inSetStateBuilder = true;
-      StateX._setStateAllowed = false;
-    }
+    StateX._setStateAllowed = false;
 
-    final Widget widget = builder(context, rootState?._dataObj);
+    final Widget widget = builder(context, AppStateX._instance?._dataObj);
 
-    if (rootState != null) {
-      StateX._setStateAllowed = true;
-      rootState._inSetStateBuilder = false;
-    }
+    StateX._setStateAllowed = true;
+
+    AppStateX._instance?._inSetStateBuilder = false;
     return widget;
   }
 }

@@ -21,7 +21,7 @@ linter:
     - always_declare_return_types
     - always_put_control_body_on_new_line
     # - always_put_required_named_parameters_first # not crucial and we do it all around
-    - always_require_non_null_named_parameters
+#    - always_require_non_null_named_parameters # was removed in Dart '3.3.0'
     # - always_specify_types # we use type inference
     - annotate_overrides
     # - avoid_annotating_with_dynamic # we want to be explicit with dynamic
@@ -48,7 +48,7 @@ linter:
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
     # - avoid_returning_null # we do this commonly
-    - avoid_returning_null_for_future
+#    - avoid_returning_null_for_future # was removed in Dart '3.3.0'
     - avoid_returning_null_for_void
     - avoid_returning_this
     - avoid_setters_without_getters
@@ -81,13 +81,13 @@ linter:
     - hash_and_equals
     - implementation_imports
     #- invariant_booleans  # No longer should be used.
-    - iterable_contains_unrelated_type
+#    - iterable_contains_unrelated_type # was removed in Dart '3.3.0'
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
     - library_names
     - library_prefixes
     # - lines_longer_than_80_chars # we use it when temporarily adding strings before translations
-    - list_remove_unrelated_type
+#    - list_remove_unrelated_type # was removed in Dart '3.3.0'
     - literal_only_boolean_expressions
     - missing_whitespace_between_adjacent_strings
     - no_adjacent_strings_in_list
@@ -100,7 +100,7 @@ linter:
     - one_member_abstracts
     - only_throw_errors
     - overridden_fields
-    - package_api_docs
+#    - package_api_docs  # was removed in Dart '3.7.0'
     - package_names
     - package_prefixed_library_names
     # - parameter_assignments # we do this commonly
@@ -116,7 +116,7 @@ linter:
     - prefer_constructors_over_static_methods
     - prefer_contains
     # - prefer_double_quotes We use single quotes
-    - prefer_equal_for_default_values
+#    - prefer_equal_for_default_values # removed in Dart '3.0.0'
     # - prefer_expression_function_bodies # conflicts with https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#consider-using--for-short-functions-and-methods
     - prefer_final_fields
     - prefer_final_in_for_each
@@ -172,7 +172,7 @@ linter:
     - unnecessary_string_interpolations
     - unnecessary_this
     - unrelated_type_equality_checks
-    - unsafe_html
+#    - unsafe_html # removed in Dart '3.7.0'
     - use_full_hex_values_for_flutter_colors
     - use_function_type_syntax_for_parameters
     - use_key_in_widget_constructors
