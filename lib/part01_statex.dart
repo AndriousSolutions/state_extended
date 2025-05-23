@@ -323,10 +323,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   bool runInitAsync() {
     // Optionally call superType for if (_printEvents) { debugPrint(
     bool runInit = super.runInitAsync();
-
-    int cnt = 0;
-    StateXController con;
-
     // If any Controller says 'no', then there's no run.
     for (final con in controllerList) {
       runInit = con.runInitAsync();
@@ -562,9 +558,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Important to 'markNeedsBuild()' first
     super.didChangeDependencies();
 
-    if(_firstBuild == null){
+    if (_firstBuild == null) {
       _firstBuild = true;
-    }else{
+    } else {
       _firstBuild = false;
     }
 

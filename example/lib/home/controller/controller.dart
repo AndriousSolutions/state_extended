@@ -55,7 +55,8 @@ class Controller extends StateXController
   /// The API matches the name of the Widget's named parameter
   /// Increment and then call the State object's setState() function to reflect the change.
   void onPressed() {
-    LogController.log("########### onPressed('Page 2 Counter') in $controllerName");
+    LogController.log(
+        "########### onPressed('Page 2 Counter') in $controllerName");
     incrementCounter();
   }
 

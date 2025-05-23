@@ -288,7 +288,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   }
 
   /// Determine if its dependencies should be updated.
-  bool updateShouldNotify(covariant InheritedWidget oldWidget){
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
     // Record the triggered event
     assert(() {
       if (_printEvents) {

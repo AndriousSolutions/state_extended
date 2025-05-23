@@ -91,6 +91,7 @@ mixin _MapOfStates on State {
 
   @Deprecated('Use appCon instead.')
   StateXController? get rootCon => appCon;
+
   /// Returns 'the first' StateXController associated with this StateX object.
   /// Returns null if empty.
   StateXController? get appCon {

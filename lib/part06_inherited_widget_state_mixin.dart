@@ -85,7 +85,6 @@ mixin InheritedWidgetStateMixin on State {
     return inherited;
   }
 
-
   @Deprecated('Use setBuilder() instead.')
   Widget stateSet(WidgetBuilder? builder) => setBuilder(builder);
 
@@ -97,7 +96,6 @@ mixin InheritedWidgetStateMixin on State {
         ? StateDependentWidget(stateMixin: this as StateX, builder: builder)
         : builder(context);
   }
-
 
   @override
   void dispose() {

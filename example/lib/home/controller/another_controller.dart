@@ -25,7 +25,8 @@ class AnotherController extends StateXController
   set initAsyncError(bool? error) => _appSettings.initAsyncError = error;
 
   // ignore: unnecessary_this
-  String get className => this.toString().replaceAll('Instance of', '').replaceAll("'",'');
+  String get className =>
+      this.toString().replaceAll('Instance of', '').replaceAll("'", '');
 
   @override
   Future<bool> initAsync() async {
@@ -41,7 +42,9 @@ class AnotherController extends StateXController
   @override
   void onAsyncError(FlutterErrorDetails details) {
     //
-    if (details.exception.toString().contains('Error in AnotherController.initAsync()!')) {
+    if (details.exception
+        .toString()
+        .contains('Error in AnotherController.initAsync()!')) {
       assert(() {
         debugPrint('########### Caught error in onAsyncError() for $className');
         return true;

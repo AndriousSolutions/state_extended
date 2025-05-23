@@ -40,9 +40,8 @@ mixin AppStateMixin {
   }
 }
 
-
 @Deprecated('Use AppStateMixin mixin instead.')
-mixin RootStateMixin{
+mixin RootStateMixin {
   /// Returns the 'first' StateX object in the App
   // Important to prefix with the class name to 'share' this as a mixin.
   @Deprecated('Use appState instead.')

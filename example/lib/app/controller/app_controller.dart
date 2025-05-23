@@ -93,7 +93,8 @@ class ExampleAppController extends StateXController
 
   ///
   CupertinoThemeData get cupertinoThemeData {
-    CupertinoThemeData theme = MaterialBasedCupertinoThemeData(materialTheme: themeData);
+    CupertinoThemeData theme =
+        MaterialBasedCupertinoThemeData(materialTheme: themeData);
     final context = state?.context;
     if (context != null) {
       theme = theme.resolveFrom(context);

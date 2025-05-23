@@ -90,7 +90,8 @@ class Page3State extends StateX<Page3> with EventsStateMixin {
                             child: ElevatedButton(
                               key: const Key('Page 1'),
                               onPressed: () {
-                                LogController.log("=========== onPressed('Page 1') in $eventStateClassName");
+                                LogController.log(
+                                    "=========== onPressed('Page 1') in $eventStateClassName");
                                 Navigator.of(context)
                                   ..pop()
                                   ..pop();
@@ -102,7 +103,8 @@ class Page3State extends StateX<Page3> with EventsStateMixin {
                             child: ElevatedButton(
                               key: const Key('Page 2'),
                               onPressed: () {
-                                LogController.log("=========== onPressed('Page 2') in $eventStateClassName");
+                                LogController.log(
+                                    "=========== onPressed('Page 2') in $eventStateClassName");
                                 Navigator.pop(context);
                               },
                               child: const Text('Page 2'),
@@ -119,7 +121,8 @@ class Page3State extends StateX<Page3> with EventsStateMixin {
                           child: ElevatedButton(
                             key: const Key('New Key'),
                             onPressed: () {
-                              LogController.log("=========== onPressed('New Key') in $eventStateClassName");
+                              LogController.log(
+                                  "=========== onPressed('New Key') in $eventStateClassName");
                               // Page1 creates a new key and so a new State object
                               con.page1Key = null;
                               con.page1Count = 0;
@@ -136,7 +139,8 @@ class Page3State extends StateX<Page3> with EventsStateMixin {
                             child: ElevatedButton(
                               key: const Key('InheritedWidget example'),
                               onPressed: () async {
-                                LogController.log("=========== onPressed('InheritedWidget example') in $eventStateClassName");
+                                LogController.log(
+                                    "=========== onPressed('InheritedWidget example') in $eventStateClassName");
                                 await Navigator.push(
                                   lastState!.context,
                                   MaterialPageRoute<void>(
@@ -165,7 +169,9 @@ class Page3State extends StateX<Page3> with EventsStateMixin {
                   ElevatedButton(
                     key: const Key('Page 1 Counter'),
                     onPressed: () {
-                      LogController.log("=========== onPressed('Page 1 Counter') in $eventStateClassName");
+                      LogController.log(
+                          "=========== onPressed('Page 1 Counter') in $eventStateClassName");
+
                       /// Return State object by its type or by its StatefulWidget Type
                       /// Both returns null if not found.
                       var page2State = con.ofState<Page2State>();
@@ -186,14 +192,15 @@ class Page3State extends StateX<Page3> with EventsStateMixin {
                   ElevatedButton(
                     key: const Key('Page 2 Counter'),
                     onPressed: () {
-                      LogController.log("=========== onPressed('Page 2 Counter') in $eventStateClassName");
+                      LogController.log(
+                          "=========== onPressed('Page 2 Counter') in $eventStateClassName");
                       con.onPressed();
                     },
                     child: const Text('Page 2 Counter'),
                   ),
                 ],
               ),
-              (_) => LogPage(key: UniqueKey()),
+          (_) => LogPage(key: UniqueKey()),
         ],
         labels: const {
           'Page 3': Icon(Icons.looks_3_outlined),

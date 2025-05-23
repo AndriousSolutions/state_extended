@@ -125,7 +125,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
               appBar: AppBar(
                 title: const Text('Three-page example'),
               ),
-              body:  Column(
+              body: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   _timer.wordPair,
@@ -141,7 +141,8 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
                     TableRow(children: [
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('$count', key: const Key('Text'), style: style),
+                        child: Text('$count',
+                            key: const Key('Text'), style: style),
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,
@@ -188,7 +189,8 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
                               await Navigator.push(
                                 context,
                                 MaterialPageRoute<void>(
-                                  builder: (BuildContext context) => const Page2(),
+                                  builder: (BuildContext context) =>
+                                      const Page2(),
                                 ),
                               );
                             },

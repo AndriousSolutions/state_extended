@@ -309,7 +309,7 @@ class StateXController
 
   /// Determine if its dependencies should be updated.
   @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget){
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
     // Optionally call superType for if (_printEvents) { debugPrint(
     return super.updateShouldNotify(oldWidget);
   }

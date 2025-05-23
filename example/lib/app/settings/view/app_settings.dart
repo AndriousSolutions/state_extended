@@ -232,13 +232,13 @@ class _AppSettingsState extends State<AppSettings> {
         onTap: () {
           con.useMaterial3 = !con.useMaterial3;
           con.appStateX?.setState(() {});
-          setState((){});
+          setState(() {});
         },
         value: con.useMaterial3,
         onChanged: (bool value) {
           con.useMaterial3 = value;
           con.appStateX?.setState(() {});
-          setState((){});
+          setState(() {});
         },
       ),
     ];

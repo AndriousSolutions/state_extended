@@ -28,12 +28,6 @@ mixin _RebuildControllerStatesMixin {
   /// A flag. Instantiated Change Notifier
   bool get hasChangeNotifierImpl => _implChangeNotifier != null;
 
-  /// Don't forget to call this method in the appropriate dispose() function!
-  void _disposeChangeNotifier() {
-    _implChangeNotifier?.dispose(); // Clear listeners
-    _implChangeNotifier = null;
-  }
-
   // Implementation of the ChangeNotifier
   ImplNotifyListenersChangeNotifier? _implChangeNotifier;
 

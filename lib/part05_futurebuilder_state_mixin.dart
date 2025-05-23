@@ -229,23 +229,12 @@ mixin FutureBuilderStateMixin on State {
           null;
   bool? _usingCupertino;
 
-  /// Copy particular properties from the 'previous' StateX
-  // ignore: unused_element
-  // void _copyOverStateFuture([StateX? oldState]) {
-  //   //
-  //   if (oldState == null) {
-  //     return;
-  //   }
-  //   _future = oldState._future;
-  // }
-
   /// Supply Localizations before displaying the widget
   Widget _localizeWidget(BuildContext context, Widget child) {
     Widget widget;
     Object? material, cupertino;
-    //
-    StateX state;
     bool disposed = false;
+
     if (this is StateX) {
       disposed = (this as StateX).disposed;
     }

@@ -466,7 +466,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Assigns a value only in testing.
     if (ignore != null && WidgetsBinding.instance is! WidgetsFlutterBinding) {
       // if (_ignoreErrorInTesting == null) {
-        _ignoreErrorInTesting = ignore;
+      _ignoreErrorInTesting = ignore;
       // } else {
       //   // Once set false, it can't be changed again
       //   if (_ignoreErrorInTesting!) {
@@ -593,7 +593,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   String? _errorStateName;
 
   /// Step through its Controller first
-  void onControllerError(StateX state, FlutterErrorDetails details){
+  void onControllerError(StateX state, FlutterErrorDetails details) {
     /// You have the option to implement an error handler to individual controllers
     for (final con in state.controllerList) {
       try {
@@ -613,7 +613,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
           _logPackageError(
             e,
             library: 'part04_app_statex.dart',
-            description: 'Error in onControllerError() for ${_consoleNameOfClass(con)}',
+            description:
+                'Error in onControllerError() for ${_consoleNameOfClass(con)}',
           );
         }
       }

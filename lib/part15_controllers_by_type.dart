@@ -27,6 +27,7 @@ mixin _ControllersByType on State {
 
   @Deprecated('Use addAll() instead.')
   List<String> addList(List<StateXController> list) => addAll(list);
+
   /// Add a list of 'Controllers'.
   List<String> addAll(List<StateXController> list) {
     final List<String> keyIds = [];

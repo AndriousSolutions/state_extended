@@ -33,7 +33,7 @@ class _RandomCatState extends ImageAPIStateX<RandomCat> {
   @override
   Widget? onSplashScreen(BuildContext context) {
     // Return if possibly running in Testing
-    if(WidgetsBinding.instance is! WidgetsFlutterBinding){
+    if (WidgetsBinding.instance is! WidgetsFlutterBinding) {
       return null;
     }
     return const SplashScreen();

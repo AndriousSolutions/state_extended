@@ -41,7 +41,7 @@ class DogController extends InheritController {
   @override
   void newAnimals() {
     onTap();
-    _runningCount = 0;  // All to change
+    _runningCount = 0; // All to change
     super.newAnimals();
   }
 
@@ -51,7 +51,7 @@ class DogController extends InheritController {
   @override
   void onTap() {
     _dogRun = true;
-    _runningCount = _dogCount - 1;  // One to change
+    _runningCount = _dogCount - 1; // One to change
   }
 
   ///

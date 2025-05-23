@@ -165,7 +165,8 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
                               key: const Key('Page 1'),
                               style: flatButtonStyle,
                               onPressed: () {
-                                LogController.log("=========== onPressed('Page 1') in $eventStateClassName");
+                                LogController.log(
+                                    "=========== onPressed('Page 1') in $eventStateClassName");
                                 Navigator.pop(context);
                               },
                               child: const Text(
@@ -181,7 +182,8 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
                               style: flatButtonStyle,
                               onPressed: () async {
                                 //
-                                LogController.log("=========== onPressed('Page 3') in $eventStateClassName");
+                                LogController.log(
+                                    "=========== onPressed('Page 3') in $eventStateClassName");
                                 await Navigator.push(
                                     context,
                                     MaterialPageRoute<void>(
@@ -212,7 +214,7 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
                   ],
                 ),
               ),
-              (_) => LogPage(key: UniqueKey()),
+          (_) => LogPage(key: UniqueKey()),
         ],
         labels: const {
           'Page 2': Icon(Icons.looks_two_outlined),
@@ -223,7 +225,8 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
   /// Supply a public method to be accessed in Page 3.
   /// Calling another State object's function for demonstration purposes
   void onPressed() {
-    LogController.log("=========== onPressed('Page 1 Counter') in $eventStateClassName");
+    LogController.log(
+        "=========== onPressed('Page 1 Counter') in $eventStateClassName");
     final con = controller!;
 
     /// Retrieve specific State object (thus it can't be private)

@@ -10,7 +10,8 @@ import '/src/controller.dart';
 import '/src/view.dart';
 
 ///
-abstract class InheritController extends StateXController with EventsControllerMixin {
+abstract class InheritController extends StateXController
+    with EventsControllerMixin {
   /// Link this Controller's Widget to a specific InheritedWidget
   /// The InheritedWidget is the first State object it registered with.
   @override

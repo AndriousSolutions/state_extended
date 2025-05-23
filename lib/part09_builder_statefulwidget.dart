@@ -18,6 +18,7 @@ class _BuilderState extends State<_BuilderStatefulWidget> {
     super.initState();
     AppStateX._instance?._builderState = this;
   }
+
   @override
   Widget build(BuildContext context) => AppStateX._instance!.builder(context);
 }

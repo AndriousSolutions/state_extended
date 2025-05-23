@@ -231,7 +231,8 @@ mixin EventsControllerMixin on StateXController {
   @override
   void stateInit(state) {
     super.stateInit(state);
-    LogController.log('stateInit(${eventStateClassNameOnly('$state')}) in $controllerName');
+    LogController.log(
+        'stateInit(${eventStateClassNameOnly('$state')}) in $controllerName');
   }
 
   /// Whenever it's removed from the Widget Tree
@@ -282,7 +283,8 @@ mixin EventsControllerMixin on StateXController {
   @override
   void disposeState(state) {
     super.disposeState(state);
-    LogController.log('dispose(${eventStateClassNameOnly('$state')}) in $controllerName');
+    LogController.log(
+        'dispose(${eventStateClassNameOnly('$state')}) in $controllerName');
   }
 
   /// Supply an 'error handler' routine if something goes wrong

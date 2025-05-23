@@ -16,8 +16,8 @@ mixin AppObjectStateXMixin {
 
   // Use Cupertino UI when explicitly specified or even when running in Android
   /// Indicates if the App is running the Cupertino interface theme.
- // bool get useCupertino => MyApp.app.appState?.useCupertino ?? MyApp.app.iniOS;
-  bool get useCupertino =>  MyApp.app.iniOS;
+  // bool get useCupertino => MyApp.app.appState?.useCupertino ?? MyApp.app.iniOS;
+  bool get useCupertino => MyApp.app.iniOS;
 
   /// Determines if running in an IDE or in production.
   bool get inDebugMode => MyApp.app.appState?.inDebugMode ?? false;
@@ -34,14 +34,14 @@ mixin AppObjectStateXMixin {
 
   /// Catch and explicitly handle the error.
   void catchError(
-      Object? ex, {
-        StackTrace? stack,
-        String? library,
-        DiagnosticsNode? context,
-        IterableFilter<String>? stackFilter,
-        InformationCollector? informationCollector,
-        bool? silent,
-      }) {
+    Object? ex, {
+    StackTrace? stack,
+    String? library,
+    DiagnosticsNode? context,
+    IterableFilter<String>? stackFilter,
+    InformationCollector? informationCollector,
+    bool? silent,
+  }) {
     //
     if (ex is! Exception) {
       ex = Exception(ex.toString());
@@ -51,7 +51,9 @@ mixin AppObjectStateXMixin {
       ex,
       stack: stack,
       // Supply the app's name instead.
-      library: library, ///?? App.packageInfo?.appName,
+      library: library,
+
+      ///?? App.packageInfo?.appName,
       context: context,
       stackFilter: stackFilter,
       informationCollector: informationCollector,

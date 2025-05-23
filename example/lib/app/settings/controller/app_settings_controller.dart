@@ -3,7 +3,8 @@ import '/src/view.dart';
 
 ///
 class AppSettingsController extends StateXController
-    with  TabsScaffoldController { // TwoTabScaffoldController {
+    with TabsScaffoldController {
+  // TwoTabScaffoldController {
   /// Singleton Pattern
   factory AppSettingsController() => _this ??= AppSettingsController._();
 

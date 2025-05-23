@@ -1,11 +1,12 @@
 
-## 6.1.0
+## 6.1.0+1
 May 19, 2025
 - Replaced mixin, StateListener, with StateXEventHandlers
   used now by both StateX and StateXController
 - Optionally use debugPrint() in every event handler
 - Both StateX and StateXController now use onError()
 - Rewrite of Example app with MultiTabsScaffold
+- Removed unused local variables and format files
 
 
 ## 6.0.0

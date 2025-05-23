@@ -58,7 +58,7 @@ class WordPairsTimer extends StateXController
     super.initState();
 
     /// Initialize the timer.
-   _initTimer();
+    _initTimer();
 
     model.addState(state);
   }
@@ -123,6 +123,7 @@ class WordPairsTimer extends StateXController
   @override
   void didPopNext() {
     super.didPopNext();
+
     /// Initialize the timer.
     _initTimer();
   }
@@ -217,7 +218,8 @@ class WordPairsTimer extends StateXController
   void _cancelTimer() {
     _timer?.cancel();
     _timerInit = false;
-    LogController.log(':::::::::::: _cancelTimer() in ${eventStateClassNameOnly(toString())}');
+    LogController.log(
+        ':::::::::::: _cancelTimer() in ${eventStateClassNameOnly(toString())}');
   }
 
   /// Create a Timer to run periodically.
