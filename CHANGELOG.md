@@ -1,4 +1,13 @@
 
+## 6.1.0
+May 19, 2025
+- Replaced mixin, StateListener, with StateXEventHandlers
+  used now by both StateX and StateXController
+- Optionally use debugPrint() in every event handler
+- Both StateX and StateXController now use onError()
+- Rewrite of Example app with MultiTabsScaffold
+
+
 ## 6.0.0
 May 04, 2025
 - AppStateX now has static AppStateX? _instance
@@ -8,6 +17,11 @@ May 04, 2025
 - Renamed RootStateMixin to AppStateMixin (rootState to appState)
 - @Deprecated('Use appCon instead.')
   StateXController? get rootCon => appCon;
+- StateXController's initAsync(), initState(), dispose() are now only called once.
+  initAsyncState(), stateInit() and disposeState() now called with evey new State.
+- StateXController's deactivate() and activate() are now only called once.
+  deactivateState() and activateState() now called with evey State.
+- mixin StateListener revamped and renamed StateXEventHandlers
 - bool get inDebugMode {
 - class SetState renamed class SetBuilder
   _key = _PrivateGlobalKey<_SetBuilderState>(_SetBuilderState(builder));

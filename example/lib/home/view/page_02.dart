@@ -16,7 +16,7 @@ class Page2 extends StatefulWidget {
 }
 
 ///
-class Page2State extends StateX<Page2> with EventsStateMixin<Page2> {
+class Page2State extends StateX<Page2> with EventsStateMixin {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
   /// showBinding: Print in console when Binding events are triggered.
   Page2State() : super(controller: Controller(), printEvents: true) {
@@ -96,124 +96,151 @@ class Page2State extends StateX<Page2> with EventsStateMixin<Page2> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text('Three-page example'),
-    ),
-    persistentFooterButtons: [
-      ElevatedButton(
-        key: const Key('Page 1 Counter'),
-        style: flatButtonStyle,
-        onPressed: () {
-          final con = controller!;
-          // Retrieve specific State object (thus it can't be private)
-          Page1State state = con.ofState<Page1State>()!;
-          // Retrieve State object by its StatefulWidget (will have to cast)
-          state = con.stateOf<Page1>() as Page1State;
-          state.count++;
-          state.setState(() {});
-          state.notifyClients();
+  Widget build(BuildContext context) => MultiTabsScaffold(
+        key: GlobalObjectKey<Page2State>(this),
+        controller: con,
+        tabs: [
+          (_) => Scaffold(
+                appBar: AppBar(
+                  title: const Text('Three-page example'),
+                ),
+                persistentFooterButtons: [
+                  ElevatedButton(
+                    key: const Key('Page 1 Counter'),
+                    style: flatButtonStyle,
+                    onPressed: () {
+                      final con = controller!;
+                      // Retrieve specific State object (thus it can't be private)
+                      Page1State state = con.ofState<Page1State>()!;
+                      // Retrieve State object by its StatefulWidget (will have to cast)
+                      state = con.stateOf<Page1>() as Page1State;
+                      state.count++;
+                      state.setState(() {});
+                      state.notifyClients();
+                    },
+                    child: const Text('Page 1 Counter'),
+                  ),
+                ],
+                floatingActionButton: FloatingActionButton(
+                  key: const Key('+'),
+                  onPressed: con.onPressed,
+                  child: const Icon(Icons.add),
+                ),
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.only(top: 100),
+                      child: Text("You're on page:"),
+                    ),
+                    const Flexible(
+                      child: Text(
+                        '2',
+                        style: TextStyle(fontSize: 48),
+                      ),
+                    ),
+                    const Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: Text(
+                          'You have pushed the button this many times:',
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        '${con.data}',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 100),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          /// Page button for Page 1
+                          Flexible(
+                            child: ElevatedButton(
+                              key: const Key('Page 1'),
+                              style: flatButtonStyle,
+                              onPressed: () {
+                                LogController.log("=========== onPressed('Page 1') in $eventStateClassName");
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'Page 1',
+                              ),
+                            ),
+                          ),
+
+                          /// Page button for Page 3
+                          Flexible(
+                            child: ElevatedButton(
+                              key: const Key('Page 3'),
+                              style: flatButtonStyle,
+                              onPressed: () async {
+                                //
+                                LogController.log("=========== onPressed('Page 3') in $eventStateClassName");
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                        builder: (BuildContext context) =>
+                                            const Page3()));
+
+                                /// A good habit to get into. Refresh the screen again.
+                                /// In this case, to show the count may have changed.
+                                setState(() {});
+                              },
+                              child: const Text(
+                                'Page 3',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                            child:
+                                Text('Count is saved in a memory variable.')),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              (_) => LogPage(key: UniqueKey()),
+        ],
+        labels: const {
+          'Page 2': Icon(Icons.looks_two_outlined),
+          'Logging': Icon(Icons.login_sharp),
         },
-        child: const Text('Page 1 Counter'),
-      ),
-    ],
-    floatingActionButton: FloatingActionButton(
-      key: const Key('+'),
-      onPressed: con.onPressed,
-      child: const Icon(Icons.add),
-    ),
-    body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.only(top: 100),
-          child: Text("You're on page:"),
-        ),
-        const Flexible(
-          child: Text(
-            '2',
-            style: TextStyle(fontSize: 48),
-          ),
-        ),
-        const Flexible(
-          child: Padding(
-            padding: EdgeInsets.only(top: 50),
-            child: Text(
-              'You have pushed the button this many times:',
-            ),
-          ),
-        ),
-        Flexible(
-          child: Text(
-            '${con.data}',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 100),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              /// Page button for Page 1
-              Flexible(
-                child: ElevatedButton(
-                  key: const Key('Page 1'),
-                  style: flatButtonStyle,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'Page 1',
-                  ),
-                ),
-              ),
-
-              /// Page button for Page 3
-              Flexible(
-                child: ElevatedButton(
-                  key: const Key('Page 3'),
-                  style: flatButtonStyle,
-                  onPressed: () async {
-                    //
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                            const Page3()));
-
-                    /// A good habit to get into. Refresh the screen again.
-                    /// In this case, to show the count may have changed.
-                    setState(() {});
-                  },
-                  child: const Text(
-                    'Page 3',
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(child: Text("Count is saved in an external 'dats source.'")),
-          ],
-        ),
-      ],
-    ),
-  );
+      );
 
   /// Supply a public method to be accessed in Page 3.
   /// Calling another State object's function for demonstration purposes
   void onPressed() {
+    LogController.log("=========== onPressed('Page 1 Counter') in $eventStateClassName");
     final con = controller!;
+
     /// Retrieve specific State object (thus it can't be private)
     Page1State state = con.ofState<Page1State>()!;
+
     /// Retrieve State object by its StatefulWidget (will have to cast)
     state = con.stateOf<Page1>() as Page1State;
     state.count++;
     state.setState(() {});
   }
 }
+
+///
+final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+  minimumSize: const Size(88, 36),
+  padding: const EdgeInsets.symmetric(horizontal: 16),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(2)),
+  ),
+);

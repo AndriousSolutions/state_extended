@@ -28,54 +28,65 @@ class _HomePageState extends StateX<HomePage> {
   late HomeController con;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title ?? 'Inherited State Object Demo.'),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(30),
-            ),
-          ),
-        ),
-        body: InheritBird(
-          child: InheritCat(
-            child: InheritDog(
-              child: InheritFox(
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  children: con.children,
+  Widget build(BuildContext context) => MultiTabsScaffold(
+        key: GlobalObjectKey<Page3State>(this),
+        controller: con,
+        tabs: [
+          (_) => Scaffold(
+                appBar: AppBar(
+                  title: Text(widget.title ?? 'Inherited State Object Demo.'),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(30),
+                    ),
+                  ),
                 ),
+                body: InheritBird(
+                  child: InheritCat(
+                    child: InheritDog(
+                      child: InheritFox(
+                        child: GridView.count(
+                          crossAxisCount: 3,
+                          children: con.children,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                persistentFooterButtons: [
+                  OverflowBar(
+                    // spacing: 5,
+                    // overflowAlignment: OverflowBarAlignment.center,
+                    children: [
+                      TextButton(
+                        key: const Key('New Dogs'),
+                        onPressed: () => con.newDogs(),
+                        child: const Text('New Dogs'),
+                      ),
+                      TextButton(
+                        key: const Key('New Cats'),
+                        onPressed: () => con.newCats(),
+                        child: const Text('New Cats'),
+                      ),
+                      TextButton(
+                        key: const Key('New Foxes'),
+                        onPressed: () => con.newFoxes(),
+                        child: const Text('New Foxes'),
+                      ),
+                      TextButton(
+                        key: const Key('New Birds'),
+                        onPressed: () => con.newBirds(),
+                        child: const Text('New Birds'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ),
-          ),
-        ),
-        persistentFooterButtons: [
-          OverflowBar(
-            // spacing: 5,
-            // overflowAlignment: OverflowBarAlignment.center,
-            children: [
-              TextButton(
-                key: const Key('New Dogs'),
-                onPressed: () => con.newDogs(),
-                child: const Text('New Dogs'),
-              ),
-              TextButton(
-                key: const Key('New Cats'),
-                onPressed: () => con.newCats(),
-                child: const Text('New Cats'),
-              ),
-              TextButton(
-                key: const Key('New Foxes'),
-                onPressed: () => con.newFoxes(),
-                child: const Text('New Foxes'),
-              ),
-              TextButton(
-                key: const Key('New Birds'),
-                onPressed: () => con.newBirds(),
-                child: const Text('New Birds'),
-              ),
-            ],
-          ),
+          (_) => LogPage(key: UniqueKey()),
         ],
+        labels: const {
+          'Grid': Icon(Icons.grid_3x3_sharp),
+          'Logging': Icon(Icons.login_sharp),
+        },
       );
 }

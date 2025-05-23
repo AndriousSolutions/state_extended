@@ -3,29 +3,10 @@ import 'package:flutter/gestures.dart' show PointerDeviceKind;
 
 import '/src/view.dart';
 
-/// The Settings
-class SettingsPage extends StatelessWidget {
+///
+class ScrollScreen extends StatelessWidget {
   ///
-  const SettingsPage({super.key});
-  //
-  // @override
-  // Widget build(BuildContext context) => AppSettingsDrawer(
-  //   key: const Key('AppSettingsDrawer'),
-  // );
-  @override
-  Widget build(BuildContext context) {
-    if (MyApp.app.useMaterial) {
-      return const AppSettings.column(key: Key('AppSettings'));
-    } else {
-      return const AppSettings.disabled(key: Key('AppSettings'));
-    }
-  }
-}
-
-/// The Settings
-class SettingsScreen extends StatelessWidget {
-  ///
-  const SettingsScreen({
+  const ScrollScreen({
     super.key,
     this.leading,
     this.title,

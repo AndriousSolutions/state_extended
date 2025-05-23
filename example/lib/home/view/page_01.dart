@@ -16,7 +16,7 @@ class Page1 extends StatefulWidget {
 }
 
 ///
-class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
+class Page1State extends StateX<Page1> with EventsStateMixin {
   /// Supply a controller to this State object
   /// so to call its setState() function below.
   Page1State()
@@ -117,281 +117,159 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
     media ??= MediaQuery.of(context);
     final inMobile = media!.size.shortestSide < 600;
     final isPortrait = media!.orientation == Orientation.portrait || inMobile;
-
-    return TwoTabScaffold(
-      key: GlobalObjectKey<Page1State>(this),
+    //
+    return MultiTabsScaffold(
       controller: _con,
-      tab01: (_) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Three-page example'),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _timer.wordPair,
-            const Flexible(
-              child: Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: Text(
-                  'You have pushed the button this many times:',
-                ),
+      tabs: [
+        (_) => Scaffold(
+              appBar: AppBar(
+                title: const Text('Three-page example'),
               ),
-            ),
-            // Flexible(
-            //   child: setBuilder(
-            //     // Will build this one lone widget
-            //     (context) => Text(
-            //       '$count',
-            //       style: Theme.of(context).textTheme.headlineMedium,
-            //     ),
-            //   ),
-            // ),
-            Table(children: [
-              TableRow(children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text('$count', key: const Key('Text'), style: style),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text('Text()', style: textStyle),
-                ),
-              ]),
-              if (isPortrait)
-                TableRow(children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: setBuilder((_) {
-                      return Text('$count', style: style);
-                    }),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Text('setBuilder()', style: textStyle),
-                  ),
-                ]),
-              if (isPortrait)
-                TableRow(children: [
-                  const Align(
-                    alignment: Alignment.centerRight,
-                    child: _TextStatefulWidget(),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Text('StatefulWidget()', style: textStyle),
-                  ),
-                ]),
-            ]),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 100),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const SizedBox(),
-                  Flexible(
-                    child: ElevatedButton(
-                      key: const Key('Page 2'),
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) => const Page2(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Page 2',
+              body:  Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _timer.wordPair,
+                  const Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Text(
+                        'You have pushed the button this many times:',
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Use built-in InheritedWidget'),
-                CupertinoSwitch(
-                  key: const Key('InheritedSwitch'),
-                  value: _con.useInherited,
-                  onChanged: (v) {
-                    // Save the setting
-                    _con.useInherited = v;
-                    // Both access the 'first' StateX object
-                    firstState?.setState(() {});
-                    appStateX?.setState(() {});
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          key: const Key('+'),
-          onPressed: () {
-            /// Look at the ways to supply the App's main controller
-            var appController = appCon as ExampleAppController;
-            appController = firstState!.controller as ExampleAppController;
-            appController = appStateX!.controller as ExampleAppController;
-            if (appController.errorButton) {
-              // Deliberately throw an error to demonstrate error handling.
-              throw Exception('Fake error to demonstrate error handling!');
-            }
-
-            count++;
-            // Record the count
-            _con.page1Count = count;
-
-            /// Commented out since the controller has access to this State object.
-//          setState(() {});
-            /// Look how this Controller has access to this State object!
-            /// The incremented counter will not update otherwise! Powerful!
-            /// Comment out and the counter will appear not to work.
-            controller?.setState(() {});
-          },
-          child: const Icon(Icons.add),
-        ),
-      ),
-      tab02: (_) => const SettingsScreen(
-        title: 'Testing',
-        child: SettingsPage(),
-      ),
-      tab02Label: const {'Testing': Icon(Icons.settings)},
-    );
-    // ignore: dead_code
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Three-page example'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          _timer.wordPair,
-          const Flexible(
-            child: Padding(
-              padding: EdgeInsets.only(top: 50),
-              child: Text(
-                'You have pushed the button this many times:',
-              ),
-            ),
-          ),
-          // Flexible(
-          //   child: setBuilder(
-          //     // Will build this one lone widget
-          //     (context) => Text(
-          //       '$count',
-          //       style: Theme.of(context).textTheme.headlineMedium,
-          //     ),
-          //   ),
-          // ),
-          Table(children: [
-            TableRow(children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text('$count', style: style),
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Text('Text()', style: textStyle),
-              ),
-            ]),
-            if (isPortrait)
-              TableRow(children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: setBuilder((_) {
-                    return Text('$count', style: style);
-                  }),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text('setBuilder()', style: textStyle),
-                ),
-              ]),
-            if (isPortrait)
-              TableRow(children: [
-                const Align(
-                  alignment: Alignment.centerRight,
-                  child: _TextStatefulWidget(),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text('StatefulWidget()', style: textStyle),
-                ),
-              ]),
-          ]),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 100),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const SizedBox(),
-                Flexible(
-                  child: ElevatedButton(
-                    key: const Key('Page 2'),
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (BuildContext context) => const Page2(),
+                  Table(children: [
+                    TableRow(children: [
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text('$count', key: const Key('Text'), style: style),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text('Text()', style: textStyle),
+                      ),
+                    ]),
+                    if (isPortrait)
+                      TableRow(children: [
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: setBuilder((_) {
+                            return Text('$count', style: style);
+                          }),
                         ),
-                      );
-                    },
-                    child: const Text(
-                      'Page 2',
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text('setBuilder()', style: textStyle),
+                        ),
+                      ]),
+                    if (isPortrait)
+                      TableRow(children: [
+                        const Align(
+                          alignment: Alignment.centerRight,
+                          child: _TextStatefulWidget(),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text('StatefulWidget()', style: textStyle),
+                        ),
+                      ]),
+                  ]),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 100),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const SizedBox(),
+                        Flexible(
+                          child: ElevatedButton(
+                            key: const Key('Page 2'),
+                            onPressed: () async {
+                              LogController.log(
+                                  "=========== onPressed('Page 2') in $eventStateClassName");
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (BuildContext context) => const Page2(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Page 2',
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Use built-in InheritedWidget'),
-              CupertinoSwitch(
-                key: const Key('InheritedSwitch'),
-                value: _con.useInherited,
-                onChanged: (v) {
-                  // Save the setting
-                  _con.useInherited = v;
-                  // Both access the 'first' StateX object
-                  firstState?.setState(() {});
-                  appStateX?.setState(() {});
-                },
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('Use built-in InheritedWidget'),
+                      CupertinoSwitch(
+                        key: const Key('InheritedSwitch'),
+                        value: _con.useInherited,
+                        onChanged: (v) {
+                          // Save the setting
+                          _con.useInherited = v;
+                          // Both access the 'first' StateX object
+                          firstState?.setState(() {});
+                          appStateX?.setState(() {});
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        key: const Key('+'),
-        onPressed: () {
-          // Deliberately throw an error to demonstrate error handling.
-          throw Exception('Fake error to demonstrate error handling!');
+              floatingActionButton: FloatingActionButton(
+                key: const Key('+'),
+                onPressed: () {
+                  ///
+                  LogController.log(
+                      '=========== onPressed() in $eventStateClassName');
 
-          count++;
-          // Record the count
-          _con.page1Count = count;
+                  /// Look at the ways to supply the App's main controller
+                  var appController = appCon as ExampleAppController;
+                  appController =
+                      firstState!.controller as ExampleAppController;
+                  appController = appStateX!.controller as ExampleAppController;
+                  if (appController.errorButton) {
+                    // Deliberately throw an error to demonstrate error handling.
+                    throw Exception(
+                        'Fake error to demonstrate error handling!');
+                  }
 
-          /// Commented out since the controller has access to this State object.
+                  count++;
+                  // Record the count
+                  _con.page1Count = count;
+
+                  /// Commented out since the controller has access to this State object.
 //          setState(() {});
-          /// Look how this Controller has access to this State object!
-          /// The incremented counter will not update otherwise! Powerful!
-          /// Comment out and the counter will appear not to work.
-          controller?.setState(() {});
-        },
-        child: const Icon(Icons.add),
-      ),
+                  /// Look how this Controller has access to this State object!
+                  /// The incremented counter will not update otherwise! Powerful!
+                  /// Comment out and the counter will appear not to work.
+                  controller?.setState(() {});
+                },
+                child: const Icon(Icons.add),
+              ),
+            ),
+        (_) => const ScrollScreen(
+              title: 'Testing',
+              child: SettingsPage(),
+            ),
+        (_) => LogPage(key: UniqueKey()),
+      ],
+      labels: const {
+        'Page 1': Icon(Icons.home),
+        'Testing': Icon(Icons.settings),
+        'Logging': Icon(Icons.login_sharp),
+      },
     );
   }
 
   @override
   void onError(FlutterErrorDetails details) {
     //
-    _timer.onError(details);
+    // _timer.onError(details);
 
     final stack = details.stack;
 
@@ -403,15 +281,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
       _con.page1Count = count;
       // Look how this Controller has access to this State object!
       controller?.setState(() {});
-    }
-
-    /// You have the option to implement an error handler to individual controllers
-    for (final con in controllerList) {
-      // If it has the onError() function
-      if (con is StateXonErrorMixin) {
-        final c = con as StateXonErrorMixin;
-        c.onError(details);
-      }
+      _timer.activate();
     }
   }
 
@@ -420,10 +290,12 @@ class Page1State extends StateX<Page1> with EventsStateMixin<Page1> {
   @override
   Future<bool> catchAsyncError(Object error) async {
     //
-    final caught = error.toString().contains('Error in AnotherController.initAsync()!');
+    final caught =
+        error.toString().contains('Error in AnotherController.initAsync()!');
     if (caught) {
       assert(() {
-        debugPrint('########### Caught error in catchAsyncError() for $className');
+        debugPrint(
+            '=========== Caught error in catchAsyncError() for $eventStateClassName');
         return true;
       }());
     }

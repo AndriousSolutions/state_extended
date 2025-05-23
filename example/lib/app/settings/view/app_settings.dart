@@ -5,18 +5,6 @@ import '/src/controller.dart';
 //
 import '/src/view.dart';
 
-/// The App Settings
-class AppSettingsDrawer extends AppDrawer {
-  ///
-  AppSettingsDrawer({super.key}) {
-    if (MyApp.app.useMaterial) {
-      add(const AppSettings.column(key: Key('AppSettings')));
-    } else {
-      add(const AppSettings.disabled(key: Key('AppSettings')));
-    }
-  }
-}
-
 ///
 class AppSettings extends StatefulWidget {
   /// Provide the Dev Tool options in a ListView
@@ -67,6 +55,15 @@ class _AppSettingsState extends State<AppSettings> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         shrinkWrap: widget.shrinkWrap ?? false,
         children: appSettings,
+      );
+    }
+
+    /// In Material Design, widgets require a Material widget ancestor
+    if (LookupBoundary.findAncestorWidgetOfExactType<Material>(context) ==
+        null) {
+      wid = Material(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: wid,
       );
     }
     return wid;
@@ -226,6 +223,22 @@ class _AppSettingsState extends State<AppSettings> {
             tipBuilderError = '';
           }
           setState(() {});
+        },
+      ),
+      listTile(
+        key: const Key('Material3'),
+        leading: isSmall ? null : const Icon(Icons.description_sharp),
+        title: const Text('Use Material 3'),
+        onTap: () {
+          con.useMaterial3 = !con.useMaterial3;
+          con.appStateX?.setState(() {});
+          setState((){});
+        },
+        value: con.useMaterial3,
+        onChanged: (bool value) {
+          con.useMaterial3 = value;
+          con.appStateX?.setState(() {});
+          setState((){});
         },
       ),
     ];

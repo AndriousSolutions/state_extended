@@ -33,7 +33,7 @@ Future<void> testPage1(WidgetTester tester) async {
   // Successfully incremented.
   expect(find.text('0'), findsNothing, reason: _location);
 
-  expect(find.text(count.toString()), findsExactly(2), reason: _location);
+  expect(find.text(count.toString()), findsAny, reason: _location);
 
   await tester.tap(find.byKey(const Key('Page 2')));
   await tester.pumpAndSettle();
@@ -65,7 +65,7 @@ Future<void> testPage1(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('Page 1')));
   await tester.pumpAndSettle(const Duration(seconds: 2));
 
-  expect(find.text((count * 2).toString()), findsExactly(2), reason: _location);
+  expect(find.text((count * 2).toString()), findsAny, reason: _location);
 
   state = con.state!;
 

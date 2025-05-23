@@ -8,7 +8,8 @@ import '/src/view.dart';
 
 /// The 'App Level' Controller
 class ExampleAppController extends StateXController
-    with EventsControllerMixin, TwoTabScaffoldController {
+    with EventsControllerMixin, TabsScaffoldController {
+  // TwoTabScaffoldController {
   /// Singleton design pattern is best for Controllers.
   factory ExampleAppController() => _this ??= ExampleAppController._();
   ExampleAppController._() : _appSettings = AppSettingsController();
@@ -21,6 +22,7 @@ class ExampleAppController extends StateXController
   /// Typically called within a FutureBuilder() widget.
   @override
   Future<bool> initAsync() async {
+    await super.initAsync();
     //
     var init = await _appSettings.initAsync();
 
@@ -38,6 +40,20 @@ class ExampleAppController extends StateXController
       });
     }
     return init;
+  }
+
+  /// Called with every [StateX] associated with this Controller
+  /// Initialize any 'time-consuming' operations at the beginning.
+  @override
+  Future<bool> initAsyncState(State state) async {
+    return true;
+  }
+
+  /// Called by every [StateX] object associated with it.
+  /// Override this method to perform initialization,
+  @override
+  void stateInit(State state) {
+    return;
   }
 
   @override
@@ -64,10 +80,25 @@ class ExampleAppController extends StateXController
     //
     if (details.exception.toString().contains('Error in initAsync()!')) {
       assert(() {
-        debugPrint('########### Caught error in onAsyncError() for $className');
+        debugPrint(
+            '########### Caught error in onAsyncError() for $controllerName');
         return true;
       }());
     }
+  }
+
+  ///
+  ThemeData get themeData =>
+      ThemeData.light(useMaterial3: _appSettings.useMaterial3);
+
+  ///
+  CupertinoThemeData get cupertinoThemeData {
+    CupertinoThemeData theme = MaterialBasedCupertinoThemeData(materialTheme: themeData);
+    final context = state?.context;
+    if (context != null) {
+      theme = theme.resolveFrom(context);
+    }
+    return theme;
   }
 
   /// Page1 Key
@@ -95,17 +126,18 @@ class ExampleAppController extends StateXController
 
   /// Error in catchAsyncError()
   bool get errorCatchAsyncError => _appSettings.errorCatchAsyncError;
-  set errorCatchAsyncError(bool? error) => _appSettings.errorCatchAsyncError = error;
+  set errorCatchAsyncError(bool? error) =>
+      _appSettings.errorCatchAsyncError = error;
 
   ///
   @override
-  void deactivateTwoTab() => _appSettings.deactivateTwoTab();
+  void deactivateTabsScaffold() => _appSettings.deactivateTabsScaffold();
 
   ///
   @override
-  void switchTwoTab() => _appSettings.switchTwoTab();
+  void tabSwitch(int index) => _appSettings.tabSwitch(index);
 
   ///
   @override
-  void switchBackTwoTab() => _appSettings.switchBackTwoTab();
+  void tabSwitchBack() => _appSettings.tabSwitchBack();
 }

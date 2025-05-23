@@ -20,7 +20,7 @@ class RandomDog extends StatefulWidget {
 class _RandomDogState extends ImageAPIStateX<RandomDog> {
   _RandomDogState()
       : super(
-          controller: DogController(),
+          controller: DogController.count(),
           uri: Uri(
             scheme: 'https',
             host: 'dog.ceo',

@@ -20,8 +20,9 @@ class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
   }) : super(runAsync: true, useInherited: true) {
     //
     final id = add(ImageAPIController());
+    _controller = controller as InheritController?;
     // Retrieve the Controller by its unique id.
-    _con = controllerById(id) as ImageAPIController;
+    _con = controllerById(id) as ImageAPIController?;
   }
 
   ///
@@ -32,16 +33,17 @@ class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
   @override
   final String? message;
 
-  late ImageAPIController _con;
+  late InheritController? _controller;
+  late ImageAPIController? _con;
 
   /// Supply a widget to the built-in FutureBuilder.
   @override
   Widget buildF(context) {
-    controller?.dependOnInheritedWidget(context);
+    _controller?.dependOnInheritedWidget(context);
     return GestureDetector(
-      onTap: _con.onTap,
-      onDoubleTap: _con.onDoubleTap,
-      child: Card(child: _con.image ?? const SizedBox()),
+      onTap: _con?.onTap,
+      onDoubleTap: _con?.onDoubleTap,
+      child: Card(child: _con?.image ?? const SizedBox()),
     );
   }
 

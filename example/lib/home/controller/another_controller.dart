@@ -24,8 +24,12 @@ class AnotherController extends StateXController
   bool get initAsyncError => _appSettings.initAsyncError;
   set initAsyncError(bool? error) => _appSettings.initAsyncError = error;
 
+  // ignore: unnecessary_this
+  String get className => this.toString().replaceAll('Instance of', '').replaceAll("'",'');
+
   @override
   Future<bool> initAsync() async {
+    await super.initAsync();
     if (initAsyncError) {
       throw Exception('Error in AnotherController.initAsync()!');
     }
@@ -97,12 +101,10 @@ class AnotherController extends StateXController
   @override
   void didChangeMetrics() {
     // Already called by another State object currently running.
-    if (didCallChangeEvent) {
+    if (calledChangeMetrics) {
       return;
     }
     super.didChangeMetrics();
-    // call setState() function to test State object
-    appStateX?.setState(() {});
   }
 
   /// Called when the platform's text sizes in the application.

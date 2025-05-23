@@ -66,6 +66,7 @@ class WordPairsTimer extends StateXController
   /// In case the Widget is return to the Widget tree
   @override
   void activate() {
+    super.activate();
     // Create the Timer again.
     _initTimer();
   }
@@ -73,6 +74,7 @@ class WordPairsTimer extends StateXController
   /// In case this State object is unmounted from the widget tree.
   @override
   void deactivate() {
+    super.deactivate();
     // Cancel the timer
     _cancelTimer();
   }
@@ -91,6 +93,7 @@ class WordPairsTimer extends StateXController
   // Alternatively, use the function, pausedLifecycleState()
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
     //
     if (state != AppLifecycleState.resumed) {
       /// AppLifecycleState.paused (may enter the suspending state at any time)
@@ -103,6 +106,7 @@ class WordPairsTimer extends StateXController
   /// Called when app returns from the background
   @override
   void resumedAppLifecycleState() {
+    super.resumedAppLifecycleState();
     // Create the Timer again.
     _initTimer();
   }
@@ -110,6 +114,7 @@ class WordPairsTimer extends StateXController
   /// The application is running in the background.
   @override
   void pausedAppLifecycleState() {
+    super.pausedAppLifecycleState();
     // Cancel the timer
     _cancelTimer();
   }
@@ -117,6 +122,7 @@ class WordPairsTimer extends StateXController
   /// The next route has been popped off, and back to this route.
   @override
   void didPopNext() {
+    super.didPopNext();
     /// Initialize the timer.
     _initTimer();
   }
@@ -124,6 +130,7 @@ class WordPairsTimer extends StateXController
   /// The next route has been pushed
   @override
   void didPushNext() {
+    super.didPushNext();
     // Cancel the timer
     _cancelTimer();
   }
@@ -131,11 +138,13 @@ class WordPairsTimer extends StateXController
   /// An error has occurred
   @override
   void onError(FlutterErrorDetails details) {
-    if (_timerInit) {
-      _cancelTimer();
-    } else {
-      _initTimer();
-    }
+    super.onError(details);
+    _cancelTimer();
+    // if (_timerInit) {
+    //   _cancelTimer();
+    // } else {
+    //   _initTimer();
+    // }
   }
 
   /// If the value of the object, obj, changes, this builder() is called again
@@ -208,6 +217,7 @@ class WordPairsTimer extends StateXController
   void _cancelTimer() {
     _timer?.cancel();
     _timerInit = false;
+    LogController.log(':::::::::::: _cancelTimer() in ${eventStateClassNameOnly(toString())}');
   }
 
   /// Create a Timer to run periodically.
@@ -243,6 +253,8 @@ class WordPairsTimer extends StateXController
     }
 
     _timer = Timer.periodic(duration, (timer) => callback!());
+
+    LogController.log('_initTimer() in ${eventStateClassNameOnly(toString())}');
   }
 }
 

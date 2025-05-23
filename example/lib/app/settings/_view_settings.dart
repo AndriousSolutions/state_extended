@@ -1,8 +1,11 @@
 // App's Settings
 export 'view/app_settings.dart';
 
-// Development Tools Settings
-export 'view/devtools_settings.dart';
+// Log
+export '../logging/view/log_page.dart';
 
-// Settings Screen
-export 'view/settings_screen.dart';
+// Scroll content
+export 'view/scroll_screen.dart';
+
+// Settings
+export 'view/settings_page.dart';

@@ -12,6 +12,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart'
     show IntegrationTestWidgetsFlutterBinding;
 
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart'
+    show InMemorySharedPreferencesAsync;
+
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart'
+    show SharedPreferencesAsyncPlatform;
+
 import '../test/_test_imports.dart';
 
 void main() => testExampleApp();
@@ -26,7 +32,11 @@ void testStateExtended() {
   //
   /// Set up anything necessary before testing begins.
   /// Runs once before ALL tests or groups
-  setUpAll(() async {});
+  setUpAll(() async {
+    // Must supply 'an instance' when testing SharedPreferencesAsync()
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
+  });
 
   /// Be sure the close the app after all the testing.
   /// Runs once after ALL tests or groups
@@ -94,6 +104,9 @@ void testStateExtended() {
       /// Simulate changing the screen size
       /// Done near the end of testing as it's a very disruptive test
       await testDidChangeMetrics(tester);
+
+      /// Simulate some events (eg. paused and resumed the app)
+      await testEventHandling(tester);
     },
   );
 

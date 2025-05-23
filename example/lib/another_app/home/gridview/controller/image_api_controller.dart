@@ -16,7 +16,7 @@ import '/src/controller.dart';
 import '/src/view.dart';
 
 /// This is the 'image API' State Object Controller.
-class ImageAPIController extends StateXController {
+class ImageAPIController extends StateXController with EventsControllerMixin {
   /// No factory constructor and so multiple instances of this class is possible.
 
   /// The List of data returned by the API.
@@ -26,12 +26,20 @@ class ImageAPIController extends StateXController {
   Image? image;
 
   /// Change the single image
-  void onTap() => state?.setState(() {});
+  void onTap() {
+    LogController.log('onTap() in ${eventStateClassNameOnly(toString())}');
+    state?.setState(() {});
+    final controller = state?.controller;
+    if (controller is InheritController) {
+      controller.onTap();
+    }
+  }
 
   /// Change all three images
   void onDoubleTap() {
     final controller = state?.controller;
     if (controller is InheritController) {
+      controller.onDoubleTap();
       controller.newAnimals();
     }
   }
@@ -45,6 +53,7 @@ class ImageAPIController extends StateXController {
   /// Contains all the asynchronous operations that must complete before proceeding.
   @override
   Future<bool> initAsync() async {
+    await super.initAsync();
     // Call the API
     _data = await _getURIData();
 
@@ -128,5 +137,8 @@ class ImageAPIController extends StateXController {
   /// Supply an 'error handler' routine if something goes wrong
   /// in the corresponding initAsync() routine.
   @override
-  bool onAsyncError(FlutterErrorDetails details) => false;
+  bool onAsyncError(FlutterErrorDetails details) {
+    super.onAsyncError(details);
+    return false;
+  }
 }

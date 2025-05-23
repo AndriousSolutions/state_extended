@@ -20,7 +20,7 @@ class RandomCat extends StatefulWidget {
 class _RandomCatState extends ImageAPIStateX<RandomCat> {
   _RandomCatState()
       : super(
-          controller: CatController(),
+          controller: CatController.count(),
           message: 'message',
           uri: Uri(
             scheme: 'https',
@@ -36,5 +36,6 @@ class _RandomCatState extends ImageAPIStateX<RandomCat> {
     if(WidgetsBinding.instance is! WidgetsFlutterBinding){
       return null;
     }
-    return const SplashScreen();}
+    return const SplashScreen();
+  }
 }

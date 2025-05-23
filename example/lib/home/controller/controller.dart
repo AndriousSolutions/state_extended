@@ -10,7 +10,8 @@ import '/src/view.dart';
 
 /// EventsControllerMixin puts print() in every event method
 class Controller extends StateXController
-    with StateXonErrorMixin, EventsControllerMixin, TwoTabScaffoldController {
+    with StateXonErrorMixin, EventsControllerMixin, TabsScaffoldController {
+  // TwoTabScaffoldController {
   /// It's a good practice and follow the Singleton pattern.
   /// There's on need for more than one instance of this particular class.
   factory Controller([StateX? state]) => _this ??= Controller._(state);
@@ -53,7 +54,10 @@ class Controller extends StateXController
 
   /// The API matches the name of the Widget's named parameter
   /// Increment and then call the State object's setState() function to reflect the change.
-  void onPressed() => incrementCounter();
+  void onPressed() {
+    LogController.log("########### onPressed('Page 2 Counter') in $controllerName");
+    incrementCounter();
+  }
 
   /// The Controller knows how to 'talk to' the Model and to the interface.
   void incrementCounter() {
@@ -70,13 +74,13 @@ class Controller extends StateXController
 
     // Retrieve the StateX object of type Page2State. Null if not found.
     final page2State = ofState<Page2State>();
-    page2State?.setState(() {});
+    page2State?.setState(() {}, log: false);
     // Retrieve the StateX object for StatefulWidget, Page2. Null if not found.
     final stateX = stateOf<Page2>();
-    stateX?.setState(() {});
+    (stateX as EventsStateMixin?)?.setState(() {}, log: false);
 
     // Retrieves the controller's 'latest' State object. Null if no State objects.
-    lastState?.setState(() {});
+    (lastState as EventsStateMixin?)?.setState(() {}, log: false);
 
     /// If count is divisible by 5
     if (_model.counter % 5 == 0) {
@@ -88,13 +92,13 @@ class Controller extends StateXController
 
   ///
   @override
-  void deactivateTwoTab() => _appCon.deactivateTwoTab();
+  void deactivateTabsScaffold() => _appCon.deactivateTabsScaffold();
 
   ///
   @override
-  void switchTwoTab() => _appCon.switchTwoTab();
+  void tabSwitch(int index) => _appCon.tabSwitch(index);
 
   ///
   @override
-  void switchBackTwoTab() => _appCon.switchBackTwoTab();
+  void tabSwitchBack() => _appCon.tabSwitchBack();
 }

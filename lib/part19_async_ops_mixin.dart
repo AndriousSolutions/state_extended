@@ -12,7 +12,20 @@ part of 'state_extended.dart';
 mixin AsyncOps {
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Implement any asynchronous operations needed done at start up.
-  Future<bool> initAsync() async => true;
+  @mustCallSuper
+  Future<bool> initAsync() async {
+    _initAsyncCalled = true;
+    return true;
+  }
+
+  /// Flag indicating initAsync() has been called
+  bool get initAsyncCalled => _initAsyncCalled ?? false;
+  bool? _initAsyncCalled;
+
+  /// Called with every [StateX] associated with this Controller
+  /// Initialize any 'time-consuming' operations at the beginning.
+  /// Implement any asynchronous operations needed done at start up.
+  Future<bool> initAsyncState(covariant State state) async => true;
 
   /// initAsync() has failed and a 'error' widget instead will be displayed.
   /// This takes in the snapshot.error details.
@@ -34,7 +47,7 @@ mixin AsyncOps {
       // Record error in log
       _logPackageError(
         e,
-        library: 'part18_async_ops_mixin.dart',
+        library: 'part19_async_ops_mixin.dart',
         description: 'Exception in ${con.runtimeType}.onAsyncError()',
       );
     }

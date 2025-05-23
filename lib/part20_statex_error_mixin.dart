@@ -10,7 +10,7 @@ part of 'state_extended.dart';
 /// dartdoc:
 /// {@category StateX class}
 /// {@category Error handling}
-mixin StateXonErrorMixin {
+mixin class StateXonErrorMixin {
   /// Offer an error handler
   void onError(FlutterErrorDetails details) {}
 

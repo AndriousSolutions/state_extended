@@ -55,7 +55,7 @@ Future<void> testRunMixins(WidgetTester tester) async {
 }
 
 /// Supply the Mixins using this class
-class _TestMixins with AsyncOps, StateListener, StateXonErrorMixin {
+class _TestMixins with AsyncOps, StateXEventHandlers, StateXonErrorMixin {
   // Merely call the mixin's functions and methods to satisfy CodeCov
 }
 

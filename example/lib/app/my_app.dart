@@ -26,7 +26,7 @@ class MyApp extends StatefulWidget {
 }
 
 ///
-class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
+class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
   //
   _MyAppState()
       : super(
@@ -53,7 +53,10 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
     return super.build(context);
     // Comment out the super.build() and stay with the traditional Flutter approach.
     // ignore: dead_code
+    final con = controller as ExampleAppController;
     return MaterialApp(
+      color: Colors.blue,
+      theme: con.themeData,
       home: Page1(key: UniqueKey()),
     );
   }
@@ -64,7 +67,10 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
     // Comment out super.buildF() and see how the initAsync() uses a FutureBuilder
     // to perform asynchronous operations while the State object starts up.
     // ignore: dead_code
+    final con = controller as ExampleAppController;
     return MaterialApp(
+      color: Colors.blue,
+      theme: con.themeData,
       home: Page1(key: UniqueKey()),
     );
   }
@@ -84,6 +90,8 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
     return MaterialApp(
       navigatorObservers:
           RouteObserverStates.list, // State object aware of route changes
+      color: Colors.blue,
+      theme: con.themeData,
       // A new key will recreate the State object
       home: Page1(key: con.page1Key),
     );
@@ -104,25 +112,6 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
     return widget;
   }
 
-  @override
-  void onError(FlutterErrorDetails details) {
-    //
-    assert(() {
-      debugPrint('########### onError() in $className');
-      return true;
-    }());
-
-    final errorDetails = lastFlutterError();
-
-    String message;
-
-    if (errorDetails == null) {
-      message = '';
-    } else {
-      message = errorDetails.exceptionAsString();
-    }
-  }
-
   /// Catch it if the initAsync() throws an error
   /// WITH GREAT POWER COMES GREAT RESPONSIBILITY
   /// Return true to ignore the error, false to continue the error handling
@@ -132,7 +121,7 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
     logStateXError = false;
 
     assert(() {
-      debugPrint('########### catchAsyncError() in $className');
+      debugPrint('=========== catchAsyncError() in $eventStateClassName');
       return true;
     }());
 
@@ -147,7 +136,7 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
     if (caught) {
       assert(() {
         debugPrint(
-            '########### Caught error in catchAsyncError() for $className');
+            '=========== Caught error in catchAsyncError() for $eventStateClassName');
         return true;
       }());
     }
@@ -158,27 +147,14 @@ class _MyAppState extends AppStateX<MyApp> with ClassNameMixin {
   @override
   void onAsyncError(errorDetails) {
     logErrorDetails(errorDetails);
-    assert(() {
-      debugPrint('########### onAsyncError in $className');
-      return true;
-    }());
-  }
-
-  @override
-  // ignore: unnecessary_overrides
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    assert(() {
-      debugPrint('########### updateShouldNotify in $className');
-      return true;
-    }());
-    return super.updateShouldNotify(oldWidget);
   }
 
   @override
   // ignore: unnecessary_overrides
   bool dependOnInheritedWidget(BuildContext? context) {
     assert(() {
-      debugPrint('########### dependOnInheritedWidget in $className');
+      debugPrint(
+          '=========== dependOnInheritedWidget() in $eventStateClassName');
       return true;
     }());
     return super.dependOnInheritedWidget(context);

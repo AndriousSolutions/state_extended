@@ -20,7 +20,7 @@ class RandomBird extends StatefulWidget {
 class _RandomBirdState extends ImageAPIStateX<RandomBird> {
   _RandomBirdState()
       : super(
-          controller: BirdController(),
+          controller: BirdController.count(),
           message: 'message',
           uri: Uri(
             scheme: 'https',
@@ -32,7 +32,9 @@ class _RandomBirdState extends ImageAPIStateX<RandomBird> {
   /// Place a breakpoint on this build() function and see how things work.
   @override
   // ignore: unnecessary_overrides
-  Widget build(BuildContext context) => super.build(context);
+  Widget build(BuildContext context) {
+    return super.build(context);
+  }
 
   @override
   // ignore: unnecessary_overrides

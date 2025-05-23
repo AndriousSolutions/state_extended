@@ -5,6 +5,7 @@
 //          Created  09 Feb 2019
 //
 //
+import '/src/controller.dart';
 
 import '/src/model.dart';
 
@@ -25,12 +26,27 @@ class AppObject
         StateXonErrorMixin {
   ///
   factory AppObject() => _this ??= AppObject._();
-  AppObject._() : prefs = SharedPreferencesAsync();
+  AppObject._()
+      : prefs = SharedPreferencesAsync(),
+        appSettings = AppSettingsController();
+
   static AppObject? _this;
 
   /// Stores App's Preferences
   // https://pub.dartlang.org/packages/shared_preferences/
   final SharedPreferencesAsync prefs;
+
+  /// Supply the App's settings
+  final AppSettingsController appSettings;
+
+  //  bool get useMaterial => MyApp.app.appState?.useMaterial ?? MyApp.app.inAndroid;
+  @override
+  bool get useMaterial => MyApp.app.inAndroid;
+
+  // Use Cupertino UI when explicitly specified or even when running in Android
+  /// Indicates if the App is running the Cupertino interface theme.
+  @override
+  bool get useCupertino => MyApp.app.iniOS;
 
   /// Dispose the App properties.
   @override
@@ -48,19 +64,6 @@ class AppObject
       _appState = state;
     }
   }
-
-  // /// Log an Error
-  // @override
-  // void logErrorDetails(details) {
-  //   if (logStateXError) {
-  //     super.logErrorDetails(details);
-  //   } else {
-  //     logStateXError = true; // Log error next time
-  //   }
-  // }
-  //
-  // /// Flag whether to log the next error
-  // static bool logStateXError = true;
 
   /// Determine if the App initialized successfully.
   // ignore: unnecessary_getters_setters

@@ -400,7 +400,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         // Record error in device's log
         _logPackageError(
           e,
-          library: 'part08_app_statex.dart',
+          library: 'part04_app_statex.dart',
           description: 'Error in AppStateX Error Handler',
         );
       }
@@ -552,6 +552,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
           // Call the StateX's onError() function
           if (caught) {
             _errorStateName = name;
+            onControllerError(state, details);
             state.onError(details);
           } else {
             _errorStateName = null;
@@ -578,7 +579,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
           // Record error in device's log
           _logPackageError(
             e,
-            library: 'part08_app_statex.dart',
+            library: 'part04_app_statex.dart',
             description: 'Error in onStateError()',
           );
         }
@@ -590,6 +591,34 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// The name of the State object experiencing an error
   String get errorStateName => _errorStateName ?? '';
   String? _errorStateName;
+
+  /// Step through its Controller first
+  void onControllerError(StateX state, FlutterErrorDetails details){
+    /// You have the option to implement an error handler to individual controllers
+    for (final con in state.controllerList) {
+      try {
+        con.onError(details);
+      } catch (e, stack) {
+        // Throw in DebugMode.
+        if (kDebugMode) {
+          // Set the original error routine. Allows the handler to throw errors.
+          FlutterError.onError = _prevErrorFunc;
+          // Rethrow to be handled by the original routine.
+          rethrow;
+        } else {
+          // Record the error
+          recordException(e, stack);
+
+          // Record error in device's log
+          _logPackageError(
+            e,
+            library: 'part04_app_statex.dart',
+            description: 'Error in onControllerError() for ${_consoleNameOfClass(con)}',
+          );
+        }
+      }
+    }
+  }
 
   // Notify the developer there's an error in the error handler.
   void _onErrorInHandler() {

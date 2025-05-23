@@ -1,18 +1,16 @@
 //
-export 'app_object.dart';
+export 'logging/view/log_page.dart';
 //
 export 'my_app.dart';
 //
+//export 'two_tabs_scaffold.dart';
+//
 export 'settings/_view_settings.dart';
 //
-export 'splash_screen.dart';
+export 'view/common/event_handler_ calls.dart';
 //
-export 'two_tab_scaffold.dart';
+export 'view/common/splash_screen.dart';
 //
-export 'view/common/class_name_mixin.dart';
-//
-export 'view/common/events_state.dart';
-//
-export 'view/drawer/app_drawer.dart';
+export 'view/multi_tabs/multi_tabs_scaffold.dart';
 //
 export 'view/object/_view_app_object.dart';

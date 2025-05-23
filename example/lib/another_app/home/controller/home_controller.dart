@@ -10,7 +10,8 @@ import '/src/controller.dart';
 import '/src/view.dart';
 
 ///
-class HomeController extends StateXController {
+class HomeController extends StateXController
+    with EventsControllerMixin, TabsScaffoldController {
   ///
   factory HomeController() => _this ??= HomeController._();
   HomeController._() : super();

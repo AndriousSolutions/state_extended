@@ -78,7 +78,7 @@ mixin FutureBuilderStateMixin on State {
   // Call initAsync() all the time if set true.
   bool _runAsync = false;
 
-  /// Call initAsync() all the time if return true.
+  /// Call initAsync() all the time if returns true.
   /// Conditional calls initAsync() creating a Future with every rebuild
   @protected
   bool runInitAsync() => true;

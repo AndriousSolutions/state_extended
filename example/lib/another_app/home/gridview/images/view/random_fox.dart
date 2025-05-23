@@ -20,7 +20,7 @@ class RandomFox extends StatefulWidget {
 class _RandomFoxState extends ImageAPIStateX<RandomFox> {
   _RandomFoxState()
       : super(
-          controller: FoxController(),
+          controller: FoxController.count(),
           uri: Uri(
             scheme: 'https',
             host: 'randomfox.ca',

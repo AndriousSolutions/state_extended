@@ -3,7 +3,7 @@ import '/src/view.dart';
 
 ///
 class AppSettingsController extends StateXController
-    with TwoTabScaffoldController {
+    with  TabsScaffoldController { // TwoTabScaffoldController {
   /// Singleton Pattern
   factory AppSettingsController() => _this ??= AppSettingsController._();
 
@@ -13,6 +13,7 @@ class AppSettingsController extends StateXController
   ///
   @override
   Future<bool> initAsync() async {
+    await super.initAsync();
     final settings = await _getPreferences();
     return settings;
   }
@@ -37,26 +38,33 @@ class AppSettingsController extends StateXController
 
   ///
   @override
-  void deactivateTwoTab() => _setPreferences();
+  void deactivateTabsScaffold() => _setPreferences();
 
   ///
   @override
-  void switchBackTwoTab() => _setPreferences();
+  void tabSwitchBack() => _setPreferences();
 
   /// Delay the initAsync() for a time
   bool get initAsyncDelay => _initAsyncDelay;
   bool _initAsyncDelay = false;
-
   set initAsyncDelay(bool? delay) {
     if (delay != null) {
       _initAsyncDelay = delay;
     }
   }
 
+  /// Use Material 3 or Material 2
+  bool get useMaterial3 => _useMaterial3;
+  bool _useMaterial3 = false;
+  set useMaterial3(bool? use) {
+    if (use != null) {
+      _useMaterial3 = use;
+    }
+  }
+
   /// Error in push button
   bool get errorButton => _errorButton;
   bool _errorButton = false;
-
   set errorButton(bool? error) {
     if (error != null) {
       _errorButton = error;
@@ -66,7 +74,6 @@ class AppSettingsController extends StateXController
   /// Error in builder()
   bool get errorInBuilder => _errorInBuilder;
   bool _errorInBuilder = false;
-
   set errorInBuilder(bool? error) {
     if (error != null) {
       _errorInBuilder = error;
@@ -76,7 +83,6 @@ class AppSettingsController extends StateXController
   /// Error in the App's initAsync()
   bool get initAppAsyncError => _initAppAsyncError;
   bool _initAppAsyncError = false;
-
   set initAppAsyncError(bool? error) {
     if (error != null) {
       _initAppAsyncError = error;
@@ -86,7 +92,6 @@ class AppSettingsController extends StateXController
   /// Error in initAsync()
   bool get initAsyncError => _initAsyncError;
   bool _initAsyncError = false;
-
   set initAsyncError(bool? error) {
     if (error != null) {
       _initAsyncError = error;
@@ -96,7 +101,6 @@ class AppSettingsController extends StateXController
   /// Error in errorCatchAsyncError()
   bool get errorCatchAsyncError => _errorCatchAsyncError;
   bool _errorCatchAsyncError = false;
-
   set errorCatchAsyncError(bool? error) {
     if (error != null) {
       _errorCatchAsyncError = error;
@@ -128,6 +132,8 @@ class AppSettingsController extends StateXController
       _errorInBuilder = await prefs.getBool('errorInBuilder') ?? false;
 
       _errorButton = await prefs.getBool('errorButton') ?? false;
+
+      _useMaterial3 = await prefs.getBool('useMaterial3') ?? true;
       //
     } catch (e) {
       preferences = false;
@@ -154,6 +160,8 @@ class AppSettingsController extends StateXController
       await prefs.setBool('errorInBuilder', _errorInBuilder);
 
       await prefs.setBool('errorButton', _errorButton);
+
+      await prefs.setBool('useMaterial3', _useMaterial3);
     } catch (e) {
       set = false;
     }
