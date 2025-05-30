@@ -13,7 +13,6 @@ May 19, 2025
 - Rewrite of Example app with MultiTabsScaffold
 - Removed unused local variables and format files
 
-
 ## 6.0.0
 May 04, 2025
 - AppStateX now has static AppStateX? _instance
