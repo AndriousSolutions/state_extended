@@ -1,5 +1,5 @@
 
-## 6.1.1+2
+## 6.1.1+3
 May 28, 2025
 - con._popStateFromSetter(); before con.deactivate(); in part01_state.dart
 - Deprecated printEvents with debugPrintEvents
@@ -8,6 +8,7 @@ May 28, 2025
 - Using flutter_test.dart:TestFailure in part04_app_statex.dart
 - Test stateObj.useInherited in test_statex.dart
 - // ignore_for_file: unused_local_variable in test_statex.dart
+- Resolved doc reference [pausedAppLifecycleState] in mixin, StateXEventHandlers
 
 ## 6.1.0+1
 May 19, 2025

@@ -340,7 +340,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   /// another activity is focused, such as a split-screen app, a phone call,
   /// a picture-in-picture app, a system dialog, or another window.
   ///
-  /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
+  /// Apps in this state should assume that they may be [pausedAppLifecycleState] at any time.
   void inactiveAppLifecycleState() {
     // Record the triggered event
     assert(() {
