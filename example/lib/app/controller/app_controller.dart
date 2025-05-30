@@ -27,7 +27,7 @@ class ExampleAppController extends StateXController
 
     state?.debugPrintEvents = _appSettings.printoutEvents;
 
-    if(init) {
+    if (init) {
       init = await super.initAsync();
     }
 

@@ -107,6 +107,7 @@ mixin _RebuildControllerStatesMixin {
   }
 
   /// Call all the registered 'State' listeners.
+  // ignore: deprecated_member_use_from_same_package
   bool notifyStateListeners() => notifyStates();
   @Deprecated('Use notifyStateListeners() instead.')
   bool notifyStates() {

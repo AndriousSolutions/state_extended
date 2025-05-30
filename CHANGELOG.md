@@ -1,8 +1,11 @@
 
-## 6.1.1
+## 6.1.1+1
 May 28, 2025
 - con._popStateFromSetter(); before con.deactivate(); in part01_state.dart
 - Deprecated printEvents with debugPrintEvents
+- Tto pass static analysis in  part12_rebuild_controller_states_mixin.dart:110:34
+  // ignore: deprecated_member_use_from_same_package
+- Using flutter_test.dart:TestFailure in part04_app_statex.dart
 
 ## 6.1.0+1
 May 19, 2025
