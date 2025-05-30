@@ -40,6 +40,7 @@ mixin AppStateMixin {
   }
 }
 
+// ignore: deprecated_member_use_from_same_package
 @Deprecated('Use AppStateMixin mixin instead.')
 mixin RootStateMixin {
   /// Returns the 'first' StateX object in the App
