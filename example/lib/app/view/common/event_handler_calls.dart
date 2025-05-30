@@ -98,6 +98,13 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     super.setState(fn);
   }
 
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+    /// The Timer is too frequent and interrupts the running App.
+    // super.updateShouldNotify(oldWidget);
+    return true;
+  }
+
   /// This method is also called immediately after [initState].
   /// Otherwise called only if this State object's Widget
   /// is a 'dependency' of InheritedWidget.
@@ -233,6 +240,21 @@ mixin EventsControllerMixin on StateXController {
     super.stateInit(state);
     LogController.log(
         'stateInit(${eventStateClassNameOnly('$state')}) in $controllerName');
+  }
+
+  /// Called with every [StateX] associated with this Controller
+  @override
+  Future<bool> initAsyncState(StateX state) async {
+    final init = await super.initAsyncState(state);
+
+    // Impose a print if the State prints
+    if (state.debugPrintEvents) {
+      // Use debugPrint() to print out to the console when an event fires
+      debugPrintEvents = state.debugPrintEvents;
+    }
+    LogController.log(
+        'initAsyncState(${eventStateClassNameOnly('$state')}) in $controllerName');
+    return init;
   }
 
   /// Whenever it's removed from the Widget Tree

@@ -1,7 +1,7 @@
 ## State Extended
 
 The StateX class is truly an extension of Flutter's State class
-providing functions and features found lacking in the original.
+providing additional functions and features you'll find useful.
 These features are nothing new to Flutter.
 StateX is an amalgamation of other features already found in Flutter.
 My motto when writing this package has been, 'Keep it simple, Keep it Flutter.'
@@ -37,10 +37,6 @@ only the <b>stateSet</b>() function and <b>dependOnInheritedWidget</b>() functio
 will dictate which widgets in the interface are updated when something is to change.
 Instead of building the interface from scratch again and again, 
 only specified portions on the interface is rebuilt improving performance.
-
-4) <b>buildAndroid</b>() and <b>buildiOS</b>() supplies the Material interface 
-and the Cupertino interface respectively depending on whether you're app is running 
-on a Android phone or iOS phone respectively.
 
 So, why these other functions and features? Because, they're needed...all the time.
 All my apps need to perform time-consuming operations before the app can proceed.

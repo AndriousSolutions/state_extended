@@ -53,13 +53,12 @@ class WordPairsTimer extends StateXController
   ///
   int index = 0;
 
+  /// Called by every [StateX] object associated with this Controller.
+  /// Override this method to perform initialization,
   @override
-  void initState() {
-    super.initState();
-
+  void stateInit(StateX state) {
     /// Initialize the timer.
     _initTimer();
-
     model.addState(state);
   }
 
@@ -74,9 +73,9 @@ class WordPairsTimer extends StateXController
   /// In case this State object is unmounted from the widget tree.
   @override
   void deactivate() {
-    super.deactivate();
     // Cancel the timer
     _cancelTimer();
+    super.deactivate();
   }
 
   /// IMPORTANT dispose() runs late and will cancel the *new* timer
@@ -141,36 +140,34 @@ class WordPairsTimer extends StateXController
   void onError(FlutterErrorDetails details) {
     super.onError(details);
     _cancelTimer();
-    // if (_timerInit) {
-    //   _cancelTimer();
-    // } else {
-    //   _initTimer();
-    // }
   }
 
   /// If the value of the object, obj, changes, this builder() is called again
   /// This allows spontaneous rebuilds here and there and not the whole screen.
-  Widget get wordPair => SetBuilder(builder: (context, obj) {
-        Widget widget;
-        if (obj is String) {
-          widget = Text(
-            obj,
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
-            ),
-          );
-        } else {
-          widget = const SizedBox(height: 6);
-        }
-        return widget;
-      });
+  Widget get wordPair {
+    return SetBuilder(builder: (context, obj) {
+      Widget widget;
+      if (obj is String) {
+        widget = Text(
+          obj,
+          style: TextStyle(
+            color: Colors.red,
+            fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
+          ),
+        );
+      } else {
+        widget = const SizedBox(height: 6);
+      }
+      return widget;
+    });
+  }
 
   // /// Alternate approach. See class _WordPair
   // Widget get wordPair => _WordPair(this);
 
   String _wordPair = '';
 
+  // Assigning a value to dataObject will cause a rebuild
   void _getWordPair() {
     //
     try {

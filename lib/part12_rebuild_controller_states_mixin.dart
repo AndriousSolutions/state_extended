@@ -19,13 +19,12 @@ mixin _RebuildControllerStatesMixin {
 
   // Instantiate the Change Notifier
   void _initChangeNotifier() {
-    //
+    // Implement a ChangeNotifier
     _implChangeNotifier ??= ImplNotifyListenersChangeNotifier();
-
-    _removeOldStates();
   }
 
   /// A flag. Instantiated Change Notifier
+  @Deprecated('Deemed unnecessary')
   bool get hasChangeNotifierImpl => _implChangeNotifier != null;
 
   // Implementation of the ChangeNotifier
@@ -51,17 +50,8 @@ mixin _RebuildControllerStatesMixin {
   bool _widgetBuilderUsed = false;
 
   /// Whether any listeners are currently registered.
-  bool get hasChangeListeners =>
-      _implChangeNotifier?.hasChangeListeners ?? false;
-
-  /// Call all the registered listeners.
-  bool notifyStates() {
-    final notify = _implChangeNotifier != null;
-    if (notify) {
-      _implChangeNotifier?.notifyListeners();
-    }
-    return notify;
-  }
+  bool get hasStateListeners => hasListeners;
+  bool get hasListeners => _implChangeNotifier?.hasListeners ?? false;
 
   /// When notified, setState() is called.
   bool addStateListener([State? state]) {
@@ -73,8 +63,16 @@ mixin _RebuildControllerStatesMixin {
       _removeOldStates();
       // Don't bother if already added
       if (!_stateListenersMap.containsKey(state!)) {
-        // ignore: INVALID_USE_OF_PROTECTED_MEMBER
-        listener() => state.setState(() {});
+        //
+        listener() {
+          if (state.mounted) {
+            // ignore: INVALID_USE_OF_PROTECTED_MEMBER
+            state.setState(() {});
+          } else {
+            removeStateListener(state);
+          }
+        }
+
         _stateListenersMap.addAll({state: listener});
         _implChangeNotifier?.addListener(listener);
       }
@@ -88,7 +86,8 @@ mixin _RebuildControllerStatesMixin {
       remove = state != null;
     }
     if (remove) {
-      if (_stateListenersMap.containsKey(state!)) {
+      remove = _stateListenersMap.containsKey(state!);
+      if (remove) {
         final listener = _stateListenersMap.remove(state);
         remove = listener != null;
         if (remove) {
@@ -99,6 +98,27 @@ mixin _RebuildControllerStatesMixin {
     }
     return remove;
   }
+
+  /// Don't forget to call this method in the appropriate dispose() function!
+  void removeAllStateListeners() {
+    _stateListenersMap.forEach(
+        (state, listener) => _implChangeNotifier?.removeListener(listener));
+    _stateListenersMap.clear();
+  }
+
+  /// Call all the registered 'State' listeners.
+  bool notifyStateListeners() => notifyStates();
+  @Deprecated('Use notifyStateListeners() instead.')
+  bool notifyStates() {
+    final notify = _implChangeNotifier != null;
+    if (notify) {
+      _implChangeNotifier?.notifyListeners();
+    }
+    return notify;
+  }
+
+  /// Use the original function name for [ChangeNotifier] as well
+  bool notifyListeners() => notifyStateListeners();
 
   bool _removeOldStates() {
     bool removed = false;
@@ -114,21 +134,30 @@ mixin _RebuildControllerStatesMixin {
     }
     return removed;
   }
+
+  /// Don't forget to call this method in the appropriate dispose() function!
+  void _disposeChangeNotifier() {
+    removeAllStateListeners();
+    _implChangeNotifier?.dispose();
+    _implChangeNotifier = null;
+  }
 }
 
 /// Implementing ChangeNotifier
 class ImplNotifyListenersChangeNotifier with ChangeNotifier {
+  /// The 'unnecessary overrides' prevent the Dart Analysis warning:
+  /// The member 'notifyListeners' can only be used within instance members of
+  /// subclasses of 'package: change_notifier.dart'.
+
   /// Whether any listeners are currently registered.
-  bool get hasChangeListeners => super.hasListeners;
+  @override
+  // ignore: unnecessary_overrides
+  bool get hasListeners => super.hasListeners;
 
   /// Call all the registered listeners.
   @override
   // ignore: unnecessary_overrides
   void notifyListeners() => super.notifyListeners();
-
-// The 'unnecessary overrides' prevent the Dart Analysis warning:
-// The member 'notifyListeners' can only be used within instance members of
-// subclasses of 'package: change_notifier.dart'.
 }
 
 ///
@@ -173,8 +202,7 @@ mixin ImplNotifyListenersChangeNotifierMixin {
   bool _widgetBuilderUsed = false;
 
   /// Whether any listeners are currently registered.
-  bool get hasChangeListeners =>
-      _implChangeNotifier?.hasChangeListeners ?? false;
+  bool get hasChangeListeners => _implChangeNotifier?.hasListeners ?? false;
 
   /// Call all the registered listeners.
   bool notifyListeners() {

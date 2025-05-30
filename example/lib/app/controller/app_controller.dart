@@ -22,9 +22,14 @@ class ExampleAppController extends StateXController
   /// Typically called within a FutureBuilder() widget.
   @override
   Future<bool> initAsync() async {
-    await super.initAsync();
-    //
+    // Retrieve the Settings ASAP
     var init = await _appSettings.initAsync();
+
+    state?.debugPrintEvents = _appSettings.printoutEvents;
+
+    if(init) {
+      init = await super.initAsync();
+    }
 
     // Throw an error right here at the beginning to test recovery code.
     if (initAppAsyncError) {
@@ -40,20 +45,6 @@ class ExampleAppController extends StateXController
       });
     }
     return init;
-  }
-
-  /// Called with every [StateX] associated with this Controller
-  /// Initialize any 'time-consuming' operations at the beginning.
-  @override
-  Future<bool> initAsyncState(State state) async {
-    return true;
-  }
-
-  /// Called by every [StateX] object associated with it.
-  /// Override this method to perform initialization,
-  @override
-  void stateInit(State state) {
-    return;
   }
 
   @override

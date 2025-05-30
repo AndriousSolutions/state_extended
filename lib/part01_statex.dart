@@ -19,22 +19,22 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         WidgetsBindingObserver,
         _ControllersByType,
         AppStateMixin,
-        FutureBuilderStateMixin, // 1
-        AsyncOps, // 2
-        StateXEventHandlers, // 3
+        FutureBuilderStateMixin,
+        AsyncOps,
+        StateXEventHandlers,
         StateXonErrorMixin,
         InheritedWidgetStateMixin,
         RecordExceptionMixin,
         _MapOfStates
-    implements
-        StateXEventHandlers {
+    implements StateXEventHandlers {
   //
   /// With an optional StateXController parameter and use of built-in FutureBuilder & InheritedWidget
   StateX({
     StateXController? controller,
     bool? runAsync,
     bool? useInherited,
-    bool? printEvents,
+    @Deprecated('Use debugPrintEvents instead') bool? printEvents,
+    bool? debugPrintEvents,
   }) {
     // Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
@@ -45,12 +45,12 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // A flag determining whether the built-in InheritedWidget is used or not.
     _useInherited = useInherited ?? false;
     // Show the 'event handler' functions
-    _printEvents = printEvents ?? false;
+    _debugPrintEvents = debugPrintEvents ?? printEvents ?? false;
     // Associate the controller to this State object
     _controller = controller;
     // Show the Controller's 'event handler' functions only if not already doing so
-    if (_controller?._printEvents == false) {
-      _controller?._printEvents = _printEvents;
+    if (_controller?._debugPrintEvents == false) {
+      _controller?._debugPrintEvents = _debugPrintEvents;
     }
     // Any subsequent calls to add() will be assigned to stateX.
     add(_controller);
@@ -202,11 +202,11 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
       // Don't bother if the State object is disposed of.
       if (mounted) {
-        /// Refresh the interface by 'rebuilding' the Widget Tree
-        /// Call the State object's setState() function.
+        // Refresh the interface by 'rebuilding' the Widget Tree
+        // Call the State object's setState() function.
         super.setState(fn);
         assert(() {
-          if (_printEvents) {
+          if (_debugPrintEvents) {
             debugPrint('$_consoleLeadingLine setState() in $this');
           }
           return true;
@@ -214,7 +214,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       }
       _setStateAllowed = true;
     } else {
-      /// Can't rebuild at this moment but at least make the request.
+      // Can't rebuild at this moment but at least make the request.
       _setStateRequested = true;
     }
   }
@@ -229,7 +229,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// (i.e. Subscribe to another object it depends on during [initState],
     /// unsubscribe object and subscribe to a new object when it changes in
     /// [didUpdateWidget], and then unsubscribe from the object in [dispose].
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.initState();
 
     /// If 'AppState' is not used
@@ -274,7 +274,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   Future<bool> initAsync() async {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.initAsync();
 
     // Always return true. It's got to continue for now.
@@ -321,7 +321,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Conditional calls initAsync() creating a Future with every rebuild
   @override
   bool runInitAsync() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     bool runInit = super.runInitAsync();
     // If any Controller says 'no', then there's no run.
     for (final con in controllerList) {
@@ -338,7 +338,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Implement any asynchronous operations needed done at start up.
   @override
   Future<bool> initAsyncState(covariant State state) async {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.initAsyncState(state);
     return true;
   }
@@ -347,7 +347,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// This takes in the snapshot.error details.
   @override
   void onAsyncError(FlutterErrorDetails details) {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.onAsyncError(details);
   }
 
@@ -383,14 +383,14 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     for (final con in controllerList) {
       //
       con.deactivateState(this);
+      // Pop the State object from the controller
+      con._popStateFromSetter(this);
       if (con.lastState == null) {
         con.deactivate();
       }
-      // Pop the State object from the controller
-      con._popStateFromSetter(this);
     }
 
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.deactivate();
 
     // Remove from the list of StateX objects present in the app!
@@ -425,15 +425,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     //   _setStateAllowed = false;
 
     for (final con in controllerList) {
-      // Supply the State object first
-      con._pushStateToSetter(this);
       if (con.lastState == null) {
         con.activate();
       }
       con.activateState(this);
+      // Supply the State object first
+      con._pushStateToSetter(this);
     }
 
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.activate();
 
     /// Become aware of Route changes
@@ -505,7 +505,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (mounted) {
       super.dispose();
       assert(() {
-        if (_printEvents) {
+        if (_debugPrintEvents) {
           debugPrint('$_consoleLeadingLine dispose() in $this');
         }
         return true;
@@ -586,6 +586,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangeMetrics() {
+    super.didChangeMetrics();
+
     /// In general, this is not overridden often as the layout system takes care of
     /// automatically recomputing the application geometry when the application
     /// size changes
@@ -820,7 +822,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine updateShouldNotify() in $_consoleClassName');
       }
@@ -950,7 +952,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// is running in a window or tab that is no longer visible (on the web).
   @override
   void hiddenAppLifecycleState() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.hiddenAppLifecycleState();
   }
 
@@ -962,7 +964,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// user input, and running in the background.
   @override
   void pausedAppLifecycleState() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.pausedAppLifecycleState();
   }
 
@@ -973,7 +975,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// The application is visible and responding to user input.
   @override
   void resumedAppLifecycleState() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.resumedAppLifecycleState();
   }
 
@@ -985,7 +987,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// or after the view being destroyed due to a Navigator pop.
   @override
   void detachedAppLifecycleState() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.detachedAppLifecycleState();
   }
 
@@ -1012,7 +1014,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       con.reassemble();
     }
 
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.reassemble();
 
     _setStateAllowed = true;
@@ -1053,7 +1055,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
 
     if (appResponse == AppExitResponse.exit) {
-      // Optionally call superType for if (_printEvents) { debugPrint(
+      // Optionally call super for debugPrint()
       appResponse = await super.didRequestAppExit();
     }
 
@@ -1108,7 +1110,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
 
     if (handled) {
-      // Optionally call superType for if (_printEvents) { debugPrint(
+      // Optionally call super for debugPrint()
       handled = await super.didPopRoute();
     }
 
@@ -1139,7 +1141,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @Deprecated('Use didPushRouteInformation instead. '
       'This feature was deprecated after v3.8.0-14.0.pre.')
   Future<bool> didPushRoute(String route) async {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPushRoute(route);
     // Return false to pop out
     return false;
@@ -1172,7 +1174,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       await con.didPushRouteInformation(routeInformation);
     }
 
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPushRouteInformation(routeInformation);
 
     _setStateAllowed = true;
@@ -1204,7 +1206,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       con.didPush();
     }
 
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPush();
 
     _setStateAllowed = true;
@@ -1235,7 +1237,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       con.didPushNext();
     }
 
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPushNext();
 
     _setStateAllowed = true;
@@ -1266,7 +1268,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       con.didPop();
     }
 
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPop();
 
     _setStateAllowed = true;
@@ -1297,7 +1299,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       con.didPopNext();
     }
 
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPopNext();
 
     _setStateAllowed = true;
@@ -1320,6 +1322,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Offer an error handler
   @override
   void onError(FlutterErrorDetails details) {
+    // No dbugPrint() here in case it too will error
     super.onError(details);
   }
 

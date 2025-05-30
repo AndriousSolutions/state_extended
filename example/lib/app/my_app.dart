@@ -39,7 +39,9 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
           /// Demonstrate passing an 'object' down the Widget tree much like
           /// how it's done using Scoped Model, but better.
           object: 'Hello!',
-          printEvents: true, // Print event function calls
+          // debugPrintEvents: true, // Print event function calls to the console
+          debugPrintEvents:
+              false, // Do not print event function calls to the console
         ) {
     // Assign the App State object
     MyApp.app.appState = this;
@@ -57,7 +59,7 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
     return MaterialApp(
       color: Colors.blue,
       theme: con.themeData,
-      home: Page1(key: UniqueKey()),
+      home: Page1(key: con.page1Key),
     );
   }
 
@@ -71,7 +73,7 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
     return MaterialApp(
       color: Colors.blue,
       theme: con.themeData,
-      home: Page1(key: UniqueKey()),
+      home: Page1(key: con.page1Key),
     );
   }
 
@@ -147,16 +149,5 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
   @override
   void onAsyncError(errorDetails) {
     logErrorDetails(errorDetails);
-  }
-
-  @override
-  // ignore: unnecessary_overrides
-  bool dependOnInheritedWidget(BuildContext? context) {
-    assert(() {
-      debugPrint(
-          '=========== dependOnInheritedWidget() in $eventStateClassName');
-      return true;
-    }());
-    return super.dependOnInheritedWidget(context);
   }
 }

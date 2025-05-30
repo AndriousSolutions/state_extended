@@ -16,9 +16,17 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   String get identifier => _id;
   final String _id = Uuid().generateV4();
 
+  @Deprecated('Use debugPrintEvents instead.')
+  bool get printEvents => _debugPrintEvents;
+
   /// debugPrint the 'event handlers'
-  bool get printEvents => _printEvents;
-  bool _printEvents = false;
+  bool get debugPrintEvents => _debugPrintEvents;
+  bool _debugPrintEvents = false;
+  set debugPrintEvents(bool? print) {
+    if (print != null) {
+      _debugPrintEvents = print;
+    }
+  }
 
   /// Clean up the Class name
   String get _consoleClassName =>
@@ -37,7 +45,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     /// unsubscribe object and subscribe to a new object when it changes in
     /// [didUpdateWidget], and then unsubscribe from the object in [dispose].
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine initState() in $_consoleClassName');
       }
       return true;
@@ -50,7 +58,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   Future<bool> initAsync() async {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine initAsync() in $_consoleClassName');
       }
       return true;
@@ -63,7 +71,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   bool runInitAsync() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine runInitAsync() in $_consoleClassName');
       }
       return true;
@@ -78,7 +86,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   Future<bool> initAsyncState(covariant State state) async {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine initAsyncState() in $_consoleClassName');
       }
@@ -93,7 +101,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void onAsyncError(FlutterErrorDetails details) {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine onAsyncError() in $_consoleClassName');
       }
       return true;
@@ -109,7 +117,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     /// this object and other elements in the tree (e.g. if you have provided an
     /// ancestor with a pointer to a descendant's [RenderObject]).
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine deactivate() in $_consoleClassName');
       }
       return true;
@@ -132,7 +140,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     /// is inserted into the tree. Instead, the framework calls [initState] in
     /// that situation.
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine activate() in $_consoleClassName');
       }
       return true;
@@ -145,7 +153,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     /// means any calls to [setState] in [didUpdateWidget] are redundant.
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didUpdateWidget() in $_consoleClassName');
       }
@@ -165,7 +173,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     /// Subclasses rarely use this method, but its an option if needed.
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didChangeDependencies() in $_consoleClassName');
       }
@@ -192,7 +200,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     ///   }
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didChangeMetrics() in $_consoleClassName');
       }
@@ -217,7 +225,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     ///   }
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didChangeTextScaleFactor() in $_consoleClassName');
       }
@@ -230,7 +238,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void didChangePlatformBrightness() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didChangePlatformBrightness() in $_consoleClassName');
       }
@@ -248,7 +256,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     /// This method exposes notifications from [Window.onLocaleChanged].
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didChangeLocales() in $_consoleClassName');
       }
@@ -262,7 +270,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void didChangeAccessibilityFeatures() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didChangeAccessibilityFeatures() in $_consoleClassName');
       }
@@ -279,7 +287,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     /// [SystemChannels.system].
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didHaveMemoryPressure() in $_consoleClassName');
       }
@@ -291,7 +299,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine updateShouldNotify() in $_consoleClassName');
       }
@@ -311,7 +319,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     /// AppLifecycleState.paused (may enter the suspending state at any time)
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didChangeAppLifecycleState($state) in $_consoleClassName');
       }
@@ -336,7 +344,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void inactiveAppLifecycleState() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine inactiveAppLifecycleState() in $_consoleClassName');
       }
@@ -351,7 +359,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void hiddenAppLifecycleState() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine hiddenAppLifecycleState() in $_consoleClassName');
       }
@@ -364,7 +372,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void pausedAppLifecycleState() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine pausedAppLifecycleState() in $_consoleClassName');
       }
@@ -376,7 +384,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void resumedAppLifecycleState() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine resumedAppLifecycleState() in $_consoleClassName');
       }
@@ -389,7 +397,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void detachedAppLifecycleState() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine detachedAppLifecycleState() in $_consoleClassName');
       }
@@ -408,7 +416,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     /// state, for example, image loading from asset bundles (since the asset
     /// bundle may have changed).
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine reassemble() in $_consoleClassName');
       }
       return true;
@@ -424,7 +432,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   Future<AppExitResponse> didRequestAppExit() async {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didRequestAppExit() in $_consoleClassName');
       }
@@ -453,7 +461,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   Future<bool> didPopRoute() async {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine didPopRoute() in $_consoleClassName');
       }
       return true;
@@ -477,7 +485,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   Future<bool> didPushRoute(String route) async {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine didPushRoute() in $_consoleClassName');
       }
       return true;
@@ -500,7 +508,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
       RouteInformation routeInformation) async {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine didPushRouteInformation() in $_consoleClassName');
       }
@@ -515,7 +523,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void didPush() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine didPush() in $_consoleClassName');
       }
       return true;
@@ -528,7 +536,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void didPushNext() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine didPushNext() in $_consoleClassName');
       }
       return true;
@@ -541,7 +549,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void didPop() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine didPop() in $_consoleClassName');
       }
       return true;
@@ -554,7 +562,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void didPopNext() {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine didPopNext() in $_consoleClassName');
       }
       return true;
@@ -566,7 +574,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void onError(FlutterErrorDetails details) {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine onError() in $_consoleClassName');
       }
       return true;
@@ -578,7 +586,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   void logErrorDetails(FlutterErrorDetails details, {bool? force}) {
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine logErrorDetails() in $_consoleClassName');
       }

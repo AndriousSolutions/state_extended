@@ -54,15 +54,6 @@ class AppSettingsController extends StateXController
     }
   }
 
-  /// Use Material 3 or Material 2
-  bool get useMaterial3 => _useMaterial3;
-  bool _useMaterial3 = false;
-  set useMaterial3(bool? use) {
-    if (use != null) {
-      _useMaterial3 = use;
-    }
-  }
-
   /// Error in push button
   bool get errorButton => _errorButton;
   bool _errorButton = false;
@@ -108,6 +99,24 @@ class AppSettingsController extends StateXController
     }
   }
 
+  /// Use Material 3 or Material 2
+  bool get useMaterial3 => _useMaterial3;
+  bool _useMaterial3 = false;
+  set useMaterial3(bool? use) {
+    if (use != null) {
+      _useMaterial3 = use;
+    }
+  }
+
+  /// Use debugPrint to print out to the console when events fire
+  bool get printoutEvents => _printoutEvents;
+  bool _printoutEvents = false;
+  set printoutEvents(bool? use) {
+    if (use != null) {
+      _printoutEvents = use;
+    }
+  }
+
   /// Call the setState() functions
   void setSettingState() {
     setState(() {});
@@ -135,6 +144,8 @@ class AppSettingsController extends StateXController
       _errorButton = await prefs.getBool('errorButton') ?? false;
 
       _useMaterial3 = await prefs.getBool('useMaterial3') ?? true;
+
+      _printoutEvents = await prefs.getBool('printoutEvents') ?? false;
       //
     } catch (e) {
       preferences = false;
@@ -163,6 +174,9 @@ class AppSettingsController extends StateXController
       await prefs.setBool('errorButton', _errorButton);
 
       await prefs.setBool('useMaterial3', _useMaterial3);
+
+      await prefs.setBool('printoutEvents', _printoutEvents);
+      //
     } catch (e) {
       set = false;
     }

@@ -16,7 +16,8 @@ class _BuilderState extends State<_BuilderStatefulWidget> {
   @override
   void initState() {
     super.initState();
-    AppStateX._instance?._builderState = this;
+    AppStateX._instance?._builderState =
+        this; // nullified in AppStateX dispose()
   }
 
   @override

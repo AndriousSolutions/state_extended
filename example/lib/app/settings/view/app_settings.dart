@@ -241,6 +241,24 @@ class _AppSettingsState extends State<AppSettings> {
           setState(() {});
         },
       ),
+      listTile(
+        key: const Key('printoutEvents'),
+        leading: isSmall ? null : const Icon(Icons.print),
+        title: const Text('Print events to console'),
+        onTap: () {
+          con.printoutEvents = !con.printoutEvents;
+          setState(() {});
+          // Show snack bar
+          _showSnackBar('Restart app');
+        },
+        value: con.printoutEvents,
+        onChanged: (bool value) {
+          con.printoutEvents = value;
+          setState(() {});
+          // Show snack bar
+          _showSnackBar('Restart app');
+        },
+      ),
     ];
     return widgets;
   }

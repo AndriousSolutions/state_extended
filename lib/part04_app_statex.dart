@@ -22,9 +22,11 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     Object? object,
     @Deprecated('notifyClientsInBuild no longer necessary')
     bool? notifyClientsInBuild,
-    super.printEvents,
+    @Deprecated('Use debugPrintEvents instead') bool? printEvents,
+    super.debugPrintEvents,
     // Save the current error handler
-  }) : _prevErrorFunc = FlutterError.onError {
+  })  : _prevErrorFunc = FlutterError.onError,
+        super(useInherited: true) {
     // Introduce its own error handler
     FlutterError.onError = _errorHandler;
 
@@ -285,14 +287,15 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   ///
   @override
   bool dependOnInheritedWidget(BuildContext? context) {
-    final depend = context != null;
-    if (depend) {
-      if (_inheritedElement == null) {
-        _dependencies.add(context);
-      } else {
-        context.dependOnInheritedElement(_inheritedElement!);
-      }
-    }
+    final depend = super.dependOnInheritedWidget(context);
+    // final depend = context != null;
+    // if (depend) {
+    //   if (_inheritedElement == null) {
+    //     _dependencies.add(context);
+    //   } else {
+    //     context.dependOnInheritedElement(_inheritedElement!);
+    //   }
+    // }
     return depend;
   }
 

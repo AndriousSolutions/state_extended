@@ -1,4 +1,9 @@
 
+## 6.1.1
+May 28, 2025
+- con._popStateFromSetter(); before con.deactivate(); in part01_state.dart
+- Deprecated printEvents with debugPrintEvents
+
 ## 6.1.0+1
 May 19, 2025
 - Replaced mixin, StateListener, with StateXEventHandlers

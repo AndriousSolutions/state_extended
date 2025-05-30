@@ -27,6 +27,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
     _con = controller as Controller;
     // Add some additional controllers if you like
     addAll([AnotherController(), YetAnotherController(), WordPairsTimer()]);
+    // Retrieve from this State object a particular Controller.
     _timer = controllerByType<WordPairsTimer>()!;
   }
 
@@ -94,9 +95,6 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
     /// The controller is was assigned to the 'first' State object.
     // Note, returns null if not found.
     anotherController = appState.controllerByType<AnotherController>();
-
-    /// InheritedWidget switch will reset count, but the controller can saves the count
-    count = _con.page1Count;
   }
 
   ///
@@ -211,11 +209,21 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
                         key: const Key('InheritedSwitch'),
                         value: _con.useInherited,
                         onChanged: (v) {
-                          // Save the setting
-                          _con.useInherited = v;
-                          // Both access the 'first' StateX object
-                          firstState?.setState(() {});
-                          appStateX?.setState(() {});
+                          _con.onChangedInherited(useInherited: v);
+                        },
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('Use built-in ChangeNotifier'),
+                      CupertinoSwitch(
+                        key: const Key('ChangeNotifierSwitch'),
+                        value: _con.useChangeNotifier,
+                        onChanged: (v) {
+                          _con.onChangedNotifier(useChangeNotifier: v);
                         },
                       ),
                     ],
@@ -239,17 +247,8 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
                     throw Exception(
                         'Fake error to demonstrate error handling!');
                   }
-
-                  count++;
-                  // Record the count
-                  _con.page1Count = count;
-
-                  /// Commented out since the controller has access to this State object.
-//          setState(() {});
-                  /// Look how this Controller has access to this State object!
-                  /// The incremented counter will not update otherwise! Powerful!
-                  /// Comment out and the counter will appear not to work.
-                  controller?.setState(() {});
+                  // The Interface has no idea what happens in here. However, you do.
+                  _con.onPressedActionButton();
                 },
                 child: const Icon(Icons.add),
               ),
@@ -271,20 +270,11 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
   @override
   void onError(FlutterErrorDetails details) {
     //
-    // _timer.onError(details);
+    _timer.onError(details);
+    // The Controller has its own error handler
+    _con.onError(details);
 
-    final stack = details.stack;
-
-    // Determine the specific error
-    if (stack != null && stack.toString().contains('handleTap')) {
-      // Increment the count like no error occurred
-      count++;
-      // Record the count
-      _con.page1Count = count;
-      // Look how this Controller has access to this State object!
-      controller?.setState(() {});
-      _timer.activate();
-    }
+    _timer.activate();
   }
 
   /// Catch it if the initAsync() throws an error
@@ -328,15 +318,15 @@ class _TextState extends State<_TextStatefulWidget> {
   }
 
   ///
-  late Controller? con;
+  late Controller con;
 
   //
   @override
   Widget build(BuildContext context) {
-    /// This Builder Widget becomes a dependent of the built-in InheritedWidget.
-    con!.dependOnInheritedWidget(context);
+    /// Determine how you're going to 'rebuild' this State object.
+    con.buildThisState(this);
     style ??= Theme.of(context).textTheme.headlineMedium;
-    return Text('${con!.page1Count}', style: style);
+    return Text('${con.page1Count}', style: style);
   }
 
   ///
@@ -344,7 +334,6 @@ class _TextState extends State<_TextStatefulWidget> {
 
   @override
   void dispose() {
-    con = null;
     style = null;
     super.dispose();
   }

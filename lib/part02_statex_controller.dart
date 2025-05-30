@@ -30,7 +30,7 @@ class StateXController
   StateXController.config({StateX? state, bool? printEvents}) {
     StateXController(state);
     // Show the 'event handler' functions
-    _printEvents = printEvents ?? true;
+    _debugPrintEvents = printEvents ?? true;
   }
 
   /// Initialize any 'time-consuming' operations at the beginning.
@@ -50,7 +50,7 @@ class StateXController
   /// Override this method to perform initialization,
   void stateInit(covariant State state) {
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine stateInit($state) in $_consoleClassName');
       }
@@ -66,9 +66,9 @@ class StateXController
   @override
   @mustCallSuper
   Future<bool> initAsync() async {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine initAsync() in $this');
       }
       return true;
@@ -81,9 +81,9 @@ class StateXController
   /// Implement any asynchronous operations needed done at start up.
   @override
   Future<bool> initAsyncState(covariant State state) async {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine initAsyncState($state) in $_consoleClassName');
       }
@@ -97,9 +97,9 @@ class StateXController
   /// This takes in the snapshot.error details.
   @override
   void onAsyncError(FlutterErrorDetails details) {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine onAsyncError() in $_consoleClassName');
       }
       return true;
@@ -131,7 +131,7 @@ class StateXController
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   bool notifyClients() {
     final notify = _stateX?.notifyClients() ?? false;
-    notifyStates();
+    notifyStateListeners();
     return notify;
   }
 
@@ -140,23 +140,23 @@ class StateXController
   @override
   void setState(VoidCallback fn) {
     super.setState(fn);
-    notifyStates();
+    notifyStateListeners();
   }
 
   /// The framework calls this method whenever it removes this [StateX] object
   /// from the tree.
   @override
   void deactivate() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.deactivate();
   }
 
   /// The framework calls this method whenever it removes this [StateX] object
   /// from the tree.
   void deactivateState(covariant State state) {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine deactivate($state) in $_consoleClassName');
       }
@@ -168,16 +168,16 @@ class StateXController
   /// removed via [deactivate].
   @override
   void activate() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.activate();
   }
 
   /// Called when this object is reinserted into the tree after having been
   /// removed via [deactivate].
   void activateState(covariant State state) {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine activateState($state) in $_consoleClassName');
       }
@@ -194,13 +194,17 @@ class StateXController
     /// build again. The [State] object's lifecycle is terminated.
     /// Subclasses should override this method to release any resources retained
     /// by this object (e.g., stop any active animations).
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Clear its ChangeNotifier
+    _disposeChangeNotifier();
+
+    // If instantiated in a factory constructor
+    // Note: You don't know when this function will fire!
+    // _initStateCalled = false;
+
+    // Optionally call super for debugPrint()
     assert(() {
-      if (_printEvents) {
-        // ignore: unnecessary_this
-        final className =
-            toString().replaceAll('instance of', '').replaceAll("'", '');
-        debugPrint('$_consoleLeadingLine dispose() in $className');
+      if (_debugPrintEvents) {
+        debugPrint('$_consoleLeadingLine dispose() in $_consoleClassName');
       }
       return true;
     }());
@@ -212,9 +216,9 @@ class StateXController
   void disposeState(covariant State state) {
     /// The framework calls this method when this [StateX] object will never
     /// build again. The [State] object's lifecycle is terminated.
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine disposeState($state) in $_consoleClassName');
       }
@@ -227,7 +231,7 @@ class StateXController
   void didUpdateWidget(covariant StatefulWidget oldWidget) {
     /// The framework always calls build() after calling [didUpdateWidget], which
     /// means any calls to [setState] in [didUpdateWidget] are redundant.
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didUpdateWidget(oldWidget);
   }
 
@@ -235,7 +239,7 @@ class StateXController
   /// Otherwise called only if a dependency of an [InheritedWidget].
   @override
   void didChangeDependencies() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didChangeDependencies();
   }
 
@@ -245,7 +249,7 @@ class StateXController
   void didChangeMetrics() {
     /// Use getter [calledChangeMetrics] to only run this once.
     /// You sharing controllers with multiple Stat objects is common.
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didChangeMetrics();
   }
 
@@ -274,21 +278,21 @@ class StateXController
   /// Called when the platform's text scale factor changes.
   @override
   void didChangeTextScaleFactor() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didChangeTextScaleFactor();
   }
 
   /// Brightness changed.
   @override
   void didChangePlatformBrightness() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didChangePlatformBrightness();
   }
 
   /// Called when the system tells the app that the user's locale has changed.
   @override
   void didChangeLocales(List<Locale>? locales) {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didChangeLocales(locales);
   }
 
@@ -296,21 +300,21 @@ class StateXController
   /// or after the view being destroyed due to a Navigator pop.
   @override
   void didChangeAccessibilityFeatures() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didChangeAccessibilityFeatures();
   }
 
   /// Called when the system is running low on memory.
   @override
   void didHaveMemoryPressure() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didHaveMemoryPressure();
   }
 
   /// Determine if its dependencies should be updated.
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     return super.updateShouldNotify(oldWidget);
   }
 
@@ -323,21 +327,22 @@ class StateXController
     /// AppLifecycleState.inactive (may be paused at any time)
     /// AppLifecycleState.hidden
     /// AppLifecycleState.paused (may enter the suspending state at any time)
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
+
     super.didChangeAppLifecycleState(state);
   }
 
   /// The application is in an inactive state and is not receiving user input.
   @override
   void inactiveAppLifecycleState() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.inactiveAppLifecycleState();
   }
 
   /// All views of an application are hidden, either because the application is
   @override
   void hiddenAppLifecycleState() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.hiddenAppLifecycleState();
   }
 
@@ -345,14 +350,14 @@ class StateXController
   /// user input, and running in the background.
   @override
   void pausedAppLifecycleState() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.pausedAppLifecycleState();
   }
 
   /// The application is visible and responding to user input.
   @override
   void resumedAppLifecycleState() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.resumedAppLifecycleState();
   }
 
@@ -360,7 +365,7 @@ class StateXController
   /// or after the view being destroyed due to a Navigator pop.
   @override
   void detachedAppLifecycleState() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.detachedAppLifecycleState();
   }
 
@@ -368,14 +373,14 @@ class StateXController
   /// example during hot reload.
   @override
   void reassemble() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.reassemble();
   }
 
   /// Called when a request is received from the system to exit the application.
   @override
   Future<AppExitResponse> didRequestAppExit() async {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     return super.didRequestAppExit();
   }
 
@@ -384,7 +389,7 @@ class StateXController
   /// the back button.
   @override
   Future<bool> didPopRoute() async {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     return super.didPopRoute();
   }
 
@@ -401,44 +406,44 @@ class StateXController
   @override
   Future<bool> didPushRouteInformation(
       RouteInformation routeInformation) async {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     return super.didPushRouteInformation(routeInformation);
   }
 
   /// Called when this State is *first* added to as a Route observer?!
   @override
   void didPush() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPush();
   }
 
   /// New route has been pushed, and this State object's route is no longer current.
   @override
   void didPushNext() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPushNext();
   }
 
   /// Called when this State is popped off a route.
   @override
   void didPop() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPop();
   }
 
   /// The top route has been popped off, and this route shows up.
   @override
   void didPopNext() {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     super.didPopNext();
   }
 
   /// Offer an error handler
   @override
   void onError(FlutterErrorDetails details) {
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine onError() in $_consoleClassName');
       }
       return true;
@@ -462,10 +467,11 @@ class StateXController
       // Won't log this time with this call.
       logStateXError = true; // Next time.
     }
-    // Optionally call superType for if (_printEvents) { debugPrint(
+    // Optionally call super for debugPrint()
+
     // Record the triggered event
     assert(() {
-      if (_printEvents) {
+      if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine logErrorDetails() in $_consoleClassName');
       }

@@ -7,7 +7,7 @@ export 'my_app.dart';
 //
 export 'settings/_view_settings.dart';
 //
-export 'view/common/event_handler_ calls.dart';
+export 'view/common/event_handler_calls.dart';
 //
 export 'view/common/splash_screen.dart';
 //
