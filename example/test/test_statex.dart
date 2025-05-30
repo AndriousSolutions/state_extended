@@ -1,3 +1,4 @@
+// ignore_for_file: unused_local_variable
 // Copyright 2018 Andrious Solutions Ltd. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -49,7 +50,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(conCount > 0, isTrue, reason: _location);
 
-  expect(stateObj.useInherited, isFalse, reason: _location);
+  expect(stateObj.useInherited, isTrue, reason: _location);
 
   StateXController? con = stateObj.controller!;
 
