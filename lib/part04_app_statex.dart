@@ -202,7 +202,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         state.deactivate();
       } catch (e, stack) {
         // An error in the error handler. Record the error
-        recordException(e, stack);
+        recordErrorInHandler(e, stack);
         _onErrorInHandler();
       }
 
@@ -212,7 +212,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         }
       } catch (e, stack) {
         // An error in the error handler. Record the error
-        recordException(e, stack);
+        recordErrorInHandler(e, stack);
         _onErrorInHandler();
       }
     }, reversed: true, remove: this);
@@ -240,7 +240,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
           }
         } catch (e, stack) {
           // Record the error
-          recordException(e, stack);
+          recordErrorInHandler(e, stack);
         }
       }
     }
@@ -398,7 +398,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
         rethrow;
       } else {
         // Record the error
-        recordException(e, stack);
+        recordErrorInHandler(e, stack);
 
         // Record error in device's log
         _logPackageError(
@@ -431,7 +431,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
     // Always test if there was an error in the error handler
     // Include it in the error reporting as well.
-    if (recHasError) {
+    if (hasErrorInErrorHandler) {
       _onErrorInHandler();
     }
 
@@ -577,7 +577,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
           rethrow;
         } else {
           // Record the error
-          recordException(e, stack);
+          recordErrorInHandler(e, stack);
 
           // Record error in device's log
           _logPackageError(
@@ -595,7 +595,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   String get errorStateName => _errorStateName ?? '';
   String? _errorStateName;
 
-  /// Step through its Controller first
+  /// Step through its Controllers
   void onControllerError(StateX state, FlutterErrorDetails details) {
     /// You have the option to implement an error handler to individual controllers
     for (final con in state.controllerList) {
@@ -610,7 +610,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
           rethrow;
         } else {
           // Record the error
-          recordException(e, stack);
+          recordErrorInHandler(e, stack);
 
           // Record error in device's log
           _logPackageError(
@@ -627,10 +627,10 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   // Notify the developer there's an error in the error handler.
   void _onErrorInHandler() {
     // Always test first that indeed an exception had occurred.
-    if (recHasError) {
+    if (hasErrorInErrorHandler) {
       // Important to get the Stack Trace before it's cleared by recordException()
       final stack = recStackTrace;
-      final exception = recordException();
+      final exception = recordErrorInHandler();
       if (exception != null) {
         final details = FlutterErrorDetails(
           exception: exception,
@@ -643,7 +643,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
           logErrorDetails(details);
         } catch (e, stack) {
           // Error in the final error handler? That's a pickle.
-          recordException(e, stack);
+          recordErrorInHandler(e, stack);
         }
       }
     }

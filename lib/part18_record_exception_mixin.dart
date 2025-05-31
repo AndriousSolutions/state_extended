@@ -9,9 +9,13 @@ part of 'state_extended.dart';
 /// dartdoc:
 /// {@category StateX class}
 /// {@category Error handling}
-mixin RecordExceptionMixin on State {
+mixin ErrorInErrorHandlerMixin on State {
   /// Return the 'last' error if any.
-  Object? recordException([Object? error, StackTrace? stack]) {
+  @Deprecated('Use recordErrorInHandler instead')
+  Object? recordException([Object? error, StackTrace? stack]) =>
+      recordErrorInHandler(error, stack);
+
+  Object? recordErrorInHandler([Object? error, StackTrace? stack]) {
     // Retrieved the currently recorded exception
     var e = _recErrorException;
 
@@ -48,7 +52,7 @@ mixin RecordExceptionMixin on State {
   Object? _recErrorException;
 
   /// Indicate if an exception had occurred.
-  bool get recHasError => _recErrorException != null;
+  bool get hasErrorInErrorHandler => _recErrorException != null;
 
   /// The StackTrace
   StackTrace? get recStackTrace => _stackTrace;

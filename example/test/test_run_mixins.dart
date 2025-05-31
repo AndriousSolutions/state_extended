@@ -6,6 +6,7 @@ import 'package:example/src/view.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
+// ignore: unused_element
 const _location = '========================== test_run_mixins.dart';
 
 Future<void> testRunMixins(WidgetTester tester) async {
@@ -15,7 +16,7 @@ Future<void> testRunMixins(WidgetTester tester) async {
   final details = FlutterErrorDetails(
     exception: Exception('fake exception'),
     library: 'test_run_mixins.dart',
-    context: ErrorDescription('Used fot testing.'),
+    context: ErrorDescription('Used for testing.'),
   );
 
   testMixins.onAsyncError(details);
@@ -62,6 +63,7 @@ class _TestMixins with AsyncOps, StateXEventHandlers, StateXonErrorMixin {
 /// Supply the Mixins using this class
 class _TestStateMixins extends StateX {
   _TestStateMixins({
+    // ignore: unused_element_parameter
     super.controller,
     super.runAsync,
     super.useInherited,

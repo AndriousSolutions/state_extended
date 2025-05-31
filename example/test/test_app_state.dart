@@ -50,15 +50,13 @@ Future<void> testsAppStateX(WidgetTester tester) async {
     context: ErrorDescription('Testing for codecov'),
   );
 
-  appState.recordException(exception);
+  appState.recordErrorInHandler(exception);
 
-  expect(appState.recHasError, isTrue, reason: _location);
+  expect(appState.hasErrorInErrorHandler, isTrue, reason: _location);
 
   expect(appState.recErrorMsg == 'Testing', isTrue, reason: _location);
 
-  expect(appState.recStackTrace, isNull, reason: _location);
-
-  var ex = appState.recordException();
+  var ex = appState.recordErrorInHandler();
 
   expect(ex, isA<Exception>(), reason: _location);
 
@@ -66,9 +64,9 @@ Future<void> testsAppStateX(WidgetTester tester) async {
 
   appState.catchError(exception);
 
-  appState.recordException(FlutterError('Test Error'));
+  appState.recordErrorInHandler(FlutterError('Test Error'));
 
-  ex = appState.recordException();
+  ex = appState.recordErrorInHandler();
 
   expect(ex, isA<Error>(), reason: _location);
 

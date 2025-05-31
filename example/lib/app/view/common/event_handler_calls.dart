@@ -20,6 +20,8 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
 
   @override
   void initState() {
+    // Have the debugPrint() function fire in the many event handlers
+    debugPrintEvents = appCon?.debugPrintEvents;
     super.initState();
     LogController.log('initState() in $eventStateClassName');
   }
@@ -246,12 +248,6 @@ mixin EventsControllerMixin on StateXController {
   @override
   Future<bool> initAsyncState(StateX state) async {
     final init = await super.initAsyncState(state);
-
-    // Impose a print if the State prints
-    if (state.debugPrintEvents) {
-      // Use debugPrint() to print out to the console when an event fires
-      debugPrintEvents = state.debugPrintEvents;
-    }
     LogController.log(
         'initAsyncState(${eventStateClassNameOnly('$state')}) in $controllerName');
     return init;

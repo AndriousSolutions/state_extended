@@ -116,7 +116,7 @@ mixin SetStateMixin {
       } catch (e, stack) {
         each = false;
         // Record the error
-        state.recordException(e, stack);
+        state.recordErrorInHandler(e, stack);
       }
     }
     return each;

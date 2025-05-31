@@ -18,6 +18,7 @@ Future<void> errorHandling(
   // Find its StatefulWidget first then the 'type' of State object.
   final appState = tester.firstState<AppStateX>(find.byType(MyApp));
 
+  // ignore: unused_local_variable
   final appCon = appState.controller;
 
   final con = AnotherController();

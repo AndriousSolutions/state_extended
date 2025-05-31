@@ -5,7 +5,7 @@
 import 'dart:ui' show AppExitResponse;
 
 import '/src/controller.dart'
-    show AppSettingsController, EventsControllerMixin, StateXController;
+    show AppSettingsController, StateXController;
 
 import '/src/view.dart';
 
@@ -24,13 +24,13 @@ class AnotherController extends StateXController
   bool get initAsyncError => _appSettings.initAsyncError;
   set initAsyncError(bool? error) => _appSettings.initAsyncError = error;
 
-  // ignore: unnecessary_this
+  /// Supply the name of this class
   String get className =>
-      this.toString().replaceAll('Instance of', '').replaceAll("'", '');
+      toString().replaceAll('Instance of', '').replaceAll("'", '');
 
   @override
-  Future<bool> initAsync() async {
-    await super.initAsync();
+  Future<bool> initAsyncState(state) async {
+    await super.initAsyncState(state);
     if (initAsyncError) {
       throw Exception('Error in AnotherController.initAsync()!');
     }

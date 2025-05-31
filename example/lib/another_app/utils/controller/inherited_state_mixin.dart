@@ -34,6 +34,7 @@ mixin InheritedStateMixin on State<StatefulWidget> {
       _inheritedStatefulWidget.inheritedElement(context);
 
   /// A flag to prevent infinite loops.
+  // ignore: unused_field
   bool _buildInherited = false;
 
   /// Don't rebuild this State object but the State object containing the InheritedWidget.

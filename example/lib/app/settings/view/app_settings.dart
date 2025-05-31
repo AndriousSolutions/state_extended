@@ -79,6 +79,7 @@ class _AppSettingsState extends State<AppSettings> {
     // Disable if running in Cupertino
     const disable = kIsWeb;
 
+    // ignore: unused_local_variable
     const tip = disable ? 'Not Web enabled' : '';
     //
     final List<Widget> widgets = <Widget>[

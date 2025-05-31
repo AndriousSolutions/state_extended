@@ -4,8 +4,6 @@
 
 import '/src/controller.dart';
 
-import '/src/view.dart';
-
 ///
 class CatController extends InheritController {
   ///

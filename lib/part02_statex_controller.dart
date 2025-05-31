@@ -80,12 +80,17 @@ class StateXController
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Implement any asynchronous operations needed done at start up.
   @override
-  Future<bool> initAsyncState(covariant State state) async {
+  Future<bool> initAsyncState(covariant StateX state) async {
     // Optionally call super for debugPrint()
     assert(() {
       if (_debugPrintEvents) {
         debugPrint(
             '$_consoleLeadingLine initAsyncState($state) in $_consoleClassName');
+      }
+      // Impose a print if the State prints
+      if (state._debugPrintEvents) {
+        // Use debugPrint() to print out to the console when an event fires
+        debugPrintEvents = state.debugPrintEvents;
       }
       return true;
     }());

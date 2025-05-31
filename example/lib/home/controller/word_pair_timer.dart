@@ -138,8 +138,8 @@ class WordPairsTimer extends StateXController
   /// An error has occurred
   @override
   void onError(FlutterErrorDetails details) {
-    super.onError(details);
     _cancelTimer();
+    super.onError(details);
   }
 
   /// If the value of the object, obj, changes, this builder() is called again
@@ -259,6 +259,7 @@ class WordPairsTimer extends StateXController
 
 /// Alternate approach to spontaneous rebuilds using the framework's InheritedWidget.
 /// This class is assigned to the getter, wordPair.
+// ignore: unused_element
 class _WordPair extends StatelessWidget {
   const _WordPair(this.con);
   final WordPairsTimer con;

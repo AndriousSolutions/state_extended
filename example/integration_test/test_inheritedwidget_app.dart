@@ -6,6 +6,7 @@ import 'package:example/src/view.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
+// ignore: unused_element
 const _location = '========================== test_example_app.dart';
 
 Future<void> testInheritedWidgetApp(WidgetTester tester) async {

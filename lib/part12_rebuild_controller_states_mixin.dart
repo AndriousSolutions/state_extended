@@ -162,7 +162,7 @@ class ImplNotifyListenersChangeNotifier with ChangeNotifier {
 }
 
 ///
-// ignore: deprecated_member_use_from_same_package
+// ignore: deprecated_member_use
 @Deprecated('No longer supported')
 mixin ImplNotifyListenersChangeNotifierMixin {
   //

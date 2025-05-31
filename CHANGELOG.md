@@ -1,9 +1,16 @@
 
+## 6.2.0
+May 31, 2025
+- Renamed RecordExceptionMixin to ErrorInErrorHandlerMixin
+- // If State prints events, so does its Controllers
+  in StateX constructor and in initAsyncState()
+- Deprecated recordException() for recordErrorInHandler()
+
 ## 6.1.1+4
 May 28, 2025
 - con._popStateFromSetter(); before con.deactivate(); in part01_state.dart
 - Deprecated printEvents with debugPrintEvents
-- Tto pass static analysis in  part12_rebuild_controller_states_mixin.dart:110:34
+- To pass static analysis in  part12_rebuild_controller_states_mixin.dart:110:34
   // ignore: deprecated_member_use_from_same_package
 - Using flutter_test.dart:TestFailure in part04_app_statex.dart
 - Test stateObj.useInherited in test_statex.dart

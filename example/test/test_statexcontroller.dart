@@ -137,5 +137,6 @@ void _testAppController(WidgetTester tester) {
 
   expect(controller, isA<ExampleAppController>());
 
+  // ignore: unused_local_variable
   final rootCon = controller as ExampleAppController;
 }

@@ -20,6 +20,8 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 
 import '../test/_test_imports.dart';
 
+const _location = '========================== widget_test.dart';
+
 void main() => testExampleApp();
 
 /// Call a group of tests.
@@ -64,7 +66,6 @@ void testStateExtended() {
   testWidgets(
     'StateX & StateXController',
     (WidgetTester tester) async {
-      //
       // Tells the tester to build a UI based on the widget tree passed to it
       await tester.pumpWidget(MyApp(key: UniqueKey()));
 
@@ -110,6 +111,31 @@ void testStateExtended() {
     },
   );
 
+  testWidgets('debugPrint() in Event Handlers', (WidgetTester tester) async {
+    // Tells the tester to build a UI based on the widget tree passed to it
+    await tester.pumpWidget(MyApp(key: UniqueKey()));
+
+    /// Now print to console every event handler call
+    ExampleAppController().debugPrintEvents = true;
+
+    /// Flutter won’t automatically rebuild your widget in the test environment.
+    /// Use pump() or pumpAndSettle() to ask Flutter to rebuild the widget.
+    /// pumpAndSettle() waits for all animations to complete.
+    await tester.pumpAndSettle();
+
+    /// Reset the counter to zero on Page 1
+    await resetPage1Count(tester);
+
+    /// Now print to console every event handler call
+    ExampleAppController().debugPrintEvents = false;
+
+    // hot reload
+    await tester.binding.reassembleApplication();
+
+    // pumpAndSettle() waits for all animations to complete.
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+  });
+
   testWidgets('Error in Builder', (WidgetTester tester) async {
     //
     // Tells the tester to build a UI based on the widget tree passed to it
@@ -120,6 +146,46 @@ void testStateExtended() {
 
     // Now trip an error right at start up.
     ExampleAppController().errorInBuilder = true;
+
+    // hot reload
+    await tester.binding.reassembleApplication();
+
+    // pumpAndSettle() waits for all animations to complete.
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+
+    final appState = ExampleAppController().appStateX;
+
+    final errorInError = appState?.hasErrorInErrorHandler;
+
+    expect(errorInError, isFalse, reason: _location);
+
+    final details = appState?.lastFlutterErrorDetails;
+
+    expect(details, isNotNull, reason: _location);
+
+    final message =  appState?.lastFlutterErrorMessage;
+
+   expect(message?.contains('Error in builder()!'), isTrue, reason: _location);
+
+    final inError = appState?.inErrorRoutine;
+
+    expect(inError, isFalse, reason: _location);
+
+    final name = appState?.errorStateName;
+
+   expect(name?.contains('Page1State'), isTrue, reason: _location);
+  });
+
+  //
+  testWidgets('initAppAsyncError', (WidgetTester tester) async {
+    //
+    // Tells the tester to build a UI based on the widget tree passed to it
+    await tester.pumpWidget(MyApp(key: UniqueKey()));
+
+    // pumpAndSettle() waits for all animations to complete.
+    await tester.pumpAndSettle();
+
+    ExampleAppController().initAppAsyncError = true;
 
     // hot reload
     await tester.binding.reassembleApplication();

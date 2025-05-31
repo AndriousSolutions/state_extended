@@ -25,7 +25,12 @@ class ExampleAppController extends StateXController
     // Retrieve the Settings ASAP
     var init = await _appSettings.initAsync();
 
-    state?.debugPrintEvents = _appSettings.printoutEvents;
+    // Have the debugPrint() function fire in the many event handlers
+    // Only when NOT testing
+    if (WidgetsBinding.instance is WidgetsFlutterBinding) {
+      debugPrintEvents = _appSettings.printoutEvents;
+      state?.debugPrintEvents = _appSettings.printoutEvents;
+    }
 
     if (init) {
       init = await super.initAsync();
@@ -68,6 +73,7 @@ class ExampleAppController extends StateXController
   /// This takes in the snapshot.error details.
   @override
   void onAsyncError(FlutterErrorDetails details) {
+    super.onAsyncError(details); // Not really necessary. Just for Codecov
     //
     if (details.exception.toString().contains('Error in initAsync()!')) {
       assert(() {

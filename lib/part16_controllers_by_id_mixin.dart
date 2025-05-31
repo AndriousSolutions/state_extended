@@ -162,7 +162,7 @@ mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
         func(con);
       } catch (e, stack) {
         each = false;
-        recordException(e, stack);
+        recordErrorInHandler(e, stack);
       }
     }
     return each;

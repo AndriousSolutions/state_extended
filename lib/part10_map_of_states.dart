@@ -142,7 +142,7 @@ mixin _MapOfStates on State {
         each = false;
         // Record the error
         if (this is StateX) {
-          (this as StateX).recordException(e, stack);
+          (this as StateX).recordErrorInHandler(e, stack);
         }
       }
     }

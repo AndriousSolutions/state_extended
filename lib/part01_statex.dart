@@ -24,7 +24,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         StateXEventHandlers,
         StateXonErrorMixin,
         InheritedWidgetStateMixin,
-        RecordExceptionMixin,
+        ErrorInErrorHandlerMixin,
         _MapOfStates
     implements StateXEventHandlers {
   //
@@ -48,8 +48,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _debugPrintEvents = debugPrintEvents ?? printEvents ?? false;
     // Associate the controller to this State object
     _controller = controller;
-    // Show the Controller's 'event handler' functions only if not already doing so
-    if (_controller?._debugPrintEvents == false) {
+    // If State prints events, so does its Controllers
+    if (_debugPrintEvents) {
       _controller?._debugPrintEvents = _debugPrintEvents;
     }
     // Any subsequent calls to add() will be assigned to stateX.

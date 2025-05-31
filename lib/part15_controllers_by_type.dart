@@ -148,7 +148,7 @@ mixin _ControllersByType on State {
       } catch (e, stack) {
         each = false;
         if (this is StateX) {
-          (this as StateX).recordException(e, stack);
+          (this as StateX).recordErrorInHandler(e, stack);
         }
       }
     }

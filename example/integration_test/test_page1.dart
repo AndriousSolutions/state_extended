@@ -1,5 +1,6 @@
 //
-import 'package:example/src/controller.dart' show Controller;
+import 'package:example/src/controller.dart'
+    show AppSettingsController, Controller;
 
 import 'package:example/src/view.dart';
 
@@ -27,6 +28,10 @@ Future<void> testPage1(WidgetTester tester) async {
     if (cnt == 3 || cnt == 6) {
       await tester.tap(find.byKey(const Key('InheritedSwitch')));
       await tester.pumpAndSettle();
+    }
+    // Invoke an error
+    if (cnt == 8) {
+      AppSettingsController().errorButton = true;
     }
   }
 
