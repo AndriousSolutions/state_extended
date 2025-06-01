@@ -25,8 +25,13 @@ Future<void> testPage1(WidgetTester tester) async {
     await tester.tap(find.byKey(const Key('+')));
     await tester.pumpAndSettle();
     // Turn the 'Use InheritedWidget' switch on anf off
-    if (cnt == 3 || cnt == 6) {
+    if (cnt == 3) {
       await tester.tap(find.byKey(const Key('InheritedSwitch')));
+      await tester.pumpAndSettle();
+    }
+    // Turn the 'Use ChangeNotifier' switch on anf off
+    if (cnt == 6) {
+      await tester.tap(find.byKey(const Key('ChangeNotifierSwitch')));
       await tester.pumpAndSettle();
     }
     // Invoke an error

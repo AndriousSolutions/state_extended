@@ -197,7 +197,7 @@ class Controller extends StateXController
 
     /// If count is divisible by 5
     if (_model.counter % 5 == 0) {
-      // Assigning a value will cause 'rootState?.notifyClients()'
+      // Assigning a value will cause 'appState?.notifyClients()'
       // Update the interface with the latest change.
       dataObject = _model.sayHello();
     }

@@ -269,6 +269,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
 
   @override
   void onError(FlutterErrorDetails details) {
+    super.onError(details);
     // recover
     _timer.activate();
   }

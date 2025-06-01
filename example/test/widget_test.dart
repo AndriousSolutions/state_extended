@@ -69,10 +69,19 @@ void testStateExtended() {
       // Tells the tester to build a UI based on the widget tree passed to it
       await tester.pumpWidget(MyApp(key: UniqueKey()));
 
+      // Invoke an error off the hop.
+      ExampleAppController().initAppAsyncError = true;
+
+      AnotherController().initAsyncFailed = true;
+
       /// Flutter won’t automatically rebuild your widget in the test environment.
       /// Use pump() or pumpAndSettle() to ask Flutter to rebuild the widget.
       /// pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle();
+
+      AnotherController().initAsyncFailed = false;
+
+      ExampleAppController().initAppAsyncError = false;
 
       /// Preform integration tests
       await integrationTesting(tester);
@@ -176,24 +185,6 @@ void testStateExtended() {
    expect(name?.contains('Page1State'), isTrue, reason: _location);
   });
 
-  //
-  testWidgets('initAppAsyncError', (WidgetTester tester) async {
-    //
-    // Tells the tester to build a UI based on the widget tree passed to it
-    await tester.pumpWidget(MyApp(key: UniqueKey()));
-
-    // pumpAndSettle() waits for all animations to complete.
-    await tester.pumpAndSettle();
-
-    ExampleAppController().initAppAsyncError = true;
-
-    // hot reload
-    await tester.binding.reassembleApplication();
-
-    // pumpAndSettle() waits for all animations to complete.
-    await tester.pumpAndSettle(const Duration(seconds: 1));
-  });
-
   testWidgets(
     'initAsyncError',
     (WidgetTester tester) async {
@@ -201,16 +192,18 @@ void testStateExtended() {
       // Tells the tester to build a UI based on the widget tree passed to it
       await tester.pumpWidget(MyApp(key: UniqueKey()));
 
+      AnotherController().initAsyncError = true;
+
       // pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle();
 
-      AnotherController().initAsyncError = true;
+      AnotherController().initAsyncError = false;
 
-      // hot reload
-      await tester.binding.reassembleApplication();
-
-      // pumpAndSettle() waits for all animations to complete.
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      // // hot reload
+      // await tester.binding.reassembleApplication();
+      //
+      // // pumpAndSettle() waits for all animations to complete.
+      // await tester.pumpAndSettle(const Duration(seconds: 1));
     },
   );
 
@@ -220,19 +213,18 @@ void testStateExtended() {
     // Tells the tester to build a UI based on the widget tree passed to it
     await tester.pumpWidget(MyApp(key: UniqueKey()));
 
+    // Invoke an error in initAsyncError()
+    AnotherController().initAsyncError = true;
+
+    // Now have that error in initAsyncError() be unrecoverable
+    ExampleAppController().errorCatchAsyncError = true;
+
     // pumpAndSettle() waits for all animations to complete.
     await tester.pumpAndSettle();
 
-    AnotherController().initAsyncError = true;
+    ExampleAppController().errorCatchAsyncError = false;
 
-    // Now trip an error right at start up.
-    ExampleAppController().errorCatchAsyncError = true;
-
-    // hot reload
-    await tester.binding.reassembleApplication();
-
-    // pumpAndSettle() waits for all animations to complete.
-    await tester.pumpAndSettle(const Duration(seconds: 1));
+    AnotherController().initAsyncError = false;
   });
 }
 

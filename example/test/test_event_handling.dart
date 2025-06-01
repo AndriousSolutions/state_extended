@@ -19,9 +19,6 @@ Future<void> testEventHandling(WidgetTester tester) async {
   // Simulate a 'release focus' then refocus event
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
 
-  // Give the app time
-  await tester.pumpAndSettle();
-
   var event = state.inactiveAppLifecycle;
 
   if (event) {
@@ -29,44 +26,39 @@ Future<void> testEventHandling(WidgetTester tester) async {
   }
 
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+
+  event = state.hiddenAppLifecycle;
+
+  if (event) {
+    expect(event, isTrue, reason: _location);
+  }
+
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
 
-  // Give the app time
-  // await tester.pumpAndSettle();
-  //
-  //  event = state.pausedAppLifecycle;
-  //
-  // if (event) {
-  //   /// The app has been paused
-  //   expect(event, isTrue, reason: _location);
-  // }
+  event = state.pausedAppLifecycle;
+
+  if (event) {
+    expect(event, isTrue, reason: _location);
+  }
 
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.detached);
 
-  // // Give the app time
-  // await tester.pumpAndSettle();
-  //
-  // event = state.detachedAppLifecycle;
-  //
-  // if (event) {
-  //   /// The app has been paused
-  //   expect(event, isTrue, reason: _location);
-  // }
+  event = state.detachedAppLifecycle;
+
+  if (event) {
+    expect(event, isTrue, reason: _location);
+  }
 
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
-  // // Give the app time
-  // await tester.pumpAndSettle();
-  //
-  // event = state.resumedAppLifecycle;
-  //
-  // if (event) {
-  //   /// The app has been paused
-  //   expect(event, isTrue, reason: _location);
-  // }
+  event = state.resumedAppLifecycle;
 
-  // Give the app time to recover and indeed resume testing.
-  await tester.pumpAndSettle(const Duration(seconds: 5));
+  if (event) {
+    expect(event, isTrue, reason: _location);
+  }
+
+  // Give the app time to recover and resume testing.
+  await tester.pumpAndSettle(const Duration(seconds: 2));
 
   // locale
   await tester.binding.setLocale('zh', 'zh_CN');
@@ -88,11 +80,11 @@ Future<void> testEventHandling(WidgetTester tester) async {
   // Give the app time to recover and indeed resume testing.
   await tester.pumpAndSettle(const Duration(seconds: 5));
 
-  event = state.hadSystemEvent;
+  final systemEvent = state.hadSystemEvent;
 
-  if (event) {
+  if (systemEvent) {
     /// The app has had some System events occurring.
-    expect(event, isTrue, reason: _location);
+    expect(systemEvent, isTrue, reason: _location);
   }
 
   if (!state.hiddenAppLifecycle) {

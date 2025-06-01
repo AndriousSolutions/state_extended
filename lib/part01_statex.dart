@@ -1322,7 +1322,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Offer an error handler
   @override
   void onError(FlutterErrorDetails details) {
-    // No dbugPrint() here in case it too will error
+    // No debugPrint() here in case it too will error
     super.onError(details);
   }
 

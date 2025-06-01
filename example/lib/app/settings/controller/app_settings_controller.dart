@@ -90,6 +90,15 @@ class AppSettingsController extends StateXController
     }
   }
 
+  /// initAsync() return false for failure to initialize successfully
+  bool get initAsyncFailed => _initAsyncFailed;
+  bool _initAsyncFailed = false;
+  set initAsyncFailed(bool? error) {
+    if (error != null) {
+      _initAsyncFailed = error;
+    }
+  }
+
   /// Error in errorCatchAsyncError()
   bool get errorCatchAsyncError => _errorCatchAsyncError;
   bool _errorCatchAsyncError = false;

@@ -4,8 +4,7 @@
 
 import 'dart:ui' show AppExitResponse;
 
-import '/src/controller.dart'
-    show AppSettingsController, StateXController;
+import '/src/controller.dart' show AppSettingsController, StateXController;
 
 import '/src/view.dart';
 
@@ -24,9 +23,22 @@ class AnotherController extends StateXController
   bool get initAsyncError => _appSettings.initAsyncError;
   set initAsyncError(bool? error) => _appSettings.initAsyncError = error;
 
+  /// Explicitly return false
+  bool get initAsyncFailed => _appSettings.initAsyncFailed;
+  set initAsyncFailed(bool? error) => _appSettings.initAsyncFailed = error;
+
   /// Supply the name of this class
   String get className =>
       toString().replaceAll('Instance of', '').replaceAll("'", '');
+
+  @override
+  Future<bool> initAsync() async {
+    var init = await super.initAsync();
+    if (initAsyncFailed) {
+      init = false;
+    }
+    return init;
+  }
 
   @override
   Future<bool> initAsyncState(state) async {
@@ -42,13 +54,14 @@ class AnotherController extends StateXController
   @override
   void onAsyncError(FlutterErrorDetails details) {
     //
-    if (details.exception
-        .toString()
-        .contains('Error in AnotherController.initAsync()!')) {
-      assert(() {
-        debugPrint('########### Caught error in onAsyncError() for $className');
-        return true;
-      }());
+    final errorMessage = details.exception.toString();
+
+    if (errorMessage.contains('Error in AnotherController.initAsync()!')) {
+      debugPrint("########### Caught 'Error in AnotherController.initAsync()!' in onAsyncError() for $className");
+    }
+
+    if (errorMessage.contains('AnotherController.initAsync() returned false!')) {
+      debugPrint("########### Caught 'AnotherController.initAsync() returned false!' in onAsyncError() for $className");
     }
   }
 

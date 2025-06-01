@@ -31,6 +31,8 @@ Future<void> testsAppStateX(WidgetTester tester) async {
 // The first State object is itself --- _MyAppState
   appState = stateObj?.appStateX;
 
+  appState = stateObj?.rootState;
+
   expect(appState, isA<AppStateX>(), reason: _location);
 
   final snapShot = appState!.snapshot!;
@@ -39,6 +41,8 @@ Future<void> testsAppStateX(WidgetTester tester) async {
 
   /// Rebuild InheritedWidget
   appState.dataObject = 'test';
+
+  expect(appState.dataObject == 'test', isTrue, reason: _location);
 
   appState.setBuilder((context) => const SizedBox());
 

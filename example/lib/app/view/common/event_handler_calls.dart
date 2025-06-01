@@ -54,12 +54,15 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   /// in the corresponding runAsync() routine.
   @override
   void onAsyncError(FlutterErrorDetails details) {
-    LogController.log('onAsyncError() in $eventStateClassName');
+    final errorMessage = details.exception.toString();
+    // No debugPrint() here in case it too will error
+    LogController.log("'$errorMessage' onAsyncError() in $eventStateClassName");
   }
 
   /// Error Handler
   @override
   void onError(FlutterErrorDetails details) {
+    // No debugPrint() here in case it too will error
     LogController.log('onError() in $eventStateClassName');
   }
 
@@ -309,6 +312,7 @@ mixin EventsControllerMixin on StateXController {
   /// in the corresponding runAsync() routine.
   @override
   void onAsyncError(FlutterErrorDetails details) {
+    // Optionally call super for debugPrint()
     super.onAsyncError(details);
     LogController.log('onAsyncError() in $controllerName');
   }
@@ -316,6 +320,7 @@ mixin EventsControllerMixin on StateXController {
   /// Error Handler
   @override
   void onError(FlutterErrorDetails details) {
+    // Optionally call super for debugPrint()
     super.onError(details);
     LogController.log('onError() in $controllerName');
   }

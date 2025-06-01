@@ -1,11 +1,13 @@
 
-## 6.2.0+1
+## 6.2.0+2
 May 31, 2025
 - Renamed RecordExceptionMixin to ErrorInErrorHandlerMixin
 - // If State prints events, so does its Controllers
   in StateX constructor and in initAsyncState()
 - Deprecated recordException() for recordErrorInHandler()
 - Additional test scripts
+  tester.binding.handleAppLifecycleStateChanged();
+  .initAppAsyncError = true;.initAsyncFailed = true;.errorCatchAsyncError = true;.initAsyncError = true;
 
 ## 6.1.1+4
 May 28, 2025

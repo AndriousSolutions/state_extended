@@ -75,13 +75,13 @@ class ExampleAppController extends StateXController
   void onAsyncError(FlutterErrorDetails details) {
     super.onAsyncError(details); // Not really necessary. Just for Codecov
     //
-    if (details.exception.toString().contains('Error in initAsync()!')) {
-      assert(() {
+    assert(() {
+      if (details.exception.toString().contains('Error in initAsync()!')) {
         debugPrint(
             '########### Caught error in onAsyncError() for $controllerName');
-        return true;
-      }());
-    }
+      }
+      return true;
+    }());
   }
 
   ///

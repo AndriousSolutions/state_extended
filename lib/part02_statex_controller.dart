@@ -333,7 +333,6 @@ class StateXController
     /// AppLifecycleState.hidden
     /// AppLifecycleState.paused (may enter the suspending state at any time)
     // Optionally call super for debugPrint()
-
     super.didChangeAppLifecycleState(state);
   }
 
