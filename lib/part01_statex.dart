@@ -914,8 +914,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         _didChangeAppLifecycleStateXControllers(state);
         detachedAppLifecycleState();
         break;
-      default:
-      // WARNING: Missing case clause
+      //default:
     }
 
     _setStateAllowed = true;

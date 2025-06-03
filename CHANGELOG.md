@@ -1,5 +1,5 @@
 
-## 6.2.1
+## 6.2.1+1
 June 02, 2025
 - Introduced WidgetsBindingInstanceMixin with static boolean inWidgetsFlutterBinding
 - detachedAppLifecycleState() removed from AppStateX
@@ -9,6 +9,7 @@ June 02, 2025
 - _removeFromMapOfStates(this); and WidgetsBinding.instance.removeObserver(this); now in StateX.dispose()
 - _instance = null; now in AppStateX.dispose()
 - runZonedGuarded() now in dispose(), inactiveAppLifecycleState(), resumedAppLifecycleState()
+- default clause is commented out
 
 ## 6.2.0+2
 May 31, 2025
