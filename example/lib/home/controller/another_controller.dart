@@ -57,11 +57,14 @@ class AnotherController extends StateXController
     final errorMessage = details.exception.toString();
 
     if (errorMessage.contains('Error in AnotherController.initAsync()!')) {
-      debugPrint("########### Caught 'Error in AnotherController.initAsync()!' in onAsyncError() for $className");
+      debugPrint(
+          "########### Caught 'Error in AnotherController.initAsync()!' in onAsyncError() for $className");
     }
 
-    if (errorMessage.contains('AnotherController.initAsync() returned false!')) {
-      debugPrint("########### Caught 'AnotherController.initAsync() returned false!' in onAsyncError() for $className");
+    if (errorMessage
+        .contains('AnotherController.initAsync() returned false!')) {
+      debugPrint(
+          "########### Caught 'AnotherController.initAsync() returned false!' in onAsyncError() for $className");
     }
   }
 

@@ -172,9 +172,9 @@ void testStateExtended() {
 
     expect(details, isNotNull, reason: _location);
 
-    final message =  appState?.lastFlutterErrorMessage;
+    final message = appState?.lastFlutterErrorMessage;
 
-   expect(message?.contains('Error in builder()!'), isTrue, reason: _location);
+    expect(message?.contains('Error in builder()!'), isTrue, reason: _location);
 
     final inError = appState?.inErrorRoutine;
 
@@ -182,7 +182,7 @@ void testStateExtended() {
 
     final name = appState?.errorStateName;
 
-   expect(name?.contains('Page1State'), isTrue, reason: _location);
+    expect(name?.contains('Page1State'), isTrue, reason: _location);
   });
 
   testWidgets(

@@ -11,7 +11,7 @@ mixin class WidgetsBindingInstanceMixin {
   /// Indicating app is running in the Flutter engine and not in
   /// the `flutter_test` framework with TestWidgetsFlutterBinding for example
   bool get inWidgetsFlutterBinding => _inWidgetsFlutterBinding ??=
-  WidgetsBinding.instance is WidgetsFlutterBinding;
+      WidgetsBinding.instance is WidgetsFlutterBinding;
   static bool? _inWidgetsFlutterBinding;
 
   /// Indicate if running under a 'Flutter Test' environment
