@@ -355,10 +355,6 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   stateObj.didUpdateWidget(widget);
 
-  /// Simulate a reinsertion into the Widget tree
-  /// Rarely called in real life, but must if deactivate() was called
-  stateObj.activate();
-
   /// null testing
   stateObj.add(null);
 

@@ -1,4 +1,15 @@
 
+## 6.2.1
+June 02, 2025
+- Introduced WidgetsBindingInstanceMixin with static boolean inWidgetsFlutterBinding
+- detachedAppLifecycleState() removed from AppStateX
+- if (state.mounted && !state._deactivated) removed from forEachState() 
+- In StateX, deactivate() called in inactiveAppLifecycleState(); activate() called in resumedAppLifecycleState()
+  dispose() called in detachedAppLifecycleState()
+- _removeFromMapOfStates(this); and WidgetsBinding.instance.removeObserver(this); now in StateX.dispose()
+- _instance = null; now in AppStateX.dispose()
+- runZonedGuarded() now in dispose(), inactiveAppLifecycleState(), resumedAppLifecycleState()
+
 ## 6.2.0+2
 May 31, 2025
 - Renamed RecordExceptionMixin to ErrorInErrorHandlerMixin

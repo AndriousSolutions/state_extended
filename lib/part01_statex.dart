@@ -17,6 +17,7 @@ part of 'state_extended.dart';
 abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         WidgetsBindingObserver,
+        WidgetsBindingInstanceMixin,
         _ControllersByType,
         AppStateMixin,
         FutureBuilderStateMixin,
@@ -359,8 +360,28 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// The framework calls this method whenever it removes this [State] object
     /// from the tree. Subclasses should override this method to clean up any links between
     /// this object and other elements in the tree.
+    //
+    if (!_deactivated) {
+      runZonedGuarded<void>(() {
+        _deactivate();
+        super.deactivate();
+      }, (error, stackTrace) {
+        // Record error in device's log
+        _logPackageError(
+          error,
+          library: 'part01_statex.dart',
+          description: 'Error in deactivate()',
+        );
+      });
+    }
+  }
 
-    /// Users may have explicitly call this.
+  // Wrapped in runZonedGuarded<void>()
+  void _deactivate() {
+    // Ignore Route changes
+    RouteObserverStates.unsubscribeRoutes(this);
+
+    // Users may have explicitly call this.
     if (_deactivated) {
       return;
     }
@@ -368,20 +389,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Indicate this State object is deactivated.
     _deactivated = true;
 
-    /// Ignore Route changes
-    RouteObserverStates.unsubscribeRoutes(this);
-
-    /// If 'AppState' is not used
-    if (appStateX == null || this is AppStateX) {
-      // Unregisters the given observer.
-      WidgetsBinding.instance.removeObserver(this);
-    }
-
     // No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
 
     for (final con in controllerList) {
-      //
       con.deactivateState(this);
       // Pop the State object from the controller
       con._popStateFromSetter(this);
@@ -389,13 +400,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         con.deactivate();
       }
     }
-
-    // Optionally call super for debugPrint()
-    super.deactivate();
-
-    // Remove from the list of StateX objects present in the app!
-    // I know! I know! It may be premature but Controllers still have access.
-    _removeFromMapOfStates(this);
 
     _setStateAllowed = true;
 
@@ -421,6 +425,9 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Likely was deactivated.
     _deactivated = false;
 
+    /// Become aware of Route changes
+    RouteObserverStates.subscribeRoutes(this);
+
     // No 'setState()' functions are allowed to fully function at this point.
     //   _setStateAllowed = false;
 
@@ -428,22 +435,15 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       if (con.lastState == null) {
         con.activate();
       }
-      con.activateState(this);
-      // Supply the State object first
       con._pushStateToSetter(this);
+      con.activateState(this);
     }
+
+    // Add to the list of StateX objects present in the app!
+    _addToMapOfStates(this);
 
     // Optionally call super for debugPrint()
     super.activate();
-
-    /// Become aware of Route changes
-    RouteObserverStates.subscribeRoutes(this);
-
-    // If 'AppState' is not used
-    if (appStateX == null) {
-      // Registers the given object as a binding observer.
-      WidgetsBinding.instance.addObserver(this);
-    }
 
     _setStateAllowed = true;
 
@@ -461,11 +461,49 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void dispose() {
+    // **IMPORTANT** Call super.dispose() below instead
     /// The State object's lifecycle is terminated.
     /// **IMPORTANT** You will not know when this will run
     /// It's to the Flutter engines discretion. deactivate() is more reliable.
     /// Subclasses should override deactivate() method instead
     /// to release any resources  (e.g., stop any active animations).
+    runZonedGuarded<void>(() {
+      _dispose();
+      // Special case: Test if already disposed
+      if (mounted) {
+        super.dispose();
+        assert(() {
+          if (_debugPrintEvents) {
+            debugPrint('$_consoleLeadingLine dispose() in $this');
+          }
+          return true;
+        }());
+      } else {
+        assert(() {
+          debugPrint('StateX: Not mounted so dispose() not called in $this');
+          return true;
+        }());
+      }
+    }, (error, stackTrace) {
+      _logPackageError(
+        error,
+        library: 'part01_statex.dart',
+        description: 'Error in dispose()',
+      );
+    });
+  }
+
+  //
+  void _dispose() {
+    // Remove from the list of StateX objects present in the app!
+    // It may be premature but Controllers still have access.
+    _removeFromMapOfStates(this);
+
+    // If 'AppState' is not used
+    if (appStateX == null) {
+      // Unregisters the given observer.
+      WidgetsBinding.instance.removeObserver(this);
+    }
 
     /// Users may have explicitly call this.
     if (_disposed || !_deactivated) {
@@ -499,23 +537,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // In some cases, if then reinserted back in another part of the tree
     // the build is called, and so setState() is not necessary.
     _setStateRequested = false;
-
-    // Special case: Test if already disposed
-    // _element is assigned null AFTER a dispose() call;
-    if (mounted) {
-      super.dispose();
-      assert(() {
-        if (_debugPrintEvents) {
-          debugPrint('$_consoleLeadingLine dispose() in $this');
-        }
-        return true;
-      }());
-    } else {
-      assert(() {
-        debugPrint('StateX: Not mounted so dispose() not called in $this');
-        return true;
-      }());
-    }
   }
 
   /// Flag indicating this State object is disposed.
@@ -882,18 +903,18 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         _detachedAppLifecycle = false;
         _resumedAppLifecycle = false;
         break;
-      case AppLifecycleState.detached:
-        _detachedAppLifecycle = true;
-        _didChangeAppLifecycleStateXControllers(state);
-        detachedAppLifecycleState();
-        break;
       case AppLifecycleState.resumed:
         _resumedAppLifecycle = true;
         _didChangeAppLifecycleStateXControllers(state);
         resumedAppLifecycleState();
         _inactiveAppLifecycle = false;
         break;
-      // default:
+      case AppLifecycleState.detached:
+        _detachedAppLifecycle = true;
+        _didChangeAppLifecycleStateXControllers(state);
+        detachedAppLifecycleState();
+        break;
+      default:
       // WARNING: Missing case clause
     }
 
@@ -939,6 +960,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Apps in this state should assume that they may be [pausedAppLifecycleState] at any time.
   @override
   void inactiveAppLifecycleState() {
+    // Don't call deactivate() if in testing
+    if (inWidgetsFlutterBinding) {
+      deactivate();
+    }
     super.inactiveAppLifecycleState();
   }
 
@@ -962,6 +987,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
+  /// (Called only in iOS, Android)
   @override
   void pausedAppLifecycleState() {
     // Optionally call super for debugPrint()
@@ -975,20 +1001,55 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// The application is visible and responding to user input.
   @override
   void resumedAppLifecycleState() {
-    // Optionally call super for debugPrint()
-    super.resumedAppLifecycleState();
+    //
+    runZonedGuarded<void>(() {
+      // Don't call activate() if in testing
+      if (inWidgetsFlutterBinding) {
+        if (_deactivated) {
+          activate();
+        }
+      }
+      super.resumedAppLifecycleState();
+    }, (error, stackTrace) {
+      // An error in the error handler. Record the error
+      recordErrorInHandler(error, stackTrace);
+      // Record error in device's log
+      _logPackageError(
+        error,
+        library: 'part01_statex.dart',
+        description: 'Error in resumedAppLifecycleState()',
+      );
+    });
   }
 
   /// State object was in 'resumed' state
   bool get resumedAppLifecycle => _resumedAppLifecycle;
   bool _resumedAppLifecycle = false;
 
-  /// Either be in the progress of attaching when the  engine is first initializing
+  /// Either be in the progress of attaching when the engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
+  /// The application is still hosted on a flutter engine but is detached from any host views.
+  /// Its firing will depending on the hosting operating system:
+  /// https://github.com/flutter/flutter/issues/124945#issuecomment-1514159238
   @override
   void detachedAppLifecycleState() {
-    // Optionally call super for debugPrint()
-    super.detachedAppLifecycleState();
+    // Don't call dispose() if in testing
+    if (inWidgetsFlutterBinding) {
+      if (!_disposed) {
+        dispose();
+      }
+      //
+      runZonedGuarded<void>(() {
+        super.detachedAppLifecycleState();
+      }, (error, stackTrace) {
+        // Record error in device's log
+        _logPackageError(
+          error,
+          library: 'part01_statex.dart',
+          description: 'Error in detachedAppLifecycleState()',
+        );
+      });
+    }
   }
 
   /// State object was in 'paused' state

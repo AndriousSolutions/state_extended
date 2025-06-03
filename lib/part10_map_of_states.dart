@@ -135,7 +135,8 @@ mixin _MapOfStates on State {
     final list = statesList(reversed: reversed, remove: remove);
     for (final StateX state in list) {
       try {
-        if (state.mounted && !state._deactivated) {
+        // if (state.mounted && !state._deactivated) { // Not working out gp
+        if (state.mounted) {
           func(state);
         }
       } catch (e, stack) {

@@ -56,9 +56,9 @@ mixin SetStateMixin {
       return false;
     }
 
-    // Remove from the Map and Set object.
+    // Remove from the Map
     _stateWidgetMap.removeWhere((key, value) => value == state);
-
+    // Remove from the Set
     final pop = _stateXSet.remove(state);
 
     // Was the 'popped' state the 'current' state?
@@ -138,6 +138,12 @@ mixin SetStateMixin {
     // assert is removed in production.
     assert(inDebugMode = true);
     return inDebugMode;
+  }
+
+  /// Clean up memory in case not empty
+  void disposeSetState() {
+    _stateXSet.clear();
+    _stateWidgetMap.clear();
   }
 }
 

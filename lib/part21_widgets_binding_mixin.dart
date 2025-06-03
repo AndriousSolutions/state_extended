@@ -1,22 +1,21 @@
-// Copyright 2025 Andrious Solutions Ltd. All rights reserved.
-// Use of this source code is governed by a 2-clause BSD License.
-// The main directory contains that LICENSE file.
-//
-//          Created  28 April 2025
+// Uuid
+// Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
+// Use of this Uuid function is governed by the M.I.T. license that can be found
+// in the LICENSE file under Uuid.
 //
 
-import '/src/view.dart';
+part of 'state_extended.dart';
 
 ///
-mixin class AppObjectBindingMixin {
+mixin class WidgetsBindingInstanceMixin {
   /// Indicating app is running in the Flutter engine and not in
   /// the `flutter_test` framework with TestWidgetsFlutterBinding for example
   bool get inWidgetsFlutterBinding => _inWidgetsFlutterBinding ??=
   WidgetsBinding.instance is WidgetsFlutterBinding;
-  bool? _inWidgetsFlutterBinding;
+  static bool? _inWidgetsFlutterBinding;
 
   /// Indicate if running under a 'Flutter Test' environment
   bool get inFlutterTest =>
       _inFlutterTest ??= WidgetsBinding.instance is! WidgetsFlutterBinding;
-  bool? _inFlutterTest;
+  static bool? _inFlutterTest;
 }

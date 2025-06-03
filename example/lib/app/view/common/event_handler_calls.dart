@@ -30,6 +30,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   @override
   void deactivate() {
     LogController.log('deactivate() in $eventStateClassName');
+    // Optionally call super for debugPrint()
     super.deactivate();
   }
 
@@ -38,6 +39,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   @override
   void activate() {
     LogController.log('activate() in $eventStateClassName');
+    // Optionally call super for debugPrint()
     super.activate();
   }
 
@@ -47,6 +49,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   @override
   void dispose() {
     LogController.log('dispose() in $eventStateClassName');
+    // Optionally call super for debugPrint()
     super.dispose();
   }
 
@@ -156,6 +159,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   /// Apps in this state should assume that they may be [pausedAppLifecycleState] at any time.
   @override
   void inactiveAppLifecycleState() {
+    super.inactiveAppLifecycleState();
     LogController.log(
       'inactiveAppLifecycleState() in $eventStateClassName',
     );
@@ -167,6 +171,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   /// is running in a window or tab that is no longer visible (on the web).
   @override
   void hiddenAppLifecycleState() {
+    super.hiddenAppLifecycleState();
     LogController.log(
       'hiddenAppLifecycleState() in $eventStateClassName',
     );
@@ -176,6 +181,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   /// user input, and running in the background.
   @override
   void pausedAppLifecycleState() {
+    super.pausedAppLifecycleState();
     LogController.log(
       'pausedAppLifecycleState() in $eventStateClassName',
     );
@@ -185,6 +191,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   /// or after the view being destroyed due to a Navigator pop.
   @override
   void detachedAppLifecycleState() {
+    super.detachedAppLifecycleState();
     LogController.log(
       'detachedAppLifecycleState() in $eventStateClassName',
     );
@@ -193,6 +200,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   /// The application is visible and responding to user input.
   @override
   void resumedAppLifecycleState() {
+    super.resumedAppLifecycleState();
     LogController.log(
       'resumedAppLifecycleState() in $eventStateClassName',
     );
@@ -259,6 +267,7 @@ mixin EventsControllerMixin on StateXController {
   /// Whenever it's removed from the Widget Tree
   @override
   void deactivate() {
+    // Optionally call super for debugPrint()
     super.deactivate();
     LogController.log('deactivate() in $controllerName');
   }
@@ -267,6 +276,7 @@ mixin EventsControllerMixin on StateXController {
   /// Called with every State object currently using this controller
   @override
   void deactivateState(state) {
+    // Optionally call super for debugPrint()
     super.deactivateState(state);
     LogController.log(
         'deactivateState(${eventStateClassNameOnly('$state')}) in $controllerName');
@@ -276,6 +286,7 @@ mixin EventsControllerMixin on StateXController {
   /// removed via [deactivate].
   @override
   void activate() {
+    // Optionally call super for debugPrint()
     super.activate();
     LogController.log('activate() in $controllerName');
   }
@@ -284,6 +295,7 @@ mixin EventsControllerMixin on StateXController {
   /// Called with every State object currently using this controller
   @override
   void activateState(state) {
+    // Optionally call super for debugPrint()
     super.activateState(state);
     LogController.log(
         'activateState(${eventStateClassNameOnly('$state')}) in $controllerName');
@@ -303,6 +315,7 @@ mixin EventsControllerMixin on StateXController {
   /// Called with every State object currently using this controller
   @override
   void disposeState(state) {
+    // Optionally call super for debugPrint()
     super.disposeState(state);
     LogController.log(
         'dispose(${eventStateClassNameOnly('$state')}) in $controllerName');
@@ -328,6 +341,7 @@ mixin EventsControllerMixin on StateXController {
   /// Called when this State is *first* added to as a Route observer?!
   @override
   void didPush() {
+    // Optionally call super for debugPrint()
     super.didPush();
     LogController.log('didPush() in $controllerName');
   }
@@ -335,6 +349,7 @@ mixin EventsControllerMixin on StateXController {
   /// New route has been pushed, and this State object's route is no longer current.
   @override
   void didPushNext() {
+    // Optionally call super for debugPrint()
     super.didPushNext();
     LogController.log('didPushNext() in $controllerName');
   }
@@ -343,6 +358,7 @@ mixin EventsControllerMixin on StateXController {
   @override
   void didPop() {
     LogController.log('didPop() in $controllerName');
+    // Optionally call super for debugPrint()
     super.didPop();
   }
 
@@ -350,6 +366,7 @@ mixin EventsControllerMixin on StateXController {
   @override
   void didPopNext() {
     LogController.log('didPopNext() in $controllerName');
+    // Optionally call super for debugPrint()
     super.didPopNext();
   }
 
@@ -368,6 +385,7 @@ mixin EventsControllerMixin on StateXController {
   /// their didChangeDependencies() function.
   @override
   void didChangeDependencies() {
+    // Optionally call super for debugPrint()
     super.didChangeDependencies();
     LogController.log('didChangeDependencies() in $controllerName');
   }
@@ -376,6 +394,7 @@ mixin EventsControllerMixin on StateXController {
   /// when a phone is rotated.
   @override
   void didChangeMetrics() {
+    // Optionally call super for debugPrint()
     super.didChangeMetrics();
     LogController.log('didChangeMetrics() in $controllerName');
   }
@@ -383,6 +402,7 @@ mixin EventsControllerMixin on StateXController {
   /// Called when the platform's text scale factor changes.
   @override
   void didChangeTextScaleFactor() {
+    // Optionally call super for debugPrint()
     super.didChangeTextScaleFactor();
     LogController.log('didChangeTextScaleFactor() in $controllerName');
   }
@@ -397,6 +417,7 @@ mixin EventsControllerMixin on StateXController {
   /// Called when the system tells the app that the user's locale has changed.
   @override
   void didChangeLocales(List<Locale>? locales) {
+    // Optionally call super for debugPrint()
     super.didChangeLocales(locales);
     LogController.log('didChangeLocales() in $controllerName');
   }
@@ -405,6 +426,7 @@ mixin EventsControllerMixin on StateXController {
   /// Apps in this state should assume that they may be [pausedAppLifecycleState] at any time.
   @override
   void inactiveAppLifecycleState() {
+    // Optionally call super for debugPrint()
     super.inactiveAppLifecycleState();
     LogController.log('inactiveAppLifecycleState() in $controllerName');
   }
@@ -415,6 +437,7 @@ mixin EventsControllerMixin on StateXController {
   /// is running in a window or tab that is no longer visible (on the web).
   @override
   void hiddenAppLifecycleState() {
+    // Optionally call super for debugPrint()
     super.hiddenAppLifecycleState();
     LogController.log('hiddenAppLifecycleState() in $controllerName');
   }
@@ -423,6 +446,7 @@ mixin EventsControllerMixin on StateXController {
   /// user input, and running in the background.
   @override
   void pausedAppLifecycleState() {
+    // Optionally call super for debugPrint()
     super.pausedAppLifecycleState();
     LogController.log('pausedAppLifecycleState() in $controllerName');
   }
@@ -431,6 +455,7 @@ mixin EventsControllerMixin on StateXController {
   /// or after the view being destroyed due to a Navigator pop.
   @override
   void detachedAppLifecycleState() {
+    // Optionally call super for debugPrint()
     super.detachedAppLifecycleState();
     LogController.log('detachedAppLifecycleState() in $controllerName');
   }
@@ -438,6 +463,7 @@ mixin EventsControllerMixin on StateXController {
   /// The application is visible and responding to user input.
   @override
   void resumedAppLifecycleState() {
+    // Optionally call super for debugPrint()
     super.resumedAppLifecycleState();
     LogController.log('resumedAppLifecycleState() in $controllerName');
   }
@@ -445,6 +471,7 @@ mixin EventsControllerMixin on StateXController {
   /// Called when there's a memory constraint.
   @override
   void didHaveMemoryPressure() {
+    // Optionally call super for debugPrint()
     super.didHaveMemoryPressure();
     LogController.log('didHaveMemoryPressure() in $controllerName');
   }
@@ -452,6 +479,7 @@ mixin EventsControllerMixin on StateXController {
   /// Called when the system changes the set of active accessibility features.
   @override
   void didChangeAccessibilityFeatures() {
+    // Optionally call super for debugPrint()
     super.didChangeAccessibilityFeatures();
     LogController.log('didChangeAccessibilityFeatures() in $controllerName');
   }
@@ -460,6 +488,7 @@ mixin EventsControllerMixin on StateXController {
   @override
   Future<AppExitResponse> didRequestAppExit() {
     LogController.log('didRequestAppExit() in $controllerName');
+    // Optionally call super for debugPrint()
     return super.didRequestAppExit();
   }
 }

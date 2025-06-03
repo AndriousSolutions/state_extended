@@ -14,6 +14,7 @@ part of 'state_extended.dart';
 /// {@category State Object Controller}
 class StateXController
     with
+        WidgetsBindingInstanceMixin,
         StateXEventHandlers,
         SetStateMixin,
         AppStateMixin,
@@ -201,6 +202,9 @@ class StateXController
     /// by this object (e.g., stop any active animations).
     // Clear its ChangeNotifier
     _disposeChangeNotifier();
+
+    /// Clean up memory
+    disposeSetState();
 
     // If instantiated in a factory constructor
     // Note: You don't know when this function will fire!

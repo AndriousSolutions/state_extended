@@ -198,12 +198,6 @@ void testStateExtended() {
       await tester.pumpAndSettle();
 
       AnotherController().initAsyncError = false;
-
-      // // hot reload
-      // await tester.binding.reassembleApplication();
-      //
-      // // pumpAndSettle() waits for all animations to complete.
-      // await tester.pumpAndSettle(const Duration(seconds: 1));
     },
   );
 

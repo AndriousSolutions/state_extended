@@ -113,26 +113,25 @@ class WordPairsTimer extends StateXController
   /// The application is running in the background.
   @override
   void pausedAppLifecycleState() {
-    super.pausedAppLifecycleState();
     // Cancel the timer
     _cancelTimer();
+    super.pausedAppLifecycleState();
   }
 
   /// The next route has been popped off, and back to this route.
   @override
   void didPopNext() {
     super.didPopNext();
-
-    /// Initialize the timer.
+    // Initialize the timer.
     _initTimer();
   }
 
   /// The next route has been pushed
   @override
   void didPushNext() {
-    super.didPushNext();
     // Cancel the timer
     _cancelTimer();
+    super.didPushNext();
   }
 
   /// An error has occurred

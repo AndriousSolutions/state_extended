@@ -312,11 +312,11 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   // To override WidgetsBindingObserver.didChangeAppLifecycleState()
   void didChangeAppLifecycleState(AppLifecycleState state) {
     /// Passing these possible values:
-    /// AppLifecycleState.detached
-    /// AppLifecycleState.resumed
     /// AppLifecycleState.inactive (may be paused at any time)
     /// AppLifecycleState.hidden
     /// AppLifecycleState.paused (may enter the suspending state at any time)
+    /// AppLifecycleState.resumed
+    /// AppLifecycleState.detached
     // Record the triggered event
     assert(() {
       if (_debugPrintEvents) {

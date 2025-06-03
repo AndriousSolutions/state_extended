@@ -66,9 +66,9 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// removed via [deactivate].
   @override
   void activate() {
-    super.activate();
     // Introduce its own error handler
     FlutterError.onError = _errorHandler;
+    super.activate();
   }
 
   /// Reference the State object returning the variable, _child
@@ -91,6 +91,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   @protected
   @mustCallSuper
   void dispose() {
+    _instance = null;
     _builderState = null;
     _inheritedState = null;
     _MapOfStates._states.clear();
@@ -177,6 +178,11 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
 
   /// Called when the system puts the app in the background or returns
   /// the app to the foreground.
+  /// AppLifecycleState.inactive:
+  /// AppLifecycleState.hidden:
+  /// AppLifecycleState.paused:
+  /// AppLifecycleState.resumed:
+  /// AppLifecycleState.detached:
   @override
   @mustCallSuper
   void didChangeAppLifecycleState(AppLifecycleState lifecycleState) {
@@ -184,37 +190,6 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     //
     forEachState((state) {
       state.didChangeAppLifecycleState(lifecycleState);
-    }, reversed: true, remove: this);
-  }
-
-  /// Calls the deactivate() and dispose() functions
-  /// in all the app's StateX class objects
-  /// It's success will depending on the hosting operating system:
-  /// https://github.com/flutter/flutter/issues/124945#issuecomment-1514159238
-  @override
-  @protected
-  @mustCallSuper
-  void detachedAppLifecycleState() {
-    //
-    forEachState((state) {
-      //
-      try {
-        state.deactivate();
-      } catch (e, stack) {
-        // An error in the error handler. Record the error
-        recordErrorInHandler(e, stack);
-        _onErrorInHandler();
-      }
-
-      try {
-        if (!state._disposed) {
-          state.dispose();
-        }
-      } catch (e, stack) {
-        // An error in the error handler. Record the error
-        recordErrorInHandler(e, stack);
-        _onErrorInHandler();
-      }
     }, reversed: true, remove: this);
   }
 
@@ -369,7 +344,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     }
 
     /// If a tester is running. Don't handle the error.
-    if (WidgetsBinding.instance is WidgetsFlutterBinding) {
+    if (inWidgetsFlutterBinding) {
+      // (WidgetsBinding.instance is WidgetsFlutterBinding) {
       //
       FlutterError.onError!(FlutterErrorDetails(
         exception: ex,
@@ -439,7 +415,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     if (_onErrorOverridden) {
       onError(details);
       // If in testing, after the supplied handler, call Flutter Testing Error handler
-      if (WidgetsBinding.instance is! WidgetsFlutterBinding) {
+      if (!inWidgetsFlutterBinding) {
+        //(WidgetsBinding.instance is! WidgetsFlutterBinding) {
         // An `Error` is a failure that the programmer should have avoided.
         if (details.exception is TestFailure || details.exception is Error) {
           // Allow an error to be ignored. Once!
@@ -467,7 +444,8 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   // Only set to true once and only in testing
   set ignoreErrorInTesting(bool? ignore) {
     // Assigns a value only in testing.
-    if (ignore != null && WidgetsBinding.instance is! WidgetsFlutterBinding) {
+    if (ignore != null && !inWidgetsFlutterBinding) {
+      //WidgetsBinding.instance is! WidgetsFlutterBinding) {
       // if (_ignoreErrorInTesting == null) {
       _ignoreErrorInTesting = ignore;
       // } else {

@@ -7,7 +7,7 @@ library;
 ///
 /// dartdoc:
 /// {@category Get started}
-import 'dart:async' show Future;
+import 'dart:async' show Future, runZonedGuarded;
 
 import 'dart:math' show Random;
 
@@ -95,5 +95,8 @@ part 'part19_async_ops_mixin.dart';
 /// on State: onError(), logErrorDetails()
 part 'part20_statex_error_mixin.dart';
 
+/// WidgetsBinding.instance indicators
+part 'part21_widgets_binding_mixin.dart';
+
 /// A UUID generator, useful for generating unique IDs.
-part 'part21_uuid.dart';
+part 'part22_uuid.dart';
