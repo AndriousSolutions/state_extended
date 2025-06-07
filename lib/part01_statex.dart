@@ -131,7 +131,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       } else {
         /// This connects the StateXController to this State object!
         if(controller._pushStateToSetter(this)){
-          // If added, assign as the 'current' state object.
+          // If just added, assign as the 'current' state object.
           controller.state = this;
         }
       }

@@ -1,4 +1,8 @@
 
+## 6.2.3
+June 07, 2025
+- Corrected _pushStateToSetter with if(_stateXSet.add(stateX);
+
 ## 6.2.2
 June 07, 2025
 - static AppStateX._instance deprecated and no longer to be used.

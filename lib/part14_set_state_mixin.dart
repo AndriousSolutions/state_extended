@@ -25,12 +25,12 @@ mixin SetStateMixin {
 
   final Set<StateX> _stateXSet = {};
   final Map<Type, StateX> _stateWidgetMap = {};
-  bool _statePushed = false;
+  bool _stateJustAdded = false;
 
   /// Add the provided State object to the Map object if
   /// it's the 'current' StateX object in _stateX.
   void _addStateToSetter(covariant StateX stateX) {
-    if (_statePushed && _stateX != null && _stateX == stateX) {
+    if (_stateJustAdded && _stateX != null && _stateX == stateX) {
       _stateWidgetMap.addAll({stateX.widget.runtimeType: stateX});
     }
   }
@@ -44,8 +44,8 @@ mixin SetStateMixin {
       return false;
     }
     // Pushed onto State Set.
-    _statePushed = _stateXSet.contains(stateX) || _stateXSet.add(stateX);
-    return _statePushed;
+    _stateJustAdded = _stateXSet.add(stateX);
+    return _stateJustAdded;
   }
 
   /// This removes the most recent StateX object added
@@ -65,7 +65,7 @@ mixin SetStateMixin {
     // Was the 'popped' state the 'current' state?
     if (stateX == state) {
       //
-      _statePushed = false;
+      _stateJustAdded = false;
 
       if (_stateXSet.isEmpty) {
         state = null;
