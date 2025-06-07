@@ -84,10 +84,26 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// If _controller == null, get the 'first assigned' controller if any.
   StateXController? get controller => _controller ??= firstCon;
 
-  /// Add a specific StateXController to this View.
+  @override
+  AppStateX? get appStateX {
+    if(_appStateX == null) {
+      if(firstState is AppStateX?) {
+        _appStateX = firstState as AppStateX?;
+      }else{
+        _appStateX = lastContext?.findAncestorStateOfType<AppStateX>();
+      }
+    }
+    return _appStateX;
+  }
+  AppStateX? _appStateX;
+
+  /// Add a specific StateXController to this State object.
   /// Returns the StateXController's unique String identifier.
   @override
   String add(StateXController? controller) {
+    // Supply a reference to the App State object if any
+    controller?._appStateX = appStateX;
+
     String id;
     if (controller == null) {
       id = '';
@@ -114,7 +130,10 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         }());
       } else {
         /// This connects the StateXController to this State object!
-        controller._pushStateToSetter(this);
+        if(controller._pushStateToSetter(this)){
+          // If added, assign as the 'current' state object.
+          controller.state = this;
+        }
       }
     }
     return id;
@@ -362,50 +381,52 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// this object and other elements in the tree.
     //
     if (!_deactivated) {
-      runZonedGuarded<void>(() {
-        _deactivate();
+      try {
+        // runZonedGuarded<void>(() {
+        // scheduleMicrotask(() {
+
+        // Ignore Route changes
+        RouteObserverStates.unsubscribeRoutes(this);
+
+        // Users may have explicitly call this.
+        if (_deactivated) {
+          return;
+        }
+
+        // Indicate this State object is deactivated.
+        _deactivated = true;
+
+        // No 'setState()' functions are allowed to fully function at this point.
+//    _setStateAllowed = false;
+
+        for (final con in controllerList) {
+          con.deactivateState(this);
+          // Pop the State object from the controller
+          con._popStateFromSetter(this);
+          if (con.lastState == null) {
+            con.deactivate();
+          }
+        }
+
+        _setStateAllowed = true;
+
+        // In some cases, if then reinserted back in another part of the tree
+        // the build is called, and so setState() is not necessary.
+        _setStateRequested = false;
+
         super.deactivate();
-      }, (error, stackTrace) {
+        // });
+      } catch (e) {
+        // }, (error, stackTrace) {
         // Record error in device's log
         _logPackageError(
-          error,
+          e,
           library: 'part01_statex.dart',
           description: 'Error in deactivate()',
         );
-      });
-    }
-  }
-
-  // Wrapped in runZonedGuarded<void>()
-  void _deactivate() {
-    // Ignore Route changes
-    RouteObserverStates.unsubscribeRoutes(this);
-
-    // Users may have explicitly call this.
-    if (_deactivated) {
-      return;
-    }
-
-    // Indicate this State object is deactivated.
-    _deactivated = true;
-
-    // No 'setState()' functions are allowed to fully function at this point.
-//    _setStateAllowed = false;
-
-    for (final con in controllerList) {
-      con.deactivateState(this);
-      // Pop the State object from the controller
-      con._popStateFromSetter(this);
-      if (con.lastState == null) {
-        con.deactivate();
+        // });
       }
     }
-
-    _setStateAllowed = true;
-
-    // In some cases, if then reinserted back in another part of the tree
-    // the build is called, and so setState() is not necessary.
-    _setStateRequested = false;
   }
 
   /// Called when this object is reinserted into the tree after having been
@@ -467,9 +488,55 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// It's to the Flutter engines discretion. deactivate() is more reliable.
     /// Subclasses should override deactivate() method instead
     /// to release any resources  (e.g., stop any active animations).
-    runZonedGuarded<void>(() {
-      _dispose();
-      // Special case: Test if already disposed
+    try {
+      // runZonedGuarded<void>(() {
+      // scheduleMicrotask(() {
+      // Remove from the list of StateX objects present in the app!
+      // It may be premature but Controllers still have access.
+      _removeFromMapOfStates(this);
+
+      // If 'AppState' is not used
+      if (appStateX == null) {
+        // Unregisters the given observer.
+        WidgetsBinding.instance.removeObserver(this);
+      }
+
+      /// Users may have explicitly call this.
+      if (_disposed || !_deactivated) {
+        assert(() {
+          debugPrint('StateX: dispose() already called in $this');
+          return true;
+        }());
+        return;
+      }
+
+      /// Indicate this State object is terminated.
+      _disposed = true;
+
+      // No 'setState()' functions are allowed to fully function at this point.
+      _setStateAllowed = false;
+
+      /// Call its controllers' dispose() functions
+      for (final con in controllerList) {
+        con.disposeState(this);
+        if (con.lastState == null) {
+          con.dispose();
+        }
+      }
+
+      // Remove any 'StateXController' reference
+      _controller = null;
+
+      // Remove App State object
+      _appStateX = null;
+
+      // In some cases, the setState() will be called again! gp
+      _setStateAllowed = true;
+
+      // In some cases, if then reinserted back in another part of the tree
+      // the build is called, and so setState() is not necessary.
+      _setStateRequested = false; // Special case: Test if already disposed
+
       if (mounted) {
         super.dispose();
         assert(() {
@@ -484,59 +551,16 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
           return true;
         }());
       }
-    }, (error, stackTrace) {
+      // });
+      // }, (error, stackTrace) {
+    } catch (e) {
       _logPackageError(
-        error,
+        e,
         library: 'part01_statex.dart',
         description: 'Error in dispose()',
       );
-    });
-  }
-
-  //
-  void _dispose() {
-    // Remove from the list of StateX objects present in the app!
-    // It may be premature but Controllers still have access.
-    _removeFromMapOfStates(this);
-
-    // If 'AppState' is not used
-    if (appStateX == null) {
-      // Unregisters the given observer.
-      WidgetsBinding.instance.removeObserver(this);
+      // });
     }
-
-    /// Users may have explicitly call this.
-    if (_disposed || !_deactivated) {
-      assert(() {
-        debugPrint('StateX: dispose() already called in $this');
-        return true;
-      }());
-      return;
-    }
-
-    /// Indicate this State object is terminated.
-    _disposed = true;
-
-    // No 'setState()' functions are allowed to fully function at this point.
-    _setStateAllowed = false;
-
-    /// Call its controllers' dispose() functions
-    for (final con in controllerList) {
-      con.disposeState(this);
-      if (con.lastState == null) {
-        con.dispose();
-      }
-    }
-
-    // Remove any 'StateXController' reference
-    _controller = null;
-
-    // In some cases, the setState() will be called again! gp
-    _setStateAllowed = true;
-
-    // In some cases, if then reinserted back in another part of the tree
-    // the build is called, and so setState() is not necessary.
-    _setStateRequested = false;
   }
 
   /// Flag indicating this State object is disposed.
@@ -1001,7 +1025,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   void resumedAppLifecycleState() {
     //
-    runZonedGuarded<void>(() {
+    try {
+      // runZonedGuarded<void>(() {
       // Don't call activate() if in testing
       if (inWidgetsFlutterBinding) {
         if (_deactivated) {
@@ -1009,16 +1034,18 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         }
       }
       super.resumedAppLifecycleState();
-    }, (error, stackTrace) {
+    } catch (e, stack) {
+      // }, (error, stackTrace) {
       // An error in the error handler. Record the error
-      recordErrorInHandler(error, stackTrace);
+      recordErrorInHandler(e, stack);
       // Record error in device's log
       _logPackageError(
-        error,
+        e,
         library: 'part01_statex.dart',
         description: 'Error in resumedAppLifecycleState()',
       );
-    });
+    }
+    // });
   }
 
   /// State object was in 'resumed' state
@@ -1038,16 +1065,19 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         dispose();
       }
       //
-      runZonedGuarded<void>(() {
+      try {
+        // runZonedGuarded<void>(() {
         super.detachedAppLifecycleState();
-      }, (error, stackTrace) {
+      } catch (e) {
+        // }, (error, stackTrace) {
         // Record error in device's log
         _logPackageError(
-          error,
+          e,
           library: 'part01_statex.dart',
           description: 'Error in detachedAppLifecycleState()',
         );
-      });
+        // });
+      }
     }
   }
 
@@ -1070,7 +1100,6 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _setStateAllowed = false;
 
     for (final con in controllerList) {
-      //
       con.reassemble();
     }
 
@@ -1382,6 +1411,7 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Offer an error handler
   @override
   void onError(FlutterErrorDetails details) {
+    // It is not mandatory to call this method
     // No debugPrint() here in case it too will error
     super.onError(details);
   }

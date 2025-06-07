@@ -6,7 +6,8 @@ part of 'state_extended.dart';
 
 // Called in AppStateX.buildF()
 class _InheritedWidgetStatefulWidget extends StatefulWidget {
-  const _InheritedWidgetStatefulWidget();
+  const _InheritedWidgetStatefulWidget(this.appState);
+  final AppStateX appState;
   @override
   State<StatefulWidget> createState() => _InheritedWidgetState();
 }
@@ -15,13 +16,19 @@ class _InheritedWidgetStatefulWidget extends StatefulWidget {
 // Every time it's called, its dependencies are rebuilt.
 class _InheritedWidgetState extends State<_InheritedWidgetStatefulWidget> {
   @override
-  void initState() {
+  void initState(){
     super.initState();
+    appState = widget.appState;
     // Reference this State object so to call in the notifyClients()
-    AppStateX._instance?._inheritedState = this;
+    appState._inheritedState = this;
   }
+  late AppStateX appState;
 
   @override
-  Widget build(BuildContext context) => StateXInheritedWidget(
-      state: AppStateX._instance!, child: const _BuilderStatefulWidget());
+  Widget build(BuildContext context) {
+    return StateXInheritedWidget(
+      state: appState,
+      child: _BuilderStatefulWidget(appState),
+    );
+  }
 }

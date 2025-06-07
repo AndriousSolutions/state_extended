@@ -1,4 +1,18 @@
 
+## 6.2.2
+June 07, 2025
+- static AppStateX._instance deprecated and no longer to be used.
+- _pushStateToSetter rewrite with _stateXSet.contains(stateX) || _stateXSet.add(stateX);
+- Using runZonedGuarded<void>(() { was not advantageous and removed.
+- AppStateMixin now has the abstract getter, appStateX
+- appStateX getter includes _appStateX = lastContext?.findAncestorStateOfType<AppStateX>();
+- Rewrite of class SetBuilder with
+  appState = context.findAncestorStateOfType<AppStateX>();
+- In part14_set_state_mixin.dart: StateX? get state => _stateX;
+                                  set state(covariant StateX? state) => _stateX = state;
+- Deprecated getter recHasError. Use hasErrorInErrorHandler instead
+- class _PrivateGlobalKey no longer used
+
 ## 6.2.1+1
 June 02, 2025
 - Introduced WidgetsBindingInstanceMixin with static boolean inWidgetsFlutterBinding

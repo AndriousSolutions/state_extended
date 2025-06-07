@@ -35,7 +35,10 @@ mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
         _mapControllerTypes[id] = con.runtimeType;
 
         /// This connects the StateXController to this State object!
-        con._pushStateToSetter(this);
+        if(con._pushStateToSetter(this)){
+          // If added, assign as the 'current' state object.
+          con.state = this;
+        }
       }
     }
     return id;

@@ -126,17 +126,28 @@ class StateXController
     }
   }
 
-  /// The current StateX object.
-  StateX? get state => _stateX;
+  /// Reference the App State object
+  @override
+  AppStateX? get appStateX {
+    if(_appStateX == null) {
+      if(firstState is AppStateX?) {
+        _appStateX = firstState as AppStateX?;
+      }else{
+        _appStateX = lastContext?.findAncestorStateOfType<AppStateX>();
+      }
+    }
+    return _appStateX;
+  }
+  AppStateX? _appStateX;
 
   /// Link a widget to an InheritedWidget
   bool dependOnInheritedWidget(BuildContext? context) =>
-      _stateX?.dependOnInheritedWidget(context) ?? false;
+      state?.dependOnInheritedWidget(context) ?? false;
 
   /// In harmony with Flutter's own API
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   bool notifyClients() {
-    final notify = _stateX?.notifyClients() ?? false;
+    final notify = state?.notifyClients() ?? false;
     notifyStateListeners();
     return notify;
   }
@@ -206,6 +217,9 @@ class StateXController
     /// Clean up memory
     disposeSetState();
 
+    // App State object
+    _appStateX = null;
+
     // If instantiated in a factory constructor
     // Note: You don't know when this function will fire!
     // _initStateCalled = false;
@@ -269,7 +283,7 @@ class StateXController
     final list = _stateXSet.toList(growable: false);
     for (final StateX state in list) {
       // You're at the current State object
-      if (state == _stateX) {
+      if (state == this.state) {
         change = _didCallChange;
         _didCallChange = false;
         break;

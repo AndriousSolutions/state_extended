@@ -14,11 +14,11 @@ part of 'state_extended.dart';
 abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     with _ControllersById {
   ///
-  /// Optionally supply as many State Controllers as you like to work with this App.
-  /// Optionally supply a 'data object' to to be accessible to the App's InheritedWidget.
   AppStateX({
     super.controller,
+    /// Optionally supply as many State Controllers as you like to work with this App.
     List<StateXController>? controllers,
+    /// Optionally supply a 'data object' to to be accessible to the App's InheritedWidget.
     Object? object,
     @Deprecated('notifyClientsInBuild no longer necessary')
     bool? notifyClientsInBuild,
@@ -30,8 +30,10 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     // Introduce its own error handler
     FlutterError.onError = _errorHandler;
 
-    // Supply a package-wide reference.
-    _instance = this;
+    // Assign this property
+    _appStateX = this;
+
+    AppStateX._instance = this;
 
     _dataObj = object;
     addList(controllers?.toList());
@@ -39,11 +41,10 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   // Save the current Error Handler.
   final FlutterExceptionHandler? _prevErrorFunc;
 
-  // Provide a global instance.
-  static AppStateX? _instance;
-
   // The 'data object' available to the framework.
   Object? _dataObj;
+
+  static AppStateX? _instance;
 
   @override
   @mustCallSuper
@@ -82,7 +83,7 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     _buildFOverridden = false;
     _inheritedState?.setState(() {}); // calls App's InheritedWidget
     _builderState?.setState(() {}); // calls builder()
-    return const _InheritedWidgetStatefulWidget();
+    return _InheritedWidgetStatefulWidget(this);
   }
 
   /// Clean up memory
@@ -91,7 +92,6 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   @protected
   @mustCallSuper
   void dispose() {
-    _instance = null;
     _builderState = null;
     _inheritedState = null;
     _MapOfStates._states.clear();
@@ -255,23 +255,6 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
     if (!_inSetStateBuilder) {
       super.setState(fn);
     }
-  }
-
-  ///
-  ///  Set the specified widget (through its context) as a dependent of the InheritedWidget
-  ///
-  @override
-  bool dependOnInheritedWidget(BuildContext? context) {
-    final depend = super.dependOnInheritedWidget(context);
-    // final depend = context != null;
-    // if (depend) {
-    //   if (_inheritedElement == null) {
-    //     _dependencies.add(context);
-    //   } else {
-    //     context.dependOnInheritedElement(_inheritedElement!);
-    //   }
-    // }
-    return depend;
   }
 
   /// Notify the InheritedWidget's dependencies
@@ -628,11 +611,11 @@ abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
   }
 }
 
-/// Ensure there's no collision.
-class _PrivateGlobalKey<T extends State<StatefulWidget>>
-    extends GlobalObjectKey<T> {
-  const _PrivateGlobalKey(super.value);
-}
+// /// Ensure there's no collision.
+// class _PrivateGlobalKey<T extends State<StatefulWidget>>
+//     extends GlobalObjectKey<T> {
+//   const _PrivateGlobalKey(super.value);
+// }
 
 /// Supply a widget from a widget builder and possibly depend on InheritedWidget
 class StateDependentWidget extends StatelessWidget {

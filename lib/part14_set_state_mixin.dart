@@ -11,65 +11,66 @@ part of 'state_extended.dart';
 /// {@category State Object Controller}
 mixin SetStateMixin {
   /// Calls the 'current' State object's setState() function if any.
-  void setState(VoidCallback fn) => _stateX?.setState(fn);
+  void setState(VoidCallback fn) => state?.setState(fn);
 
   /// Retrieve the State object by its StatefulWidget. Returns null if not found.
   StateX? stateOf<T extends StatefulWidget>() =>
       _stateWidgetMap.isEmpty ? null : _stateWidgetMap[_type<T>()];
 
+  /// Supply the State object
+  StateX? get state => _stateX;
+  set state(covariant StateX? state) => _stateX = state;
+
   StateX? _stateX;
+
   final Set<StateX> _stateXSet = {};
   final Map<Type, StateX> _stateWidgetMap = {};
   bool _statePushed = false;
 
   /// Add the provided State object to the Map object if
   /// it's the 'current' StateX object in _stateX.
-  void _addStateToSetter(StateX state) {
-    if (_statePushed && _stateX != null && _stateX == state) {
-      _stateWidgetMap.addAll({state.widget.runtimeType: state});
+  void _addStateToSetter(covariant StateX stateX) {
+    if (_statePushed && _stateX != null && _stateX == stateX) {
+      _stateWidgetMap.addAll({stateX.widget.runtimeType: stateX});
     }
   }
 
   /// Add to a Set object and assigned to as the 'current' StateX
   /// However, if was already previously added, it's not added
   /// again to a Set object and certainly not set the 'current' StateX.
-  bool _pushStateToSetter(StateX? state) {
+  bool _pushStateToSetter(covariant StateX? stateX) {
     //
-    if (state == null) {
+    if (stateX == null) {
       return false;
     }
-
-    _statePushed = _stateXSet.add(state);
-    // If added, assign as the 'current' state object.
-    if (_statePushed) {
-      _stateX = state;
-    }
+    // Pushed onto State Set.
+    _statePushed = _stateXSet.contains(stateX) || _stateXSet.add(stateX);
     return _statePushed;
   }
 
   /// This removes the most recent StateX object added
   /// to the Set of StateX state objects.
   /// Primarily internal use only: This disconnects the StateXController from that StateX object.
-  bool _popStateFromSetter([StateX? state]) {
+  bool _popStateFromSetter([covariant StateX? stateX]) {
     // Return false if null
-    if (state == null) {
+    if (stateX == null) {
       return false;
     }
 
     // Remove from the Map
-    _stateWidgetMap.removeWhere((key, value) => value == state);
+    _stateWidgetMap.removeWhere((key, value) => value == stateX);
     // Remove from the Set
-    final pop = _stateXSet.remove(state);
+    final pop = _stateXSet.remove(stateX);
 
     // Was the 'popped' state the 'current' state?
-    if (state == _stateX) {
+    if (stateX == state) {
       //
       _statePushed = false;
 
       if (_stateXSet.isEmpty) {
-        _stateX = null;
+        state = null;
       } else {
-        _stateX = _stateXSet.last;
+        state = _stateXSet.last;
       }
     }
     return pop;

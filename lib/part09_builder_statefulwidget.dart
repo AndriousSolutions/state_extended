@@ -6,20 +6,25 @@ part of 'state_extended.dart';
 
 // Call the AppState's builder() function
 class _BuilderStatefulWidget extends StatefulWidget {
-  const _BuilderStatefulWidget();
+  const _BuilderStatefulWidget(this.appState);
+  final AppStateX appState;
   @override
   State<StatefulWidget> createState() => _BuilderState();
 }
 
 // Reference this State object in the buildF()
 class _BuilderState extends State<_BuilderStatefulWidget> {
+  //
   @override
   void initState() {
     super.initState();
-    AppStateX._instance?._builderState =
-        this; // nullified in AppStateX dispose()
+    appState = widget.appState;
+    appState._builderState = this; // nullified in AppStateX dispose()
   }
+  // Will never be null
+  late AppStateX appState;
 
+  //
   @override
-  Widget build(BuildContext context) => AppStateX._instance!.builder(context);
+  Widget build(BuildContext context) => appState.builder(context);
 }

@@ -9,17 +9,21 @@ part of 'state_extended.dart';
 /// dartdoc:
 /// {@category StateX class}
 /// {@category State Object Controller}
-mixin AppStateMixin {
+mixin class AppStateMixin {
   /// Returns the 'first' StateX object in the App
   // Important to prefix with the class name to 'share' this as a mixin.
   @Deprecated('Use appStateX instead.')
   AppStateX? get rootState => appStateX;
 
-  AppStateX? get appStateX => AppStateX._instance;
+  /// Implement the App's State object
+  AppStateX? get appStateX {
+    // TODO: implement appStateX
+    throw UnimplementedError();
+  }
 
   /// This is of type Object allowing you
   /// to propagate any class object you wish down the widget tree.
-  Object? get dataObject => AppStateX._instance?._dataObj;
+  Object? get dataObject => appStateX?._dataObj;
 
   /// Assign an object to the property, dataObject.
   /// It will not assign null and if SetState objects are implemented,
@@ -28,7 +32,7 @@ mixin AppStateMixin {
   set dataObject(Object? object) {
     //
     if (object != null) {
-      final state = AppStateX._instance;
+      final state = appStateX;
       final dataObject = state?._dataObj;
       // Notify dependencies only if their was a change.
       if (dataObject == null || dataObject != object) {

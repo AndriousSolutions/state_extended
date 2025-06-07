@@ -52,6 +52,8 @@ mixin ErrorInErrorHandlerMixin on State {
   Object? _recErrorException;
 
   /// Indicate if an exception had occurred.
+  @Deprecated('Use hasErrorInErrorHandler instead')
+  bool get recHasError => hasErrorInErrorHandler;
   bool get hasErrorInErrorHandler => _recErrorException != null;
 
   /// The StackTrace

@@ -89,6 +89,7 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
       con.errorInBuilder = false;
       throw Exception('Error in builder()!');
     }
+    //
     return MaterialApp(
       navigatorObservers:
           RouteObserverStates.list, // State object aware of route changes

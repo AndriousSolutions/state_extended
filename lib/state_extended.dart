@@ -7,7 +7,7 @@ library;
 ///
 /// dartdoc:
 /// {@category Get started}
-import 'dart:async' show Future, runZonedGuarded;
+import 'dart:async' show Future;
 
 import 'dart:math' show Random;
 
