@@ -14,7 +14,7 @@ part of 'state_extended.dart';
 /// {@category Event handling}
 /// {@category Using FutureBuilder}
 /// {@category Using InheritedWidget}
-abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
+class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         WidgetsBindingObserver,
         WidgetsBindingInstanceMixin,
@@ -34,7 +34,8 @@ abstract class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     StateXController? controller,
     bool? runAsync,
     bool? useInherited,
-    @Deprecated('Use debugPrintEvents instead') bool? printEvents,
+    @Deprecated('Use debugPrintEvents instead')
+    bool? printEvents,
     bool? debugPrintEvents,
   }) {
     // Add to the list of StateX objects present in the app!

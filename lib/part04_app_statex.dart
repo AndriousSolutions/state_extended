@@ -11,7 +11,7 @@ part of 'state_extended.dart';
 /// {@category Get started}
 /// {@category StateX class}
 /// {@category AppStateX class}
-abstract class AppStateX<T extends StatefulWidget> extends StateX<T>
+class AppStateX<T extends StatefulWidget> extends StateX<T>
     with _ControllersById {
   ///
   AppStateX({

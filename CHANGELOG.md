@@ -1,4 +1,9 @@
 
+## 6.3.0
+Jun 08, 2025
+- Dropped abstract modifier from class StateX and class AppStateX
+- Renamed part18_record_exception_mixin.dart to part18_error_in_error_handler_mixin.dart
+
 ## 6.2.3
 June 07, 2025
 - Corrected _pushStateToSetter with if(_stateXSet.add(stateX);

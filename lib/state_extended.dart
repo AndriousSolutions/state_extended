@@ -87,7 +87,7 @@ part 'part16_controllers_by_id_mixin.dart';
 part 'part17_app_state_mixin.dart';
 
 /// Record an exception in a State object
-part 'part18_record_exception_mixin.dart';
+part 'part18_error_in_error_handler_mixin.dart';
 
 /// Supply the Async API: initAsync() and onAsyncError()
 part 'part19_async_ops_mixin.dart';
