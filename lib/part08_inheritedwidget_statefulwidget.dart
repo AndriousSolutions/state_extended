@@ -16,12 +16,13 @@ class _InheritedWidgetStatefulWidget extends StatefulWidget {
 // Every time it's called, its dependencies are rebuilt.
 class _InheritedWidgetState extends State<_InheritedWidgetStatefulWidget> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
     appState = widget.appState;
     // Reference this State object so to call in the notifyClients()
     appState._inheritedState = this;
   }
+
   late AppStateX appState;
 
   @override

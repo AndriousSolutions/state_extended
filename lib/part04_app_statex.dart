@@ -16,8 +16,10 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   ///
   AppStateX({
     super.controller,
+
     /// Optionally supply as many State Controllers as you like to work with this App.
     List<StateXController>? controllers,
+
     /// Optionally supply a 'data object' to to be accessible to the App's InheritedWidget.
     Object? object,
     @Deprecated('notifyClientsInBuild no longer necessary')

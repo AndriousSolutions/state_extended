@@ -21,6 +21,7 @@ class _BuilderState extends State<_BuilderStatefulWidget> {
     appState = widget.appState;
     appState._builderState = this; // nullified in AppStateX dispose()
   }
+
   // Will never be null
   late AppStateX appState;
 

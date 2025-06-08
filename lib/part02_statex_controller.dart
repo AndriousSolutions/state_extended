@@ -129,15 +129,16 @@ class StateXController
   /// Reference the App State object
   @override
   AppStateX? get appStateX {
-    if(_appStateX == null) {
-      if(firstState is AppStateX?) {
+    if (_appStateX == null) {
+      if (firstState is AppStateX?) {
         _appStateX = firstState as AppStateX?;
-      }else{
+      } else {
         _appStateX = lastContext?.findAncestorStateOfType<AppStateX>();
       }
     }
     return _appStateX;
   }
+
   AppStateX? _appStateX;
 
   /// Link a widget to an InheritedWidget

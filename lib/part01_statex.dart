@@ -34,8 +34,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     StateXController? controller,
     bool? runAsync,
     bool? useInherited,
-    @Deprecated('Use debugPrintEvents instead')
-    bool? printEvents,
+    @Deprecated('Use debugPrintEvents instead') bool? printEvents,
     bool? debugPrintEvents,
   }) {
     // Add to the list of StateX objects present in the app!
@@ -87,15 +86,16 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   @override
   AppStateX? get appStateX {
-    if(_appStateX == null) {
-      if(firstState is AppStateX?) {
+    if (_appStateX == null) {
+      if (firstState is AppStateX?) {
         _appStateX = firstState as AppStateX?;
-      }else{
+      } else {
         _appStateX = lastContext?.findAncestorStateOfType<AppStateX>();
       }
     }
     return _appStateX;
   }
+
   AppStateX? _appStateX;
 
   /// Add a specific StateXController to this State object.
@@ -131,7 +131,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         }());
       } else {
         /// This connects the StateXController to this State object!
-        if(controller._pushStateToSetter(this)){
+        if (controller._pushStateToSetter(this)) {
           // If just added, assign as the 'current' state object.
           controller.state = this;
         }
