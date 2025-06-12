@@ -4,7 +4,10 @@
 
 part of 'state_extended.dart';
 
-/// Record an exception for review by the developer
+/// Record errors in the Error Handler itself
+/// The developer has introduces an error in the handling itself.
+/// They must be notified.
+/// [recordErrorInHandler], [recErrorMsg], [recErrorException], [recStackTrace]
 ///
 /// dartdoc:
 /// {@category StateX class}
@@ -48,12 +51,14 @@ mixin ErrorInErrorHandlerMixin on State {
 
   /// The Error or Exception
   Object? get recErrorException => _recErrorException;
+
   // Store the current error or exception
   Object? _recErrorException;
 
   /// Indicate if an exception had occurred.
   @Deprecated('Use hasErrorInErrorHandler instead')
   bool get recHasError => hasErrorInErrorHandler;
+
   bool get hasErrorInErrorHandler => _recErrorException != null;
 
   /// The StackTrace

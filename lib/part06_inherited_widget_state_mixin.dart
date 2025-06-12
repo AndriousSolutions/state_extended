@@ -4,7 +4,7 @@
 
 part of 'state_extended.dart';
 
-/// Supplies an InheritedWidget to a State class
+/// Supplies the built-in InheritedWidget to a [StateX] class
 ///
 /// dartdoc:
 /// {@category StateX class}
@@ -22,6 +22,7 @@ mixin InheritedWidgetStateMixin on State {
   // Widget passed to the InheritedWidget.
   Widget? _child;
 
+  /// Called by [build]. Calls built-in [InheritedWidget]
   /// dartdoc:
   /// {@category StateX class}
   Widget buildF(BuildContext context) {
@@ -39,7 +40,7 @@ mixin InheritedWidgetStateMixin on State {
         : _child!;
   }
 
-  /// A flag. Note if buildF() function was overridden or not.
+  /// A flag. If the buildF() function was overridden or not.
   bool get buildFOverridden => _buildFOverridden;
   bool _buildFOverridden = true;
 

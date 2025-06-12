@@ -1,4 +1,5 @@
 library;
+
 // Copyright 2023 Andrious Solutions Ltd. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -23,6 +24,9 @@ import 'package:flutter/cupertino.dart'
         DefaultCupertinoLocalizations;
 
 import 'package:flutter/foundation.dart';
+
+import 'package:flutter/services.dart' show PredictiveBackEvent;
+export 'package:flutter/services.dart' show PredictiveBackEvent;
 
 /// Note when routes are pushed n popped
 import 'route_observer_states.dart';

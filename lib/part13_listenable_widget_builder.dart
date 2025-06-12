@@ -9,6 +9,10 @@ typedef MaybeBuildWidgetType = Widget? Function(BuildContext context);
 
 /// Creates a widget that rebuilds when the given listenable calls
 /// notifyListeners() function
+/// Used by [StateXController]'s [setBuilder] function
+///
+/// dartdoc:
+/// {@category State Object Controller}
 class ListenableWidgetBuilder extends StatefulWidget {
   /// The arguments is not required.
   const ListenableWidgetBuilder({
@@ -53,8 +57,10 @@ class _ListenableState extends State<ListenableWidgetBuilder> {
 
   // Possibly not provided
   Listenable? listenable;
+
   // A Widget will be returned no matter what is provided.
   late MaybeBuildWidgetType builder;
+
   // Store the past widget displayed, and use it if builder returns null.
   Widget? _widget;
 

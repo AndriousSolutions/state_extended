@@ -4,7 +4,7 @@
 
 part of 'state_extended.dart';
 
-/// The extension of the State class.
+/// An extension of Flutter's State class.
 ///
 /// dartdoc:
 /// {@category Testing}
@@ -29,12 +29,15 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         _MapOfStates
     implements StateXEventHandlers {
   //
-  /// With an optional StateXController parameter and use of built-in FutureBuilder & InheritedWidget
+  /// With an optional StateXController parameter.
+  /// Two indicators to use built-in FutureBuilder & InheritedWidget.
+  /// printEvents deprecated. Use debugPrintEvents instead.
+  /// debugPrintEvents will print events to console.
   StateX({
     StateXController? controller,
     bool? runAsync,
     bool? useInherited,
-    @Deprecated('Use debugPrintEvents instead') bool? printEvents,
+    bool? printEvents,
     bool? debugPrintEvents,
   }) {
     // Add to the list of StateX objects present in the app!
@@ -76,7 +79,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   // Current controller
   StateXController? _controller;
 
-  /// You need to be able access the widget.
+  /// Access the StatefulWidget widget.
   @override
   T get widget => super.widget as T;
 
@@ -84,6 +87,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// If _controller == null, get the 'first assigned' controller if any.
   StateXController? get controller => _controller ??= firstCon;
 
+  /// The App's State object
   @override
   AppStateX? get appStateX {
     if (_appStateX == null) {
@@ -97,6 +101,15 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   AppStateX? _appStateX;
+
+  // May have to assign directly
+  set appStateX(AppStateX? appState) {
+    if (_appStateX == null) {
+      if (appState != null) {
+        _appStateX = appState;
+      }
+    }
+  }
 
   /// Add a specific StateXController to this State object.
   /// Returns the StateXController's unique String identifier.
@@ -676,6 +689,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangeTextScaleFactor() {
+    // Optionally call the debugPrint() function
     super.didChangeTextScaleFactor();
 
     ///
@@ -1163,6 +1177,150 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return appResponse;
   }
 
+  /// Called at the start of a predictive back gesture.
+  /// If an observer returns true then that observer, and only that observer,
+  /// will be notified of subsequent events in
+  /// this same gesture (for example [handleUpdateBackGestureProgress], etc.).
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  @override
+  bool handleStartBackGesture(PredictiveBackEvent backEvent) {
+    //
+    var handled = false;
+
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return handled;
+    }
+    // No 'setState()' functions are allowed
+    _setStateAllowed = false;
+
+    for (final con in controllerList) {
+      handled = con.handleStartBackGesture(backEvent);
+      if (handled) {
+        break;
+      }
+    }
+
+    // Optionally call the debugPrint() function
+    handled = super.handleStartBackGesture(backEvent);
+
+    _setStateAllowed = true;
+
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isLastState) {
+        // Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+
+    return handled;
+  }
+
+  /// Called when a predictive back gesture moves.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  @override
+  void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+    // No 'setState()' functions are allowed
+    _setStateAllowed = false;
+
+    for (final con in controllerList) {
+      con.handleUpdateBackGestureProgress(backEvent);
+    }
+
+    // Optionally call the debugPrint() function
+    super.handleUpdateBackGestureProgress(backEvent);
+
+    _setStateAllowed = true;
+
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isLastState) {
+        // Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+  }
+
+  /// Called when a predictive back gesture is finished successfully, indicating
+  /// that the current route should be popped.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  @override
+  void handleCommitBackGesture() {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+    // No 'setState()' functions are allowed
+    _setStateAllowed = false;
+
+    for (final con in controllerList) {
+      con.handleCommitBackGesture();
+    }
+
+    // Optionally call the debugPrint() function
+    super.handleCommitBackGesture();
+
+    _setStateAllowed = true;
+
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isLastState) {
+        // Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+  }
+
+  /// Called when a predictive back gesture is canceled, indicating that no
+  /// navigation should occur.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  @override
+  void handleCancelBackGesture() {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return;
+    }
+    // No 'setState()' functions are allowed
+    _setStateAllowed = false;
+
+    for (final con in controllerList) {
+      con.handleCancelBackGesture();
+    }
+
+    // Optionally call the debugPrint() function
+    super.handleCancelBackGesture();
+
+    _setStateAllowed = true;
+
+    if (_setStateRequested) {
+      _setStateRequested = false;
+      // Only the latest State is rebuilt
+      if (isLastState) {
+        // Perform a 'rebuild' if requested.
+        setState(() {});
+      }
+    }
+  }
+
   /// Called when the system tells the app to pop the current route.
   /// For example, on Android, this is called when the user presses
   /// the back button.
@@ -1288,7 +1446,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     if (!mounted) {
       return;
     }
-
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
@@ -1296,7 +1453,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       con.didPush();
     }
 
-    // Optionally call super for debugPrint()
+    // Optionally call debugPrint()
     super.didPush();
 
     _setStateAllowed = true;
@@ -1406,6 +1563,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   /// State object experienced a system event
   bool get hadSystemEvent => _hadSystemEvent;
+
   // Reset in _pushStateToSetter()
   bool _hadSystemEvent = false;
 

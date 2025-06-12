@@ -5,22 +5,22 @@
 part of 'state_extended.dart';
 
 /// The StateX object at the 'app level.' Used to effect the whole app by
-/// being the 'root' of first State object instantiated.
+/// being the first State object instantiated.
 ///
 /// dartdoc:
 /// {@category Get started}
 /// {@category StateX class}
 /// {@category AppStateX class}
 class AppStateX<T extends StatefulWidget> extends StateX<T>
-    with _ControllersById {
+    with ControllersById {
   ///
   AppStateX({
     super.controller,
 
-    /// Optionally supply as many State Controllers as you like to work with this App.
+    // Optionally supply as many State Controllers as you like to work with this App.
     List<StateXController>? controllers,
 
-    /// Optionally supply a 'data object' to to be accessible to the App's InheritedWidget.
+    // Optionally supply a 'data object' to to be accessible to the App's InheritedWidget.
     Object? object,
     @Deprecated('notifyClientsInBuild no longer necessary')
     bool? notifyClientsInBuild,
@@ -40,6 +40,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     _dataObj = object;
     addList(controllers?.toList());
   }
+
   // Save the current Error Handler.
   final FlutterExceptionHandler? _prevErrorFunc;
 
@@ -52,7 +53,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @mustCallSuper
   void initState() {
     super.initState();
-    // Register this as a binding observer. Binding
+    // Register this as a binding observer.
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -344,7 +345,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     }
   }
 
-  /// Handle any errors in this State object.
+  /// Handle any errors in this App State object.
   void _errorHandler(FlutterErrorDetails details) {
     //
     try {
@@ -619,7 +620,12 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
 //   const _PrivateGlobalKey(super.value);
 // }
 
-/// Supply a widget from a widget builder and possibly depend on InheritedWidget
+/// Used by the [setBuilder] function in both [AppStateX] and [StateX]
+/// Supply a widget to depend the built-in [InheritedWidget]
+///
+/// dartdoc:
+/// {@category AppStateX class}
+/// {@category StateX class}
 class StateDependentWidget extends StatelessWidget {
   ///
   const StateDependentWidget({
@@ -627,8 +633,10 @@ class StateDependentWidget extends StatelessWidget {
     this.stateMixin,
     this.builder,
   });
+
   final InheritedWidgetStateMixin? stateMixin;
   final WidgetBuilder? builder;
+
   @override
   Widget build(BuildContext context) {
     stateMixin?.dependOnInheritedWidget(context);

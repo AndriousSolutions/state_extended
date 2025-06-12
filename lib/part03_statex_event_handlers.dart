@@ -4,7 +4,7 @@
 
 part of 'state_extended.dart';
 
-/// Responsible for the event handling in all the Controllers and State objects.
+/// Supplies the event handling in all the [StateXController] and [StateX] objects.
 ///
 /// dartdoc:
 /// {@category StateX class}
@@ -22,6 +22,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
   /// debugPrint the 'event handlers'
   bool get debugPrintEvents => _debugPrintEvents;
   bool _debugPrintEvents = false;
+
   set debugPrintEvents(bool? print) {
     if (print != null) {
       _debugPrintEvents = print;
@@ -264,8 +265,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     }());
   }
 
-  /// Either be in the progress of attaching when the engine is first initializing
-  /// or after the view being destroyed due to a Navigator pop.
+  /// Called when the current accessibility features have been changed.
   // To override WidgetsBindingObserver.didChangeAccessibilityFeatures()
   void didChangeAccessibilityFeatures() {
     // Record the triggered event
@@ -392,8 +392,7 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     }());
   }
 
-  /// Either be in the progress of attaching when the  engine is first initializing
-  /// or after the view being destroyed due to a Navigator pop.
+  /// The Flutter engine is running but any interface is gone.
   void detachedAppLifecycleState() {
     // Record the triggered event
     assert(() {
@@ -439,6 +438,88 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
       return true;
     }());
     return AppExitResponse.exit;
+  }
+
+  /// Called at the start of a predictive back gesture.
+  /// If an observer returns true then that observer, and only that observer,
+  /// will be notified of subsequent events in
+  /// this same gesture (for example [handleUpdateBackGestureProgress], etc.).
+  ///
+  /// Observers are expected to return true if they were able to handle the
+  /// notification, If all observers indicate they are not handling this back gesture by
+  /// returning false, then a navigation pop will result when
+  /// [handleCommitBackGesture] is called, as in a non-predictive system back
+  /// gesture.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  bool handleStartBackGesture(PredictiveBackEvent backEvent) {
+    // Record the triggered event
+    assert(() {
+      if (_debugPrintEvents) {
+        debugPrint(
+            '$_consoleLeadingLine handleStartBackGesture() in $_consoleClassName');
+      }
+      return true;
+    }());
+    return false;
+  }
+
+  /// Called when a predictive back gesture moves.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) {
+    // Record the triggered event
+    assert(() {
+      if (_debugPrintEvents) {
+        debugPrint(
+            '$_consoleLeadingLine handleUpdateBackGestureProgress() in $_consoleClassName');
+      }
+      return true;
+    }());
+  }
+
+  /// Called when a predictive back gesture is finished successfully, indicating
+  /// that the current route should be popped.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this. If there is none, then a
+  /// navigation pop will result, as in a non-predictive system back gesture.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  void handleCommitBackGesture() {
+    // Record the triggered event
+    assert(() {
+      if (_debugPrintEvents) {
+        debugPrint(
+            '$_consoleLeadingLine handleCommitBackGesture() in $_consoleClassName');
+      }
+      return true;
+    }());
+  }
+
+  /// Called when a predictive back gesture is canceled, indicating that no
+  /// navigation should occur.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  void handleCancelBackGesture() {
+    // Record the triggered event
+    assert(() {
+      if (_debugPrintEvents) {
+        debugPrint(
+            '$_consoleLeadingLine handleCancelBackGesture() in $_consoleClassName');
+      }
+      return true;
+    }());
   }
 
   /// Called when the system tells the app to pop the current route.

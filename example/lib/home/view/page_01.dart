@@ -302,6 +302,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
 ///
 class _TextStatefulWidget extends StatefulWidget {
   const _TextStatefulWidget();
+
   //
   @override
   State<StatefulWidget> createState() => _TextState();

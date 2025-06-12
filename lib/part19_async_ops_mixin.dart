@@ -4,7 +4,8 @@
 
 part of 'state_extended.dart';
 
-/// Supply the Async API
+/// Supply the Async API to [StateX] and [StateXController]
+/// [initAsync], [initAsyncState] and [onAsyncError]
 ///
 /// dartdoc:
 /// {@category StateX class}

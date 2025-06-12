@@ -15,7 +15,7 @@ mixin class AppStateMixin {
   @Deprecated('Use appStateX instead.')
   AppStateX? get rootState => appStateX;
 
-  /// Implement the App's State object
+  /// The App's State object
   AppStateX? get appStateX {
     // TODO: implement appStateX
     throw UnimplementedError();
@@ -44,6 +44,11 @@ mixin class AppStateMixin {
   }
 }
 
+/// Deprecated, Use [AppStateMixin] mixin instead.
+///
+/// dartdoc:
+/// {@category StateX class}
+/// {@category State Object Controller}
 @Deprecated('Use AppStateMixin mixin instead.')
 // ignore: deprecated_member_use_from_same_package
 mixin RootStateMixin {

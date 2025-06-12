@@ -4,7 +4,9 @@
 
 part of 'state_extended.dart';
 
-/// Supply a FutureBuilder to a State object.
+/// Supply the built-in [FutureBuilder] to the [StateX] object.
+/// [build] is overwritten. See [Implementation]
+/// See: [initAsync], [onAsyncError] and [buildF]
 ///
 /// dartdoc:
 /// {@category StateX class}
@@ -60,11 +62,11 @@ mixin FutureBuilderStateMixin on State {
     );
   }
 
-  /// A flag noting if the build() function was overridden or not.
+  /// A flag. If the build() function was overridden or not.
   bool get buildOverridden => _buildOverridden;
   bool _buildOverridden = true;
 
-  /// A flag noting an Async error was caught or not
+  /// A flag. An Async error was caught or not
   bool get caughtAsyncError => _caughtAsyncError;
   bool _caughtAsyncError = false;
 

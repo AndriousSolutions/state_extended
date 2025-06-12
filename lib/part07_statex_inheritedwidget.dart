@@ -4,7 +4,10 @@
 
 part of 'state_extended.dart';
 
-/// The InheritedWidget used by StateX
+/// The built-in InheritedWidget used by [StateX]
+///
+/// dartdoc:
+/// {@category StateX class}
 class StateXInheritedWidget extends InheritedWidget {
   const StateXInheritedWidget({
     super.key,

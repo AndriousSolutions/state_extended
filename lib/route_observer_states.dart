@@ -1,13 +1,21 @@
 //
 import 'package:flutter/material.dart';
 
+/// Makes every [StateX] and [StateXController] a [RouteAware] object
+/// calling [didPop], [didPush], [didPopNext] and [didPushNext]
+/// Implemented by default.
 ///
+/// dartdoc:
+/// {@category StateX class}
+/// {@category State Object Controller}
 class RouteObserverStates extends RouteObserver<Route<dynamic>> {
   factory RouteObserverStates() => _this ??= RouteObserverStates._();
+
   RouteObserverStates._();
+
   static RouteObserverStates? _this;
 
-  /// Supply to the MaterialApp & CupertinoApp
+  /// Supply to the [MaterialApp] & [CupertinoApp]
   /// eg.  navigatorObservers: RouteObserverStates.list,
   static List<NavigatorObserver> get list =>
       <NavigatorObserver>[RouteObserverStates()];
@@ -53,7 +61,6 @@ class RouteObserverStates extends RouteObserver<Route<dynamic>> {
   }
 
   @override
-  // ignore: unnecessary_overrides
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     this.previousRoute = null;
     currentRoute = previousRoute;
@@ -61,7 +68,6 @@ class RouteObserverStates extends RouteObserver<Route<dynamic>> {
   }
 
   @override
-  // ignore: unnecessary_overrides
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     this.previousRoute = previousRoute;
     currentRoute = route;

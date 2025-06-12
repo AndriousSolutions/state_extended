@@ -6,7 +6,7 @@ part of 'state_extended.dart';
 
 /// Manages the 'Controllers' associated with this
 /// StateX object at any one time by their unique identifier.
-mixin _ControllersById<T extends StatefulWidget> on StateX<T> {
+mixin ControllersById<T extends StatefulWidget> on StateX<T> {
   /// Stores the Controller by its Id
   ///  [<id, controller>]
   final Map<String, StateXController> _mapControllerById = {};

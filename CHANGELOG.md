@@ -1,7 +1,13 @@
-## 6.3.0+1
+## 6.3.0+2
 
-Jun 08, 2025
+June 12, 2025
 
+- New WidgetsBindingObserver event handlers:
+  handleStartBackGesture(), handleUpdateBackGestureProgress(), handleCommitBackGesture(),
+  handleCancelBackGesture()
+- Updated source documentation
+- Made the ControllersById() publicly available (removed underscore)
+- appState setter now for StateX class in part01_state.dart
 - Dropped abstract modifier from class StateX and class AppStateX
 - Renamed part18_record_exception_mixin.dart to part18_error_in_error_handler_mixin.dart
 - dart format .

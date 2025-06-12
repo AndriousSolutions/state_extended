@@ -4,8 +4,8 @@
 
 part of 'state_extended.dart';
 
-/// Used by StateXController
-/// Allows you to call 'setState' from the 'current' the State object.
+/// Used by StateXController.
+/// Allows you to call [setState] function from the 'current' the State object.
 ///
 /// dartdoc:
 /// {@category State Object Controller}
@@ -19,6 +19,7 @@ mixin SetStateMixin {
 
   /// Supply the State object
   StateX? get state => _stateX;
+
   set state(covariant StateX? state) => _stateX = state;
 
   StateX? _stateX;

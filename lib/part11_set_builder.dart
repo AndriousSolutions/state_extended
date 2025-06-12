@@ -8,7 +8,8 @@ part of 'state_extended.dart';
 typedef BuilderMaybeObjectType = Widget Function(
     BuildContext context, Object? dataObj);
 
-@Deprecated('Use SetBuilder instead')
+/// 'Use SetBuilder class instead'
+@Deprecated('Use SetBuilder class instead')
 class SetState extends SetBuilder {
   const SetState({super.key, required super.builder});
 }
@@ -18,6 +19,10 @@ class SetState extends SetBuilder {
 ///  Model's ScopedModelDescendant() class.
 ///  This class object will only rebuild if the App's InheritedWidget notifies it
 ///  as it is a dependency.
+///  Example:
+///   Widget get wordPair {
+///     return SetBuilder(builder: (context, obj) {
+///   }
 ///
 /// dartdoc:
 /// {@category AppStateX class}
@@ -25,8 +30,10 @@ class SetState extends SetBuilder {
 class SetBuilder extends StatefulWidget {
   ///
   const SetBuilder({super.key, required this.builder});
+
   // This is called with every rebuild of the App's inherited widget.
   final BuilderMaybeObjectType builder;
+
   @override
   State<StatefulWidget> createState() => _SetBuilderState();
 }

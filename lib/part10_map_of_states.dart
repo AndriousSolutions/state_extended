@@ -53,7 +53,7 @@ mixin _MapOfStates on State {
     return state == null ? null : state as T;
   }
 
-  /// Returns a StateView object using a unique String identifier.
+  /// Returns a State object using a unique String identifier.
   StateX? stateById(String? id) => _MapOfStates._states[id];
 
   /// Returns a Map of StateView objects using unique String identifiers.

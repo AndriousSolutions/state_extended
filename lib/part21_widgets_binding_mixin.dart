@@ -6,7 +6,12 @@
 
 part of 'state_extended.dart';
 
+/// Implements [inWidgetsFlutterBinding] and [inFlutterTest]
+/// for both [StateX] and [StateXController]
 ///
+/// dartdoc:
+/// {@category StateX class}
+/// {@category State Object Controller}
 mixin class WidgetsBindingInstanceMixin {
   /// Indicating app is running in the Flutter engine and not in
   /// the `flutter_test` framework with TestWidgetsFlutterBinding for example

@@ -51,6 +51,7 @@ mixin _RebuildControllerStatesMixin {
 
   /// Whether any listeners are currently registered.
   bool get hasStateListeners => hasListeners;
+
   bool get hasListeners => _implChangeNotifier?.hasListeners ?? false;
 
   /// When notified, setState() is called.
@@ -109,6 +110,7 @@ mixin _RebuildControllerStatesMixin {
   /// Call all the registered 'State' listeners.
   // ignore: deprecated_member_use_from_same_package
   bool notifyStateListeners() => notifyStates();
+
   @Deprecated('Use notifyStateListeners() instead.')
   bool notifyStates() {
     final notify = _implChangeNotifier != null;
@@ -144,7 +146,11 @@ mixin _RebuildControllerStatesMixin {
   }
 }
 
-/// Implementing ChangeNotifier
+/// Implements the [ChangeNotifier] for both [StateX] ans [StateXController ]
+///
+/// dartdoc:
+/// {@category StateX class}
+/// {@category State Object Controller}
 class ImplNotifyListenersChangeNotifier with ChangeNotifier {
   /// The 'unnecessary overrides' prevent the Dart Analysis warning:
   /// The member 'notifyListeners' can only be used within instance members of
@@ -161,7 +167,8 @@ class ImplNotifyListenersChangeNotifier with ChangeNotifier {
   void notifyListeners() => super.notifyListeners();
 }
 
-///
+/// 'No longer supported.'
+/// Replaced by [ImplNotifyListenersChangeNotifier]
 // ignore: deprecated_member_use
 @Deprecated('No longer supported')
 mixin ImplNotifyListenersChangeNotifierMixin {
