@@ -163,11 +163,11 @@ class StateXController
 
   /// The framework calls this method whenever it removes this [StateX] object
   /// from the tree.
-  @override
-  void deactivate() {
-    // Optionally call super for debugPrint()
-    super.deactivate();
-  }
+  // @override
+  // void deactivate() {
+  //   // Optionally call super for debugPrint()
+  //   super.deactivate();
+  // }
 
   /// The framework calls this method whenever it removes this [StateX] object
   /// from the tree.
@@ -184,11 +184,11 @@ class StateXController
 
   /// Called when this object is reinserted into the tree after having been
   /// removed via [deactivate].
-  @override
-  void activate() {
-    // Optionally call super for debugPrint()
-    super.activate();
-  }
+  // @override
+  // void activate() {
+  //   // Optionally call super for debugPrint()
+  //   super.activate();
+  // }
 
   /// Called when this object is reinserted into the tree after having been
   /// removed via [deactivate].
@@ -251,31 +251,31 @@ class StateXController
   }
 
   /// Override this method to respond to when the [StatefulWidget] is recreated.
-  @override
-  void didUpdateWidget(covariant StatefulWidget oldWidget) {
-    /// The framework always calls build() after calling [didUpdateWidget], which
-    /// means any calls to [setState] in [didUpdateWidget] are redundant.
-    // Optionally call super for debugPrint()
-    super.didUpdateWidget(oldWidget);
-  }
+  // @override
+  // void didUpdateWidget(covariant StatefulWidget oldWidget) {
+  //   /// The framework always calls build() after calling [didUpdateWidget], which
+  //   /// means any calls to [setState] in [didUpdateWidget] are redundant.
+  //   // Optionally call super for debugPrint()
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   /// Called when immediately after [initState].
   /// Otherwise called only if a dependency of an [InheritedWidget].
-  @override
-  void didChangeDependencies() {
-    // Optionally call super for debugPrint()
-    super.didChangeDependencies();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   // Optionally call super for debugPrint()
+  //   super.didChangeDependencies();
+  // }
 
   /// Called when the application's UI dimensions change.
   /// For example, when a phone is rotated.
-  @override
-  void didChangeMetrics() {
-    /// Use getter [calledChangeMetrics] to only run this once.
-    /// You sharing controllers with multiple Stat objects is common.
-    // Optionally call super for debugPrint()
-    super.didChangeMetrics();
-  }
+  // @override
+  // void didChangeMetrics() {
+  //   /// Use getter [calledChangeMetrics] to only run this once.
+  //   /// You sharing controllers with multiple Stat objects is common.
+  //   // Optionally call super for debugPrint()
+  //   super.didChangeMetrics();
+  // }
 
   /// The 'didChangeMetrics' event has already been called in a previous State object
   /// that contains this Controller.
@@ -300,166 +300,227 @@ class StateXController
   bool _didCallChange = false;
 
   /// Called when the platform's text scale factor changes.
-  @override
-  void didChangeTextScaleFactor() {
-    // Optionally call super for debugPrint()
-    super.didChangeTextScaleFactor();
-  }
+  // @override
+  // void didChangeTextScaleFactor() {
+  //   // Optionally call super for debugPrint()
+  //   super.didChangeTextScaleFactor();
+  // }
 
   /// Brightness changed.
-  @override
-  void didChangePlatformBrightness() {
-    // Optionally call super for debugPrint()
-    super.didChangePlatformBrightness();
-  }
+  // @override
+  // void didChangePlatformBrightness() {
+  //   // Optionally call super for debugPrint()
+  //   super.didChangePlatformBrightness();
+  // }
 
   /// Called when the system tells the app that the user's locale has changed.
-  @override
-  void didChangeLocales(List<Locale>? locales) {
-    // Optionally call super for debugPrint()
-    super.didChangeLocales(locales);
-  }
+  // @override
+  // void didChangeLocales(List<Locale>? locales) {
+  //   // Optionally call super for debugPrint()
+  //   super.didChangeLocales(locales);
+  // }
 
   /// Either be in the progress of attaching when the engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
-  @override
-  void didChangeAccessibilityFeatures() {
-    // Optionally call super for debugPrint()
-    super.didChangeAccessibilityFeatures();
-  }
+  // @override
+  // void didChangeAccessibilityFeatures() {
+  //   // Optionally call super for debugPrint()
+  //   super.didChangeAccessibilityFeatures();
+  // }
 
   /// Called when the system is running low on memory.
-  @override
-  void didHaveMemoryPressure() {
-    // Optionally call super for debugPrint()
-    super.didHaveMemoryPressure();
-  }
+  // @override
+  // void didHaveMemoryPressure() {
+  //   // Optionally call super for debugPrint()
+  //   super.didHaveMemoryPressure();
+  // }
 
   /// Determine if its dependencies should be updated.
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    // Optionally call super for debugPrint()
-    return super.updateShouldNotify(oldWidget);
-  }
+  // @override
+  // bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+  //   // Optionally call super for debugPrint()
+  //   return super.updateShouldNotify(oldWidget);
+  // }
 
   /// Called when the system puts the app in the background or returns the app to the foreground.
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    /// Passing these possible values:
-    /// AppLifecycleState.detached
-    /// AppLifecycleState.resumed
-    /// AppLifecycleState.inactive (may be paused at any time)
-    /// AppLifecycleState.hidden
-    /// AppLifecycleState.paused (may enter the suspending state at any time)
-    // Optionally call super for debugPrint()
-    super.didChangeAppLifecycleState(state);
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   /// Passing these possible values:
+  //   /// AppLifecycleState.detached
+  //   /// AppLifecycleState.resumed
+  //   /// AppLifecycleState.inactive (may be paused at any time)
+  //   /// AppLifecycleState.hidden
+  //   /// AppLifecycleState.paused (may enter the suspending state at any time)
+  //   // Optionally call super for debugPrint()
+  //   super.didChangeAppLifecycleState(state);
+  // }
 
   /// The application is in an inactive state and is not receiving user input.
   @override
-  void inactiveAppLifecycleState() {
-    // Optionally call super for debugPrint()
-    super.inactiveAppLifecycleState();
-  }
+  // void inactiveAppLifecycleState() {
+  //   // Optionally call super for debugPrint()
+  //   super.inactiveAppLifecycleState();
+  // }
 
   /// All views of an application are hidden, either because the application is
-  @override
-  void hiddenAppLifecycleState() {
-    // Optionally call super for debugPrint()
-    super.hiddenAppLifecycleState();
-  }
+  // @override
+  // void hiddenAppLifecycleState() {
+  //   // Optionally call super for debugPrint()
+  //   super.hiddenAppLifecycleState();
+  // }
 
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
-  @override
-  void pausedAppLifecycleState() {
-    // Optionally call super for debugPrint()
-    super.pausedAppLifecycleState();
-  }
+  // @override
+  // void pausedAppLifecycleState() {
+  //   // Optionally call super for debugPrint()
+  //   super.pausedAppLifecycleState();
+  // }
 
   /// The application is visible and responding to user input.
-  @override
-  void resumedAppLifecycleState() {
-    // Optionally call super for debugPrint()
-    super.resumedAppLifecycleState();
-  }
+  // @override
+  // void resumedAppLifecycleState() {
+  //   // Optionally call super for debugPrint()
+  //   super.resumedAppLifecycleState();
+  // }
 
   /// Either be in the progress of attaching when the  engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
-  @override
-  void detachedAppLifecycleState() {
-    // Optionally call super for debugPrint()
-    super.detachedAppLifecycleState();
-  }
+  // @override
+  // void detachedAppLifecycleState() {
+  //   // Optionally call super for debugPrint()
+  //   super.detachedAppLifecycleState();
+  // }
 
   /// Called whenever the application is reassembled during debugging, for
   /// example during hot reload.
-  @override
-  void reassemble() {
-    // Optionally call super for debugPrint()
-    super.reassemble();
-  }
+  // @override
+  // void reassemble() {
+  //   // Optionally call super for debugPrint()
+  //   super.reassemble();
+  // }
 
   /// Called when a request is received from the system to exit the application.
-  @override
-  Future<AppExitResponse> didRequestAppExit() async {
-    // Optionally call super for debugPrint()
-    return super.didRequestAppExit();
-  }
+  // @override
+  // Future<AppExitResponse> didRequestAppExit() async {
+  //   // Optionally call super for debugPrint()
+  //   return super.didRequestAppExit();
+  // }
 
   /// Called when the system tells the app to pop the current route.
   /// For example, on Android, this is called when the user presses
   /// the back button.
-  @override
-  Future<bool> didPopRoute() async {
-    // Optionally call super for debugPrint()
-    return super.didPopRoute();
-  }
+  // @override
+  // Future<bool> didPopRoute() async {
+  //   // Optionally call super for debugPrint()
+  //   return super.didPopRoute();
+  // }
 
   /// Called when the host tells the app to push a new route onto the
   /// navigator.
-  @override
-  Future<bool> didPushRoute(String route) async {
-    // ignore: deprecated_member_use_from_same_package
-    return super.didPushRoute(route);
-  }
+  // @override
+  // Future<bool> didPushRoute(String route) async {
+  //   // ignore: deprecated_member_use_from_same_package
+  //   return super.didPushRoute(route);
+  // }
 
   /// Called when the host tells the application to push a new
   /// [RouteInformation] and a restoration state onto the router.
-  @override
-  Future<bool> didPushRouteInformation(
-      RouteInformation routeInformation) async {
-    // Optionally call super for debugPrint()
-    return super.didPushRouteInformation(routeInformation);
-  }
+  // @override
+  // Future<bool> didPushRouteInformation(
+  //     RouteInformation routeInformation) async {
+  //   // Optionally call super for debugPrint()
+  //   return super.didPushRouteInformation(routeInformation);
+  // }
 
   /// Called when this State is *first* added to as a Route observer?!
-  @override
-  void didPush() {
-    // Optionally call super for debugPrint()
-    super.didPush();
-  }
+  // @override
+  // void didPush() {
+  //   // Optionally call super for debugPrint()
+  //   super.didPush();
+  // }
 
   /// New route has been pushed, and this State object's route is no longer current.
-  @override
-  void didPushNext() {
-    // Optionally call super for debugPrint()
-    super.didPushNext();
-  }
+  // @override
+  // void didPushNext() {
+  //   // Optionally call super for debugPrint()
+  //   super.didPushNext();
+  // }
 
   /// Called when this State is popped off a route.
-  @override
-  void didPop() {
-    // Optionally call super for debugPrint()
-    super.didPop();
-  }
+  // @override
+  // void didPop() {
+  //   // Optionally call super for debugPrint()
+  //   super.didPop();
+  // }
 
   /// The top route has been popped off, and this route shows up.
-  @override
-  void didPopNext() {
-    // Optionally call super for debugPrint()
-    super.didPopNext();
-  }
+  // @override
+  // void didPopNext() {
+  //   // Optionally call super for debugPrint()
+  //   super.didPopNext();
+  // }
+
+  /// Called at the start of a predictive back gesture.
+  /// If an observer returns true then that observer, and only that observer,
+  /// will be notified of subsequent events in
+  /// this same gesture (for example [handleUpdateBackGestureProgress], etc.).
+  ///
+  /// Observers are expected to return true if they were able to handle the
+  /// notification, If all observers indicate they are not handling this back gesture by
+  /// returning false, then a navigation pop will result when
+  /// [handleCommitBackGesture] is called, as in a non-predictive system back
+  /// gesture.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  // @override
+  // bool handleStartBackGesture(PredictiveBackEvent backEvent) {
+  //   // Optionally call super for debugPrint()
+  //   return super.handleStartBackGesture(backEvent);
+  // }
+
+  /// Called when a predictive back gesture moves.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  // @override
+  // void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) {
+  //   // Optionally call super for debugPrint()
+  //   return super.handleUpdateBackGestureProgress(backEvent);
+  // }
+
+  /// Called when a predictive back gesture is finished successfully, indicating
+  /// that the current route should be popped.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this. If there is none, then a
+  /// navigation pop will result, as in a non-predictive system back gesture.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  // @override
+  // void handleCommitBackGesture() {
+  //   // Optionally call super for debugPrint()
+  //   return super.handleCommitBackGesture();
+  // }
+
+  /// Called when a predictive back gesture is canceled, indicating that no
+  /// navigation should occur.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  // @override
+  // void handleCancelBackGesture() {
+  //   // Optionally call super for debugPrint()
+  //   return super.handleCommitBackGesture();
+  // }
 
   /// Offer an error handler
   @override

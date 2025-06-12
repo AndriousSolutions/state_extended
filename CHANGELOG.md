@@ -1,3 +1,19 @@
+## 6.4.0
+
+June 12, 2025
+
+- Commented out a number of 'empty' functions in the StateXController class reducing
+  the number of extraneous function calls in apps.
+  deactivate() activate() didUpdateWidget() didChangeDependencies() didChangeMetrics()
+  didChangeTextScaleFactor() didChangePlatformBrightness() didChangeLocales()
+  didChangeAccessibilityFeatures() didHaveMemoryPressure() updateShouldNotify()
+  didChangeAppLifecycleState() inactiveAppLifecycleState() hiddenAppLifecycleState()
+  pausedAppLifecycleState() resumedAppLifecycleState() detachedAppLifecycleState()
+  reassemble() didRequestAppExit() didPopRoute() didPushRoute() didPushRouteInformation()
+  didPush() didPushNext() didPop() didPopNext()
+  handleStartBackGesture() handleUpdateBackGestureProgress() handleCommitBackGesture()
+  handleCancelBackGesture()
+
 ## 6.3.0+2
 
 June 12, 2025
