@@ -71,7 +71,7 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
     var state = con.state;
 
     // by its StatefulWidget
-    state = con.stateOf<Page1>();
+    state = con.stateOf<Page1>() as StateX;
 
     // by its type
     state = con.ofState<Page1State>();

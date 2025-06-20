@@ -174,11 +174,11 @@ Future<void> testsStateX(WidgetTester tester) async {
   stateObj.dependOnInheritedWidget(context);
 
   // If you know their identifiers, you can retrieve a Map of StateMVC objects.
-  final Map<String, StateX> map =
+  final Map<String, State> map =
       appState.statesById([myAppStateId, keyIdPage1]);
 
   // Retrieve a State object by its unique identifier.
-  StateX? state02 = map[myAppStateId];
+  State? state02 = map[myAppStateId];
 
   // It should be a specific type of State object.
   expect(state02, isA<AppStateX>(), reason: _location);

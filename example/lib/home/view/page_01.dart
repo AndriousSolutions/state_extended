@@ -240,7 +240,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
                   /// Look at the ways to supply the App's main controller
                   var appController = appCon as ExampleAppController;
                   appController =
-                      firstState!.controller as ExampleAppController;
+                      (firstState as StateX).controller as ExampleAppController;
                   appController = appStateX!.controller as ExampleAppController;
                   if (appController.errorButton) {
                     // Deliberately throw an error to demonstrate error handling.

@@ -14,6 +14,7 @@ class AnotherController extends StateXController
     with StateXonErrorMixin, EventsControllerMixin {
   /// It's a good practice to make Controllers using the Singleton pattern
   factory AnotherController() => _this ??= AnotherController._();
+
   AnotherController._() : _appSettings = AppSettingsController();
   static AnotherController? _this;
 
@@ -21,10 +22,12 @@ class AnotherController extends StateXController
 
   /// Explicitly cause an error
   bool get initAsyncError => _appSettings.initAsyncError;
+
   set initAsyncError(bool? error) => _appSettings.initAsyncError = error;
 
   /// Explicitly return false
   bool get initAsyncFailed => _appSettings.initAsyncFailed;
+
   set initAsyncFailed(bool? error) => _appSettings.initAsyncFailed = error;
 
   /// Supply the name of this class

@@ -19,9 +19,6 @@ mixin SetStateMixin {
 
   /// Supply the State object
   StateX? get state => _stateX;
-
-  set state(covariant StateX? state) => _stateX = state;
-
   StateX? _stateX;
 
   final Set<StateX> _stateXSet = {};
@@ -64,14 +61,14 @@ mixin SetStateMixin {
     final pop = _stateXSet.remove(stateX);
 
     // Was the 'popped' state the 'current' state?
-    if (stateX == state) {
+    if (stateX == _stateX) {
       //
       _stateJustAdded = false;
 
       if (_stateXSet.isEmpty) {
-        state = null;
+        _stateX = null;
       } else {
-        state = _stateXSet.last;
+        _stateX = _stateXSet.last;
       }
     }
     return pop;

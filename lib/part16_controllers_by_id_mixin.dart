@@ -40,7 +40,7 @@ mixin ControllersByIdMixin<T extends StatefulWidget> on StateX<T> {
         /// This connects the StateXController to this State object!
         if (con._pushStateToSetter(this)) {
           // If just added, assign as the 'current' state object.
-          con.state = this;
+          con._stateX = this;
         }
       }
     }

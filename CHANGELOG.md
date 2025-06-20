@@ -1,3 +1,10 @@
+## 6.5.1
+
+June 20, 2025
+
+- Removed setter, state, from SetStateMixin in part14_set_state_mixin.dart
+  Shouldn't be public.
+
 ## 6.5.0
 
 June 19, 2025
