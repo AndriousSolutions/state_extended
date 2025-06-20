@@ -12,6 +12,7 @@ class MultiTabsScaffold extends StatelessWidget {
     required this.tabs,
     required this.labels,
     this.controller,
+    this.controllers,
     this.initIndex,
     this.appBar,
     this.navigationBar,
@@ -28,6 +29,9 @@ class MultiTabsScaffold extends StatelessWidget {
 
   ///
   final TabsScaffoldController? controller;
+
+  ///
+  final List<TabsScaffoldController>? controllers;
 
   ///
   final int? initIndex;
@@ -70,13 +74,20 @@ class _BottomBarScaffoldState extends State<_BottomBarScaffold> {
     //
     tabsScaffold = widget.widget;
 
-    // A controller
-    con = tabsScaffold.controller;
+    // Collect the into a List
+    if (tabsScaffold.controller != null) {
+      controllers.add(tabsScaffold.controller!);
+    }
+    if (tabsScaffold.controllers != null) {
+      controllers.addAll(tabsScaffold.controllers!);
+    }
 
-    // Reference
-    con?.tabsScaffold = tabsScaffold;
-    //
-    con?.initTabsScaffold();
+    // Initialize the controllers
+    for (final con in controllers) {
+      // Reference
+      con.tabsScaffold = tabsScaffold;
+      con.initTabsScaffold();
+    }
 
     // Supply the initial index
     // Record the 'current' index
@@ -91,7 +102,7 @@ class _BottomBarScaffoldState extends State<_BottomBarScaffold> {
   late MultiTabsScaffold tabsScaffold;
 
   //
-  late TabsScaffoldController? con;
+  List<TabsScaffoldController> controllers = [];
 
   // Flag when tabs are switched
   bool? switched;
@@ -135,9 +146,13 @@ class _BottomBarScaffoldState extends State<_BottomBarScaffold> {
             if (switched != null) {
               // The initial tab
               if (tabsScaffoldIndex == initIndex) {
-                con?.tabSwitchBack();
+                for (final con in controllers) {
+                  con.tabSwitchBack();
+                }
               } else {
-                con?.tabSwitch(index);
+                for (final con in controllers) {
+                  con.tabSwitch(index);
+                }
               }
             }
           },
@@ -337,6 +352,7 @@ mixin TabsScaffoldController on StateXController {
 
   ///
   MultiTabsScaffold? get tabsScaffold => _twoTab;
+
   set tabsScaffold(MultiTabsScaffold? twoTab) => _twoTab ??= twoTab;
   MultiTabsScaffold? _twoTab;
 

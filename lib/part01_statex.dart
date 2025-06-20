@@ -18,7 +18,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     with
         WidgetsBindingObserver,
         WidgetsBindingInstanceMixin,
-        _ControllersByType,
+        StateXControllersByTypeMixin,
         AppStateMixin,
         FutureBuilderStateMixin,
         AsyncOps,
@@ -26,7 +26,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         StateXonErrorMixin,
         InheritedWidgetStateMixin,
         ErrorInErrorHandlerMixin,
-        _MapOfStates
+        MapOfStateXsMixin
     implements StateXEventHandlers {
   //
   /// With an optional StateXController parameter.
@@ -83,7 +83,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   T get widget => super.widget as T;
 
-  /// Provide the 'main' controller to this 'State View.'
+  /// Provide the 'main' controller to this State object.
   /// If _controller == null, get the 'first assigned' controller if any.
   StateXController? get controller => _controller ??= firstCon;
 
@@ -91,8 +91,8 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   AppStateX? get appStateX {
     if (_appStateX == null) {
-      if (firstState is AppStateX?) {
-        _appStateX = firstState as AppStateX?;
+      if (firstState != null && firstState is AppStateX) {
+        _appStateX = firstState as AppStateX;
       } else {
         _appStateX = lastContext?.findAncestorStateOfType<AppStateX>();
       }
@@ -370,20 +370,22 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Called with every [StateX] associated with this Controller
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Implement any asynchronous operations needed done at start up.
-  @override
-  Future<bool> initAsyncState(covariant State state) async {
-    // Optionally call super for debugPrint()
-    super.initAsyncState(state);
-    return true;
-  }
+  // Save on function calls
+  // @override
+  // Future<bool> initAsyncState(covariant State state) async {
+  //   // Optionally call super for debugPrint()
+  //   super.initAsyncState(state);
+  //   return true;
+  // }
 
   /// initAsync() has failed and a 'error' widget instead will be displayed.
   /// This takes in the snapshot.error details.
-  @override
-  void onAsyncError(FlutterErrorDetails details) {
-    // Optionally call super for debugPrint()
-    super.onAsyncError(details);
-  }
+  // Save on function calls
+  // @override
+  // void onAsyncError(FlutterErrorDetails details) {
+  //   // Optionally call super for debugPrint()
+  //   super.onAsyncError(details);
+  // }
 
   /// The framework calls this method whenever it removes this [State] object
   /// from the tree.
@@ -1013,11 +1015,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// about to be paused (on iOS and Android), or because it has been minimized
   /// or placed on a desktop that is no longer visible (on non-web desktop), or
   /// is running in a window or tab that is no longer visible (on the web).
-  @override
-  void hiddenAppLifecycleState() {
-    // Optionally call super for debugPrint()
-    super.hiddenAppLifecycleState();
-  }
+  // Save on function calls
+  // @override
+  // void hiddenAppLifecycleState() {
+  //   // Optionally call super for debugPrint()
+  //   super.hiddenAppLifecycleState();
+  // }
 
   /// State object was in a 'hidden' state
   bool get hiddenAppLifecycle => _hiddenAppLifecycle;
@@ -1026,11 +1029,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
   /// (Called only in iOS, Android)
-  @override
-  void pausedAppLifecycleState() {
-    // Optionally call super for debugPrint()
-    super.pausedAppLifecycleState();
-  }
+  // Save on function calls
+  // @override
+  // void pausedAppLifecycleState() {
+  //   // Optionally call super for debugPrint()
+  //   super.pausedAppLifecycleState();
+  // }
 
   /// State object was in 'paused' state
   bool get pausedAppLifecycle => _pausedAppLifecycle;
@@ -1568,16 +1572,18 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   bool _hadSystemEvent = false;
 
   /// Offer an error handler
-  @override
-  void onError(FlutterErrorDetails details) {
-    // It is not mandatory to call this method
-    // No debugPrint() here in case it too will error
-    super.onError(details);
-  }
+// // Overrides StateXonErrorMixin in part20_statex_error_mixin.dart
+// @override
+// void onError(FlutterErrorDetails details) {
+//   // It is not mandatory to call this method
+//   // No debugPrint() here in case it too will error
+//   super.onError(details);
+// }
 
   /// Logs 'every' error as the error count is reset.
-  @override
-  void logErrorDetails(FlutterErrorDetails details, {bool? force}) {
-    super.logErrorDetails(details, force: force);
-  }
+// // Overrides StateXonErrorMixin in part20_statex_error_mixin.dart
+// @override
+// void logErrorDetails(FlutterErrorDetails details, {bool? force}) {
+//   super.logErrorDetails(details, force: force);
+// }
 }

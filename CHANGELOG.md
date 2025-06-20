@@ -1,3 +1,16 @@
+## 6.5.0
+
+June 19, 2025
+
+- Further enhanced example app
+- _ControllersByType renamed StateXControllersByTypeMixin
+- _MapOfStates renamed MapOfStateXsMixin
+- ControllersById renamed ControllersByIdMixin
+- Improved getter appStateX in part01_statex.dart and
+  commented out two 'empty' functions to save on function calls
+- Modified initAsyncState(covariant State state) in part02_statex_controller.dart
+- part10_map_0f_states.dart renamed part10_map_of_statexs.dart
+
 ## 6.4.0
 
 June 12, 2025

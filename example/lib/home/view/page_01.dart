@@ -117,7 +117,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
     final isPortrait = media!.orientation == Orientation.portrait || inMobile;
     //
     return MultiTabsScaffold(
-      controller: _con,
+      controllers: [_con, _timer],
       tabs: [
         (_) => Scaffold(
               appBar: AppBar(

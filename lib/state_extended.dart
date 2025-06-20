@@ -12,7 +12,7 @@ import 'dart:async' show Future;
 
 import 'dart:math' show Random;
 
-import 'dart:ui' show AppExitResponse;
+import 'dart:ui' show AppExitResponse, ViewFocusEvent;
 
 import 'package:flutter/material.dart';
 
@@ -67,7 +67,7 @@ part 'part08_inheritedwidget_statefulwidget.dart';
 part 'part09_builder_statefulwidget.dart';
 
 /// mixin on State: stateByType(), stateById(), rootCon, firstState, lastState
-part 'part10_map_of_states.dart';
+part 'part10_map_of_statexs.dart';
 
 /// class SetState: builder(context, rootState?._dataObj);
 part 'part11_set_builder.dart';

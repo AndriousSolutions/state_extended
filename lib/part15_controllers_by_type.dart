@@ -9,7 +9,7 @@ part of 'state_extended.dart';
 ///
 /// dartdoc:
 /// {@category StateX class}
-mixin _ControllersByType on State {
+mixin StateXControllersByTypeMixin on State {
   /// A collection of Controllers identified by type.
   /// [<type, controller>]
   final Map<Type, StateXController> _mapControllerByType = {};

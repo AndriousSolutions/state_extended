@@ -9,7 +9,7 @@ part of 'state_extended.dart';
 /// dartdoc:
 /// {@category StateX class}
 /// {@category StateXController class}
-mixin _MapOfStates on State {
+mixin MapOfStateXsMixin on State {
 // mixin _MapOfStates on State {
   /// All the State objects in this app.
   static final Map<String, StateX> _states = {};
@@ -20,7 +20,7 @@ mixin _MapOfStates on State {
     final add = state != null;
     if (add) {
       //
-      _MapOfStates._states[state._id] = state;
+      MapOfStateXsMixin._states[state._id] = state;
     }
     return add;
   }
@@ -29,9 +29,9 @@ mixin _MapOfStates on State {
   bool _removeFromMapOfStates(StateX? state) {
     var removed = state != null;
     if (removed) {
-      final int length = _MapOfStates._states.length;
-      _MapOfStates._states.removeWhere((key, value) => state._id == key);
-      removed = _MapOfStates._states.length < length;
+      final int length = MapOfStateXsMixin._states.length;
+      MapOfStateXsMixin._states.removeWhere((key, value) => state._id == key);
+      removed = MapOfStateXsMixin._states.length < length;
     }
     return removed;
   }
@@ -41,7 +41,7 @@ mixin _MapOfStates on State {
   T? stateByType<T extends StateX>() {
     StateX? state;
     try {
-      for (final item in _MapOfStates._states.values) {
+      for (final item in MapOfStateXsMixin._states.values) {
         if (item is T) {
           state = item;
           break;
@@ -53,8 +53,11 @@ mixin _MapOfStates on State {
     return state == null ? null : state as T;
   }
 
+  /// Consistent with the equivalent in the StateXController class
+  T? ofState<T extends StateX>() => stateByType<T>();
+
   /// Returns a State object using a unique String identifier.
-  StateX? stateById(String? id) => _MapOfStates._states[id];
+  StateX? stateById(String? id) => MapOfStateXsMixin._states[id];
 
   /// Returns a Map of StateView objects using unique String identifiers.
   Map<String, StateX> statesById(List<String> ids) {
@@ -78,9 +81,9 @@ mixin _MapOfStates on State {
     List<StateX> list;
     // In reversed chronological order
     if (reversed != null && reversed) {
-      list = _MapOfStates._states.values.toList().reversed.toList();
+      list = MapOfStateXsMixin._states.values.toList().reversed.toList();
     } else {
-      list = _MapOfStates._states.values.toList();
+      list = MapOfStateXsMixin._states.values.toList();
     }
     // Exclude a particular State.
     if (remove != null) {

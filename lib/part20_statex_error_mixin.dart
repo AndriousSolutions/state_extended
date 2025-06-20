@@ -15,6 +15,7 @@ mixin class StateXonErrorMixin {
   void onError(FlutterErrorDetails details) {}
 
   /// Logs 'every' error as the error count is reset.
+  /// force - Forces the log despite flag setting of logStateXError
   void logErrorDetails(FlutterErrorDetails details, {bool? force}) {
     //
     if (logStateXError || (force ?? false)) {

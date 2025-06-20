@@ -12,14 +12,12 @@ part of 'state_extended.dart';
 /// {@category StateX class}
 /// {@category AppStateX class}
 class AppStateX<T extends StatefulWidget> extends StateX<T>
-    with ControllersById {
+    with ControllersByIdMixin {
   ///
   AppStateX({
     super.controller,
-
     // Optionally supply as many State Controllers as you like to work with this App.
     List<StateXController>? controllers,
-
     // Optionally supply a 'data object' to to be accessible to the App's InheritedWidget.
     Object? object,
     @Deprecated('notifyClientsInBuild no longer necessary')
@@ -33,7 +31,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     FlutterError.onError = _errorHandler;
 
     // Assign this property
-    _appStateX = this;
+    appStateX = this;
 
     AppStateX._instance = this;
 
@@ -97,7 +95,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void dispose() {
     _builderState = null;
     _inheritedState = null;
-    _MapOfStates._states.clear();
+    MapOfStateXsMixin._states.clear();
     super.dispose();
   }
 
@@ -106,13 +104,91 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   Future<bool> didPopRoute() async {
-    final pop = super.didPopRoute();
+    var pop = await super.didPopRoute();
     // Loop through all the StateX objects
     final list = statesList(reversed: true, remove: this);
     for (final StateX state in list) {
-      await state.didPopRoute();
+      if (await state.didPopRoute()) {
+        pop = true;
+      }
     }
     return pop;
+  }
+
+  /// Called at the start of a predictive back gesture.
+  /// If an observer returns true then that observer, and only that observer,
+  /// will be notified of subsequent events in
+  /// this same gesture (for example [handleUpdateBackGestureProgress], etc.).
+  ///
+  /// Observers are expected to return true if they were able to handle the
+  /// notification, If all observers indicate they are not handling this back gesture by
+  /// returning false, then a navigation pop will result when
+  /// [handleCommitBackGesture] is called, as in a non-predictive system back
+  /// gesture.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  @override
+  bool handleStartBackGesture(PredictiveBackEvent backEvent) {
+    var handled = super.handleStartBackGesture(backEvent);
+    //
+    forEachState((state) {
+      if (state.handleStartBackGesture(backEvent)) {
+        handled = true;
+      }
+    }, reversed: true, remove: this);
+    return handled;
+  }
+
+  /// Called when a predictive back gesture moves.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  @override
+  void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) {
+    super.handleUpdateBackGestureProgress(backEvent);
+    //
+    forEachState((state) {
+      state.handleUpdateBackGestureProgress(backEvent);
+    }, reversed: true, remove: this);
+  }
+
+  /// Called when a predictive back gesture is finished successfully, indicating
+  /// that the current route should be popped.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this. If there is none, then a
+  /// navigation pop will result, as in a non-predictive system back gesture.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  @override
+  void handleCommitBackGesture() {
+    super.handleCommitBackGesture();
+    //
+    forEachState((state) {
+      state.handleCommitBackGesture();
+    }, reversed: true, remove: this);
+  }
+
+  /// Called when a predictive back gesture is canceled, indicating that no
+  /// navigation should occur.
+  ///
+  /// The observer which was notified of this gesture's [handleStartBackGesture]
+  /// is the same observer notified for this.
+  ///
+  /// Currently, this is only used on Android devices that support the
+  /// predictive back feature.
+  @override
+  void handleCancelBackGesture() {
+    super.handleCancelBackGesture();
+    //
+    forEachState((state) {
+      state.handleCancelBackGesture();
+    }, reversed: true, remove: this);
   }
 
   /// Called when the host tells the application to push a new
@@ -123,11 +199,13 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   Future<bool> didPushRouteInformation(
       RouteInformation routeInformation) async {
     //
-    final handled = super.didPushRouteInformation(routeInformation);
+    var handled = await super.didPushRouteInformation(routeInformation);
     // Loop through all the StateX objects
     final list = statesList(reversed: true, remove: this);
     for (final StateX state in list) {
-      await state.didPushRouteInformation(routeInformation);
+      if (await state.didPushRouteInformation(routeInformation)) {
+        handled = true;
+      }
     }
     return handled;
   }
@@ -196,6 +274,17 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     }, reversed: true, remove: this);
   }
 
+  /// Called whenever the [PlatformDispatcher] receives a notification that the
+  /// focus state on a view has changed.
+  @override
+  void didChangeViewFocus(ViewFocusEvent event) {
+    super.didChangeViewFocus(event);
+    //
+    forEachState((state) {
+      state.didChangeViewFocus(event);
+    }, reversed: true, remove: this);
+  }
+
   /// Called when a request is received from the system to exit the application.
   @override
   @mustCallSuper
@@ -203,24 +292,22 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     //
     var appResponse = await super.didRequestAppExit();
     //
-    if (appResponse == AppExitResponse.exit) {
-      final list = statesList(reversed: true, remove: this);
-      // Loop through all the StateX objects
-      for (final StateX state in list) {
-        try {
-          if (state.mounted && !state._deactivated) {
-            final response = await state.didRequestAppExit();
-            if (response == AppExitResponse.cancel) {
-              // Cancel and do not exit the application.
-              appResponse == response;
-              break;
-            }
-          }
-        } catch (e, stack) {
-          // Record the error
-          recordErrorInHandler(e, stack);
+    final list = statesList(reversed: true, remove: this);
+    // Loop through all the StateX objects
+    for (final StateX state in list) {
+      // try {
+      if (state.mounted && !state._deactivated) {
+        final response = await state.didRequestAppExit();
+        if (response == AppExitResponse.cancel) {
+          // Cancel and do not exit the application.
+          appResponse == response;
+          break;
         }
       }
+      // } catch (e, stack) {
+      //   // Record the error
+      //   recordErrorInHandler(e, stack);
+      // }
     }
     return appResponse;
   }
@@ -304,6 +391,10 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
         (_) => const SizedBox.shrink(); // Display 'nothing' if not provided
     return StateDependentWidget(stateMixin: this, builder: builder);
   }
+
+  /// Reference the App State object
+  @override
+  AppStateX? get appStateX => this;
 
   /// Catch any errors in the App
   /// Free for you to override

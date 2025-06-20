@@ -11,7 +11,7 @@ import '/src/view.dart';
 
 ///
 class WordPairsTimer extends StateXController
-    with StateXonErrorMixin, EventsControllerMixin {
+    with StateXonErrorMixin, EventsControllerMixin, TabsScaffoldController {
   /// Only one instance of the class is necessary and desired.
   factory WordPairsTimer({
     int? seconds,
@@ -101,6 +101,16 @@ class WordPairsTimer extends StateXController
       _cancelTimer();
     }
   }
+
+  ///
+  /// Cancel the timer
+  @override
+  void tabSwitch(int index) => _cancelTimer();
+
+  ///
+  /// Create the Timer again.
+  @override
+  void tabSwitchBack() => _initTimer();
 
   /// Called when app returns from the background
   @override
@@ -261,7 +271,9 @@ class WordPairsTimer extends StateXController
 // ignore: unused_element
 class _WordPair extends StatelessWidget {
   const _WordPair(this.con);
+
   final WordPairsTimer con;
+
   @override
   Widget build(BuildContext context) {
     /// This is where the magic happens.
