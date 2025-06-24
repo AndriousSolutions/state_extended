@@ -107,8 +107,10 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     var pop = await super.didPopRoute();
     // Loop through all the StateX objects
     final list = statesList(reversed: true, remove: this);
-    for (final StateX state in list) {
-      if (await state.didPopRoute()) {
+    // Loop through all the StateX objects
+    for (final state in list) {
+      // try {
+      if (await (state as StateX).didPopRoute()) {
         pop = true;
       }
     }
@@ -132,7 +134,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   bool handleStartBackGesture(PredictiveBackEvent backEvent) {
     var handled = super.handleStartBackGesture(backEvent);
     //
-    forEachState((state) {
+    forEachStateX((state) {
       if (state.handleStartBackGesture(backEvent)) {
         handled = true;
       }
@@ -151,7 +153,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) {
     super.handleUpdateBackGestureProgress(backEvent);
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.handleUpdateBackGestureProgress(backEvent);
     }, reversed: true, remove: this);
   }
@@ -169,7 +171,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void handleCommitBackGesture() {
     super.handleCommitBackGesture();
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.handleCommitBackGesture();
     }, reversed: true, remove: this);
   }
@@ -186,7 +188,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void handleCancelBackGesture() {
     super.handleCancelBackGesture();
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.handleCancelBackGesture();
     }, reversed: true, remove: this);
   }
@@ -202,8 +204,10 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     var handled = await super.didPushRouteInformation(routeInformation);
     // Loop through all the StateX objects
     final list = statesList(reversed: true, remove: this);
-    for (final StateX state in list) {
-      if (await state.didPushRouteInformation(routeInformation)) {
+    // Loop through all the StateX objects
+    for (final state in list) {
+      // try {
+      if (await (state as StateX).didPushRouteInformation(routeInformation)) {
         handled = true;
       }
     }
@@ -217,7 +221,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void didChangeMetrics() {
     super.didChangeMetrics();
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.didChangeMetrics();
     }, reversed: true, remove: this);
   }
@@ -228,7 +232,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void didChangeTextScaleFactor() {
     super.didChangeTextScaleFactor();
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.didChangeTextScaleFactor();
     }, reversed: true, remove: this);
   }
@@ -239,7 +243,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void didChangePlatformBrightness() {
     super.didChangePlatformBrightness();
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.didChangePlatformBrightness();
     }, reversed: true, remove: this);
   }
@@ -252,7 +256,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void didChangeLocales(List<Locale>? locales) {
     super.didChangeLocales(locales);
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.didChangeLocales(locales);
     }, reversed: true, remove: this);
   }
@@ -269,7 +273,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void didChangeAppLifecycleState(AppLifecycleState lifecycleState) {
     super.didChangeAppLifecycleState(lifecycleState);
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.didChangeAppLifecycleState(lifecycleState);
     }, reversed: true, remove: this);
   }
@@ -280,7 +284,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void didChangeViewFocus(ViewFocusEvent event) {
     super.didChangeViewFocus(event);
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.didChangeViewFocus(event);
     }, reversed: true, remove: this);
   }
@@ -294,8 +298,9 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     //
     final list = statesList(reversed: true, remove: this);
     // Loop through all the StateX objects
-    for (final StateX state in list) {
+    for (final s in list) {
       // try {
+      final state = s as StateX;
       if (state.mounted && !state._deactivated) {
         final response = await state.didRequestAppExit();
         if (response == AppExitResponse.cancel) {
@@ -318,7 +323,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void didHaveMemoryPressure() {
     super.didHaveMemoryPressure();
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.didHaveMemoryPressure();
     }, reversed: true, remove: this);
   }
@@ -329,7 +334,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void didChangeAccessibilityFeatures() {
     super.didChangeAccessibilityFeatures();
     //
-    forEachState((state) {
+    forEachStateX((state) {
       state.didChangeAccessibilityFeatures();
     }, reversed: true, remove: this);
   }
@@ -581,7 +586,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// Possibly the error occurred there.
   bool onStateError(FlutterErrorDetails details) {
     //
-    final state = lastState;
+    final state = lastState as StateX?;
 
     // If it's this object, it will call its own later
     bool caught = state != null && state != this;

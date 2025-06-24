@@ -24,7 +24,7 @@ Future<void> testsAppStateX(WidgetTester tester) async {
   StateXController? con = appState.controller;
 
 // This Controller's current State object is _MyAppState as AppStateMVC
-  final StateX? stateObj = con?.state;
+  final StateX? stateObj = con?.statex;
 
   expect(stateObj, isA<AppStateX>(), reason: _location);
 

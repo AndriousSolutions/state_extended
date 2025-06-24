@@ -8,11 +8,10 @@ part of 'state_extended.dart';
 ///
 /// dartdoc:
 /// {@category StateX class}
-/// {@category StateXController class}
 mixin MapOfStateXsMixin on State {
 // mixin _MapOfStates on State {
   /// All the State objects in this app.
-  static final Map<String, StateX> _states = {};
+  static final Map<String, State> _states = {};
 
   /// This is 'privatized' function as it is an critical method and not for public access.
   /// This contains the 'main list' of StateX objects present in the app!
@@ -38,8 +37,8 @@ mixin MapOfStateXsMixin on State {
 
   /// Retrieve the State object by type
   /// Returns null if not found
-  T? stateByType<T extends StateX>() {
-    StateX? state;
+  T? stateByType<T extends State>() {
+    State? state;
     try {
       for (final item in MapOfStateXsMixin._states.values) {
         if (item is T) {
@@ -54,14 +53,14 @@ mixin MapOfStateXsMixin on State {
   }
 
   /// Consistent with the equivalent in the StateXController class
-  T? ofState<T extends StateX>() => stateByType<T>();
+  T? ofState<T extends State>() => stateByType<T>();
 
   /// Returns a State object using a unique String identifier.
-  StateX? stateById(String? id) => MapOfStateXsMixin._states[id];
+  State? stateById(String? id) => MapOfStateXsMixin._states[id];
 
   /// Returns a Map of StateView objects using unique String identifiers.
-  Map<String, StateX> statesById(List<String> ids) {
-    final Map<String, StateX> map = {};
+  Map<String, State> statesById(List<String> ids) {
+    final Map<String, State> map = {};
     for (final id in ids) {
       final state = stateById(id);
       if (state != null) {
@@ -72,13 +71,13 @@ mixin MapOfStateXsMixin on State {
   }
 
   /// Returns a List of StateX objects using unique String identifiers.
-  List<StateX> listStates(List<String> keys) {
+  List<State> listStates(List<String> keys) {
     return statesById(keys).values.toList();
   }
 
   /// Return a List of available StateX objects
-  List<StateX> statesList({bool? reversed, StateX? remove}) {
-    List<StateX> list;
+  List<State> statesList({bool? reversed, State? remove}) {
+    List<State> list;
     // In reversed chronological order
     if (reversed != null && reversed) {
       list = MapOfStateXsMixin._states.values.toList().reversed.toList();
@@ -100,28 +99,28 @@ mixin MapOfStateXsMixin on State {
   StateXController? get appCon {
     StateXController? controller;
     final state = firstState;
-    if (state != null) {
+    if (state != null && state is StateX) {
       controller = state.controller;
     }
     return controller;
   }
 
   /// Return the first State object
-  StateX? get firstState => _nextStateX();
+  State? get firstState => _nextStateX();
 
   /// Return the 'latest' State object
-  StateX? get lastState => _nextStateX(reversed: true);
+  State? get lastState => _nextStateX(reversed: true);
 
   /// Returns the 'latest' context in the App.
   BuildContext? get lastContext => lastState?.context;
 
   /// Loop through the list and return the next available State object
-  StateX? _nextStateX({bool? reversed}) {
+  State? _nextStateX({bool? reversed}) {
     reversed = reversed != null && reversed;
-    StateX? nextState;
+    State? nextState;
     final list = statesList(reversed: reversed);
-    for (final StateX state in list) {
-      if (state.mounted && !state._deactivated) {
+    for (final State state in list) {
+      if (state.mounted && (state is! StateX || !state._deactivated)) {
         nextState = state;
         break;
       }
@@ -129,18 +128,50 @@ mixin MapOfStateXsMixin on State {
     return nextState;
   }
 
-  /// To externally 'process' through the State objects.
+  /// To externally 'process' through the [State] objects.
   /// Invokes [func] on each StateX possessed by this StateX object.
   /// With an option to process in reversed chronological order
-  bool forEachState(void Function(StateX state) func,
-      {bool? reversed, StateX? remove}) {
+  bool forEachState(
+    void Function(State state) func, {
+    bool? reversed,
+    State? remove,
+  }) {
     bool each = true;
     final list = statesList(reversed: reversed, remove: remove);
-    for (final StateX state in list) {
+    for (final State state in list) {
       try {
         // if (state.mounted && !state._deactivated) { // Not working out gp
         if (state.mounted) {
           func(state);
+        }
+      } catch (e, stack) {
+        each = false;
+        // Record the error
+        if (this is StateX) {
+          (this as StateX).recordErrorInHandler(e, stack);
+        }
+      }
+    }
+    return each;
+  }
+
+  /// To externally 'process' through the [StateX] objects.
+  /// Invokes [func] on each StateX possessed by this StateX object.
+  /// With an option to process in reversed chronological order
+  bool forEachStateX(
+    void Function(StateX state) func, {
+    bool? reversed,
+    State? remove,
+  }) {
+    bool each = true;
+    final list = statesList(reversed: reversed, remove: remove);
+    for (final State state in list) {
+      try {
+        if (state.mounted) {
+          // if (state.mounted && !state._deactivated) { // Not working out gp
+          if (state is StateX && !state._deactivated) {
+            func(state);
+          }
         }
       } catch (e, stack) {
         each = false;

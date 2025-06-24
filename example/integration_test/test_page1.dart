@@ -59,7 +59,7 @@ Future<void> testPage1(WidgetTester tester) async {
   Controller? con = Controller();
 
   // You can retrieve a State object the Controller has collected so far.
-  StateX state = con.stateOf<Page2>()!;
+  StateX state = con.stateOf<Page2>()! as StateX;
 
   /// Increment the counter
   for (int cnt = 0; cnt <= count - 1; cnt++) {
@@ -77,7 +77,7 @@ Future<void> testPage1(WidgetTester tester) async {
 
   expect(find.text((count * 2).toString()), findsAny, reason: _location);
 
-  state = con.state!;
+  state = con.statex!;
 
   expect(state, isA<Page1State>(), reason: _location);
 
@@ -118,9 +118,9 @@ Future<void> testPage1(WidgetTester tester) async {
     expect(event, isTrue, reason: _location);
   }
 
-  state = con.stateOf<Page1>()!;
+  state = con.stateOf<Page1>()! as StateX;
 
-  state = con.state!;
+  state = con.statex!;
 
   expect(state.mounted, isTrue, reason: _location);
 

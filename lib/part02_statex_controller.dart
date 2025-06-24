@@ -116,14 +116,17 @@ class StateXController
   /// to use that State object's functions and features.
   /// Returns that State object's unique identifier.
   String addState(StateX? state) {
+    String id;
     if (state == null) {
-      return '';
-    }
-    if (state.add(this).isNotEmpty) {
-      return state.identifier;
+      id = '';
     } else {
-      return '';
+      if (state.add(this).isNotEmpty) {
+        id = state.identifier;
+      } else {
+        id = '';
+      }
     }
+    return id;
   }
 
   /// Reference the App State object
@@ -141,14 +144,18 @@ class StateXController
 
   AppStateX? _appStateX;
 
+  /// Supply the StateX object
+  StateX? get statex =>
+      _state == null || _state is! StateX ? null : _state as StateX;
+
   /// Link a widget to an InheritedWidget
   bool dependOnInheritedWidget(BuildContext? context) =>
-      state?.dependOnInheritedWidget(context) ?? false;
+      statex?.dependOnInheritedWidget(context) ?? false;
 
   /// In harmony with Flutter's own API
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   bool notifyClients() {
-    final notify = state?.notifyClients() ?? false;
+    final notify = statex?.notifyClients() ?? false;
     notifyStateListeners();
     return notify;
   }
@@ -281,15 +288,15 @@ class StateXController
   /// that contains this Controller.
   bool get calledChangeMetrics {
     bool change = false;
-    final list = _stateXSet.toList(growable: false);
-    for (final StateX state in list) {
+    final list = _stateSet.toList(growable: false);
+    for (final State state in list) {
       // You're at the current State object
       if (state == this.state) {
         change = _didCallChange;
         _didCallChange = false;
         break;
       }
-      if (!_didCallChange && state.controllerList.contains(this)) {
+      if (!_didCallChange && (state as StateX).controllerList.contains(this)) {
         _didCallChange = true;
         break;
       }
@@ -300,6 +307,7 @@ class StateXController
   bool _didCallChange = false;
 
   /// Called when the platform's text scale factor changes.
+  // Save on function calls
   // @override
   // void didChangeTextScaleFactor() {
   //   // Optionally call super for debugPrint()
@@ -307,6 +315,7 @@ class StateXController
   // }
 
   /// Brightness changed.
+  // Save on function calls
   // @override
   // void didChangePlatformBrightness() {
   //   // Optionally call super for debugPrint()
@@ -314,6 +323,7 @@ class StateXController
   // }
 
   /// Called when the system tells the app that the user's locale has changed.
+  // Save on function calls
   // @override
   // void didChangeLocales(List<Locale>? locales) {
   //   // Optionally call super for debugPrint()
@@ -322,13 +332,15 @@ class StateXController
 
   /// Either be in the progress of attaching when the engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
-  // @override
+  // Save on function calls
+// @override
   // void didChangeAccessibilityFeatures() {
   //   // Optionally call super for debugPrint()
   //   super.didChangeAccessibilityFeatures();
   // }
 
   /// Called when the system is running low on memory.
+  // Save on function calls
   // @override
   // void didHaveMemoryPressure() {
   //   // Optionally call super for debugPrint()
@@ -336,6 +348,7 @@ class StateXController
   // }
 
   /// Determine if its dependencies should be updated.
+  // Save on function calls
   // @override
   // bool updateShouldNotify(covariant InheritedWidget oldWidget) {
   //   // Optionally call super for debugPrint()
@@ -343,7 +356,8 @@ class StateXController
   // }
 
   /// Called when the system puts the app in the background or returns the app to the foreground.
-  // @override
+  // Save on function calls
+// @override
   // void didChangeAppLifecycleState(AppLifecycleState state) {
   //   /// Passing these possible values:
   //   /// AppLifecycleState.detached
@@ -356,14 +370,16 @@ class StateXController
   // }
 
   /// The application is in an inactive state and is not receiving user input.
-  @override
+  // Save on function calls
+  // @override
   // void inactiveAppLifecycleState() {
   //   // Optionally call super for debugPrint()
   //   super.inactiveAppLifecycleState();
   // }
 
   /// All views of an application are hidden, either because the application is
-  // @override
+  // Save on function calls
+// @override
   // void hiddenAppLifecycleState() {
   //   // Optionally call super for debugPrint()
   //   super.hiddenAppLifecycleState();
@@ -371,13 +387,15 @@ class StateXController
 
   /// The application is not currently visible to the user, not responding to
   /// user input, and running in the background.
-  // @override
+  // Save on function calls
+// @override
   // void pausedAppLifecycleState() {
   //   // Optionally call super for debugPrint()
   //   super.pausedAppLifecycleState();
   // }
 
   /// The application is visible and responding to user input.
+  // Save on function calls
   // @override
   // void resumedAppLifecycleState() {
   //   // Optionally call super for debugPrint()
@@ -386,7 +404,8 @@ class StateXController
 
   /// Either be in the progress of attaching when the  engine is first initializing
   /// or after the view being destroyed due to a Navigator pop.
-  // @override
+  // Save on function calls
+// @override
   // void detachedAppLifecycleState() {
   //   // Optionally call super for debugPrint()
   //   super.detachedAppLifecycleState();
@@ -394,6 +413,7 @@ class StateXController
 
   /// Called whenever the application is reassembled during debugging, for
   /// example during hot reload.
+  // Save on function calls
   // @override
   // void reassemble() {
   //   // Optionally call super for debugPrint()
@@ -401,7 +421,8 @@ class StateXController
   // }
 
   /// Called when a request is received from the system to exit the application.
-  // @override
+  // Save on function calls
+// @override
   // Future<AppExitResponse> didRequestAppExit() async {
   //   // Optionally call super for debugPrint()
   //   return super.didRequestAppExit();
@@ -410,7 +431,8 @@ class StateXController
   /// Called when the system tells the app to pop the current route.
   /// For example, on Android, this is called when the user presses
   /// the back button.
-  // @override
+  // Save on function calls
+// @override
   // Future<bool> didPopRoute() async {
   //   // Optionally call super for debugPrint()
   //   return super.didPopRoute();
@@ -418,7 +440,8 @@ class StateXController
 
   /// Called when the host tells the app to push a new route onto the
   /// navigator.
-  // @override
+  // Save on function calls
+// @override
   // Future<bool> didPushRoute(String route) async {
   //   // ignore: deprecated_member_use_from_same_package
   //   return super.didPushRoute(route);
@@ -426,7 +449,8 @@ class StateXController
 
   /// Called when the host tells the application to push a new
   /// [RouteInformation] and a restoration state onto the router.
-  // @override
+  // Save on function calls
+// @override
   // Future<bool> didPushRouteInformation(
   //     RouteInformation routeInformation) async {
   //   // Optionally call super for debugPrint()
@@ -434,13 +458,15 @@ class StateXController
   // }
 
   /// Called when this State is *first* added to as a Route observer?!
-  // @override
+  // Save on function calls
+// @override
   // void didPush() {
   //   // Optionally call super for debugPrint()
   //   super.didPush();
   // }
 
   /// New route has been pushed, and this State object's route is no longer current.
+  // Save on function calls
   // @override
   // void didPushNext() {
   //   // Optionally call super for debugPrint()
@@ -448,6 +474,7 @@ class StateXController
   // }
 
   /// Called when this State is popped off a route.
+  // Save on function calls
   // @override
   // void didPop() {
   //   // Optionally call super for debugPrint()
@@ -455,6 +482,7 @@ class StateXController
   // }
 
   /// The top route has been popped off, and this route shows up.
+  // Save on function calls
   // @override
   // void didPopNext() {
   //   // Optionally call super for debugPrint()
@@ -474,6 +502,7 @@ class StateXController
   ///
   /// Currently, this is only used on Android devices that support the
   /// predictive back feature.
+  // Save on function calls
   // @override
   // bool handleStartBackGesture(PredictiveBackEvent backEvent) {
   //   // Optionally call super for debugPrint()
@@ -487,6 +516,7 @@ class StateXController
   ///
   /// Currently, this is only used on Android devices that support the
   /// predictive back feature.
+  // Save on function calls
   // @override
   // void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) {
   //   // Optionally call super for debugPrint()
@@ -502,6 +532,7 @@ class StateXController
   ///
   /// Currently, this is only used on Android devices that support the
   /// predictive back feature.
+  // Save on function calls
   // @override
   // void handleCommitBackGesture() {
   //   // Optionally call super for debugPrint()
@@ -516,6 +547,7 @@ class StateXController
   ///
   /// Currently, this is only used on Android devices that support the
   /// predictive back feature.
+  // Save on function calls
   // @override
   // void handleCancelBackGesture() {
   //   // Optionally call super for debugPrint()

@@ -27,11 +27,11 @@ Future<void> integrationTesting(WidgetTester tester) async {
   final Controller? con = Controller();
 
   // Test the controllers move across different State objects.
-  state = con?.state!.firstState as StateX;
+  state = con?.statex!.firstState as StateX;
 
   expect(state, isA<AppStateX>(), reason: _location);
 
-  state = con?.state!.lastState as StateX;
+  state = con?.statex!.lastState as StateX;
 
   expect(state, isA<Page2State>(), reason: _location);
 

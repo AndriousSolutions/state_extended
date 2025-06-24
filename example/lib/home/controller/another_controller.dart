@@ -78,7 +78,12 @@ class AnotherController extends StateXController
   /// Retrieve the State object by type
   /// Returns null if not found
   @override
-  T? ofState<T extends StateX>() => super.ofState<T>();
+  StateX? stateOf<T extends StatefulWidget>() => super.stateOf<T>() as StateX?;
+
+  /// Retrieve the State object by type
+  /// Returns null if not found
+  @override
+  T? ofState<T extends State>() => super.ofState<T>();
 
   /// The framework will call this method exactly once.
   /// Only when the [StateX] object is first created.

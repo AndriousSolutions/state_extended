@@ -98,7 +98,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   /// The 'state' property is the Controller's current State object
   /// it is working with.
-  stateObj = con.state!;
+  stateObj = con.statex!;
 
   /// Of course, Flutter provides a reference to the StatefulWidget
   /// thought the State object.
@@ -128,10 +128,12 @@ Future<void> testsStateX(WidgetTester tester) async {
   each = stateObj.forEach((con) {
     var state = con.firstState;
     state = con.lastState;
-    var overridden = state?.buildOverridden;
-    overridden = state?.usingCupertino;
-    overridden = state?.buildFOverridden;
-    overridden = state?.builderOverridden;
+    if (state is StateX?) {
+      var overridden = state?.buildOverridden;
+      overridden = state?.usingCupertino;
+      overridden = state?.buildFOverridden;
+      overridden = state?.builderOverridden;
+    }
   }, reversed: true);
 
   /// Return a controller by its id in a List
@@ -152,7 +154,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   // Of course, you can retrieve the State object its collected.
   // In this case, there's only one, the one in con.state.
-  final StateX state01 = con.stateOf<Page1>()!;
+  final StateX state01 = con.stateOf<Page1>()! as StateX;
 
   // print() functions called or not during development
   expect(state01.debugPrintEvents, isFalse, reason: _location);
@@ -162,7 +164,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   final String keyIdPage1 = state01.identifier;
 
   // Returns the StateX object using an unique String identifiers.
-  stateObj = appState.stateById(keyIdPage1)!;
+  stateObj = appState.stateById(keyIdPage1)! as StateX;
 
   expect(stateObj.widget, isA<Page1>(), reason: _location);
 
@@ -279,18 +281,18 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(mounted, isTrue, reason: _location);
 
   // The previous State object is now unmounted.
-  stateObj = con.stateOf<Page1>()!;
+  stateObj = con.stateOf<Page1>()! as StateX;
 
   var count = 0;
 
   // Test forEachState
-  each = stateObj.forEachState((state) {
+  each = stateObj.forEachStateX((state) {
     count++;
   });
 
   expect(count > 1, isTrue, reason: _location);
 
-  each = stateObj.forEachState(reversed: true, (state) {
+  each = stateObj.forEachStateX(reversed: true, (state) {
     count--;
   });
 
@@ -298,7 +300,7 @@ Future<void> testsStateX(WidgetTester tester) async {
 
   expect(count == 0, isTrue, reason: _location);
 
-  each = stateObj.forEachState((state) {
+  each = stateObj.forEachStateX((state) {
     if (state is Page1State) {
       throw AssertionError('Error in forEachState()!');
     }

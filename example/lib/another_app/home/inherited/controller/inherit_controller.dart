@@ -16,7 +16,7 @@ abstract class InheritController extends StateXController
   /// The InheritedWidget is the first State object it registered with.
   @override
   bool dependOnInheritedWidget(BuildContext? context) =>
-      firstState?.dependOnInheritedWidget(context) ?? false;
+      (firstState as StateX?)?.dependOnInheritedWidget(context) ?? false;
 
   /// Calls initAsync() all the time if returns true.
   /// Conditional calls initAsync() creating a Future with every rebuild
@@ -27,7 +27,7 @@ abstract class InheritController extends StateXController
   void newAnimals() {
     LogController.log(
         ':::::::::::: newAnimals() in ${eventStateClassNameOnly(toString())}');
-    firstState?.notifyClients();
+    (firstState as StateX?)?.notifyClients();
   }
 
   /// Change the single image

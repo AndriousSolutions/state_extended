@@ -14,7 +14,7 @@ Future<void> testEventHandling(WidgetTester tester) async {
   // A Singleton pattern allows for unit testing.
   final con = Controller();
 
-  final state = con.state!;
+  final state = con.statex!;
 
   // Simulate a 'release focus' then refocus event
   tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
@@ -100,7 +100,7 @@ Future<void> testScaleFactor(WidgetTester tester) async {
   final con = Controller();
 
   // You can retrieve a State object the Controller has collected so far.
-  final state = con.stateOf<Page1>()!;
+  final state = con.stateOf<Page1>()! as StateX;
 
   final testController = TestStateController();
 

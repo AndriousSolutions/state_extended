@@ -1,4 +1,5 @@
 # StateX
+
 [![codecov](https://codecov.io/gh/AndriousSolutions/state_extended/branch/master/graph/badge.svg)](https://app.codecov.io/gh/AndriousSolutions/state_extended/tree/master/lib)
 [![CI](https://github.com/AndriousSolutions/state_extended/actions/workflows/format_test_release.yml/badge.svg)](https://github.com/AndriousSolutions/state_extended/actions/workflows/format_then_test.yml)
 [![Medium](https://img.shields.io/badge/Medium-Read-green?logo=Medium)](https://medium.com/@andrious/statex-b8f57015188f)
@@ -9,27 +10,37 @@
 ![statex](https://user-images.githubusercontent.com/32497443/178387749-1e28f27f-f64c-41df-b5c0-a7591f194e22.jpg)
 
 ## An Extension of the State class
-This package extends the capabilities of Flutter's State class.
-This fundamental component of Flutter's state management had room for improvement.
-The capabilities of Flutter's State class now includes a 'State Object Controller' and the some 22 'lifecycle events.'
+
+In this package, the extended State class now has a built-in FutureBuilder and InheritedWidget
+to perform any necessary asynchronous operations before displaying its interface or
+to optimize performance by 'rebuilding' only parts and not all of that interface.
+The capabilities of Flutter's State class now includes a 'State Object Controller' and the some 22 '
+lifecycle events.'
 
 StateX should not be confused with GetX.
-Both do involve 'controllers' that generally contain the 'business logic' involved in an app.
-GetX has its GetxController class while StateX has its StateXController class, 
-but the similarities stops there.
+Both do involve 'controllers' that generally contain the 'business logic' involved in an app--
+GetX has its GetxController class while StateX has its StateXController class, but the similarities
+stops there.
 
 <img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/716e2d31-1cfe-4d79-bed0-fe77dd02b71b" alt="statecontroller" width="700" height="277">
 
 The <b>State</b> class is Flutter’s main player in State Management.
-However, the <b>StateX</b> class then extends those capabilities to a separate controller class called, <b>StateXController</b>.
-This arrangement encourages a clean architecture separating all the mutable properties and business logic 
-from the State object and its interface as well as provide state management from <b><i>outside</i></b> the State class itself! 
-Not only can the controller class call the State object's <b>setState</b>() function, 
-it has access to the object itself, its extended functions, and its many properties (e.g. <b>widget</b>, <b>mounted</b>, <b>context</b>, etc.).
-Further, the StateX class itself now has a 'built-in' FutureBuilder and InheritedWidget allowing such a State object to address
-its own asynchronous operations before proceeding, as well as rebuild only parts of a 'busy' interface when necessary.
+However, the <b>StateX</b> class then extends those capabilities to a separate controller class
+called, <b>StateXController</b>.
+This arrangement encourages a clean architecture separating all the mutable properties and business
+logic
+from the State object and its interface as well as provide state management from <b><i>
+outside</i></b> the State class itself!
+Not only can the controller class call the State object's <b>setState</b>() function,
+it has access to the object itself, its extended functions, and its many properties (e.g. <b>
+widget</b>, <b>mounted</b>, <b>context</b>, etc.).
+Further, the StateX class itself now has a 'built-in' FutureBuilder and InheritedWidget allowing
+such a State object to address
+its own asynchronous operations before proceeding, as well as rebuild only parts of a 'busy'
+interface when necessary.
 
 ## Documentation
+
 <ul>
    <li id="started"><a href="https://pub.dev/documentation/state_extended/latest/topics/Get%20started-topic.html">Get&nbsp;started</a></li>
    <li id="statex"><a href="https://pub.dev/documentation/state_extended/latest/topics/StateX%20class-topic.html">StateX class</a></li>
@@ -41,8 +52,9 @@ its own asynchronous operations before proceeding, as well as rebuild only parts
 </ul> 
 
 ## Example Code
+
 Copy and paste the 'Counter Example App' below to see a quick and simple implementation.
-Further examples accompany the this package when you download it: 
+Further examples accompany the this package when you download it:
 [example app](https://github.com/AndriousSolutions/state_extended/tree/master/example)
 
 ```dart
@@ -70,11 +82,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends AppStateX<MyApp> {
   /// Using the Singleton pattern. Carries the App's 'ongoing state.'
   factory _MyAppState() => _this ??= _MyAppState._();
+
   _MyAppState._() : super(controller: AppController()) {
     /// Acquire a reference to the passed Controller.
     /// Cast the 'controller' property to the appropriate class type.
     con = controller as AppController;
   }
+
   static _MyAppState? _this;
 
   late AppController con;
@@ -86,10 +100,11 @@ class _MyAppState extends AppStateX<MyApp> {
   /// Define the 'look and fell' of the overall app.
   /// The body: property takes in a separate widget for the 'home' page.
   @override
-  Widget builder(BuildContext context) => MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: MyHomePage(title: widget.title),
-  );
+  Widget builder(BuildContext context) =>
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyHomePage(title: widget.title),
+      );
 }
 
 /// The Home page
@@ -112,7 +127,9 @@ class _MyHomePageState extends StateX<MyHomePage> {
   _MyHomePageState() : super(controller: HomeController(), useInherited: true) {
     con = controller as HomeController;
   }
+
   late HomeController con;
+
   @override
   void initState() {
     /// Look inside the parent function and see it calls
@@ -146,35 +163,39 @@ class _MyHomePageState extends StateX<MyHomePage> {
   Widget buildF(BuildContext context) => super.buildF(context);
 
   @override
-  Widget builder(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Text(widget.title ?? ''),
-      // popup menu button
-      actions: [con.popupMenuButton],
-    ),
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'You have pushed the button this many times:',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+  Widget builder(BuildContext context) =>
+      Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title ?? ''),
+          // popup menu button
+          actions: [con.popupMenuButton],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'You have pushed the button this many times:',
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .bodyMedium,
+              ),
 
-          /// Linked to the built-in InheritedWidget.
-          /// A Text widget to display the counter is in here.
-          /// ONLY THIS WIDGET is updated with every press of the button.
-          const CounterWidget(),
-        ],
-      ),
-    ),
-    floatingActionButton: FloatingActionButton(
-      key: const Key('+'),
-      // rebuilds only the Text widget containing the counter.
-      onPressed: () => con.onPressed(),
-      child: const Icon(Icons.add),
-    ),
-  );
+              /// Linked to the built-in InheritedWidget.
+              /// A Text widget to display the counter is in here.
+              /// ONLY THIS WIDGET is updated with every press of the button.
+              const CounterWidget(),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          key: const Key('+'),
+          // rebuilds only the Text widget containing the counter.
+          onPressed: () => con.onPressed(),
+          child: const Icon(Icons.add),
+        ),
+      );
 }
 
 /// Demonstrating the InheritedWidget's ability to spontaneously rebuild
@@ -197,7 +218,10 @@ class _CounterState extends State<CounterWidget> {
     con.dependOnInheritedWidget(context);
     return Text(
       con.data,
-      style: Theme.of(context).textTheme.headlineMedium,
+      style: Theme
+          .of(context)
+          .textTheme
+          .headlineMedium,
     );
   }
 }
@@ -206,6 +230,7 @@ class _CounterState extends State<CounterWidget> {
 class HomeController extends StateXController {
   /// Utilizing the Singleton pattern is a good programming practice
   factory HomeController() => _this ??= HomeController._();
+
   // This constructor is hidden with the underscore.
   HomeController._()
       : _model = Model(),
@@ -257,64 +282,66 @@ class HomeController extends StateXController {
   bool onAsyncError(FlutterErrorDetails details) => false;
 
   /// Provide a menu to this simple app.
-  PopupMenuButton<CountType> get popupMenuButton => PopupMenuButton<CountType>(
-    itemBuilder: (context) => [
-      PopupMenuItem(
-        value: CountType.integer,
-        child: Row(
-          children: [
-            if (_countType == CountType.integer)
-              const Icon(Icons.star_rounded, color: Colors.black),
-            const Text('Integers')
-          ],
-        ),
-      ),
-      PopupMenuItem(
-        value: CountType.alphabet,
-        child: Row(
-          children: [
-            if (_countType == CountType.alphabet)
-              const Icon(Icons.star_rounded, color: Colors.black),
-            const Text('Alphabet')
-          ],
-        ),
-      ),
-      PopupMenuItem(
-        value: CountType.prime,
-        child: Row(
-          children: [
-            if (_countType == CountType.prime)
-              const Icon(Icons.star_rounded, color: Colors.black),
-            const Text('Prime Numbers')
-          ],
-        ),
-      ),
-    ],
-    onSelected: (value) {
-      switch (value) {
-        case CountType.prime:
-          _countType = value;
-          break;
-        case CountType.alphabet:
-          _countType = value;
-          break;
-        default:
-        // In case the enumeration class was unknowingly changed
-        // Default to integer
-          _countType = CountType.integer;
-      }
-      // 'Refresh' the home screen to show the new count option
-      setState(() {});
+  PopupMenuButton<CountType> get popupMenuButton =>
+      PopupMenuButton<CountType>(
+        itemBuilder: (context) =>
+        [
+          PopupMenuItem(
+            value: CountType.integer,
+            child: Row(
+              children: [
+                if (_countType == CountType.integer)
+                  const Icon(Icons.star_rounded, color: Colors.black),
+                const Text('Integers')
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: CountType.alphabet,
+            child: Row(
+              children: [
+                if (_countType == CountType.alphabet)
+                  const Icon(Icons.star_rounded, color: Colors.black),
+                const Text('Alphabet')
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: CountType.prime,
+            child: Row(
+              children: [
+                if (_countType == CountType.prime)
+                  const Icon(Icons.star_rounded, color: Colors.black),
+                const Text('Prime Numbers')
+              ],
+            ),
+          ),
+        ],
+        onSelected: (value) {
+          switch (value) {
+            case CountType.prime:
+              _countType = value;
+              break;
+            case CountType.alphabet:
+              _countType = value;
+              break;
+            default:
+            // In case the enumeration class was unknowingly changed
+            // Default to integer
+              _countType = CountType.integer;
+          }
+          // 'Refresh' the home screen to show the new count option
+          setState(() {});
 //      var state = this.state; // The controller's current State object
-      // If you're not confident its the intended State class. Retrieve it.
+          // If you're not confident its the intended State class. Retrieve it.
 //      state = stateOf<MyHomePage>();
 //      state = ofState<_MyHomePageState>();
 //      state?.setState(() {});
-    },
-    offset: const Offset(0, 40),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-    elevation: 14,
-  );
+        },
+        offset: const Offset(0, 40),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 14,
+      );
 
   /// Like the State object, the Flutter framework will call this method exactly once.
   /// Only when the [StateX] object is first created.
@@ -639,6 +666,7 @@ class PrimeNumbers {
     }
     initPrimeNumbers(start, end);
   }
+
   final List<int> _numbers = [];
 
   int _cnt = 0;
@@ -672,6 +700,7 @@ class PrimeNumbers {
 class AppController extends StateXController {
   ///
   factory AppController() => _this ??= AppController._();
+
   AppController._();
 
   static AppController? _this;

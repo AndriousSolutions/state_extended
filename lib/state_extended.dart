@@ -67,7 +67,7 @@ part 'part08_inheritedwidget_statefulwidget.dart';
 part 'part09_builder_statefulwidget.dart';
 
 /// mixin on State: stateByType(), stateById(), rootCon, firstState, lastState
-part 'part10_map_of_statexs.dart';
+part 'part10_map_of_states.dart';
 
 /// class SetState: builder(context, rootState?._dataObj);
 part 'part11_set_builder.dart';

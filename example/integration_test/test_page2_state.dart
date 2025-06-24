@@ -28,7 +28,7 @@ Future<void> testPage2State(WidgetTester tester) async {
   expect(appState, isA<AppStateX>(), reason: _location);
 
   // You can retrieve one of the controllers State objects.
-  final StateX statePage2 = Controller().stateOf<Page2>()!;
+  final StateX statePage2 = Controller().stateOf<Page2>()! as StateX;
 
   statePage2.notifyClients();
 

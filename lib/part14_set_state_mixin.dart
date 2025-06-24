@@ -11,64 +11,69 @@ part of 'state_extended.dart';
 /// {@category State Object Controller}
 mixin SetStateMixin {
   /// Calls the 'current' State object's setState() function if any.
+  // ignore: invalid_use_of_protected_member
   void setState(VoidCallback fn) => state?.setState(fn);
 
   /// Retrieve the State object by its StatefulWidget. Returns null if not found.
-  StateX? stateOf<T extends StatefulWidget>() =>
+  State? stateOf<T extends StatefulWidget>() =>
       _stateWidgetMap.isEmpty ? null : _stateWidgetMap[_type<T>()];
 
   /// Supply the State object
-  StateX? get state => _stateX;
-  StateX? _stateX;
+  State? get state => _state;
 
-  final Set<StateX> _stateXSet = {};
-  final Map<Type, StateX> _stateWidgetMap = {};
+  // set state(covariant State? state) => _state = state;  // Shouldn't be public!!
+
+  State? _state;
+
+  final Set<State> _stateSet = {};
+  final Map<Type, State> _stateWidgetMap = {};
   bool _stateJustAdded = false;
 
   /// Add the provided State object to the Map object if
   /// it's the 'current' StateX object in _stateX.
-  void _addStateToSetter(covariant StateX stateX) {
-    if (_stateJustAdded && _stateX != null && _stateX == stateX) {
-      _stateWidgetMap.addAll({stateX.widget.runtimeType: stateX});
+  void _addStateToSetter(State state) {
+    if (_stateJustAdded && _state != null && _state == state) {
+      _stateWidgetMap.addAll({state.widget.runtimeType: state});
     }
   }
 
   /// Add to a Set object and assigned to as the 'current' StateX
   /// However, if was already previously added, it's not added
   /// again to a Set object and certainly not set the 'current' StateX.
-  bool _pushStateToSetter(covariant StateX? stateX) {
+  bool _pushStateToSetter(State? state) {
     //
-    if (stateX == null) {
+    if (state == null) {
       return false;
     }
     // Pushed onto State Set.
-    _stateJustAdded = _stateXSet.add(stateX);
+    _stateJustAdded = _stateSet.add(state);
     return _stateJustAdded;
   }
 
   /// This removes the most recent StateX object added
   /// to the Set of StateX state objects.
   /// Primarily internal use only: This disconnects the StateXController from that StateX object.
-  bool _popStateFromSetter([covariant StateX? stateX]) {
+  bool _popStateFromSetter([State? state]) {
     // Return false if null
-    if (stateX == null) {
+    if (state == null) {
       return false;
     }
 
     // Remove from the Map
-    _stateWidgetMap.removeWhere((key, value) => value == stateX);
+    _stateWidgetMap.removeWhere((key, value) => value == state);
+
     // Remove from the Set
-    final pop = _stateXSet.remove(stateX);
+    final pop = _stateSet.remove(state);
 
     // Was the 'popped' state the 'current' state?
-    if (stateX == _stateX) {
+    if (state == _state) {
       //
       _stateJustAdded = false;
 
-      if (_stateXSet.isEmpty) {
-        _stateX = null;
+      if (_stateSet.isEmpty) {
+        _state = null;
       } else {
-        _stateX = _stateXSet.last;
+        _state = _stateSet.last;
       }
     }
     return pop;
@@ -76,12 +81,12 @@ mixin SetStateMixin {
 
   /// Retrieve the StateX object of type T
   /// Returns null if not found
-  T? ofState<T extends StateX>() {
-    StateX? state;
-    if (_stateXSet.isEmpty) {
+  T? ofState<T extends State>() {
+    State? state;
+    if (_stateSet.isEmpty) {
       state = null;
     } else {
-      final stateList = _stateXSet.toList(growable: false);
+      final stateList = _stateSet.toList(growable: false);
       try {
         for (final item in stateList) {
           if (item is T) {
@@ -96,36 +101,11 @@ mixin SetStateMixin {
     return state == null ? null : state as T;
   }
 
-  /// To externally 'process' through the State objects.
-  /// Invokes [func] on each StateX possessed by this object.
-  bool forEachState(void Function(StateX state) func, {bool? reversed}) {
-    bool each = true;
-    Iterable<StateX> it;
-    // In reversed chronological order
-    if (reversed != null && reversed) {
-      it = _stateXSet.toList(growable: false).reversed;
-    } else {
-      it = _stateXSet.toList(growable: false);
-    }
-    for (final StateX state in it) {
-      try {
-        if (state.mounted && !state._deactivated) {
-          func(state);
-        }
-      } catch (e, stack) {
-        each = false;
-        // Record the error
-        state.recordErrorInHandler(e, stack);
-      }
-    }
-    return each;
-  }
-
   /// Return the first State object
-  StateX? get firstState => _stateXSet.isEmpty ? null : _stateXSet.first;
+  State? get firstState => _stateSet.isEmpty ? null : _stateSet.first;
 
   /// Return the 'latest' State object
-  StateX? get lastState => _stateXSet.isEmpty ? null : _stateXSet.last;
+  State? get lastState => _stateSet.isEmpty ? null : _stateSet.last;
 
   /// Returns the 'latest' context in the App.
   BuildContext? get lastContext => lastState?.context;
@@ -139,9 +119,67 @@ mixin SetStateMixin {
     return inDebugMode;
   }
 
+  /// To externally 'process' through the State objects.
+  /// Invokes [func] on each StateX possessed by this object.
+  bool forEachState(void Function(State state) func, {bool? reversed}) {
+    bool each = true;
+    Iterable<State> it;
+    // In reversed chronological order
+    if (reversed != null && reversed) {
+      it = _stateSet.toList(growable: false).reversed;
+    } else {
+      it = _stateSet.toList(growable: false);
+    }
+    for (final State state in it) {
+      try {
+        if (state.mounted) {
+          if (state is! StateX || !state._deactivated) {
+            func(state);
+          }
+        }
+      } catch (e, stack) {
+        each = false;
+        // Record the error
+        if (state is StateX) {
+          state.recordErrorInHandler(e, stack);
+        }
+      }
+    }
+    return each;
+  }
+
+  /// To externally 'process' through the StateX objects.
+  /// Invokes [func] on each StateX possessed by this object.
+  bool forEachStateX(void Function(StateX state) func, {bool? reversed}) {
+    bool each = true;
+    Iterable<State> it;
+    // In reversed chronological order
+    if (reversed != null && reversed) {
+      it = _stateSet.toList(growable: false).reversed;
+    } else {
+      it = _stateSet.toList(growable: false);
+    }
+    for (final State state in it) {
+      try {
+        if (state.mounted) {
+          if (state is StateX && !state._deactivated) {
+            func(state);
+          }
+        }
+      } catch (e, stack) {
+        each = false;
+        // Record the error
+        if (state is StateX) {
+          state.recordErrorInHandler(e, stack);
+        }
+      }
+    }
+    return each;
+  }
+
   /// Clean up memory in case not empty
   void disposeSetState() {
-    _stateXSet.clear();
+    _stateSet.clear();
     _stateWidgetMap.clear();
   }
 }

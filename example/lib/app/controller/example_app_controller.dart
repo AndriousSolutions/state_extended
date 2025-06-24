@@ -12,8 +12,10 @@ class ExampleAppController extends StateXController
   // TwoTabScaffoldController {
   /// Singleton design pattern is best for Controllers.
   factory ExampleAppController() => _this ??= ExampleAppController._();
+
   ExampleAppController._() : _appSettings = AppSettingsController();
   static ExampleAppController? _this;
+
   // The App's settings
   final AppSettingsController _appSettings;
 
@@ -29,7 +31,7 @@ class ExampleAppController extends StateXController
     // Only when NOT testing
     if (WidgetsBinding.instance is WidgetsFlutterBinding) {
       debugPrintEvents = _appSettings.printoutEvents;
-      state?.debugPrintEvents = _appSettings.printoutEvents;
+      statex?.debugPrintEvents = _appSettings.printoutEvents;
     }
 
     if (init) {
@@ -102,6 +104,7 @@ class ExampleAppController extends StateXController
   /// Page1 Key
   /// Changing it will recreate its State object.
   Key get page1Key => _page1Key ??= UniqueKey();
+
   set page1Key(Key? key) {
     _page1Key = key;
   }
@@ -116,14 +119,17 @@ class ExampleAppController extends StateXController
 
   /// Error in the App's initAsync()
   bool get initAppAsyncError => _appSettings.initAppAsyncError;
+
   set initAppAsyncError(bool? error) => _appSettings.initAppAsyncError = error;
 
   /// Error in builder()
   bool get errorInBuilder => _appSettings.errorInBuilder;
+
   set errorInBuilder(bool? splash) => _appSettings.errorInBuilder = splash;
 
   /// Error in catchAsyncError()
   bool get errorCatchAsyncError => _appSettings.errorCatchAsyncError;
+
   set errorCatchAsyncError(bool? error) =>
       _appSettings.errorCatchAsyncError = error;
 

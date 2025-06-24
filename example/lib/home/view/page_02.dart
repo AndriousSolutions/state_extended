@@ -42,12 +42,12 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
     assert(firstStateX is AppStateX, 'Should be a AppStateX object.');
 
     /// Retrieve the first State object
-    final firstState = controller?.state?.firstState;
+    final firstState = controller?.statex?.firstState;
 
     assert(firstState is State, 'Should be a State object.');
 
     /// Retrieve the latest, most recent State object.
-    final lastState = controller?.state?.lastState;
+    final lastState = controller?.statex?.lastState;
 
     assert(lastState is Page2State, 'Should be this State object');
 
@@ -55,7 +55,7 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
     /// Note, this State object's own context is not yet defined in initState()
     /// This is so important, there's a number of ways to get it.
     // ignore: unused_local_variable
-    BuildContext? lastContext = controller?.state?.lastState?.context;
+    BuildContext? lastContext = controller?.statex?.lastState?.context;
     lastContext = controller?.appStateX?.lastState?.context;
     lastContext = controller?.lastContext;
 

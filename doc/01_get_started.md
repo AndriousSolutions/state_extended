@@ -35,7 +35,7 @@ When it comes to building your interface with this State class, you've got optio
 3) When instantiating the StateX class, you can set the parameter, <i>useInherited</i>, to true.
    This means the built-in InheritedWidget will now be used.
    This also means the interface will only be built once and will then never change---
-   only the <b>stateSet</b>() function and <b>dependOnInheritedWidget</b>() function
+   only the <b>setBuilder</b>() function and <b>dependOnInheritedWidget</b>() function
    will dictate which widgets in the interface are updated when something is to change.
    Instead of building the interface from scratch again and again,
    only specified portions on the interface is rebuilt improving performance.
@@ -124,9 +124,7 @@ and an unlimited degree of abstraction.
 
 The first screenshot below is of the State class, <i>_MyHomePageState</i>, that displays the count.
 You'll see the count is encapsulated in yet another StatefulWidget called, <i>CounterWidget</i>.
-Such an arrangement would keep the count unchanged even if the <b>buildIn</b>() function
-used by this State class was instead the traditional <b>build</b>() function.
-The CounterWidget has got its own State class.
+Such an arrangement would keep the count unchanged. The CounterWidget has got its own State class.
 Conventionally, you would have to call the <b>setState</b>() function for that particular State
 object.
 

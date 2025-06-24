@@ -68,7 +68,7 @@ void testsStateXController(WidgetTester tester) {
   expect(appState.widget, isA<MyApp>(), reason: location);
 
   /// Returns the most recent BuildContext/Element created in the App
-  final BuildContext context = con.state!.lastState!.context;
+  final BuildContext context = con.statex!.lastState!.context;
 
   expect(context.widget, isA<Page1>(), reason: location);
 
@@ -114,16 +114,19 @@ void testsStateXController(WidgetTester tester) {
 
   // Loop through the Controller's State objects
   con.forEachState((state) {
-    for (final c in state.controllerList) {
+    for (final c in (state as StateX).controllerList) {
       if (c == con) {
       } else {}
     }
   });
 
-  // Loop through the Controller's State objects in reverse
-  con.forEachState((state) {
-    if (state.mounted) {}
-  }, reversed: true);
+  // Loop through the Controller's State objects
+  con.forEachStateX((state) {
+    for (final c in state.controllerList) {
+      if (c == con) {
+      } else {}
+    }
+  });
 }
 
 void _testAppController(WidgetTester tester) {

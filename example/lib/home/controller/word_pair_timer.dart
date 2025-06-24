@@ -153,23 +153,21 @@ class WordPairsTimer extends StateXController
 
   /// If the value of the object, obj, changes, this builder() is called again
   /// This allows spontaneous rebuilds here and there and not the whole screen.
-  Widget get wordPair {
-    return SetBuilder(builder: (context, obj) {
-      Widget widget;
-      if (obj is String) {
-        widget = Text(
-          obj,
-          style: TextStyle(
-            color: Colors.red,
-            fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
-          ),
-        );
-      } else {
-        widget = const SizedBox(height: 6);
-      }
-      return widget;
-    });
-  }
+  Widget get wordPair => SetBuilder(builder: (context, obj) {
+        Widget widget;
+        if (obj is String) {
+          widget = Text(
+            obj,
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
+            ),
+          );
+        } else {
+          widget = const SizedBox(height: 6);
+        }
+        return widget;
+      });
 
   // /// Alternate approach. See class _WordPair
   // Widget get wordPair => _WordPair(this);

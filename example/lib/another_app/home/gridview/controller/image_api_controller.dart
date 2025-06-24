@@ -28,8 +28,8 @@ class ImageAPIController extends StateXController with EventsControllerMixin {
   /// Change the single image
   void onTap() {
     LogController.log('onTap() in ${eventStateClassNameOnly(toString())}');
-    state?.setState(() {});
-    final controller = state?.controller;
+    statex?.setState(() {});
+    final controller = statex?.controller;
     if (controller is InheritController) {
       controller.onTap();
     }
@@ -37,7 +37,7 @@ class ImageAPIController extends StateXController with EventsControllerMixin {
 
   /// Change all three images
   void onDoubleTap() {
-    final controller = state?.controller;
+    final controller = statex?.controller;
     if (controller is InheritController) {
       controller.onDoubleTap();
       controller.newAnimals();

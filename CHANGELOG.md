@@ -1,9 +1,37 @@
-## 6.5.1
+## 7.0.0
 
 June 20, 2025
 
-- Removed setter, state, from SetStateMixin in part14_set_state_mixin.dart
-  Shouldn't be public.
+**BREAKING**
+Allow for great scalability taking advantage of polymorphism so to process
+StateX, any of its subtypes and flutter's State class itself.
+
+MapOfStateXsMixin in part10_map_of_states.dart
+
+- T? stateByType<T extends StateX>() --> T? stateByType<T extends State>()
+- StateX? stateById(String? id) --> State? stateById(String? id)
+- Map<String, StateX> statesById(List<String> ids) --> Map<String, State> statesById(List<String>
+  ids)
+- List<StateX> listStates(List<String> keys)  --> List<State> listStates(List<String> keys)
+- List<StateX> statesList({bool? reversed, StateX? remove}) -->
+  List<State> statesList({bool? reversed, State? remove})
+- StateX? get firstState --> State? get firstState
+- StateX? get lastState --> State? get lastState
+- bool forEachState(void Function(StateX state) func, {bool? reversed, StateX? remove}) -->
+  bool forEachState(void Function(State state) func, {bool? reversed, State? remove})
+- New function: forEachStateX(void Function(StateX state) func, {bool? reversed, State? remove})
+
+MapOfStateXsMixin in part14_set_state_mixin.dart
+
+- StateX? stateOf<T extends StatefulWidget>() --> State? stateOf<T extends StatefulWidget>()
+- StateX? get state --> State? get state
+- set state(covariant StateX? state) -->o set state(covariant State? state)
+- T? ofState<T extends StateX>() --> T? ofState<T extends State>()
+- StateX? get firstState --> State? get firstState
+- StateX? get lastState --> State? get lastState
+- bool forEachState(void Function(StateX state) func, {bool? reversed}) -->
+  bool forEachState(void Function(State state) func, {bool? reversed})
+- New function: forEachStateX(void Function(StateX state) func, {bool? reversed, State? remove})
 
 ## 6.5.0
 
