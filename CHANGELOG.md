@@ -1,3 +1,10 @@
+## 7.1.0
+
+June 26, 2025
+
+- Switched out flutter_test.dart with package, test;
+  import 'package:test/test.dart' show TestFailure;
+
 ## 7.0.1
 
 June 25, 2025
@@ -14,7 +21,7 @@ June 25, 2025
 June 20, 2025
 
 **BREAKING**
-Allow for great scalability taking advantage of polymorphism so to process
+Allow for greater scalability taking advantage of polymorphism so to process
 StateX, any of its subtypes and flutter's State class itself.
 
 MapOfStateXsMixin in part10_map_of_states.dart

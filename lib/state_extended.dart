@@ -32,7 +32,9 @@ export 'package:flutter/services.dart' show PredictiveBackEvent;
 import 'route_observer_states.dart';
 
 /// For testing
-import 'package:flutter_test/flutter_test.dart' show TestFailure;
+// import 'package:flutter_test/flutter_test.dart' show TestFailure;
+
+import 'package:test/test.dart' show TestFailure;
 
 /// Supply to user
 export 'route_observer_states.dart';

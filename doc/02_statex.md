@@ -7,11 +7,12 @@ a [State Object Controller](https://pub.dev/documentation/state_extended/latest/
 powerful capability!
 
 This class provides the <b>initAsync</b>() function to perform any asynchronous operations before
-displaying its contents.
-It also provides the <b>dependOnInheritedWidget</b>() function to assign a widget as a 'dependency'
-to the StateX's built-in InheritedWidget.
-It then uses its <b>notifyClients</b>() function to spontaneously rebuilt only those widgets. Very
+displaying its contents. It also provides the <b>dependOnInheritedWidget</b>() function to assign a
+widget as a 'dependency'
+to the StateX's built-in InheritedWidget. It then uses its <b>notifyClients</b>() function to
+spontaneously rebuilt only those widgets. Very
 powerful!
+
 <table>
   	<caption>Contents</caption>
     <tbody>
@@ -27,6 +28,7 @@ powerful!
 </table>
 The StateX class gives you five new functions and features:
 
+
 <ul>
    <li>The State Object Controller separates the interface (i.e. the State object's <b>build</b>() function) from everything else:
    <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/StateXController-class.html">StateXController</a></b></li>
@@ -41,6 +43,7 @@ The StateX class gives you five new functions and features:
    <li>A function that runs if any error occurs. Allows you to 'clean up' and fail gracefully:
    <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/StateXonErrorMixin/onError.html">onError</a></b>()</li>
 </ul>
+
 
 <h3 id="code">Control Your Code</h3>
 All your ‘mutable’ code should go into your State Object Controller.
@@ -83,25 +86,26 @@ controllers can be added.
 
 <h3 id="sync">Sync The State</h3>
 
-<p>There's now a means to deal with asynchronous operations in the State object before rendering its interface.
-In other packages, the approach has been to execute such operations even before the app
-begins---a disjointed approach. The operation is not done by the actual State object (the actual screen) where
-it's relevant or required. However, Flutter has always had the FutureBuilder widget to make this possible.
-A FutureBuilder widget is built into the StateX class, and has its <b>initAsync</b>() function to then
-perform such asynchronous operations. As a result, when such a State object is called,
-it can wait for its asynchronous operations to complete before proceeding. As easy as that.</p>
+There's now a means to deal with asynchronous operations in the State object before rendering its
+interface. A common approach has been to execute such operations even before the app
+begins---a disjointed approach. The operation is not done by the actual State object (the actual
+screen) where it's relevant or required. However, Flutter has always had the FutureBuilder widget to
+make this
+possible. A FutureBuilder widget is built into the StateX class, and has its <b>initAsync</b>()
+function to
+then perform such asynchronous operations. As a result, when such a State object is called,
+it can wait for its asynchronous operations to complete before proceeding. As easy as that.
 
 Below are three gif files. The first one depicts what a user will see more often than not when
-starting up an app written with this package. There's always a remote database to open or
-web services
-to connect to and this takes a little time. You don't want your user staring at a blank screen.
-They'll think
-the app is frozen! A spinner is displayed indicating the app is indeed running. The second gif
-file depicts twelve separate StateX objects waiting to continue.
-Each has its own individual asynchronous operation loading a animal graphic from some REST api
-somewhere.
-The last gif file shows the whole startup process for this particular app.
+starting up an app written with this package. There's always a remote database to open or web
+services to connect to and this takes a little time. You don't want your user staring at a blank
+screen. They'll think the app is frozen! A spinner is displayed indicating the app is indeed
+running. The second gif
+file depicts twelve separate StateX objects waiting to continue. Each has its own individual
+asynchronous operation loading a animal graphic from some REST api somewhere. The last gif file
+shows the whole startup process for this particular app.
 It carry's on and shows you they are indeed individual operations ending with a different picture.
+
 <div>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/6ccff53b-da0e-41b9-aace-81dc95111254"><img src="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/6ccff53b-da0e-41b9-aace-81dc95111254" width="171" height="357"></a>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/25ab69de-b9eb-4c8c-a2d0-9598152bf360"><img src="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/25ab69de-b9eb-4c8c-a2d0-9598152bf360" width="171" height="357"></a>
@@ -122,17 +126,16 @@ widget would produce the iOS-style activity indicators instead. Flutter is a cro
 
 <h3 id="control">Control The Sync</h3>
 
-<p>Those three screens above are from the example app supplied with this package.
-Yes, there are twelve separate StateX objects on that one screen each loading an animal image. 
-Actually its their own individual State Object Controller that's performing the 
-asynchronous download. Above, is a screenshot of that controller's own <b>initAsync</b>() function. 
-While each controller is calling its <b>_loadImage</b>() function, its associated StateX object will 
-quietly wait with its indicator spinning away on the screen. Very nice.</p>
+Those three screens above are from the example app supplied with this package.
+Yes, there are twelve separate StateX objects on that one screen each loading an animal image.
+Actually its their own individual State Object Controller that's performing the
+asynchronous download. Above, is a screenshot of that controller's own <b>initAsync</b>() function.
+While each controller is calling its <b>_loadImage</b>() function, its associated StateX object will
+quietly wait with its indicator spinning away on the screen. Very nice.
 
 The screenshot on the right is another **initAsync**() function from another app altogether.
 It demonstrates there can be a number of asynchronous operations performed before an app can
-continue.
-This particular app involves the authentication of the user for example.
+continue. This particular app involves the authentication of the user for example.
 If not already logged in a login screen will appear. This function is in another controller
 and that controller calls yet another controller to run its own **initAsync**().
 See how you're able to separate distinct asynchronous operations
@@ -170,7 +173,7 @@ but look how easy this is implemented in the screenshot below.
   <img align="right" src="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/9557a498-2a8b-40a4-8d49-189b5120bde4" width="171" height="357">
 </div>
 
-| [counter_app.dart](https://github.com/AndriousSolutions/fluttery_framework/blob/4dc676193914808583f111006334a91a08475b7f/example/lib/src/home/view/counter_app.dart#L41) | 
+| [counter_app.dart](https://github.com/AndriousSolutions/fluttery_framework/blob/4dc676193914808583f111006334a91a08475b7f/example/lib/src/home/view/counter_app.dart#L41) |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 <p>The <b>setBuilder</b>() function found will allow for this immediate
@@ -183,7 +186,7 @@ rebuilt, all the pictures would change. Not very effective.</p>
 
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/fa7f226f-7624-49a0-9d5d-598bdb936ed8"><img src="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/fa7f226f-7624-49a0-9d5d-598bdb936ed8" width="50%" height="60%"></a>
 
-| [counter_app.dart](https://github.com/AndriousSolutions/fluttery_framework/blob/4dc676193914808583f111006334a91a08475b7f/example/lib/src/home/grid_app_example/gridview/view/image_api.dart#L38) | 
+| [counter_app.dart](https://github.com/AndriousSolutions/fluttery_framework/blob/4dc676193914808583f111006334a91a08475b7f/example/lib/src/home/grid_app_example/gridview/view/image_api.dart#L38) |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 The screenshot above depicts one of the three widgets being assigned as a dependent to
