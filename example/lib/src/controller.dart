@@ -3,9 +3,12 @@
 // found in the LICENSE file.
 //
 export 'package:state_extended/state_extended.dart' show StateXController;
+
 //
 export '/another_app/_controller_another_app.dart';
+
 //
-export '/app/_controller_app.dart';
+export '/app/controller_app.dart';
+
 //
-export '/home/controller/_controller_home.dart';
+export '/home/controller_home.dart';

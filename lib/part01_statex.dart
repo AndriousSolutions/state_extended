@@ -997,15 +997,16 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
   }
 
-  /// Apps in this state should assume that they may be [pausedAppLifecycleState] at any time.
-  @override
-  void inactiveAppLifecycleState() {
-    // Don't call deactivate() if in testing
-    if (inWidgetsFlutterBinding) {
-      deactivate();
-    }
-    super.inactiveAppLifecycleState();
-  }
+  /// Proven too unreliable to call deactivate. gp 25Jun2025
+  // /// Apps in this state should assume that they may be [pausedAppLifecycleState] at any time.
+  // @override
+  // void inactiveAppLifecycleState() {
+  //   // Don't call deactivate() if in testing
+  //   if (inWidgetsFlutterBinding) {
+  //     deactivate();
+  //   }
+  //   super.inactiveAppLifecycleState();
+  // }
 
   /// State object was in 'inactive' state
   bool get inactiveAppLifecycle => _inactiveAppLifecycle;
@@ -1040,32 +1041,33 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   bool get pausedAppLifecycle => _pausedAppLifecycle;
   bool _pausedAppLifecycle = false;
 
-  /// The application is visible and responding to user input.
-  @override
-  void resumedAppLifecycleState() {
-    //
-    try {
-      // runZonedGuarded<void>(() {
-      // Don't call activate() if in testing
-      if (inWidgetsFlutterBinding) {
-        if (_deactivated) {
-          activate();
-        }
-      }
-      super.resumedAppLifecycleState();
-    } catch (e, stack) {
-      // }, (error, stackTrace) {
-      // An error in the error handler. Record the error
-      recordErrorInHandler(e, stack);
-      // Record error in device's log
-      _logPackageError(
-        e,
-        library: 'part01_statex.dart',
-        description: 'Error in resumedAppLifecycleState()',
-      );
-    }
-    // });
-  }
+  /// Proven too unreliable to call activate. gp 25Jun2025
+  // /// The application is visible and responding to user input.
+  // @override
+  // void resumedAppLifecycleState() {
+  //   //
+  //   try {
+  //     // runZonedGuarded<void>(() {
+  //     // Don't call activate() if in testing
+  //     if (inWidgetsFlutterBinding) {
+  //       if (_deactivated) {
+  //         activate();
+  //       }
+  //     }
+  //     super.resumedAppLifecycleState();
+  //   } catch (e, stack) {
+  //     // }, (error, stackTrace) {
+  //     // An error in the error handler. Record the error
+  //     recordErrorInHandler(e, stack);
+  //     // Record error in device's log
+  //     _logPackageError(
+  //       e,
+  //       library: 'part01_statex.dart',
+  //       description: 'Error in resumedAppLifecycleState()',
+  //     );
+  //   }
+  //   // });
+  // }
 
   /// State object was in 'resumed' state
   bool get resumedAppLifecycle => _resumedAppLifecycle;

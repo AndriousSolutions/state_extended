@@ -145,7 +145,7 @@ class _MyHomePageState extends StateX<MyHomePage> {
     appState = con?.state! as AppStateX;
 
     /// Another way to retrieve the 'app level' State object
-    appState = con?.state!.firstState as AppStateX;
+    appState = con?.statex!.firstState as AppStateX;
 
     /// You can retrieve by type as well
     appState = stateByType<AppStateX>()!;
@@ -350,12 +350,12 @@ class HomeController extends StateXController {
     super.initState();
 
     /// A State object can reference it's 'current' State object controller.
-    var thisController = state?.controller;
+    var thisController = statex?.controller;
 
     /// The same controller can be retrieved by its unique identifier if you know it.
     /// You then don't have to know the type or the type is private with a leading underscore.
     /// Note, it has to be a Controller explicitly added to the State object at some time.
-    thisController = state?.controllerById(thisController?.identifier);
+    thisController = statex?.controllerById(thisController?.identifier);
 
     assert(thisController == this,
     'Just demonstrating the means to retrieve a Controller.');
@@ -366,7 +366,7 @@ class HomeController extends StateXController {
     var stateObj = stateOf<MyHomePage>();
 
     /// Retrieve the 'app level' State object
-    final appState = rootState;
+    final appState = appStateX;
 
     assert(appState is _MyAppState,
     "Every Controller has access to the 'first' State object.");
@@ -542,7 +542,7 @@ class HomeController extends StateXController {
   /// another activity is focused, such as a split-screen app, a phone call,
   /// a picture-in-picture app, a system dialog, or another window.
   ///
-  /// Apps in this state should assume that they may be [pausedLifecycleState] at any time.
+  /// Apps in this state should assume that they may be ['pausedLifecycleState'] at any time.
   @override
   void inactiveAppLifecycleState() {
     super.inactiveAppLifecycleState();
@@ -710,6 +710,7 @@ class AppController extends StateXController {
   /// e.g. Opening Databases, accessing Web servers, etc.
   @override
   Future<bool> initAsync() async {
+    await super.initAsync();
     // Simply wait for 10 seconds at startup.
     /// In production, this is where databases are accessed, web services opened, login attempts, etc.
     return Future.delayed(const Duration(seconds: 10), () {

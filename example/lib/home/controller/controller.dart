@@ -15,6 +15,7 @@ class Controller extends StateXController
   /// It's a good practice and follow the Singleton pattern.
   /// There's on need for more than one instance of this particular class.
   factory Controller([StateX? state]) => _this ??= Controller._(state);
+
   Controller._(StateX? state)
       : _model = Model(),
         super(state) {
@@ -23,6 +24,7 @@ class Controller extends StateXController
     /// Showing how some logic is hidden from the interface.
     _appCon = ExampleAppController();
   }
+
   static Controller? _this;
 
   final Model _model;
@@ -32,6 +34,7 @@ class Controller extends StateXController
   /// Page1 Key
   /// Changing it will recreate its State object.
   Key get page1Key => _appCon.page1Key;
+
   set page1Key(Key? key) => _appCon.page1Key = key;
 
   /// Note, the count comes from a separate class, _Model.
@@ -39,6 +42,7 @@ class Controller extends StateXController
 
   /// A flag indicating if an InheritedWidget is to be used.
   bool get useInherited => _useInherited;
+
   set useInherited(bool? use) {
     // Allow for null to mistakenly be passed
     if (use != null) {
@@ -76,8 +80,9 @@ class Controller extends StateXController
       // Page1 creates a new key and so a new State object
       page1Key = null;
 
-      // Both access the 'first' StateX object; the App's State object.
+      // Both access the 'first' State object; the App's State object.
       firstState?.setState(() {});
+      // The same thing
       appStateX?.setState(() {});
       //
       LogController.log(
@@ -87,6 +92,7 @@ class Controller extends StateXController
 
   /// A flag indicating if an ChangeNotifier is to be used.
   bool get useChangeNotifier => _useChangeNotifier;
+
   set useChangeNotifier(bool? use) {
     _useChangeNotifier = use ?? false;
     if (_useChangeNotifier) {
@@ -184,6 +190,8 @@ class Controller extends StateXController
     setState(() {});
     // Every StateXController references its 'current' State object
     state?.setState(() {});
+    // The same thing
+    statex?.setState(() {});
 
     // Retrieve the StateX object of type Page2State. Null if not found.
     final page2State = ofState<Page2State>();

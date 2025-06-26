@@ -116,7 +116,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   /// Returns null if empty.
   con = stateObj.lastCon;
 
-  expect(con, isA<YetAnotherController>(), reason: _location);
+  expect(con, isA<AppSettingsController>(), reason: _location);
 
   /// Test the forEach() function encountering an error
   each = stateObj.forEach((con) {

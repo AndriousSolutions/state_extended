@@ -1,3 +1,14 @@
+## 7.0.1
+
+June 25, 2025
+
+- Commented out code in part01_statex.dart:
+  Proven unreliable to call deactivate() in inactiveAppLifecycleState()
+  and activate() in resumedAppLifecycleState()
+- getter appStateX in part02_statex_controller.dart:
+  if (firstState != null && firstState is AppStateX)
+- Introduced Drawer to example app supplying development tools.
+
 ## 7.0.0
 
 June 20, 2025

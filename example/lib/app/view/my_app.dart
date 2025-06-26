@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/rendering.dart' as debug;
+
 import '/src/controller.dart';
-
 import '/src/model.dart';
-
 import '/src/view.dart';
 
 /// To be passed to the runApp() function.
@@ -29,7 +29,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
   //
   _MyAppState()
-      : super(
+      : dev = DevTools(),
+        super(
           controller: ExampleAppController(),
           controllers: [
             AnotherController(),
@@ -47,11 +48,25 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
     MyApp.app.appState = this;
   }
 
+  final DevTools dev;
+
   /// Try these different 'build' functions so to get access
   /// to a built-in FutureBuilder and or an InheritedWidget.
 
   @override
   Widget build(BuildContext context) {
+    //
+    assert(() {
+      // Highlights UI while debugging.
+      debug.debugPaintSizeEnabled = dev.debugPaintSizeEnabled;
+      debug.debugPaintBaselinesEnabled = dev.debugPaintBaselinesEnabled;
+      debug.debugPaintPointersEnabled = dev.debugPaintPointersEnabled;
+      debug.debugPaintLayerBordersEnabled = dev.debugPaintLayerBordersEnabled;
+      debug.debugRepaintRainbowEnabled = dev.debugRepaintRainbowEnabled;
+      debug.debugRepaintTextRainbowEnabled = dev.debugRepaintTextRainbowEnabled;
+      return true;
+    }());
+
     return super.build(context);
     // Comment out the super.build() and stay with the traditional Flutter approach.
     // ignore: dead_code
@@ -59,7 +74,19 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
     return MaterialApp(
       color: Colors.blue,
       theme: con.themeData,
-      home: Page1(key: con.page1Key),
+      home: Scaffold(
+        appBar: AppBar(),
+        drawer: const Drawer(child: DevToolsSettings()),
+        onDrawerChanged: (isOpened) {
+          if (isOpened) {
+            WordPairsTimer().deactivate();
+          } else {
+            WordPairsTimer().activate();
+          }
+        },
+        // A new key will recreate the State object
+        body: Page1(key: con.page1Key),
+      ),
     );
   }
 
@@ -73,7 +100,19 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
     return MaterialApp(
       color: Colors.blue,
       theme: con.themeData,
-      home: Page1(key: con.page1Key),
+      home: Scaffold(
+        appBar: AppBar(),
+        drawer: const Drawer(child: DevToolsSettings()),
+        onDrawerChanged: (isOpened) {
+          if (isOpened) {
+            WordPairsTimer().deactivate();
+          } else {
+            WordPairsTimer().activate();
+          }
+        },
+        // A new key will recreate the State object
+        body: Page1(key: con.page1Key),
+      ),
     );
   }
 
@@ -91,12 +130,25 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
     }
     //
     return MaterialApp(
-      navigatorObservers:
-          RouteObserverStates.list, // State object aware of route changes
+      debugShowMaterialGrid: dev.debugShowMaterialGrid,
+      showPerformanceOverlay: dev.showPerformanceOverlay,
+      showSemanticsDebugger: dev.showSemanticsDebugger,
+      debugShowCheckedModeBanner: dev.debugShowCheckedModeBanner,
+      navigatorObservers: RouteObserverStates.list,
       color: Colors.blue,
       theme: con.themeData,
-      // A new key will recreate the State object
-      home: Page1(key: con.page1Key),
+      home: Scaffold(
+        appBar: AppBar(),
+        drawer: const Drawer(child: DevToolsSettings()),
+        onDrawerChanged: (isOpened) {
+          if (isOpened) {
+            WordPairsTimer().deactivate();
+          } else {
+            WordPairsTimer().activate();
+          }
+        }, // A new key will recreate the State object
+        body: Page1(key: con.page1Key),
+      ),
     );
   }
 
@@ -151,4 +203,17 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
   void onAsyncError(errorDetails) {
     logErrorDetails(errorDetails);
   }
+
+  /// ========================================= Unnecessary overrides but helpful to you
+
+  /// Using your favorite IDE, place a breakpoint in deactivate()
+  ///  and get an appreciation of what's involved in closing a screen
+  @override
+  void deactivate() {
+    super.deactivate();
+  }
+
+  @override
+  // ignore: unnecessary_overrides
+  void setState(VoidCallback fn, {bool? log}) => super.setState(fn, log: log);
 }

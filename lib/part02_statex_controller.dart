@@ -133,8 +133,8 @@ class StateXController
   @override
   AppStateX? get appStateX {
     if (_appStateX == null) {
-      if (firstState is AppStateX?) {
-        _appStateX = firstState as AppStateX?;
+      if (firstState != null && firstState is AppStateX) {
+        _appStateX = firstState as AppStateX;
       } else {
         _appStateX = lastContext?.findAncestorStateOfType<AppStateX>();
       }

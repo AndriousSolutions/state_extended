@@ -5,4 +5,4 @@
 // Flutter's Shared Preferences
 export 'package:shared_preferences/shared_preferences.dart';
 
-export '/home/model/_model_home.dart';
+export '/home/model_home.dart';

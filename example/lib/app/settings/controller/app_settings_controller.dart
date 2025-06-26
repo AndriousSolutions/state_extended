@@ -9,6 +9,7 @@ class AppSettingsController extends StateXController
   factory AppSettingsController() => _this ??= AppSettingsController._();
 
   AppSettingsController._();
+
   static AppSettingsController? _this;
 
   ///
@@ -48,6 +49,7 @@ class AppSettingsController extends StateXController
   /// Delay the initAsync() for a time
   bool get initAsyncDelay => _initAsyncDelay;
   bool _initAsyncDelay = false;
+
   set initAsyncDelay(bool? delay) {
     if (delay != null) {
       _initAsyncDelay = delay;
@@ -57,6 +59,7 @@ class AppSettingsController extends StateXController
   /// Error in push button
   bool get errorButton => _errorButton;
   bool _errorButton = false;
+
   set errorButton(bool? error) {
     if (error != null) {
       _errorButton = error;
@@ -66,6 +69,7 @@ class AppSettingsController extends StateXController
   /// Error in builder()
   bool get errorInBuilder => _errorInBuilder;
   bool _errorInBuilder = false;
+
   set errorInBuilder(bool? error) {
     if (error != null) {
       _errorInBuilder = error;
@@ -75,6 +79,7 @@ class AppSettingsController extends StateXController
   /// Error in the App's initAsync()
   bool get initAppAsyncError => _initAppAsyncError;
   bool _initAppAsyncError = false;
+
   set initAppAsyncError(bool? error) {
     if (error != null) {
       _initAppAsyncError = error;
@@ -84,6 +89,7 @@ class AppSettingsController extends StateXController
   /// Error in initAsync()
   bool get initAsyncError => _initAsyncError;
   bool _initAsyncError = false;
+
   set initAsyncError(bool? error) {
     if (error != null) {
       _initAsyncError = error;
@@ -93,6 +99,7 @@ class AppSettingsController extends StateXController
   /// initAsync() return false for failure to initialize successfully
   bool get initAsyncFailed => _initAsyncFailed;
   bool _initAsyncFailed = false;
+
   set initAsyncFailed(bool? error) {
     if (error != null) {
       _initAsyncFailed = error;
@@ -102,6 +109,7 @@ class AppSettingsController extends StateXController
   /// Error in errorCatchAsyncError()
   bool get errorCatchAsyncError => _errorCatchAsyncError;
   bool _errorCatchAsyncError = false;
+
   set errorCatchAsyncError(bool? error) {
     if (error != null) {
       _errorCatchAsyncError = error;
@@ -111,6 +119,7 @@ class AppSettingsController extends StateXController
   /// Use Material 3 or Material 2
   bool get useMaterial3 => _useMaterial3;
   bool _useMaterial3 = false;
+
   set useMaterial3(bool? use) {
     if (use != null) {
       _useMaterial3 = use;
@@ -120,16 +129,11 @@ class AppSettingsController extends StateXController
   /// Use debugPrint to print out to the console when events fire
   bool get printoutEvents => _printoutEvents;
   bool _printoutEvents = false;
+
   set printoutEvents(bool? use) {
     if (use != null) {
       _printoutEvents = use;
     }
-  }
-
-  /// Call the setState() functions
-  void setSettingState() {
-    setState(() {});
-    appStateX?.setState(() {});
   }
 
   ///

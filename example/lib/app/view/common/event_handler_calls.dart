@@ -18,6 +18,9 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
 
   String? _cName;
 
+  /// Using your favorite IDE, place breakpoints in these Flutter functions
+  /// below and see the 'inner workings' in action:
+
   @override
   void initState() {
     // Have the debugPrint() function fire in the many event handlers

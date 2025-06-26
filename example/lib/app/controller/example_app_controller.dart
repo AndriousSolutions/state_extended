@@ -27,6 +27,9 @@ class ExampleAppController extends StateXController
     // Retrieve the Settings ASAP
     var init = await _appSettings.initAsync();
 
+    // Attain a reference to the App's State object
+    _appSettings.addState(statex);
+
     // Have the debugPrint() function fire in the many event handlers
     // Only when NOT testing
     if (WidgetsBinding.instance is WidgetsFlutterBinding) {

@@ -10,8 +10,8 @@ This class provides the <b>initAsync</b>() function to perform any asynchronous 
 displaying its contents.
 It also provides the <b>dependOnInheritedWidget</b>() function to assign a widget as a 'dependency'
 to the StateX's built-in InheritedWidget.
-It then uses its <b>notifyClients</b>() function to spontaneously rebuilt only those widgets that
-have changed.
+It then uses its <b>notifyClients</b>() function to spontaneously rebuilt only those widgets. Very
+powerful!
 <table>
   	<caption>Contents</caption>
     <tbody>
@@ -68,18 +68,18 @@ instantiated right in the State object and then referenced here and there in the
 build</b>() function.
 Thus providing the data and the event handling. For example, the first screenshot below is of the '
 counter example app'
-that accompanies the Flutter Framework package. The second screenshot shows how a number of
+that uses this package. The second screenshot shows how a number of
 controllers can be added.
 
 ###### (A controller and its use are highlighted by red arrows.)
 
 <div>
-<a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/9e1771be-ca42-453a-815f-67b3c37b2ba9"><img src="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/9e1771be-ca42-453a-815f-67b3c37b2ba9" width="48%" height="60%"></a>
-<a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/cc3f2c03-916a-4169-b141-969d6beeceea"><img align="right" src="https://github.com/AndriousSolutions/fluttery_framework/assets/32497443/cc3f2c03-916a-4169-b141-969d6beeceea" width="48%" height="60%"></a>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/b3284020-dddb-4bd6-b2fb-638853c6bc15"><img src="https://github.com/user-attachments/assets/b3284020-dddb-4bd6-b2fb-638853c6bc15" width="48%" height="60%"></a>
+<a target="_blank" rel="noopener noreferrer" href="(https://github.com/user-attachments/assets/0215aa49-282c-49b1-b567-0cfda9325473"><img align="right" src="(https://github.com/user-attachments/assets/0215aa49-282c-49b1-b567-0cfda9325473" width="48%" height="60%"></a>
 </div>
 
-| [_MyHomePageState](https://gist.github.com/Andrious/c3896795659c82daf5c78e427ba030bf#file-statex_counter_app-dart-L35) | [Page1State](https://github.com/AndriousSolutions/fluttery_framework/blob/master/example/lib/src/home/view/counter/view/page_01.dart#L19) |
-|:-----------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------:|
+| [_MyHomePageState](https://gist.github.com/Andrious/da8348b60f81bb5e49c5dd5623d88b4c#file-statex_readme_example_app-dart-L26) | [Page1State](https://github.com/AndriousSolutions/state_extended/blob/cbd2af6383e0226c7013cf205cc0a7f0bf6216a8/example/lib/home/view/page_01.dart#L19) |
+|:------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 <h3 id="sync">Sync The State</h3>
 
@@ -122,7 +122,7 @@ widget would produce the iOS-style activity indicators instead. Flutter is a cro
 
 <h3 id="control">Control The Sync</h3>
 
-<p>Those three screens above are from yet another example app supplied with the Flutter Framework.
+<p>Those three screens above are from the example app supplied with this package.
 Yes, there are twelve separate StateX objects on that one screen each loading an animal image. 
 Actually its their own individual State Object Controller that's performing the 
 asynchronous download. Above, is a screenshot of that controller's own <b>initAsync</b>() function. 
