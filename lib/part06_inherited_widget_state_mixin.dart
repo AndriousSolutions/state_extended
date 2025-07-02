@@ -19,7 +19,7 @@ mixin InheritedWidgetStateMixin on State {
 
   InheritedElement? _inheritedElement;
 
-  // Widget passed to the InheritedWidget.
+  // Widget returned by buildF() function
   Widget? _child;
 
   /// Called by [build]. Calls built-in [InheritedWidget]
@@ -32,7 +32,7 @@ mixin InheritedWidgetStateMixin on State {
     } else {
       _child = builder(context);
     }
-    return _useInherited
+    return _useInherited // InheritedWidget must be called again and again. gp
         ? StateXInheritedWidget(
             state: this as StateX,
             child: _child ?? const SizedBox.shrink(),

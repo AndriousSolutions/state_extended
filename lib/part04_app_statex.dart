@@ -82,9 +82,9 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   Widget buildF(BuildContext context) {
     _buildFOverridden = false;
-    _inheritedState?.setState(() {}); // calls App's InheritedWidget
     _builderState?.setState(() {}); // calls builder()
-    return _InheritedWidgetStatefulWidget(this);
+    _inheritedState?.setState(() {}); // calls App's InheritedWidget
+    return _InheritedWidgetStatefulWidget(this); // calls App's InheritedWidget
   }
 
   /// Clean up memory

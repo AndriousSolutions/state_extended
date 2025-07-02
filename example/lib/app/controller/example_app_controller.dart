@@ -13,11 +13,17 @@ class ExampleAppController extends StateXController
   /// Singleton design pattern is best for Controllers.
   factory ExampleAppController() => _this ??= ExampleAppController._();
 
-  ExampleAppController._() : _appSettings = AppSettingsController();
+  ExampleAppController._()
+      : _appSettings = AppSettingsController(),
+        _controller = Controller();
+
   static ExampleAppController? _this;
 
   // The App's settings
   final AppSettingsController _appSettings;
+
+  // The Home screen's controller
+  final Controller _controller;
 
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Initialize asynchronous items essential to the Mobile Applications.
@@ -106,13 +112,9 @@ class ExampleAppController extends StateXController
 
   /// Page1 Key
   /// Changing it will recreate its State object.
-  Key get page1Key => _page1Key ??= UniqueKey();
+  Key? get page1Key => _controller.page1Key;
 
-  set page1Key(Key? key) {
-    _page1Key = key;
-  }
-
-  Key? _page1Key;
+  set page1Key(Key? key) => _controller.page1Key = key;
 
   /// Supply a delay at startup
   bool get initAsyncDelay => _appSettings.initAsyncDelay;

@@ -115,8 +115,11 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
                       // Retrieve State object by its StatefulWidget (will have to cast)
                       state = con.stateOf<Page1>() as Page1State;
                       state.count++;
-                      state.setState(() {});
-                      state.notifyClients();
+                      state.setState(() {}); // Does not call notifyListeners();
+                      (con as Controller).page1Count = state.count;
+                      con.setState(() {});
+                      // Instead of all this, you could just call one method:
+                      // (con as Controller).onPressedActionButton();
                     },
                     child: const Text('Page 1 Counter'),
                   ),
@@ -235,7 +238,11 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
     /// Retrieve State object by its StatefulWidget (will have to cast)
     state = con.stateOf<Page1>() as Page1State;
     state.count++;
-    state.setState(() {});
+    state.setState(() {}); // Does not call notifyListeners();
+    (con as Controller).page1Count = state.count;
+    con.setState(() {});
+    // Instead of all this, you could just call one method:
+    // (con as Controller).onPressedActionButton();
   }
 }
 

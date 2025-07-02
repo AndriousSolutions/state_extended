@@ -37,7 +37,7 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
             YetAnotherController(),
           ],
 
-          /// Demonstrate passing an 'object' down the Widget tree much like
+          /// Passing an 'object' down the Widget tree much like
           /// how it's done using Scoped Model, but better.
           object: 'Hello!',
           // debugPrintEvents: true, // Print event function calls to the console
@@ -66,9 +66,8 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
       debug.debugRepaintTextRainbowEnabled = dev.debugRepaintTextRainbowEnabled;
       return true;
     }());
-
+    // Comment out the super.build() and use the traditional Flutter approach.
     return super.build(context);
-    // Comment out the super.build() and stay with the traditional Flutter approach.
     // ignore: dead_code
     final con = controller as ExampleAppController;
     return MaterialApp(
@@ -84,34 +83,7 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
             WordPairsTimer().activate();
           }
         },
-        // A new key will recreate the State object
-        body: Page1(key: con.page1Key),
-      ),
-    );
-  }
-
-  @override
-  Widget buildF(BuildContext context) {
-    return super.buildF(context);
-    // Comment out super.buildF() and see how the initAsync() uses a FutureBuilder
-    // to perform asynchronous operations while the State object starts up.
-    // ignore: dead_code
-    final con = controller as ExampleAppController;
-    return MaterialApp(
-      color: Colors.blue,
-      theme: con.themeData,
-      home: Scaffold(
-        appBar: AppBar(),
-        drawer: const Drawer(child: DevToolsSettings()),
-        onDrawerChanged: (isOpened) {
-          if (isOpened) {
-            WordPairsTimer().deactivate();
-          } else {
-            WordPairsTimer().activate();
-          }
-        },
-        // A new key will recreate the State object
-        body: Page1(key: con.page1Key),
+        body: Page1(),
       ),
     );
   }
@@ -146,8 +118,8 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
           } else {
             WordPairsTimer().activate();
           }
-        }, // A new key will recreate the State object
-        body: Page1(key: con.page1Key),
+        },
+        body: Page1(),
       ),
     );
   }
@@ -213,6 +185,8 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
     super.deactivate();
   }
 
+  /// Using your favorite IDE, place a breakpoint in setState()
+  ///  and get an appreciation of what's involved in closing a screen
   @override
   // ignore: unnecessary_overrides
   void setState(VoidCallback fn, {bool? log}) => super.setState(fn, log: log);

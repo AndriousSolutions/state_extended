@@ -1,9 +1,18 @@
+## 7.1.1
+
+July 01, 2025
+
+- child: const _BuilderStatefulWidget(), in part08_inheritedwidget_statefulwidget.dart
+  ensures appState.builder() is only called when appropriate.
+- Corrected bug in the Example app.
+
 ## 7.1.0
 
 June 26, 2025
 
 - Switched out flutter_test.dart with package, test;
   import 'package:test/test.dart' show TestFailure;
+  Pub analyst then includes the Web platform.
 
 ## 7.0.1
 

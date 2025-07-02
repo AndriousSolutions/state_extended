@@ -9,7 +9,7 @@ import '/src/view.dart';
 /// The first page displayed in this app.
 class Page1 extends StatefulWidget {
   /// Page 1
-  const Page1({super.key});
+  Page1({Key? key}) : super(key: key ?? Controller().page1Key);
 
   @override
   State createState() => Page1State();
@@ -102,6 +102,10 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
 
   ///
   MediaQueryData? media;
+
+  /// Using your favorite IDE, place a breakpoint in deactivate()
+  @override
+  Widget build(BuildContext context) => super.build(context);
 
   ///
   @override
@@ -297,10 +301,6 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
 
     return caught;
   }
-
-  /// Using your favorite IDE, place a breakpoint in deactivate()
-  @override
-  Widget build(BuildContext context) => super.build(context);
 
   @override
   // ignore: unnecessary_overrides

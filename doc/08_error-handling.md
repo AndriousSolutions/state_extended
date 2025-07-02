@@ -1,13 +1,14 @@
 ## _It's Essential_
 
-Any errors that may occur in a StateX object is directed to its function, <b>onError</b>().
-Depending on whether it's a particular exception that can be handled, or an unanticipated error
-that will cause the app to terminate, the <b>onError</b>() will be the first to receive the details.
-This is an opportunity for you to close any critical resources or services and 'fail gracefully'
-before the error is then recorded in the device's logs.
+Any 'uncaught' errors that may occur in a StateX object is directed to its function, **onError**().
+Anticipated exceptions would be enclosed in an **try catch** and handled appropriately.
+However, any unanticipated errors or exceptions will cause the app to terminate.
+The **onError**() is in the StateX class gives you the opportunity for you to close
+any critical resources or services and fail 'gracefully'.
+
 ```Dart
   /// This function is called when an error occurred.
-  void onError(FlutterErrorDetails details) {}
+void onError(FlutterErrorDetails details) {}
 ```
 
 <table>
@@ -34,7 +35,9 @@ The State object, <i>Page1State</i>, catches this particular error in its <b>onE
 In the first screenshot below, is of the <b>FloatingActionButton</b> widget containing the error.
 As you see, an <b>Exception</b> is deliberately thrown when the button is tapped.
 (Note, the error is not thrown when running in a test environment.)
-Such an error would normally cause Flutter's default handler, <a href="https://api.flutter.dev/flutter/foundation/FlutterError/dumpErrorToConsole.html">dumpErrorToConsole</a>, 
+Such an error would normally cause Flutter's default
+handler, <a href="https://api.flutter.dev/flutter/foundation/FlutterError/dumpErrorToConsole.html">
+dumpErrorToConsole</a>,
 to record the error in the device's error logs.
 If the error had occurred while attempting to display a widget,
 it would further present a description of the error on a 'red screen' when in development,
@@ -43,34 +46,48 @@ and on a gray screen when in production.
 <h2 id="on">On Error</h2>
 
 In this case, the error logs are written to, but the count still incremented. Flutter's
-<a href="https://api.flutter.dev/flutter/foundation/FlutterError/onError.html">FlutterError.onError</a>
+<a href="https://api.flutter.dev/flutter/foundation/FlutterError/onError.html">
+FlutterError.onError</a>
 was assigned an error handler that allows the State object to possibly address its errors.
-In the second screenshot below, the <b>onError</b>() function determines the incrementation was interrupted
-and so attempts once again. This is a very simple example, but you can see the potential to better handle
+In the second screenshot below, the <b>onError</b>() function determines the incrementation was
+interrupted
+and so attempts once again. This is a very simple example, but you can see the potential to better
+handle
 errors in your own app.
+
 <div>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/1d5e0dce-4e6a-4974-9a5d-9815a80b6fcc"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/1d5e0dce-4e6a-4974-9a5d-9815a80b6fcc" width="48%" height="60%"></a>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/b6ec9861-dacb-4e18-ac8b-3be8e63781f9"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/b6ec9861-dacb-4e18-ac8b-3be8e63781f9" width="48%" height="60%"></a>
 </div>
 
 | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L89) | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L184) |
-|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------:|
+|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 <h2 id="control">Control Your Error</h2>
 
-The <b>onError</b>() function is supplied by the mixin, <a href="https://github.com/AndriousSolutions/state_extended/blob/096993bab8d13790af065b94f0bdf32e1967904e/lib/state_extended.dart#L2643">StateXonErrorMixin</a>.
-The <b>StateX</b> class utilizes it, but the <b>StateXController</b> does not. However, it can if the need arises.
-Care must be taken when implementing the <b>onError</b>() function in Controllers as one may catch an error
-intended for another. But if used judiciously, there may be instances where a controller should catch and handle any failed operation of its own doing.
+The <b>onError</b>() function is supplied by the
+mixin, <a href="https://github.com/AndriousSolutions/state_extended/blob/096993bab8d13790af065b94f0bdf32e1967904e/lib/state_extended.dart#L2643">
+StateXonErrorMixin</a>.
+The <b>StateX</b> class utilizes it, but the <b>StateXController</b> does not. However, it can if
+the need arises.
+Care must be taken when implementing the <b>onError</b>() function in Controllers as one may catch
+an error
+intended for another. But if used judiciously, there may be instances where a controller should
+catch and handle any failed operation of its own doing.
 
-The first screenshot below demonstrates how you might seek out such controllers when the '+' button error occurred.
-The StateX object goes through its controllers and calls those with a <b>onError</b>() function of their own.
+The first screenshot below demonstrates how you might seek out such controllers when the '+' button
+error occurred.
+The StateX object goes through its controllers and calls those with a <b>onError</b>() function of
+their own.
+
 <div>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/6aa1d170-631d-4bc2-b372-2f263f2b796d"><img src="https://github.com/AndriousSolutions/state_extended/assets/32497443/6aa1d170-631d-4bc2-b372-2f263f2b796d" width="48%" height="60%"></a>
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/AndriousSolutions/state_extended/assets/32497443/ea64ab79-a43a-45a2-afd5-d4eefbca4be5"><img align="right" src="https://github.com/AndriousSolutions/state_extended/assets/32497443/ea64ab79-a43a-45a2-afd5-d4eefbca4be5" width="48%" height="60%"></a>
 </div>
 
 | [page_01.dart](https://github.com/AndriousSolutions/state_extended/blob/8e706d0751db51c9da77b87b036b4a98ae4bb1a7/example/lib/src/view/home/page_01.dart#L192) | [yet_another_controller.dart](https://github.com/AndriousSolutions/state_extended/blob/096993bab8d13790af065b94f0bdf32e1967904e/example/lib/src/controller/home/yet_another_controller.dart#L7) |
-|:-------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
-Further information under the topic: <a href="https://pub.dev/documentation/state_extended/latest/topics/AppStateX%20class-topic.html#errors">AppStateX class</a>
+Further information under the
+topic: <a href="https://pub.dev/documentation/state_extended/latest/topics/AppStateX%20class-topic.html#errors">
+AppStateX class</a>

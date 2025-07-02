@@ -190,7 +190,7 @@ class WordPairsTimer extends StateXController
       _wordPair = twoWords.asString;
 
       /// Change dataObject will rebuild the InheritedWidget
-      /// Changing the 'dataObject' will call the SetState class implemented above
+      /// Changing the 'dataObject' will call the SetBuilder class implemented above
       /// and only that widget.
       appStateX?.dataObject = _wordPair;
     } catch (ex) {
@@ -221,9 +221,11 @@ class WordPairsTimer extends StateXController
   /// Cancel the timer
   void _cancelTimer() {
     _timer?.cancel();
-    _timerInit = false;
-    LogController.log(
-        ':::::::::::: _cancelTimer() in ${eventStateClassNameOnly(toString())}');
+    if (_timerInit) {
+      _timerInit = false;
+      LogController.log(
+          ':::::::::::: _cancelTimer() in ${eventStateClassNameOnly(toString())}');
+    }
   }
 
   /// Create a Timer to run periodically.

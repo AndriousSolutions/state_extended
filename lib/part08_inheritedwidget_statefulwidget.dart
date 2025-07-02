@@ -7,7 +7,9 @@ part of 'state_extended.dart';
 // Called in AppStateX.buildF()
 class _InheritedWidgetStatefulWidget extends StatefulWidget {
   const _InheritedWidgetStatefulWidget(this.appState);
+
   final AppStateX appState;
+
   @override
   State<StatefulWidget> createState() => _InheritedWidgetState();
 }
@@ -29,7 +31,8 @@ class _InheritedWidgetState extends State<_InheritedWidgetStatefulWidget> {
   Widget build(BuildContext context) {
     return StateXInheritedWidget(
       state: appState,
-      child: _BuilderStatefulWidget(appState),
+      child:
+      const _BuilderStatefulWidget(), // const prevents build() again?! gp
     );
   }
 }

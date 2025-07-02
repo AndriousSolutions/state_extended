@@ -18,12 +18,7 @@ class Controller extends StateXController
 
   Controller._(StateX? state)
       : _model = Model(),
-        super(state) {
-    /// Lets pretend you don't have ready access to the App Controller in some interface screens
-    /// but is readily available in the Page 3 controller.
-    /// Showing how some logic is hidden from the interface.
-    _appCon = ExampleAppController();
-  }
+        super(state);
 
   static Controller? _this;
 
@@ -33,9 +28,13 @@ class Controller extends StateXController
 
   /// Page1 Key
   /// Changing it will recreate its State object.
-  Key get page1Key => _appCon.page1Key;
+  Key? get page1Key => _page1Key ??= UniqueKey();
 
-  set page1Key(Key? key) => _appCon.page1Key = key;
+  set page1Key(Key? key) {
+    _page1Key = key;
+  }
+
+  Key? _page1Key;
 
   /// Note, the count comes from a separate class, _Model.
   int get data => _model.counter;
@@ -58,6 +57,17 @@ class Controller extends StateXController
   //
   bool _useInherited = false;
 
+  @override
+  void initState() {
+    super.initState();
+
+    /// Lets pretend you don't have ready access to the App Controller in some interface screens
+    /// but is readily available in the Page 3 controller.
+    /// Showing how some logic is hidden from the interface.
+    _appCon =
+        ExampleAppController(); // Not in constructor to prevent stack overflow.
+  }
+
   /// Called with every new State object to use this controller if any
   @override
   void stateInit(state) {
@@ -77,13 +87,19 @@ class Controller extends StateXController
       this.useInherited = useInherited;
 
       // See how additional logic is hidden from the interface
-      // Page1 creates a new key and so a new State object
+      // Page1 creates a new key and so a new State object with a new useInherited setting.
       page1Key = null;
 
-      // Both access the 'first' State object; the App's State object.
+      // Access the 'first' State object associated with this Controller.
+      // ignore: invalid_use_of_protected_member
       firstState?.setState(() {});
       // The same thing
+      // ignore: invalid_use_of_protected_member
+      state?.setState(() {});
+
+      // Rebuild the App's State object
       appStateX?.setState(() {});
+
       //
       LogController.log(
           ':::::::::::: onChangedInherited($useInherited) in $controllerName');
@@ -167,6 +183,7 @@ class Controller extends StateXController
     /// Look how this Controller has access to this State object!
     /// The incremented counter will not update otherwise! Powerful!
     /// Comment out and the counter will appear not to work.
+    // Step through the code, and see what it does and why.
     setState(() {});
   }
 
@@ -189,8 +206,9 @@ class Controller extends StateXController
     // Every StateXController has a setState() function.
     setState(() {});
     // Every StateXController references its 'current' State object
+    // ignore: invalid_use_of_protected_member
     state?.setState(() {});
-    // The same thing
+    // The same thing but as type, StateX.
     statex?.setState(() {});
 
     // Retrieve the StateX object of type Page2State. Null if not found.

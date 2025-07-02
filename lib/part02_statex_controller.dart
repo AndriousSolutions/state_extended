@@ -165,7 +165,7 @@ class StateXController
   @override
   void setState(VoidCallback fn) {
     super.setState(fn);
-    notifyStateListeners();
+    notifyListeners();
   }
 
   /// The framework calls this method whenever it removes this [StateX] object
