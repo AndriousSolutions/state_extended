@@ -156,7 +156,7 @@ class StateXController
   /// Rebuild the InheritedWidget of the 'closes' InheritedStateX object if any.
   bool notifyClients() {
     final notify = statex?.notifyClients() ?? false;
-    notifyStateListeners();
+    notifyListeners();
     return notify;
   }
 

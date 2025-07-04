@@ -1,10 +1,13 @@
-## 7.1.1
+## 7.1.1+2
 
 July 01, 2025
 
 - child: const _BuilderStatefulWidget(), in part08_inheritedwidget_statefulwidget.dart
   ensures appState.builder() is only called when appropriate.
 - Corrected bug in the Example app.
+- dart format .
+- notifyListeners() or notifyStateListeners() can be used.
+- Updated Example app
 
 ## 7.1.0
 
@@ -35,15 +38,15 @@ StateX, any of its subtypes and flutter's State class itself.
 
 MapOfStateXsMixin in part10_map_of_states.dart
 
-- T? stateByType<T extends StateX>() --> T? stateByType<T extends State>()
-- StateX? stateById(String? id) --> State? stateById(String? id)
-- Map<String, StateX> statesById(List<String> ids) --> Map<String, State> statesById(List<String>
+- T? stateByType<T extends StateX>() to T? stateByType<T extends State>()
+- StateX? stateById(String? id) to State? stateById(String? id)
+- Map<String, StateX> statesById(List<String> ids) to Map<String, State> statesById(List<String>
   ids)
-- List<StateX> listStates(List<String> keys)  --> List<State> listStates(List<String> keys)
-- List<StateX> statesList({bool? reversed, StateX? remove}) -->
+- List<StateX> listStates(List<String> keys) to List<State> listStates(List<String> keys)
+- List<StateX> statesList({bool? reversed, StateX? remove}) to
   List<State> statesList({bool? reversed, State? remove})
-- StateX? get firstState --> State? get firstState
-- StateX? get lastState --> State? get lastState
+- StateX? get firstState to State? get firstState
+- StateX? get lastState to State? get lastState
 - bool forEachState(void Function(StateX state) func, {bool? reversed, StateX? remove}) -->
   bool forEachState(void Function(State state) func, {bool? reversed, State? remove})
 - New function: forEachStateX(void Function(StateX state) func, {bool? reversed, State? remove})

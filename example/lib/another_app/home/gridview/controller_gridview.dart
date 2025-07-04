@@ -7,4 +7,4 @@
 ///
 export 'controller/image_api_controller.dart';
 
-export 'images/_controller_images.dart';
+export 'images/controller_images.dart';

@@ -86,15 +86,58 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
     // I can shortened the process like this.
     anotherController = controllerById(id) as AnotherController;
 
-    final AppStateX appState = appStateX!;
+    final AppStateX? appState = appStateX;
 
     /// The controller is was also assigned to the 'first' State object.
     // Note, returns null if not found or id == null or empty
-    anotherController = appState.controllerById(id) as AnotherController;
+    anotherController = appState?.controllerById(id) as AnotherController;
 
     /// The controller is was assigned to the 'first' State object.
     // Note, returns null if not found.
-    anotherController = appState.controllerByType<AnotherController>();
+    anotherController = appState?.controllerByType<AnotherController>();
+
+    var sameState = stateByType<AppStateX>();
+
+    sameState = ofState<AppStateX>(); // Merely different syntax
+
+    /// It should be this very State object.
+    if (sameState is AppStateX) {
+      assert(sameState == appState, "Should be of type 'AppStateX'");
+    }
+
+    /// Retrieve the State object by its StatefulWidget
+    State? state = controller!.stateOf<MyApp>();
+
+    /// It should be this very State object.
+    if (state is AppStateX) {
+      assert(state == appState, "Should be of type 'AppStateX'");
+    }
+
+    /// Each State object is assigned a unique identifier.
+    // identifier is a 35-alphanumeric character string
+    id = appState?.identifier;
+
+    state = stateById(id);
+
+    /// It should be this very State object.
+    if (state is AppStateX) {
+      assert(state == appState, "Should be of type 'AppStateX'");
+    }
+
+    state = firstState;
+
+    /// It should be this very State object.
+    if (state is AppStateX) {
+      assert(state == appState, "Should be of type 'AppStateX'");
+    }
+
+    /// The 'latest' StateX object running in the App.
+    state = lastState;
+
+    /// It should be this very State object.
+    if (state is Page1State) {
+      assert(state == this, "Should be of type 'Page1State'");
+    }
   }
 
   ///
@@ -243,9 +286,12 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
 
                   /// Look at the ways to supply the App's main controller
                   var appController = appCon as ExampleAppController;
+
                   appController =
                       (firstState as StateX).controller as ExampleAppController;
+
                   appController = appStateX!.controller as ExampleAppController;
+
                   if (appController.errorButton) {
                     // Deliberately throw an error to demonstrate error handling.
                     throw Exception(

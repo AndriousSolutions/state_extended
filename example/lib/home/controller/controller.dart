@@ -74,7 +74,7 @@ class Controller extends StateXController
     super.stateInit(state);
 
     if (state is Page1State) {
-      /// InheritedWidget switch will reset count, but the controller can saves the count
+      /// State recreation will reset count, but the controller can saves the count
       state.count = page1Count;
     }
   }
@@ -89,13 +89,6 @@ class Controller extends StateXController
       // See how additional logic is hidden from the interface
       // Page1 creates a new key and so a new State object with a new useInherited setting.
       page1Key = null;
-
-      // Access the 'first' State object associated with this Controller.
-      // ignore: invalid_use_of_protected_member
-      firstState?.setState(() {});
-      // The same thing
-      // ignore: invalid_use_of_protected_member
-      state?.setState(() {});
 
       // Rebuild the App's State object
       appStateX?.setState(() {});
@@ -185,6 +178,8 @@ class Controller extends StateXController
     /// Comment out and the counter will appear not to work.
     // Step through the code, and see what it does and why.
     setState(() {});
+
+    LogController.log('=========== onPressedActionButton() in $controllerName');
   }
 
   /// The API matches the name of the Widget's named parameter
@@ -237,23 +232,12 @@ class Controller extends StateXController
     if (stack != null && stack.toString().contains('handleTap')) {
       // The Controller's 'current' State object.
       var pageState = state as Page1State;
-
       // Of course, there's two other ways to retrieve a State object.
       pageState = stateOf<Page1>() as Page1State;
       pageState = ofState<Page1State>()!;
 
-      // Increment the count like no error occurred
-      pageState.count++;
-
-      // Record the count
-      page1Count = pageState.count;
-      //
-      if (useChangeNotifier) {
-        notifyListeners();
-      } else {
-        // Look how this Controller has access to this State object!
-        setState(() {});
-      }
+      // The routine called when the button is pressed.
+      onPressedActionButton();
     }
     // Optional at yhis point. You don't have to, but may call debugPrint()
     super.onError(details);

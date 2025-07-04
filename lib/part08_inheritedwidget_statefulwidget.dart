@@ -32,7 +32,7 @@ class _InheritedWidgetState extends State<_InheritedWidgetStatefulWidget> {
     return StateXInheritedWidget(
       state: appState,
       child:
-      const _BuilderStatefulWidget(), // const prevents build() again?! gp
+          const _BuilderStatefulWidget(), // const prevents build() again?! gp
     );
   }
 }
