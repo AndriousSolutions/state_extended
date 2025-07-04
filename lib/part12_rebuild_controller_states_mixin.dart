@@ -11,7 +11,6 @@ part of 'state_extended.dart';
 /// *IMPORTANT* Important to call the ChangeNotifier's dispose() function.
 ///
 /// dartdoc:
-/// {@category StateX class}
 /// {@category State Object Controller}
 mixin _RebuildControllerStatesMixin {
   //
@@ -107,6 +106,9 @@ mixin _RebuildControllerStatesMixin {
     _stateListenersMap.clear();
   }
 
+  /// Use the original function name for [ChangeNotifier] as well
+  bool notifyListeners() => notifyStateListeners();
+
   /// Call all the registered 'State' listeners.
   // ignore: deprecated_member_use_from_same_package
   bool notifyStateListeners() => notifyStates();
@@ -115,13 +117,10 @@ mixin _RebuildControllerStatesMixin {
   bool notifyStates() {
     final notify = _implChangeNotifier != null;
     if (notify) {
-      _implChangeNotifier?.notifyListeners();
+      _implChangeNotifier?.notifyStateListeners();
     }
     return notify;
   }
-
-  /// Use the original function name for [ChangeNotifier] as well
-  bool notifyListeners() => notifyStateListeners();
 
   bool _removeOldStates() {
     bool removed = false;
@@ -153,18 +152,14 @@ mixin _RebuildControllerStatesMixin {
 /// {@category State Object Controller}
 class ImplNotifyListenersChangeNotifier with ChangeNotifier {
   /// The 'unnecessary overrides' prevent the Dart Analysis warning:
-  /// The member 'notifyListeners' can only be used within instance members of
-  /// subclasses of 'package: change_notifier.dart'.
 
   /// Whether any listeners are currently registered.
   @override
   // ignore: unnecessary_overrides
   bool get hasListeners => super.hasListeners;
 
-  /// Call all the registered listeners.
-  @override
-  // ignore: unnecessary_overrides
-  void notifyListeners() => super.notifyListeners();
+  /// Call all the registered 'State' listeners.
+  void notifyStateListeners() => notifyListeners();
 }
 
 /// 'No longer supported.'
@@ -217,7 +212,7 @@ mixin ImplNotifyListenersChangeNotifierMixin {
   bool notifyListeners() {
     final notify = _implChangeNotifier != null;
     if (notify) {
-      _implChangeNotifier?.notifyListeners();
+      _implChangeNotifier?.notifyStateListeners();
     }
     return notify;
   }

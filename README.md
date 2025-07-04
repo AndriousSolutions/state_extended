@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/AndriousSolutions/state_extended/branch/master/graph/badge.svg)](https://app.codecov.io/gh/AndriousSolutions/state_extended/tree/master/lib)
 [![CI](https://github.com/AndriousSolutions/state_extended/actions/workflows/format_test_release.yml/badge.svg)](https://github.com/AndriousSolutions/state_extended/actions/workflows/format_then_test.yml)
-[![Medium](https://img.shields.io/badge/Medium-Read-green?logo=Medium)](https://medium.com/@andrious/statex-b8f57015188f)
+[![Medium](https://img.shields.io/badge/Dev.to-Read-green?logo=dev.to)](https://dev.to/andrious/statex-4f99)
 [![Pub.dev](https://img.shields.io/pub/v/state_extended.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAeGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAEgAAAABAAAASAAAAAEAAqACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAAAQdIdCAAAACXBIWXMAAAsTAAALEwEAmpwYAAACZmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICAgICA8dGlmZjpSZXNvbHV0aW9uVW5pdD4yPC90aWZmOlJlc29sdXRpb25Vbml0PgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjE8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjY0PC9leGlmOlBpeGVsWERpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjY0PC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+Ck0aSxoAAAaTSURBVFgJrVdbbBRVGP7OzOzsbmsXChIIiEQFRaIRhEKi0VRDjI++LIoPeHkhgRgeBCUCYY3iHTWGVHnxFhNpy6MXkMtCfLAENAGEAMGEgEBSLu1u2+3u7Mw5fv/MbrsFeiOeZHfOnMv/f//3X84ZYLytrc0e2HImOx8n9/yFv/d4OHtg08B4JmMN9P+3jjEK2axTkadwav8mnNxbxpmswbFdGv92GJzObgvnDRTGCEKNCaBYvWxZEK49/tsiOFYL6pJNyPUABgHVWTAmQOMEByWvBXOaV0dACFopM5KOkamqWi3K29I2Tu/LUHkHHKcJ3XmfgsVWcYkoctCV8xF3V+HM/pZQaaR8RCOHnzTGolAdCjqxbzFV0OrEwshqWqvUYCyEiyp/2viYMslBf+l9zHnyLTJjc23EXu26Sv/WDFSVm+0xnM++AxcdSNoL0dfjI8adrmWHzxjxy3v4rPTjBNab46C3Crldk0Ll24/Iqlu2mxmoKv/p93th+ndicnwBevp8aKOHtfpm0T7q3ThKzutY2vxpOJ0ho5vFZUNj4kYA8h4FTfsfHWj0luCHXBETVZwuAMQhN+4Ipd/4x0V+WWHGFI3ZDx5m/zMsn9YarhIgmYprOTDUBZls5Nf1f25AsW4JZhU8pB0nXFVP1Q38yXPUH6M/xYztyRl4pSWoS+1A+7WvIgBULiAqbaCDNFMt85SPrYceQUxvRpF+LKkY7rEcPG0H6CUzwoDwI8/RfkJV2bNw/YqHvm4fbnIlWju/C/UKAxUQVQAK7WkRydhhjjsxCRpGLi3x2LuPIJYSRKHinjG5gfuUUsh3CasW8td8JOpXoPXqt3xH6AaCiACE1DM43j2yHrHkYygVmOOVNBNltwPCkCqbunt7FEpFA8t2kL9OEMmX0Hb1myoIa4D6LYcfgjIZ9Oc5R+WqYq2svF0QJIABaKGnW9gQSQ56CCKefJlMfB0NtJH6cE61wHbiCLyoyJgaALKyFgTFYm9go46jMh7ljawa2oQFlgzkCGDyVElBWR2BaJj8ClqvBVLtDLYcXodY4gmUmO/DVTgRXQtirDEhXu7ttVDs1wg9LmilWBGUCZ6z8F7HPI68jSIPFpkYzhrOhm28IMRoHTAYuymZ/ar8CAyRaftLWE4SRku9FvGjt/GACN1AFvJdikCkmtbKJwylpkHLwTZkgkirUGvX1/THA0Kyoa9gob/AbJDEG5RNBswGOK7o58xgiaxRNXx3PCCMjtwwcBZEBlvY1LQT5dJquHUcCS8QUUFiToYBOrz6aGYsIKo1IUc3+L7I5V5hwWJNlhK8cXEL8/U1xOuZ/UQqtxsBIxeSsbSxgBDqi/0WCr0EIG6ImoV2ue3w0rCxaRtBrEEipeAmJBsCh2FjjQ1CFEKjVUwxKNdFzYNHcgRlGX0fMrHoCxjvVWh9CiZm+cxcTfqkmMttdFQsIzFRdUO+m+dLKWJBrhgREZX/wbNazfz+0DPTm4qtlwMvdV7Tb4xf8Z2AkU2Ss4OxXNlffcgE4xr/ML2qFVPmwg3UOmeeRj3Pa2PODTpDFsgxyRtwhlRdWLFk9+zUxJ8fnzJdPZtIeU2xRDCVd8SAu3xaI7KElSog2T7QbsVEVJCAVKNGvM7Q3VyueELd2HgDPlH5+Ogvl7fGguDFCY6bmOi4ehYV5wNPX/E9nAs81RUFKdWp8GpYvSKEhtaC4Nlh79O2dowxd051UNcQnRGlQl6W3bKleZtt5232+QtH19jJ+OdeLs/0IGQeKFRgPB2YfFA2nQRzNiirfsma0DsRmKqLbC4OXCbU6WKA4422un9uJ3FnEehfWJT2DgtAUNEVVoa0L7947A3lxj4kiDCHBYhstPhPqwWM7vbL5nJQUmcCXxmjGS8V70rwMa0XpBps51L9B4dXLtiCE6pX5EsbEQAdrTK0LARx+eg6Zcc+8vI9JjpVo1wSAfIu6jRDo2h83UVWLgYeOnkIPWC5epqbtFNuonfy3WbuNvXopeascQ4cPABsbuYpNVojXxnqEBAvXDy+1orZH9eCqG6XsJTLgbAiQgPS4DPgXcsyTn297Xvl3a0z5z+bZs1pXzb4oTI0C6rSap90eYYkphmYO2Y8/InxvLVuwx3yKVYBz4corbxK3ZAsYbNilm0Fmk7iYaS1/6sMXplyYIjRowOQXQTRnk5rAfHjXfO3+p73pgpPNbkt8lOMOvmTj1SJPQnWMCEY81opyy73FQqOxm4R1XzwoMwNtP8ArtQKBPNf6YAAAAAASUVORK5CYII=)](https://pub.dev/packages/state_extended)
 [![GitHub stars](https://img.shields.io/github/stars/AndriousSolutions/state_extended.svg?style=social&amp;logo=github)](https://github.com/AndriousSolutions/state_extended/stargazers)
 [![Last Commit](https://img.shields.io/github/last-commit/AndriousSolutions/state_extended)](https://github.com/AndriousSolutions/state_extended/commits/master)
@@ -38,6 +38,226 @@ Further, the StateX class itself now has a 'built-in' FutureBuilder and Inherite
 such a State object to address
 its own asynchronous operations before proceeding, as well as rebuild only parts of a 'busy'
 interface when necessary.
+
+## Quick Reference
+
+<details>
+<summary>StateX</summary>
+<table>
+  <tr>
+    <td>.controller</td>
+    <td>Retrieves the State object's 'current' Controller</td>
+    <td>StateX</td>
+  </tr>
+  <tr>
+    <td>stateByType&lt T extends StateX>()</td>
+    <td>Retrieves another State object by its type. Null if not found.</td>
+    <td>StateX</td>
+  </tr>
+  <tr>
+    <td>stateById()</td>
+    <td>Retrieve another State object using its unique String identifier. Null if not found.</td>
+    <td>StateX</td>
+  </tr>
+  <tr>
+    <td>controllerByType()</td>
+    <td>Retrieves one of its Controllers by their type</td>
+    <td>StateX</td>
+  </tr>
+  <tr>
+    <td>controllerById()</td>
+    <td>Retrieves one of its Controllers by their unique String identifier.</td>
+    <td>StateX</td>
+  </tr>
+</table>
+</details>
+
+<details>
+<summary>StateXController</summary>
+<table>
+ <tr>
+    <td>.state</td>
+    <td>Retrieves the Controller's 'current' State object</td>
+    <td>StateXController</td>
+  </tr>
+ <tr>
+    <td>ofState&lt T extends StateX>)()</td>
+    <td>Retrieves a currently associated State object by its type T. Returns null if not found.</td>
+    <td>StateXController</td>
+  </tr>
+ <tr>
+    <td>stateOf()</td>
+    <td>Retrieves an associated State object by its StatefulWidget. Returns null if not found.</td>
+    <td>StateXController</td>
+  </tr>
+</table>
+</details>
+
+<details>
+<summary>Time to Initialize</summary>
+<table>
+ <tr>
+    <td>initAsync()</td>
+    <td>Initialize any 'time-consuming' operations at the beginning. Implement any asynchronous operations needed done at start up.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>initAsyncState()</td>
+    <td>Called with every StateX associated with this Controller Initialize any '
+time-consuming' operations at the beginning. Implement any asynchronous operations needed done at
+start up.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>runInitAsync()</td>
+    <td>Call initAsync() all the time if returns true. Conditional calls initAsync()
+creating a Future with every rebuild.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+</table>
+</details>
+
+<details>
+<summary>Event Handling</summary>
+<table>
+ <tr>
+    <td>activate()</td>
+    <td>Called when the State object is reinserted into the Widget tree.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>deactivate()</td>
+    <td>Called when the State object is removed from the Widget tree.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>detachedAppLifecycleState()</td>
+    <td>The Flutter engine has detached the app from view and is shutting down.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didChangeAccessibilityFeatures()</td>
+    <td>Called when the current accessibility features have been changed.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didChangeDependencies()</td>
+    <td>Called immediately after initState() or when a widget dependent on an InheritedWidget is to be rebuilt.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didChangeLocales()</td>
+    <td>Called when the device's locale has changed.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didChangeMetrics()</td>
+    <td>Called when the app's UI dimensions change. E.g. when a phone is rotated.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didChangePlatformBrightness()</td>
+    <td>When the device's brightness has changed.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didChangeTextScaleFactor()</td>
+    <td>Called when the platform's text scale changes.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didHaveMemoryPressure()</td>
+    <td>Called when the system is running low on memory.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didPop()</td>
+    <td>Called when this State is popped off a route.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didPopNext()</td>
+    <td>The top route has been popped off returning this State object.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didPopRoute()</td>
+    <td>Called when the app pops the current route. E.g. On Android, called when the back button is presse.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didPush()</td>
+    <td>Called when this State is first pushed as a Route by a Navigator.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didPushNext()</td>
+    <td>New route has been pushed, and this State object's route is no longer current.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didPushRouteInformation()</td>
+    <td>Called when the application pushes a new RouteInformation and a restoration state onto the router.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didRequestAppExit()</td>
+    <td>Called when a request is received from the system to exit the app. Exiting the app can proceed with [AppExitResponse.exit] response, and do not exit with [AppExitResponse.cancel] response.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>didUpdateWidget()</td>
+    <td>Called when the State object's StatefulWidget is recreated.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>hiddenAppLifecycleState()</td>
+    <td>The app is about to be paused (on iOS and Android), or has been minimized (Windows) or is no longer visible (on the web).</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>inactiveAppLifecycleState()</td>
+    <td>The app is in an inactive state and is not receiving user input.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>pausedAppLifecycleState()</td>
+    <td>The application is not currently visible to the user, not responding to user input, and running in the background.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>reassemble()</td>
+    <td>Called when the app is reassembled during development, E.g. A hot reload.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>resumedAppLifecycleState()</td>
+    <td>The app has returned from the background. Is now visible and ready for user input.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>updateShouldNotify()</td>
+    <td>As a dependency of an InheritedWidget, return true to rebuild the State object.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+</table>
+</details>
+
+<details>
+<summary>Error Handling</summary>
+<table>
+ <tr>
+    <td>onError()</td>
+    <td>Offer an error handler</td>
+    <td>StateX|StateXController</td>
+  </tr>
+ <tr>
+    <td>onAsyncError()</td>
+    <td>In case the initAsync() function has failed in error. This must be handled too.</td>
+    <td>StateX|StateXController</td>
+  </tr>
+</table>
+</details>
 
 ## Documentation
 

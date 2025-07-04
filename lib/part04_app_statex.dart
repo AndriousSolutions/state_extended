@@ -36,6 +36,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     AppStateX._instance = this;
 
     _dataObj = object;
+
     addList(controllers?.toList());
   }
 

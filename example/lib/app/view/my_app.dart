@@ -41,8 +41,7 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
           /// how it's done using Scoped Model, but better.
           object: 'Hello!',
           // debugPrintEvents: true, // Print event function calls to the console
-          debugPrintEvents:
-              false, // Do not print event function calls to the console
+          debugPrintEvents: false, // Do not print event function calls
         ) {
     // Assign the App State object
     MyApp.app.appState = this;

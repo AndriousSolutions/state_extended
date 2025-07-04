@@ -7,6 +7,6 @@
 
 export '/another_app/home/controller/home_controller.dart';
 
-export '/another_app/home/gridview/_controller_gridview.dart';
+export '/another_app/home/gridview/controller_gridview.dart';
 
-export '/another_app/home/inherited/_controller_inherited.dart';
+export '/another_app/home/inherited/controller_inherited.dart';

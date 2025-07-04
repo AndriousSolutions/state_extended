@@ -5,8 +5,8 @@
 /// Export libraries concerned with the Home Page's Interface
 ///
 
-export 'gridview/_view_gridview.dart';
+export 'gridview/view_gridview.dart';
 
-export 'inherited/_view_inherited.dart';
+export 'inherited/view_inherited.dart';
 
 export 'view/home_page.dart';
