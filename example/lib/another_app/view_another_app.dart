@@ -8,4 +8,4 @@ export 'package:flutter/material.dart';
 
 export 'package:state_extended/state_extended.dart' show StateX;
 
-export 'home/_view_home.dart';
+export 'home/view_home.dart';

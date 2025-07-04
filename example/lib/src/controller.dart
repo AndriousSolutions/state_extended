@@ -6,7 +6,7 @@
 export 'package:state_extended/state_extended.dart' show StateXController;
 
 //
-export '/another_app/_controller_another_app.dart';
+export '/another_app/controller_another_app.dart';
 
 //
 export '/app/controller_app.dart';

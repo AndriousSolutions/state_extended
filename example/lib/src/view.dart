@@ -10,7 +10,7 @@ export 'package:flutter/material.dart';
 
 export 'package:state_extended/state_extended.dart';
 
-export '/another_app/_view_another_app.dart';
+export '/another_app/view_another_app.dart';
 
 export '/app/view_app.dart';
 

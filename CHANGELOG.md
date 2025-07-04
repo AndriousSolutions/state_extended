@@ -1,3 +1,14 @@
+## 7.1.1+2
+
+July 01, 2025
+
+- child: const _BuilderStatefulWidget(), in part08_inheritedwidget_statefulwidget.dart
+  ensures appState.builder() is only called when appropriate.
+- Corrected bug in the Example app.
+- dart format .
+- notifyListeners() or notifyStateListeners() can be used.
+- Updated Example app
+
 ## 7.1.1
 
 July 01, 2025
