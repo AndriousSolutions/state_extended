@@ -294,7 +294,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
 
                   if (appController.errorButton) {
                     // Deliberately throw an error to demonstrate error handling.
-                    throw Exception(
+                    throw AssertionError(
                         'Fake error to demonstrate error handling!');
                   }
                   // The Interface has no idea what happens in here. However, you do.
@@ -308,6 +308,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
               child: SettingsPage(),
             ),
         (_) => LogPage(key: UniqueKey()),
+        // Recreate State object every time!
       ],
       labels: const {
         'Page 1': Icon(Icons.home),

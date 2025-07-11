@@ -25,17 +25,51 @@ const _location = '========================== widget_test.dart';
 void main() => testExampleApp();
 
 /// Call a group of tests.
-void testExampleApp() => group('Test state_extended', testStateExtended);
+void testExampleApp() {
+  //
+  group('Test state_extended', testStateExtended);
+}
+
+/// Setup and teardown each test
+class SetupTestEnvironment extends TestVariant<void> {
+  // Record and restore the original Error Builder widget
+  late ErrorWidgetBuilder _errorWidgetBuilder;
+
+  @override
+  Iterable<void> get values => const <void>[null];
+
+  @override
+  String describeValue(void value) => '';
+
+  /// Runs before EACH test or group
+  @override
+  Future<void> setUp(void value) async {
+// Record the original Error Builder widget
+    _errorWidgetBuilder = ErrorWidget.builder;
+  }
+
+  /// Runs after EACH test or group
+  @override
+  Future<void> tearDown(void value, void memento) async {
+    // Restore to original Error Builder widget
+    ErrorWidget.builder = _errorWidgetBuilder;
+  }
+}
 
 late IntegrationTestsBinder _integrationTest;
 
 /// Also called in package's own testing file, test/widget_test.dart
 void testStateExtended() {
   //
+  // Call this function instead of using the 'default' TestWidgetsFlutterBinding
+  // Allows one or two errors to be ignored. The error handling is also tested.
+  _integrationTest =
+      IntegrationTestsBinder(); //   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
   /// Set up anything necessary before testing begins.
   /// Runs once before ALL tests or groups
-  setUpAll(() async {
-    // Must supply 'an instance' when testing SharedPreferencesAsync()
+  setUpAll(() {
+// Must supply 'an instance' when testing SharedPreferencesAsync()
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.empty();
   });
@@ -45,24 +79,18 @@ void testStateExtended() {
   tearDownAll(() {});
 
   /// Runs before EACH test or group
-  setUp(() async {
-    // // (TODO: Tip # 4) Consider configuring your default screen size here.
-    // // You can reset it to something else within a test
-    // binding.window.physicalSizeTestValue = _deskTopSize;
+  setUp(() {
+// // (TODO: Tip # 4) Consider configuring your default screen size here.
+// // You can reset it to something else within a test
+// binding.window.physicalSizeTestValue = _deskTopSize;
   });
 
   /// Runs after EACH test or group
-  tearDown(() async {
-    // Code that clears caches can go here
+  tearDown(() {
+// Code that clears caches can go here
 //    exit(0);  // Closes the whole thing!
   });
 
-  // Call this function instead of using the 'default' TestWidgetsFlutterBinding
-  // Allows one or two errors to be ignored. The error handling is also tested.
-  _integrationTest =
-      IntegrationTestsBinder(); //   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  // testWidgets calls TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets(
     'StateX & StateXController',
     (WidgetTester tester) async {
@@ -118,72 +146,85 @@ void testStateExtended() {
       /// Simulate some events (eg. paused and resumed the app)
       await testEventHandling(tester);
     },
+    variant: SetupTestEnvironment(),
   );
 
-  testWidgets('debugPrint() in Event Handlers', (WidgetTester tester) async {
-    // Tells the tester to build a UI based on the widget tree passed to it
-    await tester.pumpWidget(MyApp(key: UniqueKey()));
+  testWidgets(
+    'debugPrint() in Event Handlers',
+    (WidgetTester tester) async {
+      // Tells the tester to build a UI based on the widget tree passed to it
+      await tester.pumpWidget(MyApp(key: UniqueKey()));
 
-    /// Now print to console every event handler call
-    ExampleAppController().debugPrintEvents = true;
+      /// Now print to console every event handler call
+      ExampleAppController().debugPrintEvents = true;
 
-    /// Flutter won’t automatically rebuild your widget in the test environment.
-    /// Use pump() or pumpAndSettle() to ask Flutter to rebuild the widget.
-    /// pumpAndSettle() waits for all animations to complete.
-    await tester.pumpAndSettle();
+      /// Flutter won’t automatically rebuild your widget in the test environment.
+      /// Use pump() or pumpAndSettle() to ask Flutter to rebuild the widget.
+      /// pumpAndSettle() waits for all animations to complete.
+      await tester.pumpAndSettle();
 
-    /// Reset the counter to zero on Page 1
-    await resetPage1Count(tester);
+      /// Reset the counter to zero on Page 1
+      await resetPage1Count(tester);
 
-    /// Now print to console every event handler call
-    ExampleAppController().debugPrintEvents = false;
+      /// Now print to console every event handler call
+      ExampleAppController().debugPrintEvents = false;
 
-    // hot reload
-    await tester.binding.reassembleApplication();
+      // hot reload
+      await tester.binding.reassembleApplication();
 
-    // pumpAndSettle() waits for all animations to complete.
-    await tester.pumpAndSettle(const Duration(seconds: 1));
-  });
+      // pumpAndSettle() waits for all animations to complete.
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+    },
+    variant: SetupTestEnvironment(),
+  );
 
-  testWidgets('Error in Builder', (WidgetTester tester) async {
-    //
-    // Tells the tester to build a UI based on the widget tree passed to it
-    await tester.pumpWidget(MyApp(key: UniqueKey()));
+  testWidgets(
+    'Error in Builder',
+    (WidgetTester tester) async {
+      //
+      // Tells the tester to build a UI based on the widget tree passed to it
+      await tester.pumpWidget(MyApp(key: UniqueKey()));
 
-    // pumpAndSettle() waits for all animations to complete.
-    await tester.pumpAndSettle();
+      // pumpAndSettle() waits for all animations to complete.
+      await tester.pumpAndSettle();
 
-    // Now trip an error right at start up.
-    ExampleAppController().errorInBuilder = true;
+      // Now trip an error going to Page 2
+      ExampleAppController().errorInBuilder = true;
 
-    // hot reload
-    await tester.binding.reassembleApplication();
+      // Go to Page 2
+      await tester.tap(find.byKey(const Key('Page 2')));
 
-    // pumpAndSettle() waits for all animations to complete.
-    await tester.pumpAndSettle(const Duration(seconds: 1));
+      // pumpAndSettle() waits for all animations to complete.
+      await tester.pumpAndSettle(const Duration(seconds: 1));
 
-    final appState = ExampleAppController().appStateX;
+      final appState = ExampleAppController().appStateX;
 
-    final errorInError = appState?.hasErrorInErrorHandler;
+      final errorInError = appState?.hasErrorInErrorHandler;
 
-    expect(errorInError, isFalse, reason: _location);
+      expect(errorInError, isFalse, reason: _location);
 
-    final details = appState?.lastFlutterErrorDetails;
+      final details = appState?.lastFlutterErrorDetails;
 
-    expect(details, isNotNull, reason: _location);
+      expect(details, isNotNull, reason: _location);
 
-    final message = appState?.lastFlutterErrorMessage;
+      final message = appState?.lastFlutterErrorMessage;
 
-    expect(message?.contains('Error in builder()!'), isTrue, reason: _location);
+      expect(message?.contains('Error in builder()!'), isTrue,
+          reason: _location);
 
-    final inError = appState?.inErrorRoutine;
+      final inError = appState?.inErrorRoutine;
 
-    expect(inError, isFalse, reason: _location);
+      expect(inError, isFalse, reason: _location);
 
-    final name = appState?.errorStateName;
+      final name = appState?.errorStateName;
 
-    expect(name?.contains('Page1State'), isTrue, reason: _location);
-  });
+      expect(name?.contains('Page2State'), isTrue, reason: _location);
+
+      // Turn off the error
+      ExampleAppController().errorInBuilder = false;
+    },
+    variant: SetupTestEnvironment(),
+  );
 
   testWidgets(
     'initAsyncError',
@@ -199,27 +240,32 @@ void testStateExtended() {
 
       AnotherController().initAsyncError = false;
     },
+    variant: SetupTestEnvironment(),
   );
 
   //
-  testWidgets('catchAsyncError', (WidgetTester tester) async {
-    //
-    // Tells the tester to build a UI based on the widget tree passed to it
-    await tester.pumpWidget(MyApp(key: UniqueKey()));
+  testWidgets(
+    'catchAsyncError',
+    (WidgetTester tester) async {
+      //
+      // Tells the tester to build a UI based on the widget tree passed to it
+      await tester.pumpWidget(MyApp(key: UniqueKey()));
 
-    // Invoke an error in initAsyncError()
-    AnotherController().initAsyncError = true;
+      // Invoke an error in initAsyncError()
+      AnotherController().initAsyncError = true;
 
-    // Now have that error in initAsyncError() be unrecoverable
-    ExampleAppController().errorCatchAsyncError = true;
+      // Now have that error in initAsyncError() be unrecoverable
+      ExampleAppController().errorCatchAsyncError = true;
 
-    // pumpAndSettle() waits for all animations to complete.
-    await tester.pumpAndSettle();
+      // pumpAndSettle() waits for all animations to complete.
+      await tester.pumpAndSettle();
 
-    ExampleAppController().errorCatchAsyncError = false;
+      ExampleAppController().errorCatchAsyncError = false;
 
-    AnotherController().initAsyncError = false;
-  });
+      AnotherController().initAsyncError = false;
+    },
+    variant: SetupTestEnvironment(),
+  );
 }
 
 class IntegrationTestsBinder extends IntegrationTestWidgetsFlutterBinding {

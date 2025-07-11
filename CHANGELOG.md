@@ -1,3 +1,11 @@
+## 7.2.0
+
+July 09, 2025
+
+- Call onError() in App State object and call its primary controller if any
+- Update Example app. Error in builder() in Page 2. Supplied a custom ErrorBuilder Widget.
+- Updated Testing
+
 ## 7.1.1+2
 
 July 01, 2025
@@ -50,9 +58,9 @@ MapOfStateXsMixin in part10_map_of_states.dart
 - StateX? stateById(String? id) --> State? stateById(String? id)
 - Map<String, StateX> statesById(List<String> ids) --> Map<String, State> statesById(List<String>
   ids)
-- List<StateX> listStates(List<String> keys)  --> List<State> listStates(List<String> keys)
-- List<StateX> statesList({bool? reversed, StateX? remove}) -->
-  List<State> statesList({bool? reversed, State? remove})
+- List\<StateX> listStates(List\<String> keys)  --> List\<State> listStates(List\<String> keys)
+- List\<StateX> statesList({bool? reversed, StateX? remove}) -->
+  List\<State> statesList({bool? reversed, State? remove})
 - StateX? get firstState --> State? get firstState
 - StateX? get lastState --> State? get lastState
 - bool forEachState(void Function(StateX state) func, {bool? reversed, StateX? remove}) -->

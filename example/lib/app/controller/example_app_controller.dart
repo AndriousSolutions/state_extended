@@ -95,6 +95,26 @@ class ExampleAppController extends StateXController
     }());
   }
 
+  @override
+  void onError(FlutterErrorDetails details) {
+    // Optionally call super for debugPrint()
+    super.onError(details);
+
+    final message = details.exceptionAsString();
+
+    final handled = message.contains('Fake');
+
+    if (handled) {
+      // handled.
+    }
+  }
+
+  /// when the Drawer is just opened.
+  void onOpenDrawer() => _controller.onOpenDrawer();
+
+  /// When the Drawer is just closed.
+  void onCloseDrawer() => _controller.onCloseDrawer();
+
   ///
   ThemeData get themeData =>
       ThemeData.light(useMaterial3: _appSettings.useMaterial3);

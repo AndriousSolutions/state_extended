@@ -68,6 +68,7 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
   /// Error Handler
   @override
   void onError(FlutterErrorDetails details) {
+    super.onError(details); // Optionally call the super class.
     // No debugPrint() here in case it too will error
     LogController.log('onError() in $eventStateClassName');
   }

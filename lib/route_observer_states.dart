@@ -1,8 +1,8 @@
 //
 import 'package:flutter/material.dart';
 
-/// Makes every [StateX] and [StateXController] a [RouteAware] object
-/// calling [didPop], [didPush], [didPopNext] and [didPushNext]
+/// Makes every StateX and StateXController a [RouteAware] object
+/// calling [didPop], [didPush]
 /// Implemented by default.
 ///
 /// dartdoc:

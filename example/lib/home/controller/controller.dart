@@ -163,6 +163,16 @@ class Controller extends StateXController
     return rebuild;
   }
 
+  /// when the Drawer is just opened.
+  void onOpenDrawer() {
+    WordPairsTimer().deactivate();
+  }
+
+  /// When the Drawer is just closed.
+  void onCloseDrawer() {
+    WordPairsTimer().activate();
+  }
+
   /// Page1 count is saved periodically
   int page1Count = 0;
 
@@ -226,11 +236,13 @@ class Controller extends StateXController
 
   @override
   void onError(FlutterErrorDetails details) {
+    //
     final stack = details.stack;
 
     // Determine the specific error
     if (stack != null && stack.toString().contains('handleTap')) {
       // The Controller's 'current' State object.
+      // ignore: unused_local_variable
       var pageState = state as Page1State;
       // Of course, there's two other ways to retrieve a State object.
       pageState = stateOf<Page1>() as Page1State;

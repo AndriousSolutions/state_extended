@@ -33,6 +33,7 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
         super(
           controller: ExampleAppController(),
           controllers: [
+            BuildErrorWidget(header: 'Error', appName: 'Three-page example'),
             AnotherController(),
             YetAnotherController(),
           ],
@@ -94,11 +95,6 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
     var con = controller as ExampleAppController;
     // Every State object has the App's main controller as a property.
     con = appCon as ExampleAppController;
-    // Throw an error right here at the beginning to test recovery code.
-    if (con.errorInBuilder) {
-      con.errorInBuilder = false;
-      throw Exception('Error in builder()!');
-    }
     //
     return MaterialApp(
       debugShowMaterialGrid: dev.debugShowMaterialGrid,
@@ -114,8 +110,10 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
         onDrawerChanged: (isOpened) {
           if (isOpened) {
             WordPairsTimer().deactivate();
+            // con.onOpenDrawer();
           } else {
             WordPairsTimer().activate();
+            // con.onCloseDrawer();
           }
         },
         body: Page1(),

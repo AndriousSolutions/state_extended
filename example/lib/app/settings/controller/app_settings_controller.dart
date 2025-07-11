@@ -143,7 +143,7 @@ class AppSettingsController extends StateXController
 
     /// Any error will be caught and returns false;
     try {
-      // Access the device's persistent store
+      // Access the device's persistent storage
       final prefs = MyApp.prefs;
 
       _initAsyncDelay = await prefs.getBool('initAsyncDelay') ?? false;
@@ -173,7 +173,7 @@ class AppSettingsController extends StateXController
 
     /// Any error will be caught and returns false;
     try {
-      // Access the device's persistent store
+      // Access the device's persistent storage
       final prefs = MyApp.prefs;
 
       await prefs.setBool('initAsyncDelay', _initAsyncDelay);

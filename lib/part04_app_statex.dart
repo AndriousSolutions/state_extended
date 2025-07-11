@@ -80,6 +80,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// Reference the State object containing the app's InheritedWidget
   _InheritedWidgetState? _inheritedState;
 
+  /// Called after the built-in FutureBuilder has successfully been processed.
   @override
   Widget buildF(BuildContext context) {
     _buildFOverridden = false;
@@ -402,46 +403,6 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   AppStateX? get appStateX => this;
 
-  /// Catch any errors in the App
-  /// Free for you to override
-  @override
-  void onError(FlutterErrorDetails details) {
-    _onErrorOverridden = false;
-  }
-
-  // onError() not called directly or was overwritten
-  bool _onErrorOverridden = true;
-
-  /// Catch and explicitly handle the error.
-  void catchError(
-    Exception? ex, {
-    StackTrace? stack,
-    String? library,
-    DiagnosticsNode? context,
-    IterableFilter<String>? stackFilter,
-    InformationCollector? informationCollector,
-    bool? silent,
-  }) {
-    if (ex == null) {
-      return;
-    }
-
-    /// If a tester is running. Don't handle the error.
-    if (inWidgetsFlutterBinding) {
-      // (WidgetsBinding.instance is WidgetsFlutterBinding) {
-      //
-      FlutterError.onError!(FlutterErrorDetails(
-        exception: ex,
-        stack: stack,
-        library: library ?? '',
-        context: context,
-        stackFilter: stackFilter,
-        informationCollector: informationCollector,
-        silent: silent ?? false,
-      ));
-    }
-  }
-
   /// Handle any errors in this App State object.
   void _errorHandler(FlutterErrorDetails details) {
     //
@@ -483,7 +444,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
 
     // Call the latest SateX object's error routine
     // Possibly the error occurred there.
-    onStateError(details);
+    final stateCalled = onStateError(details);
 
     // Log the error
     logErrorDetails(details);
@@ -494,12 +455,18 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
       _onErrorInHandler();
     }
 
-    // The App's error handler
-    if (_onErrorOverridden) {
-      onError(details);
+    // The App State's error handler
+    onError(details);
+
+    //  If no Error Handler called and no Handler error
+    if (!hasErrorInErrorHandler &&
+        !_onErrorOverridden &&
+        (!stateCalled || controller == null)) {
+      // Run the original Error handler
+      _prevErrorFunc?.call(details);
+    } else {
       // If in testing, after the supplied handler, call Flutter Testing Error handler
       if (!inWidgetsFlutterBinding) {
-        //(WidgetsBinding.instance is! WidgetsFlutterBinding) {
         // An `Error` is a failure that the programmer should have avoided.
         if (details.exception is TestFailure || details.exception is Error) {
           // Allow an error to be ignored. Once!
@@ -510,14 +477,44 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
           }
         }
       }
-    } else {
-      //  If no App Error Handler, run its own Error handler
-      _prevErrorFunc?.call(details);
     }
 
     // Now out of the error handler
     _inErrorRoutine = false;
   }
+
+  /// Catch any errors in the App
+  /// Free for you to override
+  @override
+  void onError(FlutterErrorDetails details) {
+    //
+    _onErrorOverridden = false;
+    try {
+      controller?.onError(details);
+    } catch (e, stack) {
+      // Throw in DebugMode.
+      if (kDebugMode) {
+        // Set the original error routine. Allows the handler to throw errors.
+        FlutterError.onError = _prevErrorFunc;
+        // Rethrow to be handled by the original routine.
+        rethrow;
+      } else {
+        // Record the error
+        recordErrorInHandler(e, stack);
+
+        // Record error in device's log
+        _logPackageError(
+          e,
+          library: 'part04_app_statex.dart',
+          description:
+              'Error in onError() for ${_consoleNameOfClass(controller)}',
+        );
+      }
+    }
+  }
+
+  // onError() not called directly or was overwritten
+  bool _onErrorOverridden = true;
 
   /// A flag testing the Error routine *INSIDE* the testing
   /// It's set and reset *ONLY* when testing.
@@ -590,31 +587,31 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     final state = lastState as StateX?;
 
     // If it's this object, it will call its own later
-    bool caught = state != null && state != this;
+    bool stateCalled = state != null && state != this;
 
-    if (caught) {
+    if (stateCalled) {
       //
       try {
         //
         final stack = details.stack?.toString();
 
-        caught = stack != null;
+        stateCalled = stack != null;
 
-        if (caught) {
+        if (stateCalled) {
           // That State object's build() function was called.
           var name = state.toString();
           name = name.substring(0, name.indexOf('#'));
-          caught = stack.contains('$name.build');
+          stateCalled = stack.contains('$name.build');
 
-          if (!caught) {
+          if (!stateCalled) {
             // If it involves particular libraries
             final library = details.library;
-            caught = library != null &&
+            stateCalled = library != null &&
                 (library.contains('gesture') || library.contains('widgets'));
           }
 
           // Call the StateX's onError() function
-          if (caught) {
+          if (stateCalled) {
             _errorStateName = name;
             onControllerError(state, details);
             state.onError(details);
@@ -649,7 +646,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
         }
       }
     }
-    return caught;
+    return stateCalled;
   }
 
   /// The name of the State object experiencing an error
@@ -685,6 +682,36 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
     }
   }
 
+  /// Catch and explicitly handle the error.
+  void catchError(
+    Exception? ex, {
+    StackTrace? stack,
+    String? library,
+    DiagnosticsNode? context,
+    IterableFilter<String>? stackFilter,
+    InformationCollector? informationCollector,
+    bool? silent,
+  }) {
+    if (ex == null) {
+      return;
+    }
+
+    /// If a tester is running. Don't handle the error.
+    if (inWidgetsFlutterBinding) {
+      // (WidgetsBinding.instance is WidgetsFlutterBinding) {
+      //
+      FlutterError.onError!(FlutterErrorDetails(
+        exception: ex,
+        stack: stack,
+        library: library ?? '',
+        context: context,
+        stackFilter: stackFilter,
+        informationCollector: informationCollector,
+        silent: silent ?? false,
+      ));
+    }
+  }
+
   // Notify the developer there's an error in the error handler.
   void _onErrorInHandler() {
     // Always test first that indeed an exception had occurred.
@@ -717,7 +744,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
 //   const _PrivateGlobalKey(super.value);
 // }
 
-/// Used by the [setBuilder] function in both [AppStateX] and [StateX]
+/// Used by the setBuilder() function in both [AppStateX] and [StateX]
 /// Supply a widget to depend the built-in [InheritedWidget]
 ///
 /// dartdoc:

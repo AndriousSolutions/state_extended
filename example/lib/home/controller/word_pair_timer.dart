@@ -9,7 +9,7 @@ import '/src/model.dart';
 
 import '/src/view.dart';
 
-///
+/// Displays a new 'word-pair' ar set intervals
 class WordPairsTimer extends StateXController
     with StateXonErrorMixin, EventsControllerMixin, TabsScaffoldController {
   /// Only one instance of the class is necessary and desired.
