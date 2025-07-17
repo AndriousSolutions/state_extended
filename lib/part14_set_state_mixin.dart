@@ -47,6 +47,11 @@ mixin SetStateMixin {
     }
     // Pushed onto State Set.
     _stateJustAdded = _stateSet.add(state);
+
+    // If just added, assign as the 'current' state object.
+    if (_state == null || _stateJustAdded) {
+      _state = state;
+    }
     return _stateJustAdded;
   }
 

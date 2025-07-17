@@ -1,3 +1,10 @@
+
+## 7.2.1
+
+July 17, 2025
+
+- **BUGFIX** _state = state; in _pushStateToSetter()
+
 ## 7.2.0
 
 July 09, 2025
