@@ -50,6 +50,12 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
 
   final DevTools dev;
 
+  /// Place a breakpoint to see the inner workings
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   /// Try these different 'build' functions so to get access
   /// to a built-in FutureBuilder and or an InheritedWidget.
 

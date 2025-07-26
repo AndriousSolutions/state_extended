@@ -1,4 +1,31 @@
 
+##7.2.2
+
+July 26, 2025
+
+In part01_statex.dart
+- id = con.identifier; in add()
+
+In part04_app_statex.dart
+- // The App State's Controllers' error handlers
+- onControllerError(this, details);
+- // The App State's error handler
+- onError(details);
+- 
+- @Deprecated('No longer supported. Will be removed.')
+- String get errorStateName => _errorStateName ?? '';
+
+**BUGFIX** in part16_controllers_by_id_mixin.dart  
+- id = super.add(con);
+- super.remove(con);
+- // **IMPORTANT** Call super before clearing gp
+- super.dispose();
+
+In Controllers using factory constructs:
+- // Good practice to nullify static instance reference. 
+- // Flutter's garbage collection does its best, but why not if no longer used
+- _this = null;
+
 ## 7.2.1
 
 July 17, 2025

@@ -30,6 +30,9 @@ class LogController extends StateXController with TabsScaffoldController {
   @override
   void dispose() {
     _logs.clear();
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
     super.dispose();
   }
 }

@@ -25,6 +25,15 @@ class ExampleAppController extends StateXController
   // The Home screen's controller
   final Controller _controller;
 
+  /// Called when it's [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
+  }
+
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Initialize asynchronous items essential to the Mobile Applications.
   /// Typically called within a FutureBuilder() widget.
@@ -93,20 +102,6 @@ class ExampleAppController extends StateXController
       }
       return true;
     }());
-  }
-
-  @override
-  void onError(FlutterErrorDetails details) {
-    // Optionally call super for debugPrint()
-    super.onError(details);
-
-    final message = details.exceptionAsString();
-
-    final handled = message.contains('Fake');
-
-    if (handled) {
-      // handled.
-    }
   }
 
   /// when the Drawer is just opened.

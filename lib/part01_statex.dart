@@ -118,10 +118,10 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Supply a reference to the App State object if any
     controller?._appStateX = appStateX;
 
-    String id;
-    if (controller == null) {
-      id = '';
-    } else {
+    String id = '';
+
+    if (controller != null) {
+      //
       id = super.add(controller); // mixin _ControllersByType
       // Something is not right with that controller.
       if (id.isEmpty) {
@@ -130,6 +130,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
           if (_mapControllerByType.containsKey(type)) {
             final con = _mapControllerByType[type];
             if (con != null) {
+              id = con.identifier;
               assert(
                 controller.identifier == con.identifier,
                 'Multiple instances of the same Controller class, $type, is not allowed in a StateX class. '

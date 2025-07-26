@@ -62,6 +62,15 @@ class WordPairsTimer extends StateXController
     model.addState(state);
   }
 
+  /// Called when it's [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
+  }
+
   /// In case the Widget is return to the Widget tree
   @override
   void activate() {

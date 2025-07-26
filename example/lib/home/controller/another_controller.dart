@@ -94,9 +94,14 @@ class AnotherController extends StateXController
   @override
   void deactivate() => super.deactivate();
 
-  /// Called when this [StateX] object is itself disposed of.
+  /// Called when it's [StateX] object is itself disposed of.
   @override
-  void dispose() => super.dispose();
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
+  }
 
   /// Override this method to respond when the [StatefulWidget] is recreated.
   @override

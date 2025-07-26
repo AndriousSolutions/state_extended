@@ -455,13 +455,16 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
       _onErrorInHandler();
     }
 
+    // The App State's Controllers' error handlers
+    onControllerError(this, details);
     // The App State's error handler
     onError(details);
 
     //  If no Error Handler called and no Handler error
     if (!hasErrorInErrorHandler &&
         !_onErrorOverridden &&
-        (!stateCalled || controller == null)) {
+        !stateCalled &&
+        controllerList.isEmpty) {
       // Run the original Error handler
       _prevErrorFunc?.call(details);
     } else {
@@ -489,28 +492,28 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void onError(FlutterErrorDetails details) {
     //
     _onErrorOverridden = false;
-    try {
-      controller?.onError(details);
-    } catch (e, stack) {
-      // Throw in DebugMode.
-      if (kDebugMode) {
-        // Set the original error routine. Allows the handler to throw errors.
-        FlutterError.onError = _prevErrorFunc;
-        // Rethrow to be handled by the original routine.
-        rethrow;
-      } else {
-        // Record the error
-        recordErrorInHandler(e, stack);
-
-        // Record error in device's log
-        _logPackageError(
-          e,
-          library: 'part04_app_statex.dart',
-          description:
-              'Error in onError() for ${_consoleNameOfClass(controller)}',
-        );
-      }
-    }
+    // try {
+    //   controller?.onError(details);
+    // } catch (e, stack) {
+    //   // Throw in DebugMode.
+    //   if (kDebugMode) {
+    //     // Set the original error routine. Allows the handler to throw errors.
+    //     FlutterError.onError = _prevErrorFunc;
+    //     // Rethrow to be handled by the original routine.
+    //     rethrow;
+    //   } else {
+    //     // Record the error
+    //     recordErrorInHandler(e, stack);
+    //
+    //     // Record error in device's log
+    //     _logPackageError(
+    //       e,
+    //       library: 'part04_app_statex.dart',
+    //       description:
+    //           'Error in onError() for ${_consoleNameOfClass(controller)}',
+    //     );
+    //   }
+    // }
   }
 
   // onError() not called directly or was overwritten
@@ -650,6 +653,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   }
 
   /// The name of the State object experiencing an error
+  @Deprecated('No longer supported. Will be removed.')
   String get errorStateName => _errorStateName ?? '';
   String? _errorStateName;
 
