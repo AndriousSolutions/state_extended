@@ -1,6 +1,14 @@
+## 7.3.1
+
+July 27, 2025
+
+- Init SharedPreferencesAsyncPlatform.instance in widget_test.dart
+- _prevErrorWidgetBuilder in build_error_widget.dart
+  Corrected Github push merger
+
 ## 7.3.0
 
-July 23, 2025
+July 26, 2025
 
 - Future<bool> catchAsyncError(Object error) async { in StateX and StateXController
 - In the StateX class

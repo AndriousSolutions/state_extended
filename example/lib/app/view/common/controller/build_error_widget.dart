@@ -1,15 +1,6 @@
-// Copyright 2025 Andrious Solutions Ltd. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 ///
 import 'dart:ui' as i
-    show
-        //ErrorCallback,
-        ParagraphBuilder,
-        ParagraphConstraints,
-        ParagraphStyle,
-        TextStyle;
+    show ParagraphBuilder, ParagraphConstraints, ParagraphStyle, TextStyle;
 
 import 'package:flutter/cupertino.dart' show CupertinoPageRoute;
 
@@ -57,7 +48,7 @@ import 'package:flutter/rendering.dart'
 
 import '/src/controller.dart' show StateXController;
 
-import '/src/view.dart' show AppObject, AppStateX, State, StateX;
+import '/src/view.dart' show AppStateX, State, StateX;
 
 ///
 class BuildErrorWidget extends StateXController {
@@ -197,9 +188,9 @@ class BuildErrorWidget extends StateXController {
     // Flutter's garbage collection does its best, but why not if no longer used
     _this = null;
 
-    if (_errorWidgetBuilder != null) {
+    if (_prevErrorWidgetBuilder != null) {
       // Return to original Error Builder widget
-      ErrorWidget.builder = _errorWidgetBuilder!;
+      ErrorWidget.builder = _prevErrorWidgetBuilder!;
     }
     super.dispose();
   }
@@ -225,15 +216,6 @@ class BuildErrorWidget extends StateXController {
         }
       }
     }
-  }
-
-  /// Called when it's [StateX] object is itself disposed of.
-  @override
-  void dispose() {
-    // Good practice to nullify static instance reference.
-    // Flutter's garbage collection does its best, but why not if no longer used
-    _this = null;
-    super.dispose();
   }
 
   @override

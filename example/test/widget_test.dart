@@ -43,11 +43,11 @@ void testStateExtended() {
   /// Set up anything necessary before testing begins.
   /// Runs once before ALL tests or groups
   setUpAll(() {
-    // Turn off the Example app's error triggers for now during testing
-    _setupErrorsInTesting();
     // Must supply 'an instance' when testing SharedPreferencesAsync()
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.empty();
+    // Turn off the Example app's error triggers for now during testing
+    _setupErrorsInTesting();
   });
 
   /// Be sure the close the app after all the testing.
