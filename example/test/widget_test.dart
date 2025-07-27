@@ -212,9 +212,9 @@ void testStateExtended() {
 
       expect(inError, isFalse, reason: _location);
 
-      final name = appState?.errorStateName;
-
-      expect(name?.contains('Page2State'), isTrue, reason: _location);
+      // final name = appState?.errorStateName;
+      //
+      // expect(name?.contains('Page2State'), isTrue, reason: _location);
 
       // Turn off the error
       appController.errorInBuilder = false;

@@ -10,6 +10,15 @@ class DevTools extends StateXController {
 
   static DevTools? _this;
 
+  /// Called when it's [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
+  }
+
   ///
   @override
   Future<bool> initAsync() async {

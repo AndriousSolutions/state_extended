@@ -191,6 +191,19 @@ class BuildErrorWidget extends StateXController {
     }
   }
 
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+
+    if (_errorWidgetBuilder != null) {
+      // Return to original Error Builder widget
+      ErrorWidget.builder = _errorWidgetBuilder!;
+    }
+    super.dispose();
+  }
+
   // Record the original Error Builder widget
   ErrorWidgetBuilder? _prevErrorWidgetBuilder;
 
