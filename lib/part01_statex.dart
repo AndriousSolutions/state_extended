@@ -87,7 +87,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// If _controller == null, get the 'first assigned' controller if any.
   StateXController? get controller => _controller ??= firstCon;
 
-  /// The App's State object
+  /// The App's StateX object
   @override
   AppStateX? get appStateX {
     if (_appStateX == null) {
@@ -118,10 +118,10 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Supply a reference to the App State object if any
     controller?._appStateX = appStateX;
 
-    String id;
-    if (controller == null) {
-      id = '';
-    } else {
+    String id = '';
+
+    if (controller != null) {
+      //
       id = super.add(controller); // mixin _ControllersByType
       // Something is not right with that controller.
       if (id.isEmpty) {
@@ -130,6 +130,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
           if (_mapControllerByType.containsKey(type)) {
             final con = _mapControllerByType[type];
             if (con != null) {
+              id = con.identifier;
               assert(
                 controller.identifier == con.identifier,
                 'Multiple instances of the same Controller class, $type, is not allowed in a StateX class. '
@@ -144,20 +145,11 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         }());
       } else {
         /// This connects the StateXController to this State object!
-        if (controller._pushStateToSetter(this)) {
-          // If just added, assign as the 'current' state object.
-          controller._state = this;
-        }
+        controller._pushStateToSetter(this);
       }
     }
     return id;
   }
-
-  /// Remove a specific StateXController to this State object.
-  /// Returns the StateXController's unique String identifier.
-  @override
-  bool remove(StateXController? controller) =>
-      super.remove(controller); // mixin _ControllersByType
 
   /// Update the 'first' controller if necessary
   /// Place in the [didUpdateWidget] function in the special case
@@ -184,7 +176,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @Deprecated('Use addAll() instead.')
   List<String> addList(List<StateXController>? list) => addAll(list);
 
-  /// Add a list of 'Controllers' to be associated with this StatX object.
+  /// Add a list of 'Controllers' to be associated with this StateX object.
   @override
   List<String> addAll(List<StateXController>? list) {
     if (list == null) {
@@ -367,6 +359,47 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return runInit;
   }
 
+  /// Catch it if the initAsync() throws an error
+  /// WITH GREAT POWER COMES GREAT RESPONSIBILITY
+  /// RReturn true to indicate the error handled.
+  /// Return false to continue the error handling.
+  @override
+  Future<bool> catchAsyncError(Object error) async {
+    //
+    assert(() {
+      if (_debugPrintEvents) {
+        debugPrint(
+            '$_consoleLeadingLine catchAsyncError() in $_consoleClassName');
+      }
+      return true;
+    }());
+
+    bool caught = false;
+
+    // No 'setState()' functions are allowed to fully function at this point.
+    // _setStateAllowed = false;
+
+    // All the Controllers if any
+    for (final con in controllerList) {
+      try {
+        final catchError = await con.catchAsyncError(error);
+        if (catchError) {
+          caught = true;
+        }
+      } catch (e, stack) {
+        // Pass the error to the controller to handle
+        _initAsyncError(e, con, stack: stack);
+        // Have it handled by an error handler.
+        rethrow;
+      }
+    }
+    _setStateAllowed = true;
+
+    /// No 'setState()' functions are necessary
+    _setStateRequested = false;
+    return caught;
+  }
+
   /// Called with every [StateX] associated with this Controller
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Implement any asynchronous operations needed done at start up.
@@ -403,11 +436,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
         // Ignore Route changes
         RouteObserverStates.unsubscribeRoutes(this);
-
-        // Users may have explicitly call this.
-        if (_deactivated) {
-          return;
-        }
 
         // Indicate this State object is deactivated.
         _deactivated = true;
@@ -507,6 +535,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     try {
       // runZonedGuarded<void>(() {
       // scheduleMicrotask(() {
+
       // Remove from the list of StateX objects present in the app!
       // It may be premature but Controllers still have access.
       _removeFromMapOfStates(this);
@@ -535,6 +564,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       /// Call its controllers' dispose() functions
       for (final con in controllerList) {
         con.disposeState(this);
+        // There's no more State objects referencing tis controller
         if (con.lastState == null) {
           con.dispose();
         }
@@ -662,6 +692,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // A triggered system event
     _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangeMetrics';
 
     // Don't if the State object is defunct.
     if (!mounted) {
@@ -708,6 +739,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // A triggered system event
     _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangeTextScaleFactor';
 
     // Don't if the State object is defunct.
     if (!mounted) {
@@ -740,6 +772,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     super.didChangePlatformBrightness();
     // A triggered system event
     _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangePlatformBrightness';
 
     // Don't if the State object is defunct.
     if (!mounted) {
@@ -774,6 +807,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     super.didChangeLocales(locales);
     // A triggered system event
     _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangeLocales';
 
     // Don't if the State object is defunct.
     if (!mounted) {
@@ -809,6 +843,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     super.didChangeAccessibilityFeatures();
     // A triggered system event
     _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangeAccessibilityFeatures';
 
     // Don't if the State object is defunct.
     if (!mounted) {
@@ -844,6 +879,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     super.didHaveMemoryPressure();
     // A triggered system event
     _hadSystemEvent = true;
+    _lastSystemEvent = 'didHaveMemoryPressure';
 
     // Don't if the State object is defunct.
     if (!mounted) {
@@ -1102,7 +1138,8 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     }
   }
 
-  /// State object was in 'paused' state
+  /// State object was in 'detached' state
+  @Deprecated('No useful. Could never be used.')
   bool get detachedAppLifecycle => _detachedAppLifecycle;
   bool _detachedAppLifecycle = false;
 
@@ -1143,6 +1180,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     // A triggered system event
     _hadSystemEvent = true;
+    _lastSystemEvent = 'didRequestAppExit';
 
     // Don't if the State object is defunct.
     if (!mounted) {
@@ -1568,10 +1606,16 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   }
 
   /// State object experienced a system event
+  @Deprecated('Use lastSystemEvent instead')
   bool get hadSystemEvent => _hadSystemEvent;
 
   // Reset in _pushStateToSetter()
   bool _hadSystemEvent = false;
+
+  /// State object last system event experienced
+  String get lastSystemEvent => _lastSystemEvent ?? '';
+
+  String? _lastSystemEvent;
 
   /// Offer an error handler
 // // Overrides StateXonErrorMixin in part20_statex_error_mixin.dart

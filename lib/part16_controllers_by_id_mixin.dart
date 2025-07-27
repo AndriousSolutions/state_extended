@@ -9,7 +9,7 @@ part of 'state_extended.dart';
 ///
 /// dartdoc:
 /// {@category AppStateX class}
-mixin ControllersByIdMixin<T extends StatefulWidget> on StateX<T> {
+mixin ControllersInAppByIdMixin<T extends StatefulWidget> on StateX<T> {
   /// Stores the Controller by its Id
   ///  [<id, controller>]
   final Map<String, StateXController> _mapControllerById = {};
@@ -31,17 +31,11 @@ mixin ControllersByIdMixin<T extends StatefulWidget> on StateX<T> {
     if (con == null) {
       id = '';
     } else {
-      id = con.identifier;
+      id = super.add(con);
       if (!containsId(id)) {
         _mapControllerById[id] = con;
         // Will need to retrieve controller by type at times.
         _mapControllerTypes[id] = con.runtimeType;
-
-        /// This connects the StateXController to this State object!
-        if (con._pushStateToSetter(this)) {
-          // If just added, assign as the 'current' state object.
-          con._state = this;
-        }
       }
     }
     return id;
@@ -72,7 +66,8 @@ mixin ControllersByIdMixin<T extends StatefulWidget> on StateX<T> {
     if (remove) {
       remove = _mapControllerById.containsKey(id);
       if (remove) {
-        _mapControllerById.remove(id);
+        final con = _mapControllerById.remove(id);
+        super.remove(con);
         _mapControllerTypes.remove(id);
       }
     }
@@ -176,9 +171,10 @@ mixin ControllersByIdMixin<T extends StatefulWidget> on StateX<T> {
 
   @override
   void dispose() {
+    // **IMPORTANT** Call super before clearing gp
+    super.dispose();
     // Clear the its list of Controllers
     _mapControllerById.clear();
     _mapControllerTypes.clear();
-    super.dispose();
   }
 }

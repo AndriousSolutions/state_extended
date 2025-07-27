@@ -8,8 +8,18 @@ import '/src/view.dart';
 /// Includes the mixin, StateXonErrorMixin, to supply an error handler
 class YetAnotherController extends StateXController
     with StateXonErrorMixin, EventsControllerMixin {
-  /// It's a good practice to make Controllers using the Singleton pattern
+  /// It's practical at times to make Controllers using the Singleton pattern
   factory YetAnotherController() => _this ??= YetAnotherController._();
+
   YetAnotherController._() : super();
   static YetAnotherController? _this;
+
+  /// Called when its [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
+  }
 }

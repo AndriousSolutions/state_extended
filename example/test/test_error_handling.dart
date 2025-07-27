@@ -23,7 +23,7 @@ Future<void> errorHandling(
 
   final con = AnotherController();
 
-  con.initAsyncError = true;
+  con.anotherInitAsyncError = true;
 
   // hot reload
   await binding.reassembleApplication();

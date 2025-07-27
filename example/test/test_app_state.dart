@@ -31,6 +31,7 @@ Future<void> testsAppStateX(WidgetTester tester) async {
 // The first State object is itself --- _MyAppState
   appState = stateObj?.appStateX;
 
+  // Deprecated. Use appSateX, yet must still be tested.
   appState = stateObj?.rootState;
 
   expect(appState, isA<AppStateX>(), reason: _location);

@@ -1,3 +1,57 @@
+## 7.3.0
+
+July 23, 2025
+
+- Future<bool> catchAsyncError(Object error) async { in StateX and StateXController
+- In the StateX class
+  Property, lastSystemEvent, in the StateX class records the last system event if any
+  The boolean getter, hadSystemEvent, is deprecated
+- Updated example app, add radiobutton_widget.dart to example app
+- SetupTestEnvironment() in widget_test.dart
+- Supply a custom error screen when a widget fails to build and be displayed
+- /// State object was in 'detached' state
+  @Deprecated('No useful. Could never be used.')
+  bool get detachedAppLifecycle => _detachedAppLifecycle;
+
+## 7.2.2
+
+July 26, 2025
+
+In part01_statex.dart
+
+- id = con.identifier; in add()
+
+In part04_app_statex.dart
+
+- // The App State's Controllers' error handlers
+- onControllerError(this, details);
+- // The App State's error handler
+- onError(details);
+-
+- @Deprecated('No longer supported. Will be removed.')
+- String get errorStateName => _errorStateName ?? '';
+
+**BUGFIX** in part16_controllers_by_id_mixin.dart
+
+- id = super.add(con);
+- super.remove(con);
+- // **IMPORTANT** Call super before clearing gp
+- super.dispose();
+
+In Controllers using factory constructs:
+
+- // Good practice to nullify static instance reference.
+- // Flutter's garbage collection does its best, but why not if no longer used
+- _this = null;
+-
+
+## 7.2.1
+
+July 17, 2025
+
+- **BUGFIX** _state = state; in _pushStateToSetter()
+  Ensure the 'current' state object is returned after a Widget tree rebuild.
+
 ## 7.2.0
 
 July 09, 2025

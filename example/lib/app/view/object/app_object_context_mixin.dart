@@ -55,6 +55,9 @@ mixin class AppObjectContextMixin {
         state = ScaffoldMessenger.maybeOf(context);
       }
 
+      // Clear any current snackBar.
+      state?.clearSnackBars();
+
       state?.showSnackBar(
         SnackBar(
           key: key,

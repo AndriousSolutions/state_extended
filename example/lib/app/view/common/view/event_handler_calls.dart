@@ -261,7 +261,7 @@ mixin EventsControllerMixin on StateXController {
 
   /// Called with every [StateX] associated with this Controller
   @override
-  Future<bool> initAsyncState(StateX state) async {
+  Future<bool> initAsyncState(covariant State state) async {
     final init = await super.initAsyncState(state);
     LogController.log(
         'initAsyncState(${eventStateClassNameOnly('$state')}) in $controllerName');
@@ -310,8 +310,8 @@ mixin EventsControllerMixin on StateXController {
   /// Note: YOU WILL HAVE NO IDEA WHEN THIS WILL RUN in the Framework.
   @override
   void dispose() {
-    super.dispose();
     LogController.log('dispose() in $controllerName');
+    super.dispose();
   }
 
   /// The framework calls this method when this StateX object will never build again.

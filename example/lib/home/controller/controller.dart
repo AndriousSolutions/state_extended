@@ -68,6 +68,14 @@ class Controller extends StateXController
         ExampleAppController(); // Not in constructor to prevent stack overflow.
   }
 
+  /// Called when its [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // If testing (package:flutter_test/flutter_test.dart) best to nullify instance.
+    _this = null;
+    super.dispose();
+  }
+
   /// Called with every new State object to use this controller if any
   @override
   void stateInit(state) {

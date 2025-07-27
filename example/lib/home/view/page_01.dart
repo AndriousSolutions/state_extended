@@ -26,7 +26,7 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
         ) {
     _con = controller as Controller;
     // Add some additional controllers if you like
-    addAll([AnotherController(), YetAnotherController(), WordPairsTimer()]);
+    addAll([YetAnotherController(), WordPairsTimer()]);
     // Retrieve from this State object a particular Controller.
     _timer = controllerByType<WordPairsTimer>()!;
   }
@@ -64,46 +64,24 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
     // Note, returns null if not found.
     nullableController = controllerByType<Controller>();
 
-    /// You're able to retrieve a controller by its Type.
-    // Note, returns null if not found.
-    var anotherController = controllerByType<AnotherController>();
-
-    /// Each controller is assigned a unique identifier.
-    // identifier is a 35-alphanumeric character string
-    id = anotherController?.identifier;
-
-    /// You're able to retrieve a controller by its identifier.
-    // Note, returns null if not found or id == null or empty
-    nullableController = controllerById(id);
-
-    // No need to test 'nullableController is AnotherController'
-    // Searching by identifier ensures its of that Type.
-    if (nullableController != null) {
-      anotherController = nullableController as AnotherController;
-    }
-
-    // Since, I'm confident such a controller will be retrieved
-    // I can shortened the process like this.
-    anotherController = controllerById(id) as AnotherController;
-
-    final AppStateX? appState = appStateX;
-
-    /// The controller is was also assigned to the 'first' State object.
-    // Note, returns null if not found or id == null or empty
-    anotherController = appState?.controllerById(id) as AnotherController;
-
-    /// The controller is was assigned to the 'first' State object.
-    // Note, returns null if not found.
-    anotherController = appState?.controllerByType<AnotherController>();
-
     var sameState = stateByType<AppStateX>();
 
     sameState = ofState<AppStateX>(); // Merely different syntax
+
+    final AppStateX? appState = appStateX;
 
     /// It should be this very State object.
     if (sameState is AppStateX) {
       assert(sameState == appState, "Should be of type 'AppStateX'");
     }
+
+    // /// The controller is was also assigned to the 'first' State object.
+    // // Note, returns null if not found or id == null or empty
+    // anotherController = appState?.controllerById(id) as AnotherController;
+    //
+    // /// The controller is was assigned to the 'first' State object.
+    // // Note, returns null if not found.
+    // anotherController = appState?.controllerByType<AnotherController>();
 
     /// Retrieve the State object by its StatefulWidget
     State? state = controller!.stateOf<MyApp>();
@@ -149,6 +127,26 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
   /// Using your favorite IDE, place a breakpoint in deactivate()
   @override
   Widget build(BuildContext context) => super.build(context);
+
+  /// The framework calls this method whenever it removes this [State] object
+  /// from the tree.
+  @override
+  void deactivate() {
+    super.deactivate();
+  }
+
+  /// Called when this object is reinserted into the tree after having been
+  /// removed via [deactivate].
+  @override
+  void activate() {
+    super.activate();
+  }
+
+  /// The framework calls this method when this StateX object will never build again.
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   ///
   @override
@@ -330,17 +328,10 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
   @override
   Future<bool> catchAsyncError(Object error) async {
     //
-    final caught =
-        error.toString().contains('Error in AnotherController.initAsync()!');
-    if (caught) {
-      assert(() {
-        debugPrint(
-            '=========== Caught error in catchAsyncError() for $eventStateClassName');
-        return true;
-      }());
-    }
+    final caught = await super.catchAsyncError(error);
 
     final con = appCon as ExampleAppController;
+
     if (con.errorCatchAsyncError) {
       con.errorCatchAsyncError = false;
       throw Exception('Error in Catch!');

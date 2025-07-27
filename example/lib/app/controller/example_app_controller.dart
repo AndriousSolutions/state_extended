@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/scheduler.dart';
+
 import '/src/controller.dart';
 
 import '/src/view.dart';
@@ -25,6 +27,15 @@ class ExampleAppController extends StateXController
   // The Home screen's controller
   final Controller _controller;
 
+  /// Called when it's [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
+  }
+
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Initialize asynchronous items essential to the Mobile Applications.
   /// Typically called within a FutureBuilder() widget.
@@ -46,19 +57,36 @@ class ExampleAppController extends StateXController
     if (init) {
       init = await super.initAsync();
     }
+    return init;
+  }
 
-    // Throw an error right here at the beginning to test recovery code.
-    if (initAppAsyncError) {
-      // initAppAsyncError = false;
-      throw Exception('Error in initAsync()!');
-    }
+  @override
+  Future<bool> initAsyncState(state) async {
+    //
+    var init = await super.initAsyncState(state);
 
-    /// In production, this is where databases are opened, logins attempted, etc.
-    if (initAsyncDelay) {
-      // Simply wait for 10 seconds at startup.
-      init = await Future<bool>.delayed(const Duration(seconds: 10), () {
-        return true;
-      });
+    if (init) {
+      //
+      if (state is AppStateX) {
+        /// In production, this is where databases are opened, logins attempted, etc.
+        if (initAsyncDelay) {
+          //
+          // init = false;
+
+          // Simply wait for 10 seconds at startup.
+          await Future<bool>.delayed(const Duration(seconds: 10), () {
+            init = true;
+            return true;
+          });
+        }
+
+        //
+        // Throw an error right here at the beginning to test recovery code.
+        if (initAppAsyncError) {
+          // initAppAsyncError = false;
+          throw Exception("Error in App's initAsync()!");
+        }
+      }
     }
     return init;
   }
@@ -87,7 +115,9 @@ class ExampleAppController extends StateXController
     super.onAsyncError(details); // Not really necessary. Just for Codecov
     //
     assert(() {
-      if (details.exception.toString().contains('Error in initAsync()!')) {
+      if (details.exception
+          .toString()
+          .contains("Error in App's initAsync()!")) {
         debugPrint(
             '########### Caught error in onAsyncError() for $controllerName');
       }
@@ -95,18 +125,39 @@ class ExampleAppController extends StateXController
     }());
   }
 
+  /// Catch it if the initAsync() throws an error
+  /// WITH GREAT POWER COMES GREAT RESPONSIBILITY
+  /// Return true to ignore the error, false to continue the error handling
   @override
-  void onError(FlutterErrorDetails details) {
-    // Optionally call super for debugPrint()
-    super.onError(details);
+  Future<bool> catchAsyncError(Object error) async {
+    //
+    final errMag = error.toString();
 
-    final message = details.exceptionAsString();
+    var caught = errMag.contains("Error in App's initAsync()!");
 
-    final handled = message.contains('Fake');
-
-    if (handled) {
-      // handled.
+    if (caught) {
+      caught = _appSettings.catchInitAppAsyncError;
+      if (!caught) {
+        // Return to true or you're trapped not recovering
+        _appSettings.catchInitAppAsyncError = true;
+      }
     }
+
+    if (caught) {
+      assert(() {
+        debugPrint(
+            '=========== Caught error in catchAsyncError() for $controllerName');
+        return true;
+      }());
+
+      // Supplied when start up is completed
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        // Allows for a SnackBar
+        MyApp.app.showSnackBar('An error at startup but was caught');
+      });
+    }
+
+    return caught;
   }
 
   /// when the Drawer is just opened.
@@ -147,16 +198,22 @@ class ExampleAppController extends StateXController
 
   set initAppAsyncError(bool? error) => _appSettings.initAppAsyncError = error;
 
+  /// Catch the error in App's initAsync()
+  bool get catchInitAppAsyncError => _appSettings.catchInitAppAsyncError;
+
   /// Error in builder()
   bool get errorInBuilder => _appSettings.errorInBuilder;
 
-  set errorInBuilder(bool? splash) => _appSettings.errorInBuilder = splash;
+  set errorInBuilder(bool? error) => _appSettings.errorInBuilder = error;
 
   /// Error in catchAsyncError()
   bool get errorCatchAsyncError => _appSettings.errorCatchAsyncError;
 
   set errorCatchAsyncError(bool? error) =>
       _appSettings.errorCatchAsyncError = error;
+
+  /// Catch error in catchAsyncError()
+  bool get catchErrorCatchAsyncError => _appSettings.catchErrorCatchAsyncError;
 
   ///
   @override

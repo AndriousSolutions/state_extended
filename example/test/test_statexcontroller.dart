@@ -79,15 +79,6 @@ void testsStateXController(WidgetTester tester) {
   _testAppController(tester);
 
   /// This State object 'contains' this Controller.
-  var another = AnotherController();
-
-  keyId = another.identifier;
-
-  another = appState.controllerById(keyId) as AnotherController;
-
-  expect(another, isA<AnotherController>(), reason: location);
-
-  /// This State object 'contains' this Controller.
   var andAnother = YetAnotherController();
 
   keyId = andAnother.identifier;

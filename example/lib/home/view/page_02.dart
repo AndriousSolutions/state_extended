@@ -20,6 +20,9 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
   /// Define an InheritedWidget to be inserted above this Widget on the Widget tree.
   /// showBinding: Print in console when Binding events are triggered.
   Page2State() : super(controller: Controller()) {
+    // Add additional Controller
+    add(AnotherController());
+
     /// Cast to type, Controller
     con = controller as Controller;
   }
@@ -50,6 +53,28 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
     final lastState = controller?.statex?.lastState;
 
     assert(lastState is Page2State, 'Should be this State object');
+
+    /// You're able to retrieve a controller by its Type.
+    // Note, returns null if not found.
+    var anotherController = controllerByType<AnotherController>();
+
+    /// Each controller is assigned a unique identifier.
+    // identifier is a 35-alphanumeric character string
+    final id = anotherController?.identifier;
+
+    /// You're able to retrieve a controller by its identifier.
+    // Note, returns null if not found or id == null or empty
+    final nullableController = controllerById(id);
+
+    // No need to test 'nullableController is AnotherController'
+    // Searching by identifier ensures its of that Type.
+    if (nullableController != null) {
+      anotherController = nullableController as AnotherController;
+    }
+
+    // Since, I'm confident such a controller will be retrieved
+    // I can shortened the process like this.
+    anotherController = controllerById(id) as AnotherController;
 
     /// The latest BuildContext in the app.
     /// Note, this State object's own context is not yet defined in initState()
@@ -96,7 +121,7 @@ class Page2State extends StateX<Page2> with EventsStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget builder(BuildContext context) {
     // Every State object has the App's main controller as a property.
     final appController = appCon as ExampleAppController;
     // Throw an error right here at the beginning to test recovery code.

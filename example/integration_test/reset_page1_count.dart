@@ -11,12 +11,12 @@ const _location = '========================== reset_page1_count.dart';
 Future<void> resetPage1Count(WidgetTester tester) async {
   //
   await tester.tap(find.byKey(const Key('Page 2')));
-  await tester.pumpAndSettle();
-  await tester.pumpAndSettle();
+  await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
   await tester.tap(find.byKey(const Key('Page 3')));
   await tester.pumpAndSettle();
 
+  // A 'new' Key value is assigned to the Page 1
   await tester.tap(find.byKey(const Key('New Key')));
   await tester.pumpAndSettle();
 

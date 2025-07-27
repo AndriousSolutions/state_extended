@@ -1,22 +1,34 @@
 //
+import '/src/controller.dart' show BuildErrorWidget;
+
 import '/src/view.dart';
 
 ///
 class AppSettingsController extends StateXController
     with TabsScaffoldController {
-  // TwoTabScaffoldController {
-  /// Singleton Pattern
+  /// It's practical at times to make Controllers using the Singleton pattern
   factory AppSettingsController() => _this ??= AppSettingsController._();
 
   AppSettingsController._();
 
   static AppSettingsController? _this;
 
+  /// Called when it's [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
+  }
+
   ///
   @override
   Future<bool> initAsync() async {
     await super.initAsync();
     final settings = await _getPreferences();
+    // Enable or disable the Custom error screen
+    BuildErrorWidget().disabled = !_customErrorScreen;
     return settings;
   }
 
@@ -76,6 +88,29 @@ class AppSettingsController extends StateXController
     }
   }
 
+  /// Custom Error Screen
+  bool get customErrorScreen => _customErrorScreen;
+  bool _customErrorScreen = false;
+
+  set customErrorScreen(bool? error) {
+    if (error != null) {
+      _customErrorScreen = error;
+    }
+  }
+
+  /// Toggle the Custom Error Screen
+  // ignore: avoid_positional_boolean_parameters
+  void toggleErrorScreen(bool value) {
+    //
+    customErrorScreen = value;
+    //
+    if (value) {
+      BuildErrorWidget().disabled = false;
+    } else {
+      BuildErrorWidget().disabled = true;
+    }
+  }
+
   /// Error in the App's initAsync()
   bool get initAppAsyncError => _initAppAsyncError;
   bool _initAppAsyncError = false;
@@ -86,23 +121,43 @@ class AppSettingsController extends StateXController
     }
   }
 
-  /// Error in initAsync()
-  bool get initAsyncError => _initAsyncError;
-  bool _initAsyncError = false;
+  /// Catch error in initAsync()
+  bool get catchInitAppAsyncError => _catchInitAppAsyncError;
+  bool _catchInitAppAsyncError = false;
 
-  set initAsyncError(bool? error) {
+  set catchInitAppAsyncError(bool? error) {
     if (error != null) {
-      _initAsyncError = error;
+      _catchInitAppAsyncError = error;
+    }
+  }
+
+  /// Error in initAsync()
+  bool get anotherInitAsyncError => _anotherInitAsyncError;
+  bool _anotherInitAsyncError = false;
+
+  set anotherInitAsyncError(bool? error) {
+    if (error != null) {
+      _anotherInitAsyncError = error;
+    }
+  }
+
+  /// Catch error in another initAsync()
+  bool get catchAnotherInitAsyncError => _catchAnotherInitAsyncError;
+  bool _catchAnotherInitAsyncError = false;
+
+  set catchAnotherInitAsyncError(bool? error) {
+    if (error != null) {
+      _catchAnotherInitAsyncError = error;
     }
   }
 
   /// initAsync() return false for failure to initialize successfully
-  bool get initAsyncFailed => _initAsyncFailed;
-  bool _initAsyncFailed = false;
+  bool get initAsyncReturnsFalse => _initAsyncReturnsFalse;
+  bool _initAsyncReturnsFalse = false;
 
-  set initAsyncFailed(bool? error) {
+  set initAsyncReturnsFalse(bool? error) {
     if (error != null) {
-      _initAsyncFailed = error;
+      _initAsyncReturnsFalse = error;
     }
   }
 
@@ -113,6 +168,16 @@ class AppSettingsController extends StateXController
   set errorCatchAsyncError(bool? error) {
     if (error != null) {
       _errorCatchAsyncError = error;
+    }
+  }
+
+  /// Catch error in errorCatchAsyncError()
+  bool get catchErrorCatchAsyncError => _catchErrorCatchAsyncError;
+  bool _catchErrorCatchAsyncError = false;
+
+  set catchErrorCatchAsyncError(bool? error) {
+    if (error != null) {
+      _catchErrorCatchAsyncError = error;
     }
   }
 
@@ -150,11 +215,28 @@ class AppSettingsController extends StateXController
 
       _initAppAsyncError = await prefs.getBool('initAppAsyncError') ?? false;
 
-      _initAsyncError = await prefs.getBool('initAsyncError') ?? false;
+      _initAsyncReturnsFalse =
+          await prefs.getBool('initAsyncReturnsFalse') ?? false;
+
+      _anotherInitAsyncError = await prefs.getBool('initAsyncError') ?? false;
+
+      _catchInitAppAsyncError =
+          await prefs.getBool('catchInitAsyncError') ?? false;
 
       _errorInBuilder = await prefs.getBool('errorInBuilder') ?? false;
 
+      _customErrorScreen = await prefs.getBool('customErrorScreen') ?? true;
+
+      _catchAnotherInitAsyncError =
+          await prefs.getBool('catchAnotherInitAsyncError') ?? false;
+
       _errorButton = await prefs.getBool('errorButton') ?? false;
+
+      _catchErrorCatchAsyncError =
+          await prefs.getBool('catchErrorCatchAsyncError') ?? false;
+
+      _errorCatchAsyncError =
+          await prefs.getBool('errorCatchAsyncError') ?? false;
 
       _useMaterial3 = await prefs.getBool('useMaterial3') ?? true;
 
@@ -180,11 +262,25 @@ class AppSettingsController extends StateXController
 
       await prefs.setBool('initAppAsyncError', _initAppAsyncError);
 
-      await prefs.setBool('initAsyncError', _initAsyncError);
+      await prefs.setBool('initAsyncReturnsFalse', _initAsyncReturnsFalse);
+
+      await prefs.setBool('initAsyncError', _anotherInitAsyncError);
+
+      await prefs.setBool('catchInitAsyncError', _catchInitAppAsyncError);
 
       await prefs.setBool('errorInBuilder', _errorInBuilder);
 
+      await prefs.setBool('customErrorScreen', _customErrorScreen);
+
+      await prefs.setBool(
+          'catchAnotherInitAsyncError', _catchAnotherInitAsyncError);
+
       await prefs.setBool('errorButton', _errorButton);
+
+      await prefs.setBool(
+          'catchErrorCatchAsyncError', _catchErrorCatchAsyncError);
+
+      await prefs.setBool('errorCatchAsyncError', _errorCatchAsyncError);
 
       await prefs.setBool('useMaterial3', _useMaterial3);
 

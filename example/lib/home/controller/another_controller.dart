@@ -12,7 +12,7 @@ import '/src/view.dart';
 /// Includes the mixin, StateXonErrorMixin, to supply an error handler
 class AnotherController extends StateXController
     with StateXonErrorMixin, EventsControllerMixin {
-  /// It's a good practice to make Controllers using the Singleton pattern
+  /// It's practical at times to make Controllers using the Singleton pattern
   factory AnotherController() => _this ??= AnotherController._();
 
   AnotherController._() : _appSettings = AppSettingsController();
@@ -21,23 +21,38 @@ class AnotherController extends StateXController
   final AppSettingsController _appSettings;
 
   /// Explicitly cause an error
-  bool get initAsyncError => _appSettings.initAsyncError;
+  bool get anotherInitAsyncError => _appSettings.anotherInitAsyncError;
 
-  set initAsyncError(bool? error) => _appSettings.initAsyncError = error;
+  set anotherInitAsyncError(bool? error) =>
+      _appSettings.anotherInitAsyncError = error;
+
+  /// Catch another error in initAsync
+  bool get catchAnotherInitAsyncError =>
+      _appSettings.catchAnotherInitAsyncError;
 
   /// Explicitly return false
-  bool get initAsyncFailed => _appSettings.initAsyncFailed;
+  bool get initAsyncReturnsFalse => _appSettings.initAsyncReturnsFalse;
 
-  set initAsyncFailed(bool? error) => _appSettings.initAsyncFailed = error;
+  set initAsyncReturnsFalse(bool? error) =>
+      _appSettings.initAsyncReturnsFalse = error;
 
   /// Supply the name of this class
   String get className =>
       toString().replaceAll('Instance of', '').replaceAll("'", '');
 
+  /// Called when its [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
+  }
+
   @override
   Future<bool> initAsync() async {
     var init = await super.initAsync();
-    if (initAsyncFailed) {
+    if (initAsyncReturnsFalse) {
       init = false;
     }
     return init;
@@ -46,7 +61,7 @@ class AnotherController extends StateXController
   @override
   Future<bool> initAsyncState(state) async {
     await super.initAsyncState(state);
-    if (initAsyncError) {
+    if (anotherInitAsyncError) {
       throw Exception('Error in AnotherController.initAsync()!');
     }
     return true;
@@ -71,6 +86,33 @@ class AnotherController extends StateXController
     }
   }
 
+  /// Catch it if the initAsync() throws an error
+  /// WITH GREAT POWER COMES GREAT RESPONSIBILITY
+  /// Return true to ignore the error, false to continue the error handling
+  @override
+  Future<bool> catchAsyncError(Object error) async {
+    //
+    var caught =
+        error.toString().contains('Error in AnotherController.initAsync()!');
+
+    if (caught) {
+      //
+      caught = _appSettings.catchAnotherInitAsyncError;
+
+      if (!caught) {
+        // Return to true or you're in a loop
+        _appSettings.catchAnotherInitAsyncError = true;
+      }
+    }
+
+    if (caught) {
+      // Allows for a SnackBar
+      MyApp.app.showSnackBar('An error occurred but caught');
+    }
+
+    return caught;
+  }
+
   /// Provide the setState() function to external actors
   @override
   void setState(VoidCallback fn) => super.setState(fn);
@@ -93,10 +135,6 @@ class AnotherController extends StateXController
   /// Called whenever its [StateX] object is placed in the 'background.'
   @override
   void deactivate() => super.deactivate();
-
-  /// Called when this [StateX] object is itself disposed of.
-  @override
-  void dispose() => super.dispose();
 
   /// Override this method to respond when the [StatefulWidget] is recreated.
   @override

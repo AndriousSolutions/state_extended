@@ -24,6 +24,7 @@ import 'package:flutter/cupertino.dart'
         DefaultCupertinoLocalizations;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter/services.dart' show PredictiveBackEvent;
 export 'package:flutter/services.dart' show PredictiveBackEvent;

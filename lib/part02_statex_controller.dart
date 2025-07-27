@@ -34,11 +34,6 @@ class StateXController
     _debugPrintEvents = printEvents ?? true;
   }
 
-  /// Initialize any 'time-consuming' operations at the beginning.
-  /// Implement any asynchronous operations needed done at start up.
-  /// @mustCallSuper
-  /// Future< bool > initAsync() async => true;
-
   /// The framework will call this method exactly once.
   /// Override this method to perform initialization,
   @override
@@ -67,8 +62,8 @@ class StateXController
   @override
   @mustCallSuper
   Future<bool> initAsync() async {
-    // Optionally call super for debugPrint()
     assert(() {
+      // Optionally call super for debugPrint()
       if (_debugPrintEvents) {
         debugPrint('$_consoleLeadingLine initAsync() in $this');
       }
@@ -111,6 +106,11 @@ class StateXController
       return true;
     }());
   }
+
+  /// Catch it if the initAsync() throws an error
+  /// WITH GREAT POWER COMES GREAT RESPONSIBILITY
+  /// Return true to ignore the error, false to continue the error handling
+  Future<bool> catchAsyncError(Object error) async => false;
 
   /// Associate this StateXController to the specified State object
   /// to use that State object's functions and features.

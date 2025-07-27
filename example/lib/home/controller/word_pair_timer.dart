@@ -62,6 +62,14 @@ class WordPairsTimer extends StateXController
     model.addState(state);
   }
 
+  /// Called when its [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // If testing (package:flutter_test/flutter_test.dart) best to nullify instance.
+    _this = null;
+    super.dispose();
+  }
+
   /// In case the Widget is return to the Widget tree
   @override
   void activate() {

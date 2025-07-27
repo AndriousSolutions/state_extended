@@ -1,3 +1,7 @@
+// Copyright 2025 Andrious Solutions Ltd. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 ///
 import 'dart:ui' as i
     show
@@ -53,7 +57,7 @@ import 'package:flutter/rendering.dart'
 
 import '/src/controller.dart' show StateXController;
 
-import '/src/view.dart' show MyApp, State, StateX;
+import '/src/view.dart' show AppObject, AppStateX, State, StateX;
 
 ///
 class BuildErrorWidget extends StateXController {
@@ -64,6 +68,8 @@ class BuildErrorWidget extends StateXController {
     String? appName,
     String? message,
     bool? showStackTrace,
+    bool? useMaterial,
+    bool? disabled,
     i.ParagraphStyle? paragraphStyle,
     i.TextStyle? textStyle,
     EdgeInsets? padding,
@@ -76,6 +82,8 @@ class BuildErrorWidget extends StateXController {
         appName,
         message,
         showStackTrace,
+        useMaterial,
+        disabled,
         paragraphStyle,
         textStyle,
         padding,
@@ -84,34 +92,75 @@ class BuildErrorWidget extends StateXController {
       );
 
   BuildErrorWidget._(
-    this.key,
-    this.header,
-    this.appName,
-    this.message,
-    this.showStackTrace,
+    Key? key,
+    String? header,
+    String? appName,
+    String? message,
+    bool? showStackTrace,
+    this.useMaterial,
+    bool? disabled,
     this.paragraphStyle,
     this.textStyle,
     this.padding,
     this.minimumWidth,
     this.backgroundColor,
-  );
+  ) {
+    _key = key;
+    _header = header;
+    _appName = appName;
+    _message = message;
+    _showStackTrace = showStackTrace;
+    // Disable this custom error screen and use the previous error builder widget
+    _disabled = disabled ?? false;
+  }
 
   static BuildErrorWidget? _this;
 
   ///
-  Key? key;
+  Key? _key;
 
   /// Header of the text
-  String? header;
+  String? _header;
 
   /// App name and or info
-  String? appName;
+  String? _appName;
 
   /// The message to display.
-  String? message;
+  String? _message;
 
   /// retrieve Stack Trace if any
-  bool? showStackTrace;
+  bool? _showStackTrace;
+
+  /// Disable this builder and return to the original
+  bool get disabled => _disabled;
+
+  set disabled(bool? v) {
+    //
+    if (v != null) {
+      //
+      _disabled = v;
+
+      if (v) {
+        // Only toggle between these two
+        if (ErrorWidget.builder == displayBuildErrorWidget &&
+            _prevErrorWidgetBuilder != null) {
+          ErrorWidget.builder = _prevErrorWidgetBuilder!;
+        }
+      } else {
+        // Only toggle between these two
+        if (_prevErrorWidgetBuilder != null &&
+            ErrorWidget.builder == _prevErrorWidgetBuilder) {
+          ErrorWidget.builder = displayBuildErrorWidget;
+        }
+      }
+    }
+  }
+
+  // Dynamically enable or disable the error builder widget
+  late bool _disabled;
+
+  /// Use MaterialPageRoute or CupertinoPageRoute
+  bool? useMaterial;
 
   ///
   i.ParagraphStyle? paragraphStyle;
@@ -134,13 +183,16 @@ class BuildErrorWidget extends StateXController {
     super.initState();
     // Allow only the first instance to make changes
     if (ErrorWidget.builder != displayBuildErrorWidget) {
-      _errorWidgetBuilder = ErrorWidget.builder;
-      ErrorWidget.builder = displayBuildErrorWidget;
+      _prevErrorWidgetBuilder = ErrorWidget.builder;
+      // Can explicitly disabled at times
+      if (!_disabled) {
+        ErrorWidget.builder = displayBuildErrorWidget;
+      }
     }
   }
 
   // Record the original Error Builder widget
-  ErrorWidgetBuilder? _errorWidgetBuilder;
+  ErrorWidgetBuilder? _prevErrorWidgetBuilder;
 
   /// Called by every [StateX] object associated with it.
   /// Override this method to perform initialization,
@@ -149,14 +201,26 @@ class BuildErrorWidget extends StateXController {
     //
     // If in testing, you will need to return to original Error Builder widget
     if (!inWidgetsFlutterBinding) {
-      if (state.widget is MyApp) {
+      if (state is AppStateX) {
         // Allow only the first instance to make changes
         if (ErrorWidget.builder != displayBuildErrorWidget) {
-          _errorWidgetBuilder = ErrorWidget.builder;
-          ErrorWidget.builder = displayBuildErrorWidget;
+          _prevErrorWidgetBuilder = ErrorWidget.builder;
+          // Can explicitly disabled at times
+          if (!_disabled) {
+            ErrorWidget.builder = displayBuildErrorWidget;
+          }
         }
       }
     }
+  }
+
+  /// Called when it's [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
   }
 
   @override
@@ -164,24 +228,14 @@ class BuildErrorWidget extends StateXController {
     //
     // If in testing, you will need to return to original Error Builder widget
     if (!inWidgetsFlutterBinding) {
-      if (state.widget is MyApp) {
-        if (_errorWidgetBuilder != null) {
+      if (state is AppStateX) {
+        if (_prevErrorWidgetBuilder != null) {
           // Return to original Error Builder widget
-          ErrorWidget.builder = _errorWidgetBuilder!;
+          ErrorWidget.builder = _prevErrorWidgetBuilder!;
         }
       }
     }
     super.deactivateState(state);
-  }
-
-  @override
-  void dispose() {
-    //
-    if (_errorWidgetBuilder != null) {
-      // Return to original Error Builder widget
-      ErrorWidget.builder = _errorWidgetBuilder!;
-    }
-    super.dispose();
   }
 
   /// Use low-level primitives to return a simple Widget.
@@ -209,7 +263,7 @@ class BuildErrorWidget extends StateXController {
       message = '\n\n${details.exception}\n\n';
 
       if (details.stack != null &&
-          (showStackTrace ?? this.showStackTrace ?? true)) {
+          (showStackTrace ?? _showStackTrace ?? true)) {
         //
         final stack = details.stack.toString().split('\n');
 
@@ -227,10 +281,10 @@ class BuildErrorWidget extends StateXController {
     }
     // Parameters take priority
     return _ErrorRenderObjectWidget(
-      key: key ?? this.key,
-      header: header ?? this.header,
-      appName: appName ?? this.appName,
-      message: message ?? this.message,
+      key: key ?? _key,
+      header: header ?? _header,
+      appName: appName ?? _appName,
+      message: message ?? _message,
       error: error ?? details.exception,
       paragraphStyle: paragraphStyle ?? this.paragraphStyle,
       textStyle: textStyle ?? this.textStyle,
@@ -283,7 +337,7 @@ class BuildErrorWidget extends StateXController {
       backgroundColor: backgroundColor,
     );
     Route<dynamic> route;
-    if (MyApp.app.useMaterial) {
+    if (useMaterial ?? true) {
       route = MaterialPageRoute<dynamic>(
           builder: (_) => widget, settings: settings);
     } else {
@@ -576,7 +630,7 @@ class _ErrorBox extends RenderBox with RenderObjectWithChildMixin<RenderBox> {
   }
 
   void _drawMessage(PaintingContext context, double top) {
-    const text = 'An error has occurred in this app.\n';
+    const text = 'An error has occurred.\n';
     final builder = i.ParagraphBuilder(i.ParagraphStyle(
       textAlign: TextAlign.left,
       textDirection: TextDirection.ltr,

@@ -26,6 +26,7 @@ class AppObject
         StateXonErrorMixin {
   ///
   factory AppObject() => _this ??= AppObject._();
+
   AppObject._()
       : prefs = SharedPreferencesAsync(),
         appSettings = AppSettingsController();
@@ -57,8 +58,10 @@ class AppObject
   /// The App State object.
 // Not yet gp  @Deprecated('Should not be an exposed property')
   AppStateX? get appState => _appState;
+
   // Reference the App's State object
   static AppStateX? _appState;
+
   set appState(AppStateX? state) {
     if (state != null && (_appState == null || _hotReload)) {
       _appState = state;
@@ -76,6 +79,7 @@ class AppObject
 
   /// Determine if this app is running alone
   bool? get standAloneApp => _standAlone;
+
   set standAloneApp(bool? alone) {
     if (!_standAlone) {
       if (alone != null && alone) {
@@ -101,4 +105,15 @@ class AppObject
 
   /// Flag indicating there was a 'hot reload'
   bool _hotReload = false;
+
+  /// Show a snack bar when appropriate
+  void showSnackBar([String? tip]) {
+    if (inMobile) {
+      final content = tip ?? '';
+      if (content.isNotEmpty) {
+        // Displays a snack bar.
+        snackBar(message: content.trim());
+      }
+    }
+  }
 }

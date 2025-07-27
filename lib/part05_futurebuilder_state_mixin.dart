@@ -30,6 +30,19 @@ mixin FutureBuilderStateMixin on State {
         (Object e) async {
           try {
             _caughtAsyncError = await catchAsyncError(e);
+            // Record error in log
+            final errorDetails = FlutterErrorDetails(
+              exception: e,
+              stack: e is Error ? e.stackTrace : null,
+              library: 'part05_futurebuilder_state_mixin.dart',
+              context: ErrorDescription('** Caught Error in initAsync() **'),
+              informationCollector: () => <DiagnosticsNode>[
+                if (kDebugMode)
+                  DiagnosticsDebugCreator(DebugCreator(context as Element))
+              ],
+            );
+            // Call the Error Handler
+            FlutterError.reportError(errorDetails);
           } catch (e) {
             _caughtAsyncError = false;
             // Record error in log

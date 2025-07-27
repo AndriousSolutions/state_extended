@@ -9,7 +9,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (MyApp.app.useMaterial) {
-      return const AppSettings.column(key: Key('AppSettings'));
+      return const AppSettings(key: Key('AppSettings'));
     } else {
       return const AppSettings.disabled(key: Key('AppSettings'));
     }

@@ -2,10 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+//
 import 'package:flutter/rendering.dart' as debug;
 
+//
 import '/src/controller.dart';
+
+//
 import '/src/model.dart';
+
+//
 import '/src/view.dart';
 
 /// To be passed to the runApp() function.
@@ -33,8 +39,11 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
         super(
           controller: ExampleAppController(),
           controllers: [
-            BuildErrorWidget(header: 'Error', appName: 'Three-page example'),
-            AnotherController(),
+            BuildErrorWidget(
+              header: 'Error',
+              appName: 'Three-page example',
+              useMaterial: MyApp.app.useMaterial,
+            ),
             YetAnotherController(),
           ],
 
@@ -49,6 +58,12 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
   }
 
   final DevTools dev;
+
+  /// The framework calls this method when this StateX object will never build again.
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   /// Try these different 'build' functions so to get access
   /// to a built-in FutureBuilder and or an InheritedWidget.
@@ -121,18 +136,16 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
     );
   }
 
-  /// Set to true and see the built-in spinner at startup
-  bool spinnerStartup = false;
-
   @override
   Widget? onSplashScreen(context) {
     Widget? widget;
-    if (!spinnerStartup) {
-      // No Splash screen during testing
-      if (WidgetsBinding.instance is WidgetsFlutterBinding) {
-        widget = const SplashScreen();
-      }
+    // If there is to be a delay
+    // if ((controller as ExampleAppController).initAsyncDelay) {
+    // No Splash screen during testing
+    if (WidgetsBinding.instance is WidgetsFlutterBinding) {
+      widget = const SplashScreen();
     }
+    // }
     return widget;
   }
 
@@ -143,29 +156,8 @@ class _MyAppState extends AppStateX<MyApp> with EventsStateMixin {
   Future<bool> catchAsyncError(Object error) async {
     // Don't log the next error.
     logStateXError = false;
-
-    assert(() {
-      debugPrint('=========== catchAsyncError() in $eventStateClassName');
-      return true;
-    }());
-
-    final errMag = error.toString();
-
-    var caught = errMag.contains('Error in initAsync()!');
-
-    if (!caught) {
-      caught = errMag.contains('Error in AnotherController.initAsync()!');
-    }
-
-    if (caught) {
-      assert(() {
-        debugPrint(
-            '=========== Caught error in catchAsyncError() for $eventStateClassName');
-        return true;
-      }());
-    }
-
-    return caught;
+    //
+    return super.catchAsyncError(error);
   }
 
   @override

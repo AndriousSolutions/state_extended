@@ -4,7 +4,7 @@
 
 // import 'dart:ui' show AppExitResponse;
 
-import 'package:example/src/controller.dart' show Controller;
+import 'package:example/src/controller.dart' show AnotherController, Controller;
 
 import 'package:example/src/view.dart';
 
@@ -29,6 +29,15 @@ Future<void> testPage2State(WidgetTester tester) async {
 
   // You can retrieve one of the controllers State objects.
   final StateX statePage2 = Controller().stateOf<Page2>()! as StateX;
+
+  /// This State object 'contains' this Controller.
+  var another = AnotherController();
+
+  final keyId = another.identifier;
+
+  another = statePage2.controllerById(keyId) as AnotherController;
+
+  expect(another, isA<AnotherController>(), reason: _location);
 
   statePage2.notifyClients();
 

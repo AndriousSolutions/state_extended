@@ -12,10 +12,20 @@ import '/src/view.dart';
 ///
 class HomeController extends StateXController
     with EventsControllerMixin, TabsScaffoldController {
-  ///
+  /// It's practical at times to make Controllers using the Singleton pattern
   factory HomeController() => _this ??= HomeController._();
+
   HomeController._() : super();
   static HomeController? _this;
+
+  /// Called when it's [StateX] object is itself disposed of.
+  @override
+  void dispose() {
+    // Good practice to nullify static instance reference.
+    // Flutter's garbage collection does its best, but why not if no longer used
+    _this = null;
+    super.dispose();
+  }
 
   /// The List of Widgets
   List<Widget> get children => _imageList();
