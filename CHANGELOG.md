@@ -1,10 +1,11 @@
-## 7.3.1
+## 7.3.1+1
 
 July 27, 2025
 
 - Init SharedPreferencesAsyncPlatform.instance in widget_test.dart
 - _prevErrorWidgetBuilder in build_error_widget.dart
   Corrected Github push merger
+- User's Guide: [StateX By Example](https://dev.to/andrious/statex-by-example-10o2)
 
 ## 7.3.0
 
