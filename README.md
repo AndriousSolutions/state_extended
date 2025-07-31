@@ -17,6 +17,8 @@ to optimize performance by 'rebuilding' only parts and not all of that interface
 The capabilities of Flutter's State class now includes a 'State Object Controller' and the some 22 '
 lifecycle events.'
 
+### No GetX
+
 StateX should not be confused with GetX.
 Both do involve 'controllers' that generally contain the 'business logic' involved in an app--
 GetX has its GetxController class while StateX has its StateXController class, but the similarities
@@ -38,6 +40,12 @@ Further, the StateX class itself now has a 'built-in' FutureBuilder and Inherite
 such a State object to address
 its own asynchronous operations before proceeding, as well as rebuild only parts of a 'busy'
 interface when necessary.
+
+## Articles on DEV.TO
+
+<ul>
+   <li id="statexByExample"><a href="https://dev.to/andrious/statex-by-example-10o2">StateX By Example (living document)</a></li>
+</ul> 
 
 ## Quick Reference
 

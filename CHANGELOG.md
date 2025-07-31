@@ -1,4 +1,4 @@
-## 7.3.1+1
+## 7.3.1+2
 
 July 27, 2025
 
@@ -11,7 +11,7 @@ July 27, 2025
 
 July 26, 2025
 
-- Future<bool> catchAsyncError(Object error) async { in StateX and StateXController
+- catchAsyncError(Object error) async { in StateX and StateXController
 - In the StateX class
   Property, lastSystemEvent, in the StateX class records the last system event if any
   The boolean getter, hadSystemEvent, is deprecated
