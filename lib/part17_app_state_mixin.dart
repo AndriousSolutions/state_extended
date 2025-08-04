@@ -15,11 +15,15 @@ mixin class AppStateMixin {
   @Deprecated('Use appStateX instead.')
   AppStateX? get rootState => appStateX;
 
+  // Exclude from test coverage reports
+  // coverage:ignore-start
   /// The App's State object
   AppStateX? get appStateX {
     // TODO: implement appStateX
     throw UnimplementedError();
   }
+
+  // coverage:ignore-end
 
   /// This is of type Object allowing you
   /// to propagate any class object you wish down the widget tree.
@@ -50,6 +54,8 @@ mixin class AppStateMixin {
 /// {@category StateX class}
 /// {@category State Object Controller}
 @Deprecated('Use AppStateMixin mixin instead.')
+// Exclude from test coverage reports
+// coverage:ignore-start
 // ignore: deprecated_member_use_from_same_package
 mixin RootStateMixin {
   /// Returns the 'first' StateX object in the App
@@ -81,3 +87,4 @@ mixin RootStateMixin {
     }
   }
 }
+// coverage:ignore-end

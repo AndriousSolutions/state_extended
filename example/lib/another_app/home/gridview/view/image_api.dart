@@ -21,6 +21,9 @@ class ImageAPIStateX<T extends StatefulWidget> extends StateX<T>
     //
     final id = add(ImageAPIController());
     _controller = controller as InheritController?;
+    // Determine if events will be recorded on the console.
+    // Have the debugPrint() function fire in the many event handlers
+    debugPrintEvents = _controller?.debugPrintEvents;
     // Retrieve the Controller by its unique id.
     _con = controllerById(id) as ImageAPIController?;
   }

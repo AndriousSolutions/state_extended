@@ -105,8 +105,15 @@ void testStateExtended() {
       // pumpAndSettle() waits for all animations to complete.
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
+      // The App's Controller
+      /// Now print to console every event handler call
+      ExampleAppController().debugPrintEvents = true;
+
       /// Preform integration tests
       await integrationTesting(tester);
+
+      /// Reset the counter to zero on Page 1
+      await resetPage1Count(tester);
 
       /// Now allow for errors to occur even during the testing
       _integrationTest.allowErrors = true;

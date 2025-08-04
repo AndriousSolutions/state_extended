@@ -12,6 +12,13 @@ import '/src/view.dart';
 ///
 abstract class InheritController extends StateXController
     with EventsControllerMixin {
+  ///
+  InheritController() {
+    // Determine if events will be recorded on the console.
+    // Have the debugPrint() function fire in the many event handlers
+    debugPrintEvents = ExampleAppController().debugPrintEvents;
+  }
+
   /// Link this Controller's Widget to a specific InheritedWidget
   /// The InheritedWidget is the first State object it registered with.
   @override

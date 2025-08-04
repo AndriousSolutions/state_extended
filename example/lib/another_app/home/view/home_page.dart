@@ -12,7 +12,7 @@ import '/src/view.dart';
 /// The Home page
 class HomePage extends StatefulWidget {
   ///
-  const HomePage({Key? key, this.title}) : super(key: key);
+  const HomePage({super.key, this.title});
 
   ///
   final String? title;
@@ -25,11 +25,12 @@ class _HomePageState extends StateX<HomePage> {
   _HomePageState() : super(controller: HomeController()) {
     con = controller as HomeController;
   }
+
   late HomeController con;
 
   @override
   Widget build(BuildContext context) => MultiTabsScaffold(
-        key: GlobalObjectKey<Page3State>(this),
+        key: GlobalObjectKey<_HomePageState>(this),
         controller: con,
         tabs: [
           (_) => Scaffold(

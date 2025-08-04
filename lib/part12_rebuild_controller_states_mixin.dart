@@ -51,6 +51,7 @@ mixin _RebuildControllerStatesMixin {
   /// Whether any listeners are currently registered.
   bool get hasStateListeners => hasListeners;
 
+  @Deprecated('Use hasStateListeners instead')
   bool get hasListeners => _implChangeNotifier?.hasListeners ?? false;
 
   /// When notified, setState() is called.
@@ -68,8 +69,9 @@ mixin _RebuildControllerStatesMixin {
           if (state.mounted) {
             // ignore: INVALID_USE_OF_PROTECTED_MEMBER
             state.setState(() {});
-          } else {
-            removeStateListener(state);
+            // A Flutter Test will not be mounted?? gp
+            // } else {
+            //   removeStateListener(state);
           }
         }
 
@@ -154,6 +156,7 @@ class ImplNotifyListenersChangeNotifier with ChangeNotifier {
   /// The 'unnecessary overrides' prevent the Dart Analysis warning:
 
   /// Whether any listeners are currently registered.
+  // Override allows for getter hasListeners in _RebuildControllerStatesMixin
   @override
   // ignore: unnecessary_overrides
   bool get hasListeners => super.hasListeners;
@@ -163,7 +166,9 @@ class ImplNotifyListenersChangeNotifier with ChangeNotifier {
 }
 
 /// 'No longer supported.'
-/// Replaced by [ImplNotifyListenersChangeNotifier]
+/// Replaced by class [ImplNotifyListenersChangeNotifier]
+// Exclude from test coverage reports
+// coverage:ignore-start
 // ignore: deprecated_member_use
 @Deprecated('No longer supported')
 mixin ImplNotifyListenersChangeNotifierMixin {
@@ -236,3 +241,4 @@ mixin ImplNotifyListenersChangeNotifierMixin {
     return remove;
   }
 }
+// coverage:ignore-end

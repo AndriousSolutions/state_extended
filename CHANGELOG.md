@@ -1,3 +1,17 @@
+## 7.4.0
+
+August 03, 2025
+
+- Renamed route_observer_states.dart to part22_route_observer_states.dart
+- Commented out removeStateListener() in part12_rebuild_controller_states_mixin.dart
+- Exclude old code from test coverage with // coverage:ignore-start
+- forEachState() and forEachStateX() are deprecated in StateX
+  Use forEachState() and forEachStateX() in StateXController instead.
+- Add statesById() and listStates() to part14_set_state_mixin.dart
+  for StateXController
+- getter hasListeners in part12_rebuild_controller_states_mixin.dart is deprecated
+  Use hasStateListeners instead.
+
 ## 7.3.1+2
 
 July 27, 2025

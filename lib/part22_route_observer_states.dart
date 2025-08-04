@@ -1,5 +1,10 @@
+// RouteObserverStates
+// Copyright 2024 The Flutter Architecture Sample Authors. All rights reserved.
+// Use of this Uuid function is governed by the M.I.T. license that can be found
+// in the LICENSE file under Uuid.
 //
-import 'package:flutter/material.dart';
+
+part of 'state_extended.dart';
 
 /// Makes every StateX and StateXController a [RouteAware] object
 /// calling [didPop], [didPush]

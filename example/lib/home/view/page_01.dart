@@ -60,53 +60,28 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
     // Note, returns null if not found or id == null or empty
     nullableController = controllerById(id);
 
+    // Same object
+    if (nullableController is Controller) {
+      assert(
+          nullableController == controller, "Should be of type 'Controller'");
+    }
+
     /// You're able to retrieve a controller by its Type.
     // Note, returns null if not found.
     nullableController = controllerByType<Controller>();
 
-    var sameState = stateByType<AppStateX>();
-
-    sameState = ofState<AppStateX>(); // Merely different syntax
-
-    final AppStateX? appState = appStateX;
-
-    /// It should be this very State object.
-    if (sameState is AppStateX) {
-      assert(sameState == appState, "Should be of type 'AppStateX'");
+    // Same object
+    if (nullableController is Controller) {
+      assert(
+          nullableController == controller, "Should be of type 'Controller'");
     }
-
-    // /// The controller is was also assigned to the 'first' State object.
-    // // Note, returns null if not found or id == null or empty
-    // anotherController = appState?.controllerById(id) as AnotherController;
-    //
-    // /// The controller is was assigned to the 'first' State object.
-    // // Note, returns null if not found.
-    // anotherController = appState?.controllerByType<AnotherController>();
 
     /// Retrieve the State object by its StatefulWidget
-    State? state = controller!.stateOf<MyApp>();
+    State? state = controller!.stateOf<Page1>();
 
     /// It should be this very State object.
-    if (state is AppStateX) {
-      assert(state == appState, "Should be of type 'AppStateX'");
-    }
-
-    /// Each State object is assigned a unique identifier.
-    // identifier is a 35-alphanumeric character string
-    id = appState?.identifier;
-
-    state = stateById(id);
-
-    /// It should be this very State object.
-    if (state is AppStateX) {
-      assert(state == appState, "Should be of type 'AppStateX'");
-    }
-
-    state = firstState;
-
-    /// It should be this very State object.
-    if (state is AppStateX) {
-      assert(state == appState, "Should be of type 'AppStateX'");
+    if (state is Page1State) {
+      assert(state == this, "Should be of type 'Page1State'");
     }
 
     /// The 'latest' StateX object running in the App.
@@ -115,6 +90,46 @@ class Page1State extends StateX<Page1> with EventsStateMixin {
     /// It should be this very State object.
     if (state is Page1State) {
       assert(state == this, "Should be of type 'Page1State'");
+    }
+
+    /// The App's State object is the app's first state object
+    state = firstState;
+
+    /// It should be this very State object.
+    if (state is AppStateX) {
+      assert(state == appStateX, "Should be of type 'AppStateX'");
+    }
+
+    /// Each State object is assigned a unique identifier.
+    // identifier is a 35-alphanumeric character string
+    id = appStateX?.identifier;
+
+    state = stateById(id);
+
+    /// It should be this very State object.
+    if (state is AppStateX) {
+      assert(state == appStateX, "Should be of type 'AppStateX'");
+    }
+
+    var sameState = stateByType<AppStateX>();
+
+    /// It should be this very State object.
+    if (sameState is AppStateX) {
+      assert(state == sameState, "Should be of type 'AppStateX'");
+    }
+
+    sameState = ofState<AppStateX>();
+
+    /// It should be this very State object.
+    if (sameState is AppStateX) {
+      assert(state == sameState, "Should be of type 'AppStateX'");
+    }
+
+    state = stateOf<MyApp>(); // by StatefulWidget
+
+    /// It should be this very State object.
+    if (state is AppStateX) {
+      assert(state == sameState, "Should be of type 'AppStateX'");
     }
   }
 

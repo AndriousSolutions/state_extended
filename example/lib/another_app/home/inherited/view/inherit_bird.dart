@@ -12,7 +12,7 @@ import '/src/view.dart';
 ///
 class InheritBird extends StatefulWidget {
   ///
-  const InheritBird({Key? key, required this.child}) : super(key: key);
+  const InheritBird({super.key, required this.child});
 
   ///
   final Widget child;

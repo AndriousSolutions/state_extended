@@ -29,16 +29,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart' show PredictiveBackEvent;
 export 'package:flutter/services.dart' show PredictiveBackEvent;
 
-/// Note when routes are pushed n popped
-import 'route_observer_states.dart';
-
 /// For testing
 // import 'package:flutter_test/flutter_test.dart' show TestFailure;
 
 import 'package:test/test.dart' show TestFailure;
-
-/// Supply to user
-export 'route_observer_states.dart';
 
 /// part files /////////////////////////////////////////////////////////////
 
@@ -105,5 +99,8 @@ part 'part20_statex_error_mixin.dart';
 /// WidgetsBinding.instance indicators
 part 'part21_widgets_binding_mixin.dart';
 
+/// Make every StateX and StateXController a [RouteAware] object
+part 'part22_route_observer_states.dart';
+
 /// A UUID generator, useful for generating unique IDs.
-part 'part22_uuid.dart';
+part 'part23_uuid.dart';

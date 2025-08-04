@@ -14,10 +14,6 @@ mixin SetStateMixin {
   // ignore: invalid_use_of_protected_member
   void setState(VoidCallback fn) => state?.setState(fn);
 
-  /// Retrieve the State object by its StatefulWidget. Returns null if not found.
-  State? stateOf<T extends StatefulWidget>() =>
-      _stateWidgetMap.isEmpty ? null : _stateWidgetMap[_type<T>()];
-
   /// Supply the State object
   State? get state => _state;
 
@@ -26,16 +22,7 @@ mixin SetStateMixin {
   State? _state;
 
   final Set<State> _stateSet = {};
-  final Map<Type, State> _stateWidgetMap = {};
   bool _stateJustAdded = false;
-
-  /// Add the provided State object to the Map object if
-  /// it's the 'current' StateX object in _stateX.
-  void _addStateToSetter(State state) {
-    if (_stateJustAdded && _state != null && _state == state) {
-      _stateWidgetMap.addAll({state.widget.runtimeType: state});
-    }
-  }
 
   /// Add to a Set object and assigned to as the 'current' StateX
   /// However, if was already previously added, it's not added
@@ -64,9 +51,6 @@ mixin SetStateMixin {
       return false;
     }
 
-    // Remove from the Map
-    _stateWidgetMap.removeWhere((key, value) => value == state);
-
     // Remove from the Set
     final pop = _stateSet.remove(state);
 
@@ -84,16 +68,48 @@ mixin SetStateMixin {
     return pop;
   }
 
+  /// Returns a State object using a unique String identifier.
+  State? stateById(String? id) {
+    State? state;
+    if (_stateSet.isNotEmpty && id != null) {
+      id = id.trim();
+      final stateList = _stateSet.toList().reversed;
+      for (final s in stateList) {
+        if (s is StateX && s.identifier == id) {
+          state = s;
+          break;
+        }
+      }
+    }
+    return state;
+  }
+
+  /// Returns a Map of StateView objects using unique String identifiers.
+  Map<String, State> statesById(List<String> ids) {
+    final Map<String, State> map = {};
+    for (final id in ids) {
+      final state = stateById(id);
+      if (state != null) {
+        map[id] = state;
+      }
+    }
+    return map;
+  }
+
+  /// Returns a List of StateX objects using unique String identifiers.
+  List<State> listStates(List<String> keys) => statesById(keys).values.toList();
+
+  /// Retrieve the State object by type
+  /// Returns null if not found
+  T? stateByType<T extends State>() => ofState<T>();
+
   /// Retrieve the StateX object of type T
   /// Returns null if not found
   T? ofState<T extends State>() {
     State? state;
-    if (_stateSet.isEmpty) {
-      state = null;
-    } else {
-      final stateList = _stateSet.toList(growable: false);
+    if (_stateSet.isNotEmpty) {
       try {
-        for (final item in stateList) {
+        for (final item in _stateSet.toList().reversed) {
           if (item is T) {
             state = item;
             break;
@@ -103,7 +119,19 @@ mixin SetStateMixin {
         state = null;
       }
     }
-    return state == null ? null : state as T;
+    return state as T?;
+  }
+
+  /// Retrieve the State object by its StatefulWidget. Returns null if not found.
+  State? stateOf<T extends StatefulWidget>() {
+    State? state;
+    for (final s in _stateSet.toList().reversed) {
+      if (s.widget is T) {
+        state = s;
+        break;
+      }
+    }
+    return state;
   }
 
   /// Return the first State object
@@ -185,7 +213,6 @@ mixin SetStateMixin {
   /// Clean up memory in case not empty
   void disposeSetState() {
     _stateSet.clear();
-    _stateWidgetMap.clear();
   }
 }
 

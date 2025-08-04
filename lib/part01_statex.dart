@@ -172,9 +172,13 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     return update;
   }
 
+// Exclude from test coverage reports
+// coverage:ignore-start
   @override
   @Deprecated('Use addAll() instead.')
   List<String> addList(List<StateXController>? list) => addAll(list);
+
+// coverage:ignore-end
 
   /// Add a list of 'Controllers' to be associated with this StateX object.
   @override
@@ -281,7 +285,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     while (cnt < controllerList.length) {
       con = controllerList[cnt];
       // Add this to the _StateSets Map
-      con._addStateToSetter(this);
+      // con._addStateToSetter(this);
       if (!con.initStateCalled) {
         con._initStateCalled = true;
         con.initState();

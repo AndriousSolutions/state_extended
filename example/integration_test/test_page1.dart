@@ -19,6 +19,9 @@ Future<void> testPage1(WidgetTester tester) async {
 
   expect(find.byKey(const Key('Text')), findsOneWidget, reason: _location);
 
+  // A Singleton pattern allows for unit testing.
+  var con = Controller();
+
   /// Increment the counter
   for (int cnt = 0; cnt <= count - 1; cnt++) {
     // Tap the '+' icon and trigger a frame.
@@ -45,6 +48,15 @@ Future<void> testPage1(WidgetTester tester) async {
 
   expect(find.text(count.toString()), findsAny, reason: _location);
 
+  /// Indicating a Change Notifier was Instantiated
+  expect(con.hasChangeNotifierImpl, isTrue, reason: _location);
+
+  /// Whether any listeners are currently registered.
+  expect(con.hasStateListeners, isTrue, reason: _location);
+
+  /// Deprecated. Use hasStateListeners instead.
+  expect(con.hasListeners, isTrue, reason: _location);
+
   await tester.tap(find.byKey(const Key('Page 2')));
   await tester.pumpAndSettle();
 
@@ -55,11 +67,8 @@ Future<void> testPage1(WidgetTester tester) async {
     await tester.pumpAndSettle();
   }
 
-  // A Singleton pattern allows for unit testing.
-  Controller? con = Controller();
-
   // You can retrieve a State object the Controller has collected so far.
-  StateX state = con.stateOf<Page2>()! as StateX;
+  var state = con.stateOf<Page2>()! as StateX;
 
   /// Increment the counter
   for (int cnt = 0; cnt <= count - 1; cnt++) {
@@ -81,11 +90,11 @@ Future<void> testPage1(WidgetTester tester) async {
 
   expect(state, isA<Page1State>(), reason: _location);
 
-  con = state.controllerByType<Controller>();
+  con = state.controllerByType<Controller>()!;
 
   expect(con, isA<Controller>(), reason: _location);
 
-  String? id = con?.identifier;
+  String? id = con.identifier;
 
   final stateXController = state.controllerById(id);
 

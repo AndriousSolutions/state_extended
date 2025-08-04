@@ -12,7 +12,7 @@ import '/another_app/view_another_app.dart';
 /// This StatefulWidget stores an InheritedWidget
 class InheritFox extends StatefulWidget {
   ///
-  const InheritFox({Key? key, required this.child}) : super(key: key);
+  const InheritFox({super.key, required this.child});
 
   ///
   final Widget child;

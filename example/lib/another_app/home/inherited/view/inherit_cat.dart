@@ -12,7 +12,7 @@ import '/src/view.dart';
 /// This StatefulWidget stores an InheritedWidget
 class InheritCat extends StatefulWidget {
   ///
-  const InheritCat({Key? key, required this.child}) : super(key: key);
+  const InheritCat({super.key, required this.child});
 
   ///
   final Widget child;

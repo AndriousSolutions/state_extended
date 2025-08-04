@@ -9,7 +9,6 @@ part of 'state_extended.dart';
 /// dartdoc:
 /// {@category StateX class}
 mixin MapOfStateXsMixin on State {
-// mixin _MapOfStates on State {
   /// All the State objects in this app.
   static final Map<String, State> _states = {};
 
@@ -19,7 +18,7 @@ mixin MapOfStateXsMixin on State {
     final add = state != null;
     if (add) {
       //
-      MapOfStateXsMixin._states[state._id] = state;
+      _states[state._id] = state;
     }
     return add;
   }
@@ -28,9 +27,9 @@ mixin MapOfStateXsMixin on State {
   bool _removeFromMapOfStates(StateX? state) {
     var removed = state != null;
     if (removed) {
-      final int length = MapOfStateXsMixin._states.length;
-      MapOfStateXsMixin._states.removeWhere((key, value) => state._id == key);
-      removed = MapOfStateXsMixin._states.length < length;
+      final int length = _states.length;
+      _states.removeWhere((key, value) => state._id == key);
+      removed = _states.length < length;
     }
     return removed;
   }
@@ -40,7 +39,7 @@ mixin MapOfStateXsMixin on State {
   T? stateByType<T extends State>() {
     State? state;
     try {
-      for (final item in MapOfStateXsMixin._states.values) {
+      for (final item in _states.values) {
         if (item is T) {
           state = item;
           break;
@@ -55,8 +54,20 @@ mixin MapOfStateXsMixin on State {
   /// Consistent with the equivalent in the StateXController class
   T? ofState<T extends State>() => stateByType<T>();
 
+  /// Retrieve the State object by its StatefulWidget. Returns null if not found.
+  State? stateOf<T extends StatefulWidget>() {
+    State? state;
+    for (final s in _states.values.toList().reversed) {
+      if (s.widget is T) {
+        state = s;
+        break;
+      }
+    }
+    return state;
+  }
+
   /// Returns a State object using a unique String identifier.
-  State? stateById(String? id) => MapOfStateXsMixin._states[id];
+  State? stateById(String? id) => _states[id];
 
   /// Returns a Map of StateView objects using unique String identifiers.
   Map<String, State> statesById(List<String> ids) {
@@ -68,27 +79,6 @@ mixin MapOfStateXsMixin on State {
       }
     }
     return map;
-  }
-
-  /// Returns a List of StateX objects using unique String identifiers.
-  List<State> listStates(List<String> keys) {
-    return statesById(keys).values.toList();
-  }
-
-  /// Return a List of available StateX objects
-  List<State> statesList({bool? reversed, State? remove}) {
-    List<State> list;
-    // In reversed chronological order
-    if (reversed != null && reversed) {
-      list = MapOfStateXsMixin._states.values.toList().reversed.toList();
-    } else {
-      list = MapOfStateXsMixin._states.values.toList();
-    }
-    // Exclude a particular State.
-    if (remove != null) {
-      list.remove(remove);
-    }
-    return list.toList(growable: false);
   }
 
   @Deprecated('Use appCon instead.')
@@ -118,7 +108,7 @@ mixin MapOfStateXsMixin on State {
   State? _nextStateX({bool? reversed}) {
     reversed = reversed != null && reversed;
     State? nextState;
-    final list = statesList(reversed: reversed);
+    final list = _statesList(reversed: reversed);
     for (final State state in list) {
       if (state.mounted && (state is! StateX || !state._deactivated)) {
         nextState = state;
@@ -128,43 +118,51 @@ mixin MapOfStateXsMixin on State {
     return nextState;
   }
 
+  /// Returns a List of StateX objects using unique String identifiers.
+  List<State> listStates(List<String> keys) {
+    return statesById(keys).values.toList();
+  }
+
+// coverage:ignore-start
   /// To externally 'process' through the [State] objects.
   /// Invokes [func] on each StateX possessed by this StateX object.
   /// With an option to process in reversed chronological order
+  @Deprecated(
+      'No longer allowed access to all State objects in the App.\n Only Controllers have this forEachState() function.')
   bool forEachState(
     void Function(State state) func, {
     bool? reversed,
     State? remove,
-  }) {
-    bool each = true;
-    final list = statesList(reversed: reversed, remove: remove);
-    for (final State state in list) {
-      try {
-        // if (state.mounted && !state._deactivated) { // Not working out gp
-        if (state.mounted) {
-          func(state);
-        }
-      } catch (e, stack) {
-        each = false;
-        // Record the error
-        if (this is StateX) {
-          (this as StateX).recordErrorInHandler(e, stack);
-        }
-      }
-    }
-    return each;
-  }
+  }) =>
+      false;
+
+// coverage:ignore-end
+
+// coverage:ignore-start
+  /// To externally 'process' through the [StateX] objects.
+  /// Invokes [func] on each StateX possessed by this StateX object.
+  /// With an option to process in reversed chronological order
+  @Deprecated(
+      'No longer allowed access to all State objects in the App.\n Only Controllers have this forEachState() function.')
+  bool forEachStateX(
+    void Function(StateX state) func, {
+    bool? reversed,
+    State? remove,
+  }) =>
+      false;
+
+// coverage:ignore-end
 
   /// To externally 'process' through the [StateX] objects.
   /// Invokes [func] on each StateX possessed by this StateX object.
   /// With an option to process in reversed chronological order
-  bool forEachStateX(
+  bool _forEachStateX(
     void Function(StateX state) func, {
     bool? reversed,
     State? remove,
   }) {
     bool each = true;
-    final list = statesList(reversed: reversed, remove: remove);
+    final list = _statesList(reversed: reversed, remove: remove);
     for (final State state in list) {
       try {
         if (state.mounted) {
@@ -182,6 +180,22 @@ mixin MapOfStateXsMixin on State {
       }
     }
     return each;
+  }
+
+  /// Return a List of available StateX objects
+  List<State> _statesList({bool? reversed, State? remove}) {
+    List<State> list;
+    // In reversed chronological order
+    if (reversed != null && reversed) {
+      list = _states.values.toList().reversed.toList();
+    } else {
+      list = _states.values.toList();
+    }
+    // Exclude a particular State.
+    if (remove != null) {
+      list.remove(remove);
+    }
+    return list.toList(growable: false);
   }
 
   /// Determines if running in an IDE or in production.

@@ -13,6 +13,7 @@ import '/src/view.dart';
 class RandomBird extends StatefulWidget {
   ///
   const RandomBird({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _RandomBirdState();
 }

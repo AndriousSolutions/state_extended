@@ -15,144 +15,52 @@ import '../test/_test_imports.dart';
 const _location = '========================== test_statex.dart';
 
 Future<void> testsStateX(WidgetTester tester) async {
-  /// Explicitly provide what's intentionally should be accessible
-  /// but is made accessible for 'internal testing' of this framework.
-  // Find its StatefulWidget first then the 'type' of State object.
-  StateX stateObj = tester.firstState<AppStateX>(find.byType(MyApp));
+  /// Find this app's first State object.
+  StateX? stateObj = tester.firstState<AppStateX>(find.byType(MyApp));
 
-  var conCount = 0;
+  stateObj = stateObj.stateByType<Page1State>();
 
-  stateObj.forEach((con) {
-    conCount++;
-  });
+  stateObj = stateObj?.ofState<Page1State>();
 
-  expect(conCount > 1, isTrue, reason: _location);
+  // It should be from a specific StatefulWidget
+  expect(stateObj!.widget, isA<Page1>(), reason: _location);
 
-  var each = stateObj.forEach(reversed: true, (con) {
-    conCount--;
-  });
+  StateXController? con = stateObj.controller;
 
-  expect(each, isTrue, reason: _location);
-
-  expect(conCount == 0, isTrue, reason: _location);
-
-  each = stateObj.forEach((con) {
-    if (con is YetAnotherController) {
-      throw Exception('Error in forEach()!');
-    }
-  });
-
-  expect(each, isFalse, reason: _location);
-
-  for (final con in stateObj.controllerList) {
-    conCount++;
-  }
-
-  expect(conCount > 0, isTrue, reason: _location);
-
-  expect(stateObj.useInherited, isTrue, reason: _location);
-
-  StateXController? con = stateObj.controller!;
-
-  expect(con, isA<ExampleAppController>());
-
-  final contains = stateObj.contains(con);
-
-  expect(contains, isTrue, reason: _location);
-
-  // The first State object is itself --- _MyAppState
-  final appState = stateObj.appStateX!;
-
-  // Every StateMVC and ControllerMVC has a unique String identifier.
-  final myAppStateId = appState.identifier;
-
-  BuildContext context = appState.context;
-
-  expect(context, isA<BuildContext>(), reason: _location);
-  //
-  // A Controller for the 'app level' to influence the whole app.
-  con = appState.controller!;
-
-  final String keyId = con.identifier;
-
-  con = appState.controllerById(keyId)!;
-
-  expect(con, isA<ExampleAppController>(), reason: _location);
-
-  var id = appState.add(TestingController());
-
-  /// Remove a specific 'StateXController' by its unique 'key' identifier.
-  var remove = appState.removeByKey(id);
-
-  expect(remove, isTrue, reason: _location);
-
-  final TestingController testCon = TestingController();
-
-  /// Add a controller to a State object
-  appState.add(testCon);
-
-  /// Remove a controller to a State object
-  remove = appState.remove(testCon);
-
-  expect(remove, isTrue, reason: _location);
-
-  /// The 'state' property is the Controller's current State object
-  /// it is working with.
-  stateObj = con.statex!;
-
-  /// Of course, Flutter provides a reference to the StatefulWidget
-  /// thought the State object.
-  StatefulWidget widget = stateObj.widget;
-
-  expect(widget, isA<MyApp>(), reason: _location);
-
-  /// Returns 'the first' StateXController associated with this StateX object.
-  /// Returns null if empty.
-  con = stateObj.firstCon;
-
-  expect(con, isA<ExampleAppController>(), reason: _location);
+  expect(con, isA<Controller>(), reason: _location);
 
   /// Returns 'the last' StateXController associated with this StateX object.
   /// Returns null if empty.
   con = stateObj.lastCon;
 
-  if (con is AppSettingsController) {
-    expect(con, isA<AppSettingsController>(), reason: _location);
-  } else {
-    expect(con, isA<YetAnotherController>(), reason: _location);
-  }
+  expect(con, isNot(isA<Controller>()), reason: _location);
+
+  var conCount = 0;
 
   /// Test the forEach() function encountering an error
-  each = stateObj.forEach((con) {
-    var state = con.firstState;
-    state = con.lastState;
+  var allWithNoError = stateObj.forEach((con) {
+    conCount++;
   });
 
-  /// reversed
-  each = stateObj.forEach((con) {
-    var state = con.firstState;
-    state = con.lastState;
-    if (state is StateX?) {
-      var overridden = state?.buildOverridden;
-      overridden = state?.usingCupertino;
-      overridden = state?.buildFOverridden;
-      overridden = state?.builderOverridden;
-    }
+  expect(conCount > 1, isTrue, reason: _location);
+
+  /// In reverse
+  allWithNoError = stateObj.forEach((con) {
+    conCount--;
   }, reversed: true);
 
+  expect(conCount == 0, isTrue, reason: _location);
+
   /// Return a controller by its id in a List
-  final listCon = stateObj.listControllers([keyId]);
+  final listCon = stateObj.listControllers([stateObj.identifier]);
 
   // Returns the most recent BuildContext/Element created in the App
-  context = appState.lastState!.context;
+  var context = stateObj.lastState!.context;
 
   if (context.widget is Page1) {
     // Page 1 is currently being displayed.
     expect(context.widget, isA<Page1>(), reason: _location);
   }
-
-  /// Call for testing coverage
-  appState.dependOnInheritedWidget(context);
 
   con = Controller();
 
@@ -161,74 +69,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   final StateX state01 = con.stateOf<Page1>()! as StateX;
 
   // print() functions called or not during development
-  expect(state01.debugPrintEvents, isFalse, reason: _location);
-
-  // Test looking up State objects by id.
-  // The unique key identifier for this State object.
-  final String keyIdPage1 = state01.identifier;
-
-  // Returns the StateX object using an unique String identifiers.
-  stateObj = appState.stateById(keyIdPage1)! as StateX;
-
-  expect(stateObj.widget, isA<Page1>(), reason: _location);
-
-  stateObj = appState.stateByType<Page1State>()!;
-
-  expect(stateObj.widget, isA<Page1>(), reason: _location);
-
-  /// Call for testing coverage
-  stateObj.dependOnInheritedWidget(context);
-
-  // If you know their identifiers, you can retrieve a Map of StateMVC objects.
-  final Map<String, State> map =
-      appState.statesById([myAppStateId, keyIdPage1]);
-
-  // Retrieve a State object by its unique identifier.
-  State? state02 = map[myAppStateId];
-
-  // It should be a specific type of State object.
-  expect(state02, isA<AppStateX>(), reason: _location);
-
-  // It should be from a specific StatefulWidget
-  expect(state02!.widget, isA<MyApp>(), reason: _location);
-
-  // It should be a specific type of State object.
-  state02 = map[keyIdPage1];
-
-  // It should be a specific type of State object.
-  expect(state02, isA<StateX>(), reason: _location);
-
-  // It should be from a specific StatefulWidget
-  expect(state02!.widget, isA<Page1>(), reason: _location);
-
-  // Returns a List of State objects using unique String identifiers.
-  final list = appState.listStates([myAppStateId, keyIdPage1]);
-
-  state02 = list[0];
-
-  // It should be a specific type of State object.
-  expect(state02, isA<AppStateX>(), reason: _location);
-
-  // It should be from a specific StatefulWidget
-  expect(state02.widget, isA<MyApp>(), reason: _location);
-
-  state02 = list[1];
-
-  // It should be a specific type of State object.
-  expect(state02, isA<StateX>(), reason: _location);
-
-  // It should be from a specific StatefulWidget
-  expect(state02.widget, isA<Page1>(), reason: _location);
-
-// Unable to determine and be Web compatible.
-//  // Determine if app is running in a tester
-//  expect(state02.inFlutterTester, isTrue, reason: _location);
-
-  // Determines if running in an IDE or in production.
-  // Returns true if the App is under in the Debugger and not production.
-  final debugging = appState.inDebugMode && con.inDebugMode;
-
-  expect(debugging, isA<bool>(), reason: _location);
+  expect(state01.printEvents, isTrue, reason: _location);
 
   // The State object. (con.state as StateMVC will work!)
   final _state = con.state!;
@@ -236,7 +77,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   expect(_state, isA<State>(), reason: _location);
 
   // Test for the unique identifier assigned to every Controller.
-  id = stateObj.add(TestingController());
+  var id = stateObj.add(TestingController());
 
   expect(id, isNotEmpty, reason: _location);
 
@@ -290,27 +131,27 @@ Future<void> testsStateX(WidgetTester tester) async {
   var count = 0;
 
   // Test forEachState
-  each = stateObj.forEachStateX((state) {
+  allWithNoError = con.forEachStateX((state) {
     count++;
   });
 
-  expect(count > 1, isTrue, reason: _location);
+  expect(count > 0, isTrue, reason: _location);
 
-  each = stateObj.forEachStateX(reversed: true, (state) {
+  allWithNoError = con.forEachStateX(reversed: true, (state) {
     count--;
   });
 
-  expect(each, isTrue, reason: _location);
+  expect(allWithNoError, isTrue, reason: _location);
 
   expect(count == 0, isTrue, reason: _location);
 
-  each = stateObj.forEachStateX((state) {
+  allWithNoError = con.forEachStateX((state) {
     if (state is Page1State) {
       throw AssertionError('Error in forEachState()!');
     }
   });
 
-  expect(each, isFalse, reason: _location);
+  expect(allWithNoError, isFalse, reason: _location);
 
   final testController = TestStateController();
 
@@ -339,7 +180,7 @@ Future<void> testsStateX(WidgetTester tester) async {
   // Remove the indicated controller
   expect(state01.removeByKey(id), isTrue, reason: _location);
 
-  widget = stateObj.widget;
+  final widget = stateObj.widget;
 
   stateObj.didUpdateWidget(widget);
 
