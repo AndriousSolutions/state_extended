@@ -347,29 +347,29 @@ mixin StateXEventHandlers implements AsyncOps, RouteAware, StateXonErrorMixin {
     return false;
   }
 
-  /// Called when the host tells the application to push a new
-  /// [RouteInformation] and a restoration state onto the router.
-  ///
-  /// Observers are expected to return true if they were able to
-  /// handle the notification. Observers are notified in registration
-  /// order until one returns true.
-  ///
-  // ignore: comment_references
-  /// This method exposes the `popRoute` notification from [SystemChannels.navigation].
-  ///
-  // To override WidgetsBindingObserver.didPushRouteInformation()
-  Future<bool> didPushRouteInformation(
-      RouteInformation routeInformation) async {
-    // Record the triggered event
-    assert(() {
-      if (_debugPrintEvents) {
-        debugPrint(
-            '$_consoleLeadingLine didPushRouteInformation() in $_consoleClassName');
-      }
-      return true;
-    }());
-    return true;
-  }
+  /// Don't override the original. It's actually implemented there.
+  // /// Called when the host tells the application to push a new
+  // /// [RouteInformation] and a restoration state onto the router.
+  // ///
+  // /// Observers are expected to return true if they were able to
+  // /// handle the notification. Observers are notified in registration
+  // /// order until one returns true.
+  // ///
+  // // ignore: comment_references
+  // /// This method exposes the `popRoute` notification from [SystemChannels.navigation].
+  // ///
+  // Future<bool> didPushRouteInformation(
+  //     RouteInformation routeInformation) async {
+  //   // Record the triggered event
+  //   assert(() {
+  //     if (_debugPrintEvents) {
+  //       debugPrint(
+  //           '$_consoleLeadingLine didPushRouteInformation() in $_consoleClassName');
+  //     }
+  //     return true;
+  //   }());
+  //   return false;
+  // }
 
   /// Called when the application's UI dimensions change.
   /// For example, when a phone is rotated.

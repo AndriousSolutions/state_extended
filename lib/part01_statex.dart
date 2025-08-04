@@ -447,6 +447,9 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         // No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
 
+        // Optionally call super for debugPrint()
+        super.deactivate();
+
         for (final con in controllerList) {
           con.deactivateState(this);
           // Pop the State object from the controller
@@ -461,8 +464,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         // In some cases, if then reinserted back in another part of the tree
         // the build is called, and so setState() is not necessary.
         _setStateRequested = false;
-
-        super.deactivate();
         // });
       } catch (e) {
         // }, (error, stackTrace) {
@@ -500,19 +501,19 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed to fully function at this point.
     //   _setStateAllowed = false;
 
+    // Optionally call super for debugPrint()
+    super.activate();
+
     for (final con in controllerList) {
+      con._pushStateToSetter(this);
+      con.activateState(this);
       if (con.lastState == null) {
         con.activate();
       }
-      con._pushStateToSetter(this);
-      con.activateState(this);
     }
 
     // Add to the list of StateX objects present in the app!
     _addToMapOfStates(this);
-
-    // Optionally call super for debugPrint()
-    super.activate();
 
     _setStateAllowed = true;
 
@@ -574,6 +575,15 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         }
       }
 
+      super.dispose();
+
+      assert(() {
+        if (_debugPrintEvents) {
+          debugPrint('$_consoleLeadingLine dispose() in $this');
+        }
+        return true;
+      }());
+
       // Remove any 'StateXController' reference
       _controller = null;
 
@@ -587,20 +597,21 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       // the build is called, and so setState() is not necessary.
       _setStateRequested = false; // Special case: Test if already disposed
 
-      if (mounted) {
-        super.dispose();
-        assert(() {
-          if (_debugPrintEvents) {
-            debugPrint('$_consoleLeadingLine dispose() in $this');
-          }
-          return true;
-        }());
-      } else {
-        assert(() {
-          debugPrint('StateX: Not mounted so dispose() not called in $this');
-          return true;
-        }());
-      }
+      // if (mounted) {
+      //   super.dispose();
+      //   assert(() {
+      //     if (_debugPrintEvents) {
+      //       debugPrint('$_consoleLeadingLine dispose() in $this');
+      //     }
+      //     return true;
+      //   }());
+      // } else {
+      //   assert(() {
+      //     debugPrint('StateX: Not mounted so dispose() not called in $this');
+      //     return true;
+      //   }());
+      // }
+
       // });
       // }, (error, stackTrace) {
     } catch (e) {
@@ -628,11 +639,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed
 //    _setStateAllowed = false;
 
+    // Optionally call super for debugPrint()
+    super.didUpdateWidget(oldWidget);
+
     for (final con in controllerList) {
       con.didUpdateWidget(oldWidget);
     }
-
-    super.didUpdateWidget(oldWidget);
 
     /// Re-enable setState() function
     _setStateAllowed = true;
@@ -650,9 +662,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangeDependencies() {
-    // Important to 'markNeedsBuild()' first
-    super.didChangeDependencies();
-
     if (_firstBuild == null) {
       _firstBuild = true;
     } else {
@@ -661,6 +670,10 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
+
+    // Important to 'markNeedsBuild()' first gp
+    // Optionally call super for debugPrint()
+    super.didChangeDependencies();
 
     for (final con in controllerList) {
       con.didChangeDependencies();
@@ -681,8 +694,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangeMetrics() {
-    super.didChangeMetrics();
-
     /// In general, this is not overridden often as the layout system takes care of
     /// automatically recomputing the application geometry when the application
     /// size changes
@@ -706,6 +717,9 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
 
+    // Optionally call super for debugPrint()
+    super.didChangeMetrics();
+
     for (final con in controllerList) {
       con.didChangeMetrics();
     }
@@ -726,9 +740,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangeTextScaleFactor() {
-    // Optionally call the debugPrint() function
-    super.didChangeTextScaleFactor();
-
     ///
     /// This typically happens as the result of the user changing system
     /// preferences, and it should affect all of the text sizes in the
@@ -753,6 +764,9 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
 
+    // Optionally call the debugPrint() function
+    super.didChangeTextScaleFactor();
+
     for (final con in controllerList) {
       con.didChangeTextScaleFactor();
     }
@@ -773,7 +787,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangePlatformBrightness() {
-    super.didChangePlatformBrightness();
     // A triggered system event
     _hadSystemEvent = true;
     _lastSystemEvent = 'didChangePlatformBrightness';
@@ -785,6 +798,9 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     /// No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
+
+    // Optionally call super for debugPrint()
+    super.didChangePlatformBrightness();
 
     for (final con in controllerList) {
       con.didChangePlatformBrightness();
@@ -808,7 +824,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @mustCallSuper
   @override
   void didChangeLocales(List<Locale>? locales) {
-    super.didChangeLocales(locales);
     // A triggered system event
     _hadSystemEvent = true;
     _lastSystemEvent = 'didChangeLocales';
@@ -823,6 +838,9 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     /// No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
+
+    // Optionally call super for debugPrint()
+    super.didChangeLocales(locales);
 
     for (final con in controllerList) {
       con.didChangeLocales(locales);
@@ -844,7 +862,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangeAccessibilityFeatures() {
-    super.didChangeAccessibilityFeatures();
     // A triggered system event
     _hadSystemEvent = true;
     _lastSystemEvent = 'didChangeAccessibilityFeatures';
@@ -859,6 +876,9 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     /// No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
+
+    // Optionally call super for debugPrint()
+    super.didChangeAccessibilityFeatures();
 
     for (final con in controllerList) {
       con.didChangeAccessibilityFeatures();
@@ -880,7 +900,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didHaveMemoryPressure() {
-    super.didHaveMemoryPressure();
     // A triggered system event
     _hadSystemEvent = true;
     _lastSystemEvent = 'didHaveMemoryPressure';
@@ -896,6 +915,9 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
     /// No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
+
+    // Optionally call super for debugPrint()
+    super.didHaveMemoryPressure();
 
     for (final con in controllerList) {
       con.didHaveMemoryPressure();
@@ -958,10 +980,11 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
     /// No 'setState()' functions are allowed to fully function at this point.
     //   _setStateAllowed = false;
+
+    // Optionally call super for debugPrint()
+    super.didChangeAppLifecycleState(state);
 
     /// First, process the State object's own event functions.
     switch (state) {
@@ -1161,12 +1184,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
+    // Optionally call super for debugPrint()
+    super.reassemble();
+
     for (final con in controllerList) {
       con.reassemble();
     }
-
-    // Optionally call super for debugPrint()
-    super.reassemble();
 
     _setStateAllowed = true;
 
@@ -1179,20 +1202,22 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   Future<AppExitResponse> didRequestAppExit() async {
-    /// Exiting the application can proceed.
-    var appResponse = AppExitResponse.exit;
-
+    //
     // A triggered system event
     _hadSystemEvent = true;
     _lastSystemEvent = 'didRequestAppExit';
 
     // Don't if the State object is defunct.
     if (!mounted) {
-      return appResponse;
+      /// Exiting the application can proceed.
+      return AppExitResponse.exit;
     }
 
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
+
+    // State object's function is called first
+    var appResponse = await super.didRequestAppExit();
 
     // All must allow an exit or it's cancelled.
     for (final con in controllerList) {
@@ -1204,11 +1229,6 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         // Record the 'cancel' response
         appResponse = response;
       }
-    }
-
-    if (appResponse == AppExitResponse.exit) {
-      // Optionally call super for debugPrint()
-      appResponse = await super.didRequestAppExit();
     }
 
     _setStateAllowed = true;
@@ -1234,25 +1254,21 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// predictive back feature.
   @override
   bool handleStartBackGesture(PredictiveBackEvent backEvent) {
-    //
-    var handled = false;
-
     // Don't if the State object is defunct.
     if (!mounted) {
-      return handled;
+      return false;
     }
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
+    // Optionally call the debugPrint() function
+    var handled = super.handleStartBackGesture(backEvent);
+
     for (final con in controllerList) {
-      handled = con.handleStartBackGesture(backEvent);
-      if (handled) {
-        break;
+      if (con.handleStartBackGesture(backEvent)) {
+        handled = true;
       }
     }
-
-    // Optionally call the debugPrint() function
-    handled = super.handleStartBackGesture(backEvent);
 
     _setStateAllowed = true;
 
@@ -1281,12 +1297,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
+    // Optionally call the debugPrint() function
+    super.handleUpdateBackGestureProgress(backEvent);
+
     for (final con in controllerList) {
       con.handleUpdateBackGestureProgress(backEvent);
     }
-
-    // Optionally call the debugPrint() function
-    super.handleUpdateBackGestureProgress(backEvent);
 
     _setStateAllowed = true;
 
@@ -1314,12 +1330,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
+    // Optionally call the debugPrint() function
+    super.handleCommitBackGesture();
+
     for (final con in controllerList) {
       con.handleCommitBackGesture();
     }
-
-    // Optionally call the debugPrint() function
-    super.handleCommitBackGesture();
 
     _setStateAllowed = true;
 
@@ -1350,12 +1366,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
+    // Optionally call the debugPrint() function
+    super.handleCancelBackGesture();
+
     for (final con in controllerList) {
       con.handleCancelBackGesture();
     }
-
-    // Optionally call the debugPrint() function
-    super.handleCancelBackGesture();
 
     _setStateAllowed = true;
 
@@ -1379,35 +1395,31 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @mustCallSuper
   Future<bool> didPopRoute() async {
     /// Observers are expected to return true if they were able to
-    /// handle the notification, for example by closing an active dialog
-    /// box, and false otherwise. The [WidgetsApp] widget uses this
+    /// handle the notification and false otherwise. For example by closing an active dialog
+    /// box, The [WidgetsApp] widget uses this
     /// mechanism to notify the [Navigator] widget that it should pop
     /// its current route if possible.
     ///
     /// This method exposes the `popRoute` notification from
     /// [SystemChannels.navigation].
 
-    /// Set if a StateXController successfully 'handles' the notification.
-    bool handled = false;
-
     // Don't if the State object is defunct.
     if (!mounted) {
-      return handled;
+      return false;
     }
 
     /// No 'setState()' functions are allowed to fully function at this point.
     //   _setStateAllowed = false;
+
+    /// Set if a StateXController successfully 'handles' the notification.
+    // Optionally call super for debugPrint()
+    var handled = await super.didPopRoute();
 
     for (final con in controllerList) {
       final didPop = await con.didPopRoute();
       if (didPop) {
         handled = true;
       }
-    }
-
-    if (handled) {
-      // Optionally call super for debugPrint()
-      handled = await super.didPopRoute();
     }
 
     _setStateAllowed = true;
@@ -1437,10 +1449,33 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @Deprecated('Use didPushRouteInformation instead. '
       'This feature was deprecated after v3.8.0-14.0.pre.')
   Future<bool> didPushRoute(String route) async {
+    // Don't if the State object is defunct.
+    if (!mounted) {
+      return false;
+    }
+
+    /// No 'setState()' functions are allowed to fully function at this point.
+    _setStateAllowed = false;
+
     // Optionally call super for debugPrint()
-    super.didPushRoute(route);
-    // Return false to pop out
-    return false;
+    var handled = false;
+
+    for (final con in controllerList) {
+      handled = await con.didPushRoute(route);
+      if (handled) {
+        break;
+      }
+    }
+
+    // Stop when it's 'handled'
+    if (!handled) {
+      // Optionally call super for debugPrint()
+      handled = await didPushRoute(route);
+    }
+
+    _setStateAllowed = true;
+
+    return handled;
   }
 
   /// Called when the host tells the application to push a new
@@ -1466,12 +1501,30 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     /// No 'setState()' functions are allowed to fully function at this point.
     _setStateAllowed = false;
 
-    for (final con in controllerList) {
-      await con.didPushRouteInformation(routeInformation);
-    }
+    // Record the triggered event
+    assert(() {
+      if (_debugPrintEvents) {
+        debugPrint(
+            '$_consoleLeadingLine handleCommitBackGesture() in $_consoleClassName');
+      }
+      return true;
+    }());
 
     // Optionally call super for debugPrint()
-    super.didPushRouteInformation(routeInformation);
+    var handled = false;
+
+    for (final con in controllerList) {
+      handled = await con.didPushRouteInformation(routeInformation);
+      if (handled) {
+        break;
+      }
+    }
+
+    // Stop when it's 'handled'
+    if (!handled) {
+      // Optionally call super for debugPrint()
+      handled = await super.didPushRouteInformation(routeInformation);
+    }
 
     _setStateAllowed = true;
 
@@ -1483,7 +1536,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         setState(() {});
       }
     }
-    return super.didPushRouteInformation(routeInformation);
+    return handled;
   }
 
   /// Called when this route has been pushed.
@@ -1497,12 +1550,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
+    // Optionally call debugPrint()
+    super.didPush();
+
     for (final con in controllerList) {
       con.didPush();
     }
-
-    // Optionally call debugPrint()
-    super.didPush();
 
     _setStateAllowed = true;
 
@@ -1528,12 +1581,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     _setStateAllowed = false;
 
+    // Optionally call super for debugPrint()
+    super.didPushNext();
+
     for (final con in controllerList) {
       con.didPushNext();
     }
-
-    // Optionally call super for debugPrint()
-    super.didPushNext();
 
     _setStateAllowed = true;
 
@@ -1559,12 +1612,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     //   _setStateAllowed = false;
 
+    // Optionally call super for debugPrint()
+    super.didPop();
+
     for (final con in controllerList) {
       con.didPop();
     }
-
-    // Optionally call super for debugPrint()
-    super.didPop();
 
     _setStateAllowed = true;
 
@@ -1590,12 +1643,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // No 'setState()' functions are allowed
     //   _setStateAllowed = false;
 
+    // Optionally call super for debugPrint()
+    super.didPopNext();
+
     for (final con in controllerList) {
       con.didPopNext();
     }
-
-    // Optionally call super for debugPrint()
-    super.didPopNext();
 
     _setStateAllowed = true;
 

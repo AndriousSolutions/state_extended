@@ -168,6 +168,29 @@ class StateXController
     notifyListeners();
   }
 
+  /// Called when the host tells the application to push a new
+  /// [RouteInformation] and a restoration state onto the router.
+  ///
+  /// Observers are expected to return true if they were able to
+  /// handle the notification. Observers are notified in registration
+  /// order until one returns true.
+  ///
+  // ignore: comment_references
+  /// This method exposes the `popRoute` notification from [SystemChannels.navigation].
+  ///
+  Future<bool> didPushRouteInformation(
+      RouteInformation routeInformation) async {
+    // Record the triggered event
+    assert(() {
+      if (_debugPrintEvents) {
+        debugPrint(
+            '$_consoleLeadingLine didPushRouteInformation() in $_consoleClassName');
+      }
+      return true;
+    }());
+    return false;
+  }
+
   /// The framework calls this method whenever it removes this [StateX] object
   /// from the tree.
   // @override

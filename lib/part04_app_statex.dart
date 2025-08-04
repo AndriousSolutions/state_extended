@@ -106,6 +106,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   Future<bool> didPopRoute() async {
+    //
     var pop = await super.didPopRoute();
     // Loop through all the StateX objects
     final list = _statesList(reversed: true, remove: this);
@@ -134,6 +135,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// predictive back feature.
   @override
   bool handleStartBackGesture(PredictiveBackEvent backEvent) {
+    //
     var handled = super.handleStartBackGesture(backEvent);
     //
     _forEachStateX((state) {
@@ -153,6 +155,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// predictive back feature.
   @override
   void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) {
+    //
     super.handleUpdateBackGestureProgress(backEvent);
     //
     _forEachStateX((state) {
@@ -171,6 +174,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// predictive back feature.
   @override
   void handleCommitBackGesture() {
+    //
     super.handleCommitBackGesture();
     //
     _forEachStateX((state) {
@@ -188,6 +192,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// predictive back feature.
   @override
   void handleCancelBackGesture() {
+    //
     super.handleCancelBackGesture();
     //
     _forEachStateX((state) {
@@ -221,6 +226,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didChangeMetrics() {
+    //
     super.didChangeMetrics();
     //
     _forEachStateX((state) {
@@ -232,6 +238,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didChangeTextScaleFactor() {
+    //
     super.didChangeTextScaleFactor();
     //
     _forEachStateX((state) {
@@ -243,6 +250,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didChangePlatformBrightness() {
+    //
     super.didChangePlatformBrightness();
     //
     _forEachStateX((state) {
@@ -256,6 +264,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didChangeLocales(List<Locale>? locales) {
+    //
     super.didChangeLocales(locales);
     //
     _forEachStateX((state) {
@@ -273,6 +282,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didChangeAppLifecycleState(AppLifecycleState lifecycleState) {
+    //
     super.didChangeAppLifecycleState(lifecycleState);
     //
     _forEachStateX((state) {
@@ -284,6 +294,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// focus state on a view has changed.
   @override
   void didChangeViewFocus(ViewFocusEvent event) {
+    //
     super.didChangeViewFocus(event);
     //
     _forEachStateX((state) {
@@ -323,6 +334,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didHaveMemoryPressure() {
+    //
     super.didHaveMemoryPressure();
     //
     _forEachStateX((state) {
@@ -334,6 +346,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didChangeAccessibilityFeatures() {
+    //
     super.didChangeAccessibilityFeatures();
     //
     _forEachStateX((state) {

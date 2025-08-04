@@ -1,3 +1,14 @@
+## 7.5.0
+
+August 04, 2025
+
+- Adjusted WidgetsBindingObserver functions in part01_statex.dart
+  State object's function is now called before its Controllers equivalent
+- Corrected didPushRouteInformation() in part01_statex.dart
+- Expanded more test coverage in test_app_state.dart
+- Add didPushRouteInformation() to part02_statex_controller.dart
+- Remove didPushRouteInformation() from part03_statex_event_handlers.dart
+
 ## 7.4.0
 
 August 03, 2025

@@ -73,6 +73,14 @@ mixin EventsStateMixin<T extends StatefulWidget> on StateX<T> {
     LogController.log('onError() in $eventStateClassName');
   }
 
+  /// Called when the system tells the app to pop the current route, such as
+  /// after a system back button press or back gesture.
+  @override
+  Future<bool> didPopRoute() async {
+    LogController.log('didPopRoute() in $eventStateClassName');
+    return super.didPopRoute();
+  }
+
   /// Called when this State is *first* added to as a Route observer?!
   @override
   void didPush() {

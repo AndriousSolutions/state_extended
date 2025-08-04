@@ -21,16 +21,6 @@ Future<void> testRunMixins(WidgetTester tester) async {
 
   testMixins.onAsyncError(details);
 
-  await testMixins.didPushRouteInformation(
-    RouteInformation(
-      uri: Uri(
-        scheme: 'mailto',
-        path: 'John.Doe@example.com',
-        queryParameters: {'subject': 'Example'},
-      ),
-    ),
-  );
-
   testMixins.detachedAppLifecycleState();
 
   testMixins.onError(details);
@@ -69,6 +59,7 @@ class _TestStateMixins extends StateX {
     super.useInherited,
     super.printEvents,
   });
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

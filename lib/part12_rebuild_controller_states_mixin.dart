@@ -49,7 +49,7 @@ mixin _RebuildControllerStatesMixin {
   bool _widgetBuilderUsed = false;
 
   /// Whether any listeners are currently registered.
-  bool get hasStateListeners => hasListeners;
+  bool get hasStateListeners => _implChangeNotifier?.hasListeners ?? false;
 
   @Deprecated('Use hasStateListeners instead')
   bool get hasListeners => _implChangeNotifier?.hasListeners ?? false;

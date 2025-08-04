@@ -181,6 +181,25 @@ Future<void> testsAppStateX(WidgetTester tester) async {
 
   appStateXObj.setBuilder((context) => const SizedBox());
 
+  appStateXObj.activate();
+
+  await appStateXObj.didPopRoute();
+
+  await appStateXObj.didRequestAppExit();
+
+  // appStateXObj.didChangeViewFocus(ViewFocusEvent event);
+  //
+  // await appStateXObj.didPushRouteInformation(
+  //             RouteInformation routeInformation);
+  //
+  // appStateXObj.handleStartBackGesture(PredictiveBackEvent backEvent);
+  //
+  // appStateXObj.handleUpdateBackGestureProgress(PredictiveBackEvent backEvent);
+
+  appStateXObj.handleCommitBackGesture();
+
+  appStateXObj.handleCancelBackGesture();
+
   final exception = Exception('Testing');
 
   final errorDetails = FlutterErrorDetails(
