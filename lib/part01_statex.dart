@@ -37,6 +37,8 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     StateXController? controller,
     bool? runAsync,
     bool? useInherited,
+    bool? isBindingObserver,
+    bool? isRouteObserver,
     bool? printEvents,
     bool? debugPrintEvents,
   }) {
@@ -44,14 +46,18 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     _addToMapOfStates(this);
     _consoleLeadingLine = '===========';
 
+    // Associate the controller to this State object
+    _controller = controller;
     // A flag whether the built-in FutureBuilder always runs.
     _runAsync = runAsync ?? false;
     // A flag determining whether the built-in InheritedWidget is used or not.
     _useInherited = useInherited ?? false;
+    // A flag. Whether involved as a WidgetsBindingObserver or not.
+    _isBindingObserver = isBindingObserver ?? true;
+    // A flag. Whether is 'RouteAware' and observers Route changes
+    _isRouteObserver = isRouteObserver ?? true;
     // Show the 'event handler' functions
     _debugPrintEvents = debugPrintEvents ?? printEvents ?? false;
-    // Associate the controller to this State object
-    _controller = controller;
     // If State prints events, so does its Controllers
     if (_debugPrintEvents) {
       _controller?._debugPrintEvents = _debugPrintEvents;
@@ -76,12 +82,12 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   /// Widget build(BuildContext context)
   ///
 
-  // Current controller
-  StateXController? _controller;
-
   /// Access the StatefulWidget widget.
   @override
   T get widget => super.widget as T;
+
+  // Current controller
+  StateXController? _controller;
 
   /// Provide the 'main' controller to this State object.
   /// If _controller == null, get the 'first assigned' controller if any.
@@ -104,6 +110,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
 
   // May have to assign directly
   set appStateX(AppStateX? appState) {
+    // Assigned only once.
     if (_appStateX == null) {
       if (appState != null) {
         _appStateX = appState;
@@ -263,7 +270,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     super.initState();
 
     /// If 'AppState' is not used
-    if (appStateX == null) {
+    if (appStateX == null && _isBindingObserver) {
       /// Registers the given object as a binding observer. Binding
       /// observers are notified when various application events occur,
       /// for example when the system locale changes. Generally, one
@@ -272,8 +279,11 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       WidgetsBinding.instance.addObserver(this);
     }
 
-    /// Become aware of Route changes
-    RouteObserverStates.subscribeRoutes(this);
+    // Become aware of Routes changes.
+    if (_isRouteObserver) {
+      /// Become aware of Route changes
+      RouteObserverStates.subscribeRoutes(this);
+    }
 
     /// No 'setState()' functions are allowed to fully function at this point.
     //_setStateAllowed = false;
@@ -439,7 +449,9 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
         // scheduleMicrotask(() {
 
         // Ignore Route changes
-        RouteObserverStates.unsubscribeRoutes(this);
+        if (_isRouteObserver) {
+          RouteObserverStates.unsubscribeRoutes(this);
+        }
 
         // Indicate this State object is deactivated.
         _deactivated = true;
@@ -495,8 +507,10 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     // Likely was deactivated.
     _deactivated = false;
 
-    /// Become aware of Route changes
-    RouteObserverStates.subscribeRoutes(this);
+    // Become aware of Routes changes.
+    if (_isRouteObserver) {
+      RouteObserverStates.subscribeRoutes(this);
+    }
 
     // No 'setState()' functions are allowed to fully function at this point.
     //   _setStateAllowed = false;
@@ -546,7 +560,7 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
       _removeFromMapOfStates(this);
 
       // If 'AppState' is not used
-      if (appStateX == null) {
+      if (appStateX == null && _isBindingObserver) {
         // Unregisters the given observer.
         WidgetsBinding.instance.removeObserver(this);
       }
@@ -689,6 +703,14 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   bool get firstBuild => _firstBuild ?? true;
   bool? _firstBuild;
 
+  /// Involved as a [WidgetsBindingObserver]
+  bool get isBindingObserver => _isBindingObserver;
+  bool _isBindingObserver = true;
+
+  /// Is subscribed to Flutter's [RouteObserver]
+  bool get isRouteObserver => _isRouteObserver;
+  bool _isRouteObserver = true;
+
   /// Called when the application's dimensions change. For example,
   /// when a phone is rotated.
   @override
@@ -705,14 +727,14 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     ///     setState(() { _lastSize = ui.window.physicalSize; });
     ///   }
 
-    // A triggered system event
-    _hadSystemEvent = true;
-    _lastSystemEvent = 'didChangeMetrics';
-
     // Don't if the State object is defunct.
     if (!mounted) {
       return;
     }
+
+    // A triggered system event
+    _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangeMetrics';
 
     /// No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
@@ -752,14 +774,14 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
     ///     setState(() { _lastTextScaleFactor = ui.window.textScaleFactor; });
     ///   }
 
-    // A triggered system event
-    _hadSystemEvent = true;
-    _lastSystemEvent = 'didChangeTextScaleFactor';
-
     // Don't if the State object is defunct.
     if (!mounted) {
       return;
     }
+
+    // A triggered system event
+    _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangeTextScaleFactor';
 
     /// No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
@@ -787,14 +809,14 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangePlatformBrightness() {
-    // A triggered system event
-    _hadSystemEvent = true;
-    _lastSystemEvent = 'didChangePlatformBrightness';
-
     // Don't if the State object is defunct.
     if (!mounted) {
       return;
     }
+
+    // A triggered system event
+    _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangePlatformBrightness';
 
     /// No 'setState()' functions are allowed to fully function at this point.
 //    _setStateAllowed = false;
@@ -824,14 +846,14 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @mustCallSuper
   @override
   void didChangeLocales(List<Locale>? locales) {
-    // A triggered system event
-    _hadSystemEvent = true;
-    _lastSystemEvent = 'didChangeLocales';
-
     // Don't if the State object is defunct.
     if (!mounted) {
       return;
     }
+
+    // A triggered system event
+    _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangeLocales';
 
     ///
     /// This method exposes notifications from [Window.onLocaleChanged].
@@ -862,14 +884,14 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didChangeAccessibilityFeatures() {
-    // A triggered system event
-    _hadSystemEvent = true;
-    _lastSystemEvent = 'didChangeAccessibilityFeatures';
-
     // Don't if the State object is defunct.
     if (!mounted) {
       return;
     }
+
+    // A triggered system event
+    _hadSystemEvent = true;
+    _lastSystemEvent = 'didChangeAccessibilityFeatures';
 
     ///
     /// This method exposes notifications from [Window.onAccessibilityFeaturesChanged].
@@ -900,14 +922,14 @@ class StateX<T extends StatefulWidget> extends State<StatefulWidget>
   @override
   @mustCallSuper
   void didHaveMemoryPressure() {
-    // A triggered system event
-    _hadSystemEvent = true;
-    _lastSystemEvent = 'didHaveMemoryPressure';
-
     // Don't if the State object is defunct.
     if (!mounted) {
       return;
     }
+
+    // A triggered system event
+    _hadSystemEvent = true;
+    _lastSystemEvent = 'didHaveMemoryPressure';
 
     ///
     /// This method exposes the `memoryPressure` notification from

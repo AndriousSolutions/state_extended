@@ -286,7 +286,7 @@ Further examples accompany the this package when you download it:
 [example app](https://github.com/AndriousSolutions/state_extended/tree/master/example)
 
 ```dart
-//
+///
 import 'package:flutter/material.dart';
 
 import 'package:state_extended/state_extended.dart';
@@ -352,7 +352,12 @@ class MyHomePage extends StatefulWidget {
 /// This subclass is linked to the App's lifecycle using [WidgetsBindingObserver]
 class _MyHomePageState extends StateX<MyHomePage> {
   /// Let the 'business logic' run in a Controller
-  _MyHomePageState() : super(controller: HomeController(), useInherited: true) {
+  _MyHomePageState()
+      : super(
+    controller: HomeController(),
+    useInherited: true,
+    debugPrintEvents: true,
+  ) {
     con = controller as HomeController;
   }
 
@@ -377,6 +382,7 @@ class _MyHomePageState extends StateX<MyHomePage> {
 
     /// You can retrieve by type as well
     appState = stateByType<AppStateX>()!;
+    appState = ofState<AppStateX>()!;
   }
 
   /// The 'first' State object. The 'App State object.'
@@ -438,11 +444,19 @@ class CounterWidget extends StatefulWidget {
 }
 
 class _CounterState extends State<CounterWidget> {
+  //
+  @override
+  void initState() {
+    super.initState();
+    con = HomeController();
+  }
+
+  late HomeController con;
+
   @override
   Widget build(BuildContext context) {
     /// Making this widget dependent will cause the build() function below
     /// to run again if and when the App's InheritedWidget calls its notifyClients() function.
-    final con = HomeController();
     con.dependOnInheritedWidget(context);
     return Text(
       con.data,
@@ -618,10 +632,6 @@ class HomeController extends StateXController {
   @override
   void deactivate() {
     super.deactivate();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('########### deactivate in HomeController');
-    }
   }
 
   /// Called when this object is reinserted into the tree after having been
@@ -629,10 +639,6 @@ class HomeController extends StateXController {
   @override
   void activate() {
     super.activate();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('########### activate in HomeController');
-    }
   }
 
   /// The framework calls this method when this [StateX] object will never
@@ -640,10 +646,6 @@ class HomeController extends StateXController {
   /// Note: THERE IS NO GUARANTEE THIS METHOD WILL RUN in the Framework.
   @override
   void dispose() {
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: dispose in HomeController');
-    }
     super.dispose();
   }
 
@@ -653,10 +655,6 @@ class HomeController extends StateXController {
     /// The framework always calls build() after calling [didUpdateWidget], which
     /// means any calls to [setState] in [didUpdateWidget] are redundant.
     super.didUpdateWidget(oldWidget);
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didUpdateWidget in HomeController');
-    }
   }
 
   /// Called when this [StateX] object is first created immediately after [initState].
@@ -665,10 +663,6 @@ class HomeController extends StateXController {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didChangeDependencies in HomeController');
-    }
   }
 
   /// Called whenever the application is reassembled during debugging, for
@@ -676,10 +670,6 @@ class HomeController extends StateXController {
   @override
   void reassemble() {
     super.reassemble();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: reassemble in HomeController');
-    }
   }
 
   /// Called when the system tells the app to pop the current route.
@@ -693,10 +683,6 @@ class HomeController extends StateXController {
   /// [SystemChannels.navigation].
   @override
   Future<bool> didPopRoute() async {
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didPopRoute in HomeController');
-    }
     return super.didPopRoute();
   }
 
@@ -705,41 +691,24 @@ class HomeController extends StateXController {
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didChangeMetrics in HomeController');
-    }
   }
 
   /// Called when the platform's text scale factor changes.
   @override
   void didChangeTextScaleFactor() {
     super.didChangeTextScaleFactor();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didChangeTextScaleFactor in HomeController');
-    }
   }
 
   /// Brightness changed.
   @override
   void didChangePlatformBrightness() {
     super.didChangePlatformBrightness();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print(
-          '############ Event: didChangePlatformBrightness in HomeController');
-    }
   }
 
   /// Called when the system tells the app that the user's locale has changed.
   @override
   void didChangeLocales(List<Locale>? locales) {
     super.didChangeLocales(locales);
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didChangeLocales in HomeController');
-    }
   }
 
   /// Called when the system puts the app in the background or returns the app to the foreground.
@@ -751,10 +720,6 @@ class HomeController extends StateXController {
     /// AppLifecycleState.detach
     /// AppLifecycleState.resumed
     super.didChangeAppLifecycleState(state);
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didChangeAppLifecycleState in HomeController');
-    }
   }
 
   /// The application is in an inactive state and is not receiving user input.
@@ -774,10 +739,6 @@ class HomeController extends StateXController {
   @override
   void inactiveAppLifecycleState() {
     super.inactiveAppLifecycleState();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: inactiveLifecycleState in HomeController');
-    }
   }
 
   /// The application is not currently visible to the user, not responding to
@@ -785,10 +746,6 @@ class HomeController extends StateXController {
   @override
   void pausedAppLifecycleState() {
     super.pausedAppLifecycleState();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: pausedLifecycleState in HomeController');
-    }
   }
 
   /// Either be in the progress of attaching when the engine is first initializing
@@ -796,41 +753,24 @@ class HomeController extends StateXController {
   @override
   void detachedAppLifecycleState() {
     super.detachedAppLifecycleState();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: detachedLifecycleState in HomeController');
-    }
   }
 
   /// The application is visible and responding to user input.
   @override
   void resumedAppLifecycleState() {
     super.resumedAppLifecycleState();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: resumedLifecycleState in HomeController');
-    }
   }
 
   /// Called when the system is running low on memory.
   @override
   void didHaveMemoryPressure() {
     super.didHaveMemoryPressure();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print('############ Event: didHaveMemoryPressure in HomeController');
-    }
   }
 
   /// Called when the system changes the set of active accessibility features.
   @override
   void didChangeAccessibilityFeatures() {
     super.didChangeAccessibilityFeatures();
-    if (inDebugMode) {
-      //ignore: avoid_print
-      print(
-          '############ Event: didChangeAccessibilityFeatures in HomeController');
-    }
   }
 }
 

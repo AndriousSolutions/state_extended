@@ -155,17 +155,17 @@ Future<void> testsAppStateX(WidgetTester tester) async {
   // It should be from a specific StatefulWidget
   expect(stateObj!.widget, isA<MyApp>(), reason: _location);
 
-  stateObj = (stateObj as StateX).lastState;
+  stateObj = (stateObj as StateX).firstState;
 
   // It should be a specific type of State object.
   expect(stateObj, isA<StateX>(), reason: _location);
 
   // It should be from a specific StatefulWidget
-  expect(stateObj!.widget, isNot(isA<MyApp>()), reason: _location);
+  expect(stateObj!.widget, isA<MyApp>(), reason: _location);
 
   con = (stateObj as StateX).controller;
 
-  expect(con, isNot(isA<ExampleAppController>()), reason: _location);
+  expect(con, isA<ExampleAppController>(), reason: _location);
 
   // Test looking up State objects by id.
   // The unique key identifier for this State object.
@@ -177,7 +177,7 @@ Future<void> testsAppStateX(WidgetTester tester) async {
   stateObj = list[0];
 
   // It should be a specific type of State object.
-  expect(stateObj, isNot(isA<AppStateX>()), reason: _location);
+  expect(stateObj, isA<AppStateX>(), reason: _location);
 
   appStateXObj.setBuilder((context) => const SizedBox());
 

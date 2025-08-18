@@ -68,7 +68,11 @@ void testsStateXController(WidgetTester tester) {
   expect(appState.widget, isA<MyApp>(), reason: location);
 
   /// Returns the most recent BuildContext/Element created in the App
-  final BuildContext context = con.statex!.lastState!.context;
+  // final BuildContext context = con.statex!.lastState!.context;
+
+  final stateObj = con.statex?.stateOf<Page1>();
+
+  final BuildContext context = stateObj!.context;
 
   expect(context.widget, isA<Page1>(), reason: location);
 

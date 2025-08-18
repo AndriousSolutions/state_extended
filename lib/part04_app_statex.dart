@@ -97,7 +97,7 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   void dispose() {
     _builderState = null;
     _inheritedState = null;
-    MapOfStateXsMixin._states.clear();
+    MapOfStateXsMixin._dispose();
     super.dispose();
   }
 
@@ -108,13 +108,18 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   Future<bool> didPopRoute() async {
     //
     var pop = await super.didPopRoute();
+    // Loop through the App's StateX objects
+    final list = _listStateXs(
+      where: (s) => s.mounted && !s._deactivated && s.isBindingObserver,
+      reversed: true,
+      remove: this,
+    );
     // Loop through all the StateX objects
-    final list = _statesList(reversed: true, remove: this);
-    // Loop through all the StateX objects
-    for (final state in list) {
-      // try {
-      if (await (state as StateX).didPopRoute()) {
+    for (final s in list) {
+      //
+      if (await s.didPopRoute()) {
         pop = true;
+        break;
       }
     }
     return pop;
@@ -137,12 +142,8 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   bool handleStartBackGesture(PredictiveBackEvent backEvent) {
     //
     var handled = super.handleStartBackGesture(backEvent);
-    //
-    _forEachStateX((state) {
-      if (state.handleStartBackGesture(backEvent)) {
-        handled = true;
-      }
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.handleStartBackGesture(backEvent));
     return handled;
   }
 
@@ -155,12 +156,9 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// predictive back feature.
   @override
   void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) {
-    //
     super.handleUpdateBackGestureProgress(backEvent);
-    //
-    _forEachStateX((state) {
-      state.handleUpdateBackGestureProgress(backEvent);
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.handleUpdateBackGestureProgress(backEvent));
   }
 
   /// Called when a predictive back gesture is finished successfully, indicating
@@ -174,12 +172,9 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// predictive back feature.
   @override
   void handleCommitBackGesture() {
-    //
     super.handleCommitBackGesture();
-    //
-    _forEachStateX((state) {
-      state.handleCommitBackGesture();
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.handleCommitBackGesture());
   }
 
   /// Called when a predictive back gesture is canceled, indicating that no
@@ -192,12 +187,9 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// predictive back feature.
   @override
   void handleCancelBackGesture() {
-    //
     super.handleCancelBackGesture();
-    //
-    _forEachStateX((state) {
-      state.handleCancelBackGesture();
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.handleCancelBackGesture());
   }
 
   /// Called when the host tells the application to push a new
@@ -209,13 +201,18 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
       RouteInformation routeInformation) async {
     //
     var handled = await super.didPushRouteInformation(routeInformation);
+    // Loop through the App's StateX objects
+    final list = _listStateXs(
+      where: (s) => s.mounted && !s._deactivated && s.isBindingObserver,
+      reversed: true,
+      remove: this,
+    );
     // Loop through all the StateX objects
-    final list = _statesList(reversed: true, remove: this);
-    // Loop through all the StateX objects
-    for (final state in list) {
-      // try {
-      if (await (state as StateX).didPushRouteInformation(routeInformation)) {
+    for (final s in list) {
+      //
+      if (await s.didPushRouteInformation(routeInformation)) {
         handled = true;
+        break;
       }
     }
     return handled;
@@ -226,36 +223,27 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didChangeMetrics() {
-    //
     super.didChangeMetrics();
-    //
-    _forEachStateX((state) {
-      state.didChangeMetrics();
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.didChangeMetrics());
   }
 
   /// Called when the platform's text scale factor changes.
   @override
   @mustCallSuper
   void didChangeTextScaleFactor() {
-    //
     super.didChangeTextScaleFactor();
-    //
-    _forEachStateX((state) {
-      state.didChangeTextScaleFactor();
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.didChangeTextScaleFactor());
   }
 
   /// Called when the platform brightness changes.
   @override
   @mustCallSuper
   void didChangePlatformBrightness() {
-    //
     super.didChangePlatformBrightness();
-    //
-    _forEachStateX((state) {
-      state.didChangePlatformBrightness();
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.didChangePlatformBrightness());
   }
 
   /// Called when the system tells the app that the user's locale has
@@ -264,12 +252,9 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didChangeLocales(List<Locale>? locales) {
-    //
     super.didChangeLocales(locales);
-    //
-    _forEachStateX((state) {
-      state.didChangeLocales(locales);
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.didChangeLocales(locales));
   }
 
   /// Called when the system puts the app in the background or returns
@@ -282,24 +267,18 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didChangeAppLifecycleState(AppLifecycleState lifecycleState) {
-    //
     super.didChangeAppLifecycleState(lifecycleState);
-    //
-    _forEachStateX((state) {
-      state.didChangeAppLifecycleState(lifecycleState);
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.didChangeAppLifecycleState(lifecycleState));
   }
 
   /// Called whenever the [PlatformDispatcher] receives a notification that the
   /// focus state on a view has changed.
   @override
   void didChangeViewFocus(ViewFocusEvent event) {
-    //
     super.didChangeViewFocus(event);
-    //
-    _forEachStateX((state) {
-      state.didChangeViewFocus(event);
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.didChangeViewFocus(event));
   }
 
   /// Called when a request is received from the system to exit the application.
@@ -308,24 +287,21 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   Future<AppExitResponse> didRequestAppExit() async {
     //
     var appResponse = await super.didRequestAppExit();
-    //
-    final list = _statesList(reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    final list = _listStateXs(
+      where: (s) => s.mounted && !s._deactivated && s.isBindingObserver,
+      reversed: true,
+      remove: this,
+    );
     // Loop through all the StateX objects
-    for (final s in list) {
-      // try {
-      final state = s as StateX;
-      if (state.mounted && !state._deactivated) {
-        final response = await state.didRequestAppExit();
-        if (response == AppExitResponse.cancel) {
-          // Cancel and do not exit the application.
-          appResponse == response;
-          break;
-        }
+    for (final state in list) {
+      //
+      final response = await state.didRequestAppExit();
+      if (response == AppExitResponse.cancel) {
+        // Cancel and do not exit the application.
+        appResponse == response;
+        break;
       }
-      // } catch (e, stack) {
-      //   // Record the error
-      //   recordErrorInHandler(e, stack);
-      // }
     }
     return appResponse;
   }
@@ -334,25 +310,33 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   @override
   @mustCallSuper
   void didHaveMemoryPressure() {
-    //
     super.didHaveMemoryPressure();
-    //
-    _forEachStateX((state) {
-      state.didHaveMemoryPressure();
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.didHaveMemoryPressure());
   }
 
   /// Called when the system changes the set of currently active accessibility features.
   @override
   @mustCallSuper
   void didChangeAccessibilityFeatures() {
-    //
     super.didChangeAccessibilityFeatures();
-    //
-    _forEachStateX((state) {
-      state.didChangeAccessibilityFeatures();
-    }, reversed: true, remove: this);
+    // Loop through the App's StateX objects
+    _callForEachStateX((s) => s.didChangeAccessibilityFeatures());
   }
+
+  /// Loop through the App's [StateX] objects.
+  /// Invokes [func] on each StateX in the app.
+  /// With an option to process in reversed chronological order
+  bool _callForEachStateX(
+    void Function(StateX state) func, {
+    bool? reversed,
+  }) =>
+      _forEachStateX(
+        func,
+        where: (s) => s.mounted && !s._deactivated && s.isBindingObserver,
+        reversed: reversed ?? true,
+        remove: this,
+      );
 
   /// In the SetState class?
   bool _inSetStateBuilder = false;
@@ -399,18 +383,17 @@ class AppStateX<T extends StatefulWidget> extends StateX<T>
   /// Called when the State's InheritedWidget is called again
   /// This 'widget function' will be called again.
   @override
-  // ignore: deprecated_member_use_from_same_package
-  Widget setBuilder(WidgetBuilder? builder) => stateSet(builder);
+  Widget setBuilder(WidgetBuilder? builder) {
+    builder ??=
+        (_) => const SizedBox.shrink(); // Display 'nothing' if not provided
+    return StateDependentWidget(stateMixin: this, builder: builder);
+  }
 
   /// Called when the State's InheritedWidget is called again
   /// This 'widget function' will be called again.
   @override
   @Deprecated('Use setBuilder() instead.')
-  Widget stateSet(WidgetBuilder? builder) {
-    builder ??=
-        (_) => const SizedBox.shrink(); // Display 'nothing' if not provided
-    return StateDependentWidget(stateMixin: this, builder: builder);
-  }
+  Widget stateSet(WidgetBuilder? builder) => setBuilder(builder);
 
   /// Reference the App State object
   @override

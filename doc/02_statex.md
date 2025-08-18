@@ -34,6 +34,8 @@ The StateX class gives you five new functions and features:
    <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/StateXController-class.html">StateXController</a></b></li>
    <li>A function to perform any necessary asynchronous operations before displaying the interface:
    <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/AsyncOps/initAsync.html">initAsync</a></b>()</li>
+   <li>A function to 'catch' any asynchronous operations errors before possibly displaying the interface:
+   <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/StateX/catchAsyncError.html">catchAsyncError</a></b>()</li>
    <li>A means to update only <i>particular</i> widgets in the interface and not the whole screen improving performance:
    <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/InheritedWidgetStateMixin/dependOnInheritedWidget.html">dependOnInheritedWidget</a></b>()
 , <b><a href="https://pub.dev/documentation/state_extended/latest/state_extended/StateX/didChangeDependencies.html">didChangeDependencies</a></b>()

@@ -10,15 +10,14 @@ part of 'state_extended.dart';
 /// {@category StateX class}
 mixin MapOfStateXsMixin on State {
   /// All the State objects in this app.
-  static final Map<String, State> _states = {};
+  static final Map<String, StateX> _stateXs = {};
 
   /// This is 'privatized' function as it is an critical method and not for public access.
   /// This contains the 'main list' of StateX objects present in the app!
   bool _addToMapOfStates(StateX? state) {
     final add = state != null;
     if (add) {
-      //
-      _states[state._id] = state;
+      _stateXs[state._id] = state;
     }
     return add;
   }
@@ -27,9 +26,9 @@ mixin MapOfStateXsMixin on State {
   bool _removeFromMapOfStates(StateX? state) {
     var removed = state != null;
     if (removed) {
-      final int length = _states.length;
-      _states.removeWhere((key, value) => state._id == key);
-      removed = _states.length < length;
+      final int length = _stateXs.length;
+      _stateXs.removeWhere((key, value) => state._id == key);
+      removed = _stateXs.length < length;
     }
     return removed;
   }
@@ -39,7 +38,11 @@ mixin MapOfStateXsMixin on State {
   T? stateByType<T extends State>() {
     State? state;
     try {
-      for (final item in _states.values) {
+      final stateList = _listStateXs(
+        reversed: true,
+        where: (s) => s.mounted && !s._deactivated,
+      );
+      for (final item in stateList) {
         if (item is T) {
           state = item;
           break;
@@ -57,7 +60,11 @@ mixin MapOfStateXsMixin on State {
   /// Retrieve the State object by its StatefulWidget. Returns null if not found.
   State? stateOf<T extends StatefulWidget>() {
     State? state;
-    for (final s in _states.values.toList().reversed) {
+    final stateList = _listStateXs(
+      reversed: true,
+      where: (s) => s.mounted && !s._deactivated,
+    );
+    for (final s in stateList) {
       if (s.widget is T) {
         state = s;
         break;
@@ -67,7 +74,7 @@ mixin MapOfStateXsMixin on State {
   }
 
   /// Returns a State object using a unique String identifier.
-  State? stateById(String? id) => _states[id];
+  State? stateById(String? id) => _stateXs[id];
 
   /// Returns a Map of StateView objects using unique String identifiers.
   Map<String, State> statesById(List<String> ids) {
@@ -96,33 +103,28 @@ mixin MapOfStateXsMixin on State {
   }
 
   /// Return the first State object
-  State? get firstState => _nextStateX();
+  State? get firstState => _nextState();
 
   /// Return the 'latest' State object
-  State? get lastState => _nextStateX(reversed: true);
+  State? get lastState => _nextState(reversed: true);
 
   /// Returns the 'latest' context in the App.
   BuildContext? get lastContext => lastState?.context;
 
   /// Loop through the list and return the next available State object
-  State? _nextStateX({bool? reversed}) {
+  State? _nextState({bool? reversed}) {
     reversed = reversed != null && reversed;
-    State? nextState;
-    final list = _statesList(reversed: reversed);
-    for (final State state in list) {
-      if (state.mounted && (state is! StateX || !state._deactivated)) {
-        nextState = state;
-        break;
-      }
-    }
-    return nextState;
+    final list = _listStateXs(
+      where: (s) => s.mounted && !s._deactivated,
+      reversed: reversed,
+    );
+    return list.isEmpty ? null : list.first;
   }
 
   /// Returns a List of StateX objects using unique String identifiers.
-  List<State> listStates(List<String> keys) {
-    return statesById(keys).values.toList();
-  }
+  List<State> listStates(List<String> keys) => statesById(keys).values.toList();
 
+// Ignore in test coverage
 // coverage:ignore-start
   /// To externally 'process' through the [State] objects.
   /// Invokes [func] on each StateX possessed by this StateX object.
@@ -138,6 +140,7 @@ mixin MapOfStateXsMixin on State {
 
 // coverage:ignore-end
 
+// Ignore in test coverage
 // coverage:ignore-start
   /// To externally 'process' through the [StateX] objects.
   /// Invokes [func] on each StateX possessed by this StateX object.
@@ -153,49 +156,74 @@ mixin MapOfStateXsMixin on State {
 
 // coverage:ignore-end
 
-  /// To externally 'process' through the [StateX] objects.
+  /// To internally 'process' through the [StateX] objects.
   /// Invokes [func] on each StateX possessed by this StateX object.
   /// With an option to process in reversed chronological order
   bool _forEachStateX(
     void Function(StateX state) func, {
+    bool Function(StateX state)? where,
     bool? reversed,
-    State? remove,
+    StateX? remove,
   }) {
     bool each = true;
-    final list = _statesList(reversed: reversed, remove: remove);
-    for (final State state in list) {
-      try {
-        if (state.mounted) {
-          // if (state.mounted && !state._deactivated) { // Not working out gp
-          if (state is StateX && !state._deactivated) {
-            func(state);
-          }
-        }
-      } catch (e, stack) {
-        each = false;
-        // Record the error
-        if (this is StateX) {
-          (this as StateX).recordErrorInHandler(e, stack);
-        }
+    try {
+      //
+      final list = _listStateXs(
+        reversed: reversed,
+        where: where,
+        remove: remove,
+      );
+      for (final state in list) {
+        func(state);
+      }
+    } catch (e, stack) {
+      each = false;
+      // Record the error
+      if (this is StateX) {
+        (this as StateX).recordErrorInHandler(e, stack);
       }
     }
     return each;
   }
 
   /// Return a List of available StateX objects
-  List<State> _statesList({bool? reversed, State? remove}) {
-    List<State> list;
-    // In reversed chronological order
-    if (reversed != null && reversed) {
-      list = _states.values.toList().reversed.toList();
-    } else {
-      list = _states.values.toList();
-    }
-    // Exclude a particular State.
+  List<StateX> _listStateXs({
+    bool? reversed,
+    bool Function(StateX state)? where,
+    StateX? remove,
+  }) {
+    // The iterable sequence of StateX objects
+    List<StateX> list = _stateXsIterable(where: where).toList();
+    // Exclude a particular StateX.
     if (remove != null) {
       list.remove(remove);
     }
-    return list.toList(growable: false);
+    // In reversed chronological order
+    if (reversed != null && reversed) {
+      list = list.reversed.toList(growable: false);
+    } else {
+      list = list.toList(growable: false);
+    }
+    return list;
+  }
+
+  // The iterable sequence of StateX objects
+  Iterable<StateX> _stateXsIterable({
+    bool Function(StateX state)? where,
+  }) {
+    Iterable<StateX> itr;
+
+    if (where == null) {
+      itr = _stateXs.values;
+    } else {
+      itr = _stateXs.values.where(where);
+    }
+    return itr;
+  }
+
+  /// Clear of memory
+  static void _dispose() {
+    _stateXs.clear();
   }
 
   /// Determines if running in an IDE or in production.

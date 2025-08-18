@@ -1,11 +1,24 @@
+## 7.6.0
+
+August 15, 2025
+
+- In part01_statex.dart, two new parameters:
+  isBindingObserver - State object is an event handler.
+  isRouteObserver - State object reacts to route changes.
+- Rewrite in part04_app_statex.dart includes:
+  _listStateXs() and _forEachStateX()
+- Rewrite in part10_map_of_states.dart includes:
+  static final Map<String, StateX> _stateXs = {};
+  itr = _stateXs.values.where(where);
+
 ## 7.5.0
 
 August 04, 2025
 
 - Adjusted WidgetsBindingObserver functions in part01_statex.dart
   State object's function is now called before its Controllers equivalent
-- Corrected didPushRouteInformation() in part01_statex.dart
 - Expanded more test coverage in test_app_state.dart
+- Corrected didPushRouteInformation() in part01_statex.dart
 - Add didPushRouteInformation() to part02_statex_controller.dart
 - Remove didPushRouteInformation() from part03_statex_event_handlers.dart
 

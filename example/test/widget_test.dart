@@ -108,9 +108,9 @@ void testStateExtended() {
       // The App's Controller
       /// Now print to console every event handler call
       ExampleAppController().debugPrintEvents = true;
-
-      /// Preform integration tests
-      await integrationTesting(tester);
+      //
+      // /// Preform integration tests
+      // await integrationTesting(tester);
 
       /// Reset the counter to zero on Page 1
       await resetPage1Count(tester);

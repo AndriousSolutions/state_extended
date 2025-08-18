@@ -13,6 +13,7 @@
 .flutter-plugins
 .flutter-plugins-dependencies
 flutter_export_environment.sh
+/devtools_options.yaml
 .pub/
 out/
 .gradle/
@@ -87,7 +88,7 @@ app.*.map.json
 mapping.txt
 seeds.txt
 unused.txt
-obfuscate/
+/obfuscate/
 
 # Android related
 google-services.json
